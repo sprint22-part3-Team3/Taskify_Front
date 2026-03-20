@@ -11,7 +11,7 @@ import IcClose from '@/shared/assets/icons/ic-close.svg?react';
 import IcEyeOff from '@/shared/assets/icons/ic-eye-off.svg?react';
 import IcEye from '@/shared/assets/icons/ic-eye.svg?react';
 import IcGithub from '@/shared/assets/icons/ic-github.svg?react';
-import IcMaillOff from '@/shared/assets/icons/ic-maill-off.svg?react';
+import IcMailOff from '@/shared/assets/icons/ic-mail-off.svg?react';
 import IcMenu from '@/shared/assets/icons/ic-menu.svg?react';
 import IcSearch from '@/shared/assets/icons/ic-search.svg?react';
 import IcSettings from '@/shared/assets/icons/ic-settings.svg?react';
@@ -30,7 +30,7 @@ export {
   IcEye,
   IcEyeOff,
   IcGithub,
-  IcMaillOff,
+  IcMailOff,
   IcMenu,
   IcSearch,
   IcSettings,
