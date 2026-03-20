@@ -6,21 +6,21 @@ export async function fetchApi<T>(
   endpoint: string, // API 경로 ex) 'users', 'posts'
   options: RequestInit = {}, // fetch 옵션 (method, headers, body 등), 안 넘기면 빈 객체
   query: string = '' // URL 뒤에 붙는 추가 값 ex) 사용자 id '123'
-): Promise<T> {
+): Promise<T | null> {
   // 최종 URL 조합: BASE_URL/endpoint/query / ex) 'https://api.example.com/users/123'
   const res = await fetch(
-    `${ENV.API_TEAM_BASE_URL}/${endpoint}/${query}`,
+    `${[ENV.API_TEAM_BASE_URL, endpoint, query].filter(Boolean).join('/')}`,
     options
   );
 
-  // res.ok === false면 서버가 4xx, 5xx 에러를 보낸 것
+  // res.ok === false면 서버가 에러를 보낸 것
   if (!res.ok) {
-    throw new Error('데이터를 불러오는데 실패했습니다.');
+    throw new Error(`API 요청 실패: ${res.status}`);
   }
 
   // 204: 서버가 "성공했지만 돌려줄 데이터 없음"이라고 응답한 경우, JSON 파싱하면 에러나니까 null을 반환
   if (res.status === 204 || res.headers.get('content-length') === '0') {
-    return null as T;
+    return null;
   }
 
   // 서버 응답을 JSON으로 변환해서 반환
