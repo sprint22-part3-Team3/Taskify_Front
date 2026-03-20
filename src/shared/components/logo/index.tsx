@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { LOGO_MAP } from '@/shared/components/logo/Logo.constants';
+import { LOGO_MAP } from '@/shared/components/logo/logo.constants';
 import { type LogoProps } from '@/shared/components/logo/logo.types';
 
 /**
