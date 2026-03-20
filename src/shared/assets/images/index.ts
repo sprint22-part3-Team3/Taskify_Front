@@ -1,5 +1,6 @@
-import imgMainLogo from '@/shared/assets/images/img-main-logo.svg';
-import imgSideLogoMobile from '@/shared/assets/images/img-side-logo-mobile.svg';
-import imgSideLogo from '@/shared/assets/images/img-side-logo.svg';
+import imgCard01 from '@/shared/assets/images/img-card-01.png';
+import imgCard02 from '@/shared/assets/images/img-card-02.png';
+import imgCard03 from '@/shared/assets/images/img-card-03.png';
+import imgLanding from '@/shared/assets/images/img-landing.png';
 
-export { imgMainLogo, imgSideLogo, imgSideLogoMobile };
+export { imgCard01, imgCard02, imgCard03, imgLanding };
