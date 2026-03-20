@@ -1,8 +1,8 @@
-import type { TitleProps } from '@/shared/components/title/title.types';
+import type { TitleProps } from '@/shared/components/title/Title.types';
 import {
   SIZE_MAP,
   WEIGHT_MAP,
-} from '@/shared/components/title/title.constants';
+} from '@/shared/components/title/Title.constants';
 
 // Title component that renders a heading element with customizable size and weight
 
