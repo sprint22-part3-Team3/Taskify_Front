@@ -2,12 +2,12 @@ import { LogoLg, LogoM, LogoSm } from '@/shared/assets';
 import { type ComponentType, type SVGProps } from 'react';
 import { Link } from 'react-router-dom';
 
-type LogoSize = 'Large' | 'Medium' | 'Small';
+type LogoSize = 'large' | 'medium' | 'small';
 
 const LOGO_MAP: Record<LogoSize, ComponentType<SVGProps<SVGSVGElement>>> = {
-  Large: LogoLg,
-  Medium: LogoM,
-  Small: LogoSm,
+  large: LogoLg,
+  medium: LogoM,
+  small: LogoSm,
 };
 
 interface LogoProps {
@@ -23,10 +23,10 @@ interface LogoProps {
  *
  * @example
  * ```tsx
- * <Logo size="Large" className="header-logo" />
+ * <Logo size="large" className="header-logo" />
  * ```
  */
-const Logo = function ({ size = 'Medium', className }: LogoProps) {
+function Logo({ size = 'medium', className }: LogoProps) {
   const LogoImage = LOGO_MAP[size];
 
   return (
@@ -34,6 +34,6 @@ const Logo = function ({ size = 'Medium', className }: LogoProps) {
       <LogoImage />
     </Link>
   );
-};
+}
 
 export default Logo;
