@@ -1,5 +1,5 @@
-import logoLg from '@/shared/assets/logos/logo-lg.svg';
-import logoM from '@/shared/assets/logos/logo-m.svg';
-import logoSm from '@/shared/assets/logos/logo-sm.svg';
+import LogoLg from '@/shared/assets/logos/logo-lg.svg?react';
+import LogoM from '@/shared/assets/logos/logo-m.svg?react';
+import LogoSm from '@/shared/assets/logos/logo-sm.svg?react';
 
-export { logoLg, logoM, logoSm };
+export { LogoLg, LogoM, LogoSm };
