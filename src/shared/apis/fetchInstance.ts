@@ -16,7 +16,7 @@ export async function fetchInstance<T>(
 ): Promise<T | null> {
   // new URL() 적용
   const url = new URL(
-    [endpoint, query].filter(Boolean).join('/'),
+    [endpoint.replace(/^\//, ''), query].filter(Boolean).join('/'),
     ENV.API_TEAM_BASE_URL
   ).toString();
 
