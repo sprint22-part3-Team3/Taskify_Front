@@ -3,7 +3,7 @@ import { type ElementType } from 'react';
 import type { PolymorphicButtonProps } from '@/shared/components/button/button.types';
 import { cn } from '@/shared/utils/cn';
 
-const ButtonStyle = cva(
+const buttonStyle = cva(
   `inline-flex items-center justify-center whitespace-nowrap rounded-lg border border-solid
   transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600/30
   cursor-pointer disabled:cursor-not-allowed`,
@@ -69,7 +69,7 @@ function Button<T extends ElementType = 'button'>({
   const Component = as || 'button';
 
   const componentProps = {
-    className: cn(ButtonStyle({ theme, size }), className),
+    className: cn(buttonStyle({ theme, size }), className),
     ...(Component === 'button' ? { type } : {}),
     ...(Component === 'button' ? { disabled } : {}),
     onClick,
