@@ -1,44 +1,82 @@
-//todo: 리팩토링하기
+import type { NavigationButtonsProps } from '@/shared/components/navigation-button/NavigationButton.types';
+import { IcArrowLeft, IcArrowRight } from '@/shared/assets/icons';
 
-type NavigationButtonsProps = {
-  onPrev?: () => void;
-  onNext?: () => void;
-  prevDisabled?: boolean;
-  nextDisabled?: boolean;
-};
+/**
+ * 이전/다음 네비게이션 버튼 컴포넌트
+ *
+ * @remarks
+ * - 이전/다음 버튼을 통해 페이지 이동을 제어하는 UI 컴포넌트입니다.
+ * - 버튼 상태에 따라 disabled 스타일이 적용됩니다.
+ * - 모바일에서는 `hideOnMobile` 옵션으로 표시 여부를 제어할 수 있습니다.
+ *
+ * @example 기본 사용 예시
+ * ```tsx
+ * <NavigationButtons
+ *   onPrev={() => console.log('이전')}
+ *   onNext={() => console.log('다음')}
+ * />
+ * ```
+ *
+ * @example 페이지 상태와 함께 사용하는 예시
+ * ```tsx
+ * function Page() {
+ *   const [page, setPage] = useState(0);
+ *   const totalPage = 5;
+ *
+ *   const handlePrev = () => {
+ *     setPage((prev) => Math.max(prev - 1, 0));
+ *   };
+ *
+ *   const handleNext = () => {
+ *     setPage((prev) => Math.min(prev + 1, totalPage - 1));
+ *   };
+ *
+ *   return (
+ *     <NavigationButtons
+ *       onPrev={handlePrev}
+ *       onNext={handleNext}
+ *       prevDisabled={page === 0}
+ *       nextDisabled={page === totalPage - 1}
+ *       hideOnMobile
+ *     />
+ *   );
+ * }
+ * ```
+ */
 
 export default function NavigationButtons({
   onPrev,
   onNext,
-  prevDisabled = false,
-  nextDisabled = false,
+  hasPrevDisabled = true,
+  hasNextDisabled = true,
+  isHidingOnMobile = false,
 }: NavigationButtonsProps) {
   return (
-    <div className="flex gap-2 rounded border border-red-500 p-2">
+    <div className={`${isHidingOnMobile ? 'hidden sm:flex' : 'flex'}`}>
       {/* 이전 버튼 */}
       <button
         onClick={onPrev}
-        disabled={prevDisabled}
-        className={`flex h-10 w-10 items-center justify-center rounded-full border transition-colors ${
-          prevDisabled
-            ? 'cursor-not-allowed border-gray-200 bg-gray-100 text-gray-300'
-            : 'border-gray-300 bg-white text-gray-800 hover:bg-gray-100'
-        } `}
+        disabled={hasPrevDisabled}
+        className={`flex h-9 w-9 items-center justify-center rounded-l border border-gray-200 md:h-10 md:w-10 ${
+          hasPrevDisabled ? 'pointer-events-none' : 'hover:bg-gray-50'
+        }`}
       >
-        ←
+        <IcArrowLeft
+          className={`${hasPrevDisabled ? 'opacity-20' : 'opacity-100'}`}
+        />
       </button>
 
       {/* 다음 버튼 */}
       <button
         onClick={onNext}
-        disabled={nextDisabled}
-        className={`flex h-10 w-10 items-center justify-center rounded-full border transition-colors ${
-          nextDisabled
-            ? 'cursor-not-allowed border-gray-200 bg-gray-100 text-gray-300'
-            : 'border-gray-300 bg-white text-gray-800 hover:bg-gray-100'
-        } `}
+        disabled={hasNextDisabled}
+        className={`-ml-px flex h-9 w-9 items-center justify-center rounded-r border border-gray-200 md:h-10 md:w-10 ${
+          hasNextDisabled ? 'pointer-events-none' : 'hover:bg-gray-50'
+        }`}
       >
-        →
+        <IcArrowRight
+          className={`${hasNextDisabled ? 'opacity-20' : 'opacity-100'}`}
+        />
       </button>
     </div>
   );
