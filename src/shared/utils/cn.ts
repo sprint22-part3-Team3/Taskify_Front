@@ -20,15 +20,15 @@ import { twMerge } from 'tailwind-merge';
  *       secondary: 'bg-gray-200 text-primary-500',
  *     },
  *     size: {
- *       sm: 'text-sm-medium h-8',
- *       md: 'text-md-medium h-10',
+ *       sm: 'typo-sm-medium h-8',
+ *       md: 'typo-md-medium h-10',
  *     },
  *   },
  * });
  *
  * return (
  *   <button className={cn(buttonVariants({ intent: 'primary', size: 'sm' }))}>버튼</button>
- *   // → className: 'px-4 py-2 bg-primary-500 text-white text-sm-medium h-8'
+ *   // → className: 'px-4 py-2 bg-primary-500 text-white typo-sm-medium h-8'
  * )
  * ```
  */

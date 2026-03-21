@@ -27,99 +27,99 @@
 }
 
 /* Extra Small - 12px */
-@utility text-xs-regular {
+@utility typo-xs-regular {
   @apply text-xs font-normal;
 }
-@utility text-xs-medium {
+@utility typo-xs-medium {
   @apply text-xs font-medium;
 }
-@utility text-xs-semibold {
+@utility typo-xs-semibold {
   @apply text-xs font-semibold;
   line-height: 1.25rem;
 }
 
 /* Small - 13px */
-@utility text-sm-medium {
+@utility typo-sm-medium {
   @apply text-sm font-medium;
 }
-@utility text-sm-semibold {
+@utility typo-sm-semibold {
   @apply text-sm font-semibold;
 }
 
 /* Medium - 14px */
-@utility text-md-regular {
+@utility typo-md-regular {
   @apply text-md font-normal;
 }
-@utility text-md-medium {
+@utility typo-md-medium {
   @apply text-md font-medium;
 }
-@utility text-md-semibold {
+@utility typo-md-semibold {
   @apply text-md font-semibold;
 }
-@utility text-md-bold {
+@utility typo-md-bold {
   @apply text-md font-bold;
 }
 
 /* Large - 16px */
-@utility text-lg-regular {
+@utility typo-lg-regular {
   @apply text-lg font-normal;
 }
-@utility text-lg-medium {
+@utility typo-lg-medium {
   @apply text-lg font-medium;
 }
-@utility text-lg-semibold {
+@utility typo-lg-semibold {
   @apply text-lg font-semibold;
 }
-@utility text-lg-bold {
+@utility typo-lg-bold {
   @apply text-lg font-bold;
 }
 
 /* 2Large - 18px */
-@utility text-2lg-regular {
+@utility typo-2lg-regular {
   @apply text-2lg font-normal;
 }
-@utility text-2lg-medium {
+@utility typo-2lg-medium {
   @apply text-2lg font-medium;
 }
-@utility text-2lg-semibold {
+@utility typo-2lg-semibold {
   @apply text-2lg font-semibold;
 }
-@utility text-2lg-bold {
+@utility typo-2lg-bold {
   @apply text-2lg font-bold;
 }
 
 /* Extra Large - 20px */
-@utility text-xl-regular {
+@utility typo-xl-regular {
   @apply text-xl font-normal;
 }
-@utility text-xl-medium {
+@utility typo-xl-medium {
   @apply text-xl font-medium;
 }
-@utility text-xl-semibold {
+@utility typo-xl-semibold {
   @apply text-xl font-semibold;
 }
-@utility text-xl-bold {
+@utility typo-xl-bold {
   @apply text-xl font-bold;
 }
 
 /* 2Extra Large - 24px */
-@utility text-2xl-regular {
+@utility typo-2xl-regular {
   @apply text-2xl font-normal;
 }
-@utility text-2xl-medium {
+@utility typo-2xl-medium {
   @apply text-2xl font-medium;
 }
-@utility text-2xl-semibold {
+@utility typo-2xl-semibold {
   @apply text-2xl font-semibold;
 }
-@utility text-2xl-bold {
+@utility typo-2xl-bold {
   @apply text-2xl font-bold;
 }
 
 /* 3Extra Large - 32px */
-@utility text-3xl-semibold {
+@utility typo-3xl-semibold {
   @apply text-3xl font-semibold;
 }
-@utility text-3xl-bold {
+@utility typo-3xl-bold {
   @apply text-3xl font-bold;
 }
