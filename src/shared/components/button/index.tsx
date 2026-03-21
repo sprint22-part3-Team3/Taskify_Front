@@ -1,9 +1,8 @@
 import { cva } from 'class-variance-authority';
-import { clsx } from 'clsx';
 import { type ElementType } from 'react';
 import type { PolymorphicButtonProps } from '@/shared/components/button/button.types';
+import { cn } from '@/shared/utils/cn';
 
-//TODO: cn으로 변경하기
 const ButtonStyle = cva(
   `inline-flex items-center justify-center whitespace-nowrap rounded-lg border border-solid
   transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600/30
@@ -24,10 +23,10 @@ const ButtonStyle = cva(
         icon: 'border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:bg-gray-50 hover:text-black-200 active:border-gray-400 active:bg-gray-100 active:text-black-200 disabled:border-gray-100 disabled:text-gray-300 disabled:hover:border-gray-100 disabled:hover:bg-white disabled:hover:text-gray-300 aria-disabled:border-gray-100 aria-disabled:text-gray-300 aria-disabled:hover:border-gray-100 aria-disabled:hover:bg-white aria-disabled:hover:text-gray-300',
       },
       size: {
-        lg: 'h-13.5 rounded-lg px-7 text-lg-semibold',
-        md: 'h-12.5 rounded-lg px-6 text-lg-medium',
-        sm: 'h-8 rounded-md px-4 text-xs-medium',
-        icon: 'h-10 rounded-lg px-4 text-md-medium gap-2',
+        lg: 'h-13.5 rounded-lg px-14 typo-lg-semibold',
+        md: 'h-12.5 rounded-lg px-6 typo-2lg-medium',
+        sm: 'h-8 rounded-sm px-7 typo-md-medium',
+        icon: 'h-10 rounded-lg px-4 typo-lg-medium gap-2',
       },
     },
     defaultVariants: {
@@ -46,9 +45,9 @@ const ButtonStyle = cva(
  *
  *  as={Link}는 to={'경로'}와 같이 사용해주세요
  *  폼 제출하는 타입의 버튼은 type="submit"을 명시해주세요
- *  아이콘 전용 버튼은 children 없이 사용 가능하지만, 접근성을 위해 aria-label을 넣어주세요
+ *
  * @example
- * <Button theme="primary" type="submit" className="h-[62px] w-full text-md-semibold">
+ * <Button theme="primary" type="submit" className="h-8 w-full typo-md-semibold">
  *   버튼
  * </Button>
  *
@@ -70,7 +69,7 @@ function Button<T extends ElementType = 'button'>({
   const Component = as || 'button';
 
   const componentProps = {
-    className: clsx(ButtonStyle({ theme, size }), className),
+    className: cn(ButtonStyle({ theme, size }), className),
     ...(Component === 'button' ? { type } : {}),
     ...(Component === 'button' ? { disabled } : {}),
     onClick,
