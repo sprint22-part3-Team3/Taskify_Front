@@ -1,6 +1,6 @@
 export type LogoSize = 'large' | 'medium' | 'small';
 
-export interface LogoProps {
+export type LogoProps = {
   size?: LogoSize;
   className?: string;
-}
+};
