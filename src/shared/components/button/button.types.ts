@@ -10,7 +10,7 @@ export type ButtonTheme =
 
 export type ButtonSize = 'lg' | 'md' | 'sm' | 'icon';
 
-interface ButtonBaseProps {
+type ButtonBaseProps = {
   theme?: ButtonTheme;
   size?: ButtonSize;
   children?: ReactNode;
@@ -18,13 +18,11 @@ interface ButtonBaseProps {
   disabled?: boolean;
   className?: string;
   onClick?: () => void;
-}
+};
 
-export interface ButtonProps<
-  T extends ElementType = 'button',
-> extends ButtonBaseProps {
+export type ButtonProps<T extends ElementType = 'button'> = ButtonBaseProps & {
   as?: T;
-}
+};
 
 export type PolymorphicButtonProps<T extends ElementType> = ButtonProps<T> &
   Omit<ComponentProps<T>, keyof ButtonProps<T>>;
