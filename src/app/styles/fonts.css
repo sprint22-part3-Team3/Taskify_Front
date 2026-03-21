@@ -34,8 +34,8 @@
   @apply text-xs font-medium;
 }
 @utility typo-xs-semibold {
-  @apply text-xs font-semibold;
-  line-height: 1.25rem;
+  /* Figma 디자인에 따라 line-height 20px 별도로 적용 */
+  @apply text-xs leading-5 font-semibold;
 }
 
 /* Small - 13px */
