@@ -1,7 +1,7 @@
 import type {
   TitleSize,
   TitleWeight,
-} from '@/shared/components/title/Title.types';
+} from '@/shared/components/title/title.types';
 
 export const SIZE_MAP: Record<TitleSize, string> = {
   xs: 'text-xs',
