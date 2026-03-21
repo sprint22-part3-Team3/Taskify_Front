@@ -17,7 +17,7 @@ export async function fetchInstance<T>(
   // new URL() 적용
   const url = new URL(
     [endpoint.replace(/^\//, ''), query].filter(Boolean).join('/'),
-    ENV.API_TEAM_BASE_URL
+    ENV.API_BASE_URL
   ).toString();
 
   // 5초 타임아웃 설정
