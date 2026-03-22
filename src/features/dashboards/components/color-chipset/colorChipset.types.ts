@@ -2,7 +2,7 @@ import type { ComponentProps } from 'react';
 import type {
   DashboardColor,
   DashboardColorName,
-} from '@/shared/apis/dashboardColors';
+} from '@/features/dashboards/types/dashboardColor.types';
 
 export type ColorChipsetProps = Omit<ComponentProps<'div'>, 'onChange'> & {
   colors: DashboardColor[];

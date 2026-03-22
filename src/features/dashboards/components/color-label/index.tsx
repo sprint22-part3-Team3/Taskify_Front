@@ -1,5 +1,5 @@
 import { cn } from '@/shared/utils/cn';
-import { type ColorLabelProps } from '@/shared/components/color-label/colorLabel.types';
+import { type ColorLabelProps } from '@/features/dashboards/components/color-label/colorLabel.types';
 
 /**
  * 대시보드 색상 원형과 이름을 함께 보여주는 컴포넌트입니다.
@@ -32,12 +32,7 @@ function ColorLabel({
         className="h-2 w-2 shrink-0 rounded-full"
         style={{ backgroundColor: color }}
       />
-      <span
-        className={cn(
-          'typo-2lg-medium font-sans text-gray-400',
-          labelClassName
-        )}
-      >
+      <span className={cn('typo-2lg-medium text-gray-400', labelClassName)}>
         {label}
       </span>
     </div>
@@ -45,3 +40,4 @@ function ColorLabel({
 }
 
 export { ColorLabel };
+export type { ColorLabelProps };
