@@ -13,7 +13,7 @@ export default function TextArea({
       <textarea
         className={cn(
           'h-31.5 w-full resize-none rounded-lg border border-gray-200 bg-white px-4 py-3',
-          'placeholder:font-lg-regular text-black placeholder:text-gray-300',
+          'placeholder:typo-lg-regular text-black placeholder:text-gray-300',
           'focus:border-primary-500 focus:outline-none',
           error && 'border-error',
           className
