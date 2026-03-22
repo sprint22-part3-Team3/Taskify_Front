@@ -37,7 +37,7 @@ function AvatarGroup({
   });
   const avatarGroupSize = useResponsiveValue(AVATAR_GROUP_SIZE);
 
-  if (!users) {
+  if (!users || users.length === 0) {
     return null;
   }
 
