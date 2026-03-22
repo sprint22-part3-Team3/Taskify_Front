@@ -41,9 +41,9 @@ function AvatarGroup({
     return null;
   }
 
-  const resolvedTotalCount = totalCount ?? users.length + restCount;
+  const displayTotalCount = totalCount ?? users.length + restCount;
   const visibleUsers = users.slice(0, maxToShow);
-  const rest = Math.max(resolvedTotalCount - visibleUsers.length, 0);
+  const rest = Math.max(displayTotalCount - visibleUsers.length, 0);
 
   return (
     <div
