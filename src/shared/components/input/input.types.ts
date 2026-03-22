@@ -3,7 +3,6 @@ import type { InputFieldProps } from '@/shared/components/input/input-field/inpu
 
 export type InputProps = InputFieldProps & {
   label?: ReactNode;
-  isRequired?: boolean;
   errorMessage?: string;
   errorMessageClassName?: string;
   containerClassName?: string;

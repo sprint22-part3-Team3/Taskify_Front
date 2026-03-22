@@ -3,7 +3,7 @@ import { type LabelProps } from './label.types';
 
 function Label({
   children,
-  isRequired = false,
+  required = false,
   className,
   ...props
 }: LabelProps) {
@@ -13,7 +13,7 @@ function Label({
       {...props}
     >
       {children}
-      {isRequired && (
+      {required && (
         <span className="typo-lg-regular text-primary-500 ml-0.5">*</span>
       )}
     </label>
