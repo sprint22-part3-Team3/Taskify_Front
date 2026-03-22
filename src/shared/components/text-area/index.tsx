@@ -1,6 +1,21 @@
 import { cn } from '@/shared/utils/cn';
 import type { TextAreaProps } from './textArea.types';
 
+/**
+ * 여러 줄 텍스트 입력을 처리하는 공용 TextArea 컴포넌트입니다.
+ *
+ * 입력 값과 에러 메시지를 함께 관리할 수 있으며,
+ *
+ * @example
+ * ```tsx
+ * <TextArea
+ *   value={content}
+ *   onChange={setContent}
+ *   placeholder="내용을 입력해주세요"
+ *   error="내용은 10자 이상 입력해주세요."
+ * />
+ * ```
+ */
 export default function TextArea({
   className,
   value,
