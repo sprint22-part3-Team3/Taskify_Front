@@ -17,14 +17,14 @@ function MyDashboardPage() {
           <Button
             theme="outlined"
             size="icon"
-            className="typo-md-semibold md:typo-lg-semibold h-14.5 w-full max-w-83 justify-between px-5 text-left"
+            className="typo-md-semibold md:typo-lg-semibold h-14.5 w-full max-w-65 justify-between px-5 text-left sm:max-w-62.5 md:h-17 md:max-w-83"
           >
             <span>새로운 대시보드</span>
             <IcAdd className="text-primary-500 h-5 w-5" />
           </Button>
         </section>
 
-        <section className="mt-12 max-h-97.5 max-w-240 rounded-lg bg-white px-10 pt-6">
+        <section className="mt-12 h-81.75 max-w-240 rounded-lg bg-white px-10 pt-6 md:h-97.5">
           <h2 className="typo-md-bold text-black-200 md:typo-xl-bold">
             초대받은 대시보드
           </h2>
