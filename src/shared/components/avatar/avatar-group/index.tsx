@@ -1,9 +1,11 @@
+import { cloneElement, isValidElement, type ReactElement } from 'react';
 import { cn } from '@/shared/utils/cn';
 import { AVATAR_SIZE_CLASS_NAMES } from '@/shared/components/avatar/avatar.constants';
 import useResponsiveValue from '@/shared/hooks/useResponsiveValue';
 import {
   AVATAR_GROUP_BADGE_TEXT_CLASS_NAMES,
   AVATAR_GROUP_GAP_CLASS_NAMES,
+  AVATAR_GROUP_SIZE,
   AVATAR_GROUP_VISIBLE_COUNT,
 } from './avatarGroup.constants';
 import type { AvatarGroupProps } from './avatarGroup.types';
@@ -14,19 +16,18 @@ import type { AvatarGroupProps } from './avatarGroup.types';
  * const users = membersResponse.members.map((member) => ({
  *   id: member.id,
  *   avatar: (
- *     <Avatar user={member} size="md">
+ *     <Avatar user={member} size="lg">
  *       {member.profileImageUrl ? <Avatar.Img /> : <Avatar.Fallback />}
  *     </Avatar>
  *   ),
  * }));
  *
- * <AvatarGroup users={users} totalCount={membersResponse.totalCount} size="md" />
+ * <AvatarGroup users={users} totalCount={membersResponse.totalCount} />
  */
 function AvatarGroup({
   users,
   restCount = 0,
   totalCount,
-  size = 'md',
   className = '',
 }: AvatarGroupProps) {
   const maxToShow = useResponsiveValue({
@@ -34,6 +35,7 @@ function AvatarGroup({
     tablet: AVATAR_GROUP_VISIBLE_COUNT.tablet,
     desktop: AVATAR_GROUP_VISIBLE_COUNT.desktop,
   });
+  const avatarGroupSize = useResponsiveValue(AVATAR_GROUP_SIZE);
 
   if (!users) {
     return null;
@@ -47,20 +49,29 @@ function AvatarGroup({
     <div
       className={cn(
         'flex items-center',
-        AVATAR_GROUP_GAP_CLASS_NAMES[size],
+        AVATAR_GROUP_GAP_CLASS_NAMES[avatarGroupSize],
         className
       )}
     >
       {visibleUsers.map((user) => (
-        <div key={user.id}>{user.avatar}</div>
+        <div key={user.id}>
+          {isValidElement(user.avatar)
+            ? cloneElement(
+                user.avatar as ReactElement<{ size?: typeof avatarGroupSize }>,
+                {
+                  size: avatarGroupSize,
+                }
+              )
+            : user.avatar}
+        </div>
       ))}
 
       {rest > 0 && (
         <div
           className={cn(
             'bg-primary-100 text-primary-500 flex shrink-0 items-center justify-center rounded-full leading-none',
-            AVATAR_SIZE_CLASS_NAMES[size],
-            AVATAR_GROUP_BADGE_TEXT_CLASS_NAMES[size]
+            AVATAR_SIZE_CLASS_NAMES[avatarGroupSize],
+            AVATAR_GROUP_BADGE_TEXT_CLASS_NAMES[avatarGroupSize]
           )}
         >
           +{rest}
