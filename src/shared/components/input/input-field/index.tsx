@@ -2,6 +2,18 @@ import { cn } from '@/shared/utils/cn';
 import { forwardRef } from 'react';
 import type { InputFieldProps } from './inputField.types';
 
+/**
+ * 실제 HTML `input` 요소를 렌더링하는 공용 InputField 컴포넌트입니다.
+ *
+ *
+ * @example
+ * ```tsx
+ * <InputField
+ *   type="email"
+ *   placeholder="이메일을 입력해주세요"
+ * />
+ * ```
+ */
 const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
   ({ className, disabled, ...props }, ref) => {
     return (
