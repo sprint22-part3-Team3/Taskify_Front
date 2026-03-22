@@ -28,7 +28,7 @@ function AvatarGroup({
   users,
   restCount = 0,
   totalCount,
-  className = '',
+  className,
 }: AvatarGroupProps) {
   const maxToShow = useResponsiveValue({
     mobile: AVATAR_GROUP_VISIBLE_COUNT.mobile,

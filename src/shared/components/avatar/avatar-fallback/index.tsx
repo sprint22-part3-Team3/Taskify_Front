@@ -30,7 +30,7 @@ const avatarFallbackStyle = cva(
   }
 );
 
-function AvatarFallback({ className = '' }: AvatarFallbackProps) {
+function AvatarFallback({ className }: AvatarFallbackProps) {
   const avatarUser = useAvatarUser();
   const avatarSize = useAvatarSize();
   const resolvedNickname = avatarUser?.nickname ?? '';
