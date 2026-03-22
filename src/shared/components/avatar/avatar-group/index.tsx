@@ -1,10 +1,10 @@
 import { cn } from '@/shared/utils/cn';
-import { avatarSizeClassNames } from '@/shared/components/avatar/avatar.constants';
+import { AVATAR_SIZE_CLASS_NAMES } from '@/shared/components/avatar/avatar.constants';
 import useResponsiveValue from '@/shared/hooks/useResponsiveValue';
 import {
+  AVATAR_GROUP_BADGE_TEXT_CLASS_NAMES,
+  AVATAR_GROUP_GAP_CLASS_NAMES,
   AVATAR_GROUP_VISIBLE_COUNT,
-  avatarGroupBadgeTextClassNames,
-  avatarGroupGapClassNames,
 } from './avatarGroup.constants';
 import type { AvatarGroupProps } from './avatarGroup.types';
 
@@ -47,7 +47,7 @@ function AvatarGroup({
     <div
       className={cn(
         'flex items-center',
-        avatarGroupGapClassNames[size],
+        AVATAR_GROUP_GAP_CLASS_NAMES[size],
         className
       )}
     >
@@ -59,8 +59,8 @@ function AvatarGroup({
         <div
           className={cn(
             'bg-primary-100 text-primary-500 flex shrink-0 items-center justify-center rounded-full leading-none',
-            avatarSizeClassNames[size],
-            avatarGroupBadgeTextClassNames[size]
+            AVATAR_SIZE_CLASS_NAMES[size],
+            AVATAR_GROUP_BADGE_TEXT_CLASS_NAMES[size]
           )}
         >
           +{rest}

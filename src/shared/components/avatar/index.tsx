@@ -1,6 +1,6 @@
 import AvatarFallback from '@/shared/components/avatar/avatar-fallback';
 import AvatarImage from '@/shared/components/avatar/avatar-image';
-import { avatarSizeClassNames } from '@/shared/components/avatar/avatar.constants';
+import { AVATAR_SIZE_CLASS_NAMES } from '@/shared/components/avatar/avatar.constants';
 import { AvatarSizeProvider } from '@/shared/context/avatar/avatarProvider';
 import { cn } from '@/shared/utils/cn';
 import type { AvatarComponent, AvatarProps } from './avatar.types';
@@ -22,7 +22,7 @@ const Avatar = (({ children, user, size = 'md', className }: AvatarProps) => {
       <div
         className={cn(
           'pointer-events-none shrink-0 overflow-hidden rounded-full',
-          avatarSizeClassNames[size],
+          AVATAR_SIZE_CLASS_NAMES[size],
           className
         )}
       >
