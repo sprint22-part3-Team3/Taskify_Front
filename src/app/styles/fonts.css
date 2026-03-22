@@ -1,6 +1,8 @@
 @theme {
   --font-sans: 'Pretendard Variable', 'Pretendard', sans-serif;
 
+  --text-2xs: 0.625rem; /* 10px */
+
   --text-xs: 0.75rem; /* 12px */
   --text-xs--line-height: 1.125rem; /* 18px */
 

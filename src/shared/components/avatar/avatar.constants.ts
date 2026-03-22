@@ -8,8 +8,8 @@ export const avatarSizeClassNames: Record<AvatarSize, string> = {
 };
 
 export const avatarFallbackTextClassNames: Record<AvatarSize, string> = {
-  sm: 'typo-2xs-tight-semibold',
-  md: 'typo-xs-tight-semibold',
-  lg: 'typo-md-tight-semibold',
-  xl: 'typo-lg-tight-semibold',
+  sm: 'text-2xs leading-none font-semibold',
+  md: 'text-2xs leading-none font-semibold',
+  lg: 'text-md leading-none font-semibold',
+  xl: 'text-lg leading-none font-semibold',
 };
