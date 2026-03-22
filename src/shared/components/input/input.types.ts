@@ -6,6 +6,6 @@ export type InputProps = InputFieldProps & {
   isRequired?: boolean;
   errorMessage?: string;
   errorMessageClassName?: string;
-  wrapperClassName?: string;
+  containerClassName?: string;
   labelClassName?: string;
 };

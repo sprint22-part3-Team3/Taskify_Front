@@ -14,7 +14,7 @@ import type { InputProps } from './input.types';
  * labelClassName은 Label만 꾸밀 때 사용합니다.
  * className은 실제 `<input>`만 꾸밀 때 사용합니다.
  * errorMessageClassName은 에러 메시지만 꾸밀 때 사용합니다.
- * wrapperClassName은 이 세 요소를 감싸는 바깥 `<div>`를 꾸밀 때 사용합니다.
+ * containerClassName은 이 세 요소를 감싸는 바깥 `<div>`를 꾸밀 때 사용합니다.
  *
  * @example
  * ```tsx
@@ -36,7 +36,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       isRequired = false,
       errorMessage,
       errorMessageClassName,
-      wrapperClassName,
+      containerClassName,
       className,
       labelClassName,
       required,
@@ -50,7 +50,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const showRequiredMark = isRequired || required;
 
     return (
-      <div className={cn('flex w-full flex-col gap-2', wrapperClassName)}>
+      <div className={cn('flex w-full flex-col gap-2', containerClassName)}>
         {label && (
           <Label
             htmlFor={inputId}
