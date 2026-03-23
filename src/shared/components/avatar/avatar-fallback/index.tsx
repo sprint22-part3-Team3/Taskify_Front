@@ -1,5 +1,5 @@
 import { cva } from 'class-variance-authority';
-import { avatarFallbackTextClassNames } from '@/shared/components/avatar/avatar.constants';
+import { AVATAR_FALLBACK_TEXT_CLASS_NAMES } from '@/shared/components/avatar/avatar.constants';
 import {
   useAvatarSize,
   useAvatarUser,
@@ -30,7 +30,7 @@ const avatarFallbackStyle = cva(
   }
 );
 
-function AvatarFallback({ className = '' }: AvatarFallbackProps) {
+function AvatarFallback({ className }: AvatarFallbackProps) {
   const avatarUser = useAvatarUser();
   const avatarSize = useAvatarSize();
   const resolvedNickname = avatarUser?.nickname ?? '';
@@ -40,7 +40,7 @@ function AvatarFallback({ className = '' }: AvatarFallbackProps) {
     <div
       className={cn(
         avatarFallbackStyle({ color: resolvedAvatarColor }),
-        avatarFallbackTextClassNames[avatarSize],
+        AVATAR_FALLBACK_TEXT_CLASS_NAMES[avatarSize],
         className
       )}
     >
