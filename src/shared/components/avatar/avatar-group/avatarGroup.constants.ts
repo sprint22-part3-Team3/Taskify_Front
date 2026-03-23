@@ -6,12 +6,6 @@ export const AVATAR_GROUP_VISIBLE_COUNT = {
   desktop: 4,
 } as const;
 
-export const AVATAR_GROUP_SIZE = {
-  mobile: 'lg',
-  tablet: 'xl',
-  desktop: 'xl',
-} as const;
-
 export const AVATAR_GROUP_GAP_CLASS_NAMES: Record<AvatarGroupSize, string> = {
   lg: '-space-x-3',
   xl: '-space-x-3',
