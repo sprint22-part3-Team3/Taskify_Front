@@ -76,7 +76,7 @@ function MyDashboardPage() {
               <Button
                 theme="outlined"
                 size="icon"
-                className="h-9 w-9 rounded-r-none border-r-0 px-0 md:h-10 md:w-10"
+                className="-mr-px h-9 w-9 rounded-r-none px-0 hover:relative hover:z-10 md:h-10 md:w-10"
               >
                 <IcArrowLeft
                   className={getPaginationArrowClass(canGoPreviousPage)}
