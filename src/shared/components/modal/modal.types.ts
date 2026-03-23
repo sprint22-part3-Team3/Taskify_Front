@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
 export type ModalContextValue = {
   onClose: () => void;
@@ -15,7 +15,12 @@ export type ModalHeaderProps = {
   title?: string;
   hasMenuIcon?: boolean;
   hasCloseIcon?: boolean;
+  onClickMenu?: () => void;
   className?: string;
+};
+
+export type ModalHeaderIconProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+  children: ReactNode;
 };
 
 export type ModalMainProps = {

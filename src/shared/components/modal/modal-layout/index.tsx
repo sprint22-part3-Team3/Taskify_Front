@@ -1,7 +1,7 @@
 import type { ModalLayoutProps } from '@/shared/components/modal/modal.types';
 import { createPortal } from 'react-dom';
 import { cn } from '@/shared/utils/cn';
-import { ModalContext } from '@/shared/components/modal/modal-context';
+import { ModalContext } from '@/shared/components/modal/modalContext';
 
 /**
  * 모달의 배경 오버레이와 하얀색 기본 박스를 렌더링하고,

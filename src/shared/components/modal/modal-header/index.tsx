@@ -1,7 +1,29 @@
-import type { ModalHeaderProps } from '@/shared/components/modal/modal.types';
+import type {
+  ModalHeaderIconProps,
+  ModalHeaderProps,
+} from '@/shared/components/modal/modal.types';
 import { cn } from '@/shared/utils/cn';
 import { IcClose, IcMenu } from '@/shared/assets/icons';
-import { useModalContext } from '@/shared/components/modal/modal-context';
+import { useModalContext } from '@/shared/components/modal/modalContext';
+
+function ModalHeaderIcon({
+  className,
+  children,
+  ...props
+}: ModalHeaderIconProps) {
+  return (
+    <button
+      type="button"
+      className={cn(
+        'flex cursor-pointer items-center justify-center',
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+}
 
 /**
  * 제목과 닫기/메뉴 버튼을 포함하는 모달 상단 영역
@@ -10,6 +32,7 @@ function ModalHeader({
   title,
   hasCloseIcon = false,
   hasMenuIcon = false,
+  onClickMenu,
   className,
   ...props
 }: ModalHeaderProps) {
@@ -31,25 +54,24 @@ function ModalHeader({
         {title}
       </h2>
       {(hasMenuIcon || hasCloseIcon) && (
-        <div className="flex items-center gap-4 *:flex *:cursor-pointer *:items-center *:justify-center md:gap-6">
+        <div className="flex items-center gap-4 md:gap-6">
           {hasMenuIcon && (
-            <button
-              type="button"
-              aria-label="메뉴 열기"
+            <ModalHeaderIcon
               className="h-5 w-5 md:h-7 md:w-7"
+              aria-label="메뉴 열기"
+              onClick={onClickMenu}
             >
               <IcMenu className="w-0.75 text-black md:w-1" />
-            </button>
+            </ModalHeaderIcon>
           )}
           {hasCloseIcon && (
-            <button
-              type="button"
+            <ModalHeaderIcon
+              className="h-5 w-5 md:h-7 md:w-7"
               aria-label="모달 닫기"
-              className="h-6 w-6 md:h-8 md:w-8"
               onClick={onClose}
             >
               <IcClose className="h-full w-full text-black" />
-            </button>
+            </ModalHeaderIcon>
           )}
         </div>
       )}

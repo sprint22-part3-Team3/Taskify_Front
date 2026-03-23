@@ -6,9 +6,9 @@ import { cn } from '@/shared/utils/cn';
  */
 function ModalMain({ className, children, ...props }: ModalMainProps) {
   return (
-    <main className={cn('my-6', className)} {...props}>
+    <div className={cn('my-6', className)} {...props}>
       {children}
-    </main>
+    </div>
   );
 }
 
