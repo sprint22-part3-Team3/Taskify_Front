@@ -1,7 +1,7 @@
-import type { TextareaHTMLAttributes } from 'react';
+import type { ComponentProps } from 'react';
 
 export interface TextAreaProps extends Omit<
-  TextareaHTMLAttributes<HTMLTextAreaElement>,
+  ComponentProps<'textarea'>,
   'onChange'
 > {
   value: string;
