@@ -1,11 +1,11 @@
 import { cloneElement, isValidElement, type ReactElement } from 'react';
 import { cn } from '@/shared/utils/cn';
 import { AVATAR_SIZE_CLASS_NAMES } from '@/shared/components/avatar/avatar.constants';
+import { RESPONSIVE_AVATAR_SIZE } from '@/shared/constants/profile.constants';
 import useResponsiveValue from '@/shared/hooks/useResponsiveValue';
 import {
   AVATAR_GROUP_BADGE_TEXT_CLASS_NAMES,
   AVATAR_GROUP_GAP_CLASS_NAMES,
-  AVATAR_GROUP_SIZE,
   AVATAR_GROUP_VISIBLE_COUNT,
 } from './avatarGroup.constants';
 import type { AvatarGroupProps } from './avatarGroup.types';
@@ -35,7 +35,7 @@ function AvatarGroup({
     tablet: AVATAR_GROUP_VISIBLE_COUNT.tablet,
     desktop: AVATAR_GROUP_VISIBLE_COUNT.desktop,
   });
-  const avatarGroupSize = useResponsiveValue(AVATAR_GROUP_SIZE);
+  const avatarGroupSize = useResponsiveValue(RESPONSIVE_AVATAR_SIZE);
 
   if (!users || users.length === 0) {
     return null;

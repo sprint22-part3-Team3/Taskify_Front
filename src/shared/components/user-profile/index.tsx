@@ -1,6 +1,6 @@
 import Avatar from '@/shared/components/avatar';
 import useResponsiveValue from '@/shared/hooks/useResponsiveValue';
-import type { AvatarSize } from '@/shared/components/avatar/avatar.types';
+import { RESPONSIVE_AVATAR_SIZE } from '@/shared/constants/profile.constants';
 import { cn } from '@/shared/utils/cn';
 import type { UserProfileProps } from './userProfile.types';
 
@@ -17,11 +17,7 @@ function UserProfile({
   className = '',
   nicknameClassName = '',
 }: UserProfileProps) {
-  const avatarSize = useResponsiveValue<AvatarSize>({
-    mobile: 'lg',
-    tablet: 'xl',
-    desktop: 'xl',
-  });
+  const avatarSize = useResponsiveValue(RESPONSIVE_AVATAR_SIZE);
 
   return (
     <div className={cn('flex items-center gap-3', className)}>
