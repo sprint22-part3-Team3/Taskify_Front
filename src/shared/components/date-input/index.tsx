@@ -137,7 +137,7 @@ function DateInputField({
       />
 
       {isOpen && (
-        <div className="absolute left-0 z-20 mt-2 w-73.75 max-w-full rounded-2xl border border-gray-100 bg-white py-4 shadow-lg">
+        <div className="absolute left-0 mt-2 w-73.75 max-w-full rounded-2xl border border-gray-100 bg-white px-1 py-1.5 shadow-lg">
           <DatePicker
             inline
             locale={ko}
