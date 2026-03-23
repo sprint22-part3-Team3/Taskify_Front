@@ -18,7 +18,10 @@ function InvitedDashboardItemRow({
 }: InvitedDashboardItemRowProps) {
   return (
     <div
-      className={cn('border-b border-gray-100 py-4 md:px-6 md:py-4', className)}
+      className={cn(
+        'border-b border-gray-100 py-4 sm:py-5.5 md:px-6 md:py-5.75',
+        className
+      )}
       {...props}
     >
       <div className="md:hidden">
