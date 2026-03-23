@@ -2,7 +2,6 @@ import {
   IcAdd,
   IcArrowLeft,
   IcArrowRight,
-  IcBookmark,
   IcMailOff,
   IcSearch,
 } from '@/shared/assets/icons';
@@ -62,9 +61,6 @@ function MyDashboardPage() {
                       label={dashboardItem.title}
                       labelClassName="typo-md-semibold md:typo-lg-semibold text-black-200"
                     />
-                    {dashboardItem.isCreatedByMe && (
-                      <IcBookmark className="text-primary-500 h-4 w-4" />
-                    )}
                   </div>
                   <IcArrowRight className="text-black-200 h-4.5 w-4.5" />
                 </Button>
