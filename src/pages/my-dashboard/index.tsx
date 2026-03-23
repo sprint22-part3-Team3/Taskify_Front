@@ -73,7 +73,7 @@ function MyDashboardPage() {
           </div>
 
           <div className="mt-4 flex items-center justify-end gap-3">
-            <span className="typo-sm-medium text-black-200">
+            <span className="typo-md-regular text-black-200">
               {CURRENT_PAGE} 페이지 중 {TOTAL_PAGES}
             </span>
             <div className="flex">
@@ -117,7 +117,7 @@ function MyDashboardPage() {
 
               <div className="mt-4 md:overflow-x-auto">
                 <div className="md:min-w-170">
-                  <div className="typo-md-medium hidden grid-cols-3 px-6 py-4 text-gray-300 md:grid">
+                  <div className="typo-md-regular md:typo-lg-regular hidden grid-cols-3 px-6 py-4 text-gray-300 md:grid">
                     <span>이름</span>
                     <span>초대자</span>
                     <span>수락 여부</span>
