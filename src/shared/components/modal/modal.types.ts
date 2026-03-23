@@ -1,25 +1,29 @@
 import type { ReactNode } from 'react';
 
-type ModalBaseProps = {
-  isOpen: boolean;
+export type ModalContextValue = {
   onClose: () => void;
-  children: ReactNode;
-};
-
-export type FormModalVariant = 'simple' | 'base' | 'detailed';
-
-export type FormModalProps = ModalBaseProps & {
-  onClickSecondary?: () => void;
-  onClickPrimary: () => void;
-  variant: FormModalVariant;
-  title: string;
-  isCloseIcon?: boolean;
-  secondaryText?: string;
-  primaryText?: string;
 };
 
 export type ModalLayoutProps = {
+  isOpen: boolean;
   onClose: () => void;
-  className?: string;
   children: ReactNode;
+  className?: string;
+};
+
+export type ModalHeaderProps = {
+  title?: string;
+  hasMenuIcon?: boolean;
+  hasCloseIcon?: boolean;
+  className?: string;
+};
+
+export type ModalMainProps = {
+  children: ReactNode;
+  className?: string;
+};
+
+export type ModalFooterProps = {
+  children: ReactNode;
+  className?: string;
 };
