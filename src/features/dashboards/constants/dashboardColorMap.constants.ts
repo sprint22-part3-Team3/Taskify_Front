@@ -1,19 +1,16 @@
+import { COLORS } from '@/shared/constants/color.constants';
 import type {
   DashboardColor,
   DashboardColorName,
 } from '@/features/dashboards/types/dashboardColor.types';
 
 /**
- * 대시보드에서 선택 가능한 색상 도메인 정의입니다.
- * 타입에 색상을 추가하면 이 맵에도 반드시 추가되도록 강제합니다.
+ * 공통 색상 이름 목록을 기준으로 대시보드 색상 맵을 생성합니다.
  */
-export const DASHBOARD_COLOR_MAP: Record<DashboardColorName, string> = {
-  pink: 'var(--color-pink)',
-  orange: 'var(--color-orange)',
-  yellow: 'var(--color-yellow)',
-  blue: 'var(--color-blue)',
-  purple: 'var(--color-purple)',
-};
+export const DASHBOARD_COLOR_MAP: Record<DashboardColorName, string> =
+  Object.fromEntries(
+    COLORS.map((color) => [color, `var(--color-${color})`])
+  ) as Record<DashboardColorName, string>;
 
 export const DASHBOARD_COLORS: DashboardColor[] = (
   Object.entries(DASHBOARD_COLOR_MAP) as [DashboardColorName, string][]

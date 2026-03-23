@@ -1,9 +1,6 @@
-export type DashboardColorName =
-  | 'pink'
-  | 'orange'
-  | 'yellow'
-  | 'blue'
-  | 'purple';
+import type { COLORS } from '@/shared/constants/color.constants';
+
+export type DashboardColorName = (typeof COLORS)[number];
 
 export type DashboardColor = {
   id: DashboardColorName;
