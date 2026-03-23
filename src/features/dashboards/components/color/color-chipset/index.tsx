@@ -1,6 +1,6 @@
 import { IcCheck } from '@/shared/assets/icons';
 import { cn } from '@/shared/utils/cn';
-import { type ColorChipsetProps } from '@/features/dashboards/components/color-chipset/colorChipset.types';
+import { type ColorChipsetProps } from '@/features/dashboards/components/color/color-chipset/colorChipset.types';
 
 /**
  * 대시보드 색상을 선택하는 컬러칩셋 컴포넌트입니다.
