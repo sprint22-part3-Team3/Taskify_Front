@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { forwardRef, useId } from 'react';
 import { cn } from '@/shared/utils/cn';
 import type { TextAreaProps } from './textArea.types';
 
@@ -19,10 +19,14 @@ import type { TextAreaProps } from './textArea.types';
  */
 const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
   ({ className, value, onChange, error, ...props }, ref) => {
+    const errorId = useId();
+
     return (
       <div className="flex max-w-130 flex-col gap-1">
         <textarea
           ref={ref}
+          aria-invalid={Boolean(error)}
+          aria-describedby={error ? errorId : undefined}
           className={cn(
             'h-31.5 w-full resize-none rounded-lg border border-gray-200 bg-white px-4 py-3',
             'placeholder:typo-lg-regular text-black placeholder:text-gray-300',
@@ -34,7 +38,11 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           onChange={(event) => onChange(event.target.value)}
           {...props}
         />
-        {error && <p className="text-error typo-md-regular">{error}</p>}
+        {error && (
+          <p id={errorId} className="text-error typo-md-regular">
+            {error}
+          </p>
+        )}
       </div>
     );
   }
