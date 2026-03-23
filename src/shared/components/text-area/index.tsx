@@ -28,7 +28,7 @@ function TextArea({
   const errorId = useId();
 
   return (
-    <div className="flex max-w-130 flex-col gap-1">
+    <div className="flex w-full flex-col gap-1">
       <textarea
         ref={ref}
         aria-invalid={Boolean(error)}
