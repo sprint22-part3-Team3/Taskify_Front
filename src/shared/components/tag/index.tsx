@@ -1,10 +1,14 @@
 import { getDashboardColorHex } from '@/features/dashboards/constants/dashboardColorMap.constants';
-import {
-  TAG_TEXT_DEFAULT_COLOR,
-  getTagBackgroundColor,
-} from '@/shared/components/tag/tag.constants';
+import type { DashboardColorName } from '@/features/dashboards/types/dashboardColor.types';
 import { type TagProps } from '@/shared/components/tag/tag.types';
 import { cn } from '@/shared/utils/cn';
+
+const TAG_TEXT_DEFAULT_COLOR: DashboardColorName = 'blue';
+const TAG_BACKGROUND_OPACITY_PERCENT = 10;
+
+const getTagBackgroundColor = (textColor: string): string => {
+  return `color-mix(in srgb, ${textColor} ${TAG_BACKGROUND_OPACITY_PERCENT}%, transparent)`;
+};
 
 /**
  * 대시보드 색상 기반 텍스트 컬러를 적용하는 공용 Tag 컴포넌트입니다.
@@ -26,7 +30,7 @@ function Tag({
   return (
     <span
       className={cn(
-        'typo-md-regular inline-flex items-center justify-center rounded-sm px-2 py-1',
+        'typo-md-regular inline-flex items-center rounded-sm px-2 py-1',
         className
       )}
       style={{
