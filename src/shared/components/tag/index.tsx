@@ -1,10 +1,10 @@
 import { getDashboardColorHex } from '@/features/dashboards/constants/dashboardColorMap.constants';
-import type { DashboardColorName } from '@/features/dashboards/types/dashboardColor.types';
+import {
+  TAG_BACKGROUND_OPACITY_PERCENT,
+  TAG_TEXT_DEFAULT_COLOR,
+} from '@/shared/components/tag/tag.constants';
 import { type TagProps } from '@/shared/components/tag/tag.types';
 import { cn } from '@/shared/utils/cn';
-
-const TAG_TEXT_DEFAULT_COLOR: DashboardColorName = 'blue';
-const TAG_BACKGROUND_OPACITY_PERCENT = 10;
 
 const getTagBackgroundColor = (textColor: string): string => {
   return `color-mix(in srgb, ${textColor} ${TAG_BACKGROUND_OPACITY_PERCENT}%, transparent)`;
