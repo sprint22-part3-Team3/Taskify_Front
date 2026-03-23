@@ -66,16 +66,17 @@ function FormModal({
       )}
     >
       <header className="flex items-center justify-between">
-        <p
+        <h2
           className={cn(
             modalVariants({ titleStyle: variant }),
             'text-black-200'
           )}
         >
           {title}
-        </p>
+        </h2>
         {isCloseIcon && (
           <button
+            type="button"
             className="flex h-6 w-6 cursor-pointer items-center justify-center md:h-9 md:w-9"
             onClick={onClose}
           >
