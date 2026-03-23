@@ -1,7 +1,7 @@
 import type { TitleProps } from '@/shared/components/title/title.types';
 import {
-  SIZE_MAP,
-  WEIGHT_MAP,
+  TITLE_SIZE_MAP,
+  TITLE_WEIGHT_MAP,
 } from '@/shared/components/title/title.constants';
 
 // Title component that renders a heading element with customizable size and weight
@@ -30,7 +30,9 @@ function Title({
   const Tag = as;
 
   return (
-    <Tag className={`${SIZE_MAP[size]} ${WEIGHT_MAP[weight]} ${className}`}>
+    <Tag
+      className={`${TITLE_SIZE_MAP[size]} ${TITLE_WEIGHT_MAP[weight]} ${className}`}
+    >
       {children}
     </Tag>
   );
