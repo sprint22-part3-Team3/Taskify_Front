@@ -8,13 +8,9 @@ import type {
  * 공통 색상 이름 목록을 기준으로 대시보드 색상 맵을 생성합니다.
  */
 export const DASHBOARD_COLOR_MAP: Record<DashboardColorName, string> =
-  COLORS.reduce(
-    (dashboardColorMap, color) => {
-      dashboardColorMap[color] = `var(--color-${color})`;
-      return dashboardColorMap;
-    },
-    {} as Record<DashboardColorName, string>
-  );
+  Object.fromEntries(
+    COLORS.map((color) => [color, `var(--color-${color})`])
+  ) as Record<DashboardColorName, string>;
 
 export const DASHBOARD_COLORS: DashboardColor[] = (
   Object.entries(DASHBOARD_COLOR_MAP) as [DashboardColorName, string][]
