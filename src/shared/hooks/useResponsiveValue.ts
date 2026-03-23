@@ -25,26 +25,29 @@ export function getResponsiveValue<T>(
 }
 
 export default function useResponsiveValue<T>(values: ResponsiveValue<T>): T {
+  const { mobile, tablet, desktop } = values;
+
   const [value, setValue] = useState<T>(() => {
     if (typeof window === 'undefined') {
-      return values.mobile;
+      return mobile;
     }
 
-    return getResponsiveValue(values, window.innerWidth);
+    return getResponsiveValue({ mobile, tablet, desktop }, window.innerWidth);
   });
 
   useEffect(() => {
     const handleResize = () => {
-      setValue(getResponsiveValue(values, window.innerWidth));
+      setValue(
+        getResponsiveValue({ mobile, tablet, desktop }, window.innerWidth)
+      );
     };
 
-    handleResize();
     window.addEventListener('resize', handleResize);
 
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, [values]);
+  }, [mobile, tablet, desktop]);
 
   return value;
 }
