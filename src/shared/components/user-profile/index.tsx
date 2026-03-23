@@ -9,15 +9,18 @@ import type { UserProfileProps } from './userProfile.types';
  *
  * <UserProfile
  *   user={user}
+ *   size="md"
  *   nicknameClassName="typo-md-regular md:typo-lg-regular"
  * />
  */
 function UserProfile({
   user,
+  size,
   className = '',
   nicknameClassName = '',
 }: UserProfileProps) {
-  const avatarSize = useResponsiveValue(RESPONSIVE_AVATAR_SIZE);
+  const responsiveAvatarSize = useResponsiveValue(RESPONSIVE_AVATAR_SIZE);
+  const avatarSize = size ?? responsiveAvatarSize;
 
   return (
     <div className={cn('flex items-center gap-3', className)}>
