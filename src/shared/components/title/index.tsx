@@ -4,21 +4,20 @@ import {
   TITLE_WEIGHT_MAP,
 } from '@/shared/components/title/title.constants';
 
-// Title component that renders a heading element with customizable size and weight
-
-// Props:
-// - as: the HTML heading tag to use (default: 'h2')
-// - size: the size of the title (default: 'md')
-// - weight: the font weight of the title (default: 'bold')
-// - children: the content of the title
-// - className: additional CSS classes to apply to the title
-
-// The component uses the SIZE_MAP and WEIGHT_MAP constants to determine the appropriate CSS classes based on the size and weight props. It then renders the specified heading tag with the combined classes and children content.
-
-// Example usage:
-// <Title as="h3" size="lg" weight="semibold" className="text-blue-500">
-//   This is a large, semibold title with blue text.
-// </Title>
+/**
+ * 타이틀 컴포넌트
+ *
+ * @remarks
+ * - 페이지 내에서 제목을 표시하는 컴포넌트입니다.
+ * - `as` prop을 통해 제목 태그(h1, h2, h3 등)를 선택할 수 있습니다.
+ * - `size` prop을 통해 제목의 크기를 조절할 수 있습니다.
+ * - `weight` prop을 통해 제목의 글자 두께를 조절할 수 있습니다.
+ *
+ * @example 기본 사용 예시
+ * ```tsx
+ * <Title as="h1" size="lg" weight="bold">페이지 제목</Title>
+ * ```
+ **/
 
 function Title({
   as = 'h2',
