@@ -3,7 +3,7 @@ import type {
   TitleWeight,
 } from '@/shared/components/title/title.types';
 
-export const SIZE_MAP: Record<TitleSize, string> = {
+export const TITLE_SIZE_MAP: Record<TitleSize, string> = {
   xs: 'text-xs',
   sm: 'text-sm',
   md: 'text-md',
@@ -14,7 +14,7 @@ export const SIZE_MAP: Record<TitleSize, string> = {
   '3xl': 'text-3xl',
 };
 
-export const WEIGHT_MAP: Record<TitleWeight, string> = {
+export const TITLE_WEIGHT_MAP: Record<TitleWeight, string> = {
   regular: 'font-normal',
   medium: 'font-medium',
   semibold: 'font-semibold',
