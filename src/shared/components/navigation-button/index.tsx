@@ -1,4 +1,4 @@
-import type { NavigationButtonsProps } from '@/shared/components/navigation-button/navButton';
+import type { NavigationButtonsProps } from '@/shared/components/navigation-button/navButton.types';
 import { IcArrowLeft, IcArrowRight } from '@/shared/assets/icons';
 
 /**
@@ -35,9 +35,9 @@ import { IcArrowLeft, IcArrowRight } from '@/shared/assets/icons';
  *     <NavigationButtons
  *       onPrev={handlePrev}
  *       onNext={handleNext}
- *       prevDisabled={page === 0}
- *       nextDisabled={page === totalPage - 1}
- *       hideOnMobile
+ *       hasPrevDisabled={page === 0}
+ *       hasNextDisabled={page === totalPage - 1}
+ *       isHidingOnMobile
  *     />
  *   );
  * }
@@ -62,7 +62,7 @@ export default function NavigationButtons({
         }`}
       >
         <IcArrowLeft
-          className={`${hasPrevDisabled ? 'opacity-20' : 'opacity-100'}`}
+          className={`${hasPrevDisabled ? 'text-gray-200' : 'text-gray-400'}`}
         />
       </button>
 
@@ -75,7 +75,7 @@ export default function NavigationButtons({
         }`}
       >
         <IcArrowRight
-          className={`${hasNextDisabled ? 'opacity-20' : 'opacity-100'}`}
+          className={`${hasNextDisabled ? 'text-gray-200' : 'text-gray-400'}`}
         />
       </button>
     </div>
