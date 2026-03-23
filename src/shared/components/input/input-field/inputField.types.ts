@@ -1,3 +1,3 @@
-import { type InputHTMLAttributes } from 'react';
+import type { ComponentProps } from 'react';
 
-export type InputFieldProps = InputHTMLAttributes<HTMLInputElement>;
+export type InputFieldProps = ComponentProps<'input'>;

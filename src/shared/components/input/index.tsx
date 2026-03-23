@@ -1,4 +1,4 @@
-import { forwardRef, useId } from 'react';
+import { useId } from 'react';
 import InputField from '@/shared/components/input/input-field';
 import Label from '@/shared/components/input/label';
 import { cn } from '@/shared/utils/cn';
@@ -28,57 +28,45 @@ import type { InputProps } from './input.types';
  * />
  * ```
  */
-const Input = forwardRef<HTMLInputElement, InputProps>(
-  (
-    {
-      id,
-      label,
-      required = false,
-      errorMessage,
-      errorMessageClassName,
-      containerClassName,
-      className,
-      labelClassName,
-      disabled,
-      ...props
-    },
-    ref
-  ) => {
-    const generatedId = useId();
-    const inputId = id ?? generatedId;
+function Input({
+  id,
+  label,
+  required = false,
+  errorMessage,
+  errorMessageClassName,
+  containerClassName,
+  className,
+  labelClassName,
+  disabled,
+  ref,
+  ...props
+}: InputProps) {
+  const generatedId = useId();
+  const inputId = id ?? generatedId;
 
-    return (
-      <div className={cn('flex w-full flex-col gap-2', containerClassName)}>
-        {label && (
-          <Label
-            htmlFor={inputId}
-            required={required}
-            className={labelClassName}
-          >
-            {label}
-          </Label>
-        )}
-        <InputField
-          ref={ref}
-          id={inputId}
-          required={required}
-          disabled={disabled}
-          aria-invalid={Boolean(errorMessage)}
-          {...props}
-          className={className}
-        />
-        {errorMessage && (
-          <p
-            className={cn('typo-md-regular text-error', errorMessageClassName)}
-          >
-            {errorMessage}
-          </p>
-        )}
-      </div>
-    );
-  }
-);
-
-Input.displayName = 'Input';
+  return (
+    <div className={cn('flex w-full flex-col gap-2', containerClassName)}>
+      {label && (
+        <Label htmlFor={inputId} required={required} className={labelClassName}>
+          {label}
+        </Label>
+      )}
+      <InputField
+        ref={ref}
+        id={inputId}
+        required={required}
+        disabled={disabled}
+        aria-invalid={Boolean(errorMessage)}
+        {...props}
+        className={className}
+      />
+      {errorMessage && (
+        <p className={cn('typo-md-regular text-error', errorMessageClassName)}>
+          {errorMessage}
+        </p>
+      )}
+    </div>
+  );
+}
 
 export default Input;
