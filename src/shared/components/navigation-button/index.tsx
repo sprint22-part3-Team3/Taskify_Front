@@ -1,4 +1,4 @@
-import type { NavigationButtonsProps } from '@/shared/components/navigation-button/navigationButton.types';
+import type { NavigationButtonsProps } from '@/shared/components/navigation-button/navButton';
 import { IcArrowLeft, IcArrowRight } from '@/shared/assets/icons';
 
 /**
