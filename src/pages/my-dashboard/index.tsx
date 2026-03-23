@@ -6,7 +6,7 @@ import {
   IcMailOff,
   IcSearch,
 } from '@/shared/assets/icons';
-import { ColorLabel } from '@/features/dashboards/components/color-label';
+import { ColorLabel } from '@/features/dashboards/components/color/color-label';
 import { getDashboardColorHex } from '@/features/dashboards/constants/dashboardColorMap.constants';
 import { Button } from '@/shared/components/button';
 import {
