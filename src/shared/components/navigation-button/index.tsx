@@ -1,5 +1,6 @@
 import type { NavigationButtonsProps } from '@/shared/components/navigation-button/navigationButton.types';
 import { IcArrowLeft, IcArrowRight } from '@/shared/assets/icons';
+import { cn } from '@/shared/utils/cn';
 
 /**
  * 이전/다음 네비게이션 버튼 컴포넌트
@@ -47,19 +48,20 @@ import { IcArrowLeft, IcArrowRight } from '@/shared/assets/icons';
 export default function NavigationButtons({
   onPrev,
   onNext,
-  hasPrevDisabled = true,
-  hasNextDisabled = true,
+  hasPrevDisabled = false,
+  hasNextDisabled = false,
   isHidingOnMobile = false,
 }: NavigationButtonsProps) {
   return (
-    <div className={`${isHidingOnMobile ? 'hidden sm:flex' : 'flex'}`}>
+    <div className={cn('flex', isHidingOnMobile && 'hidden sm:flex')}>
       {/* 이전 버튼 */}
       <button
         onClick={onPrev}
         disabled={hasPrevDisabled}
-        className={`flex h-9 w-9 items-center justify-center rounded-l border border-gray-200 md:h-10 md:w-10 ${
-          hasPrevDisabled ? 'pointer-events-none' : 'hover:bg-gray-50'
-        }`}
+        className={cn(
+          'flex h-9 w-9 items-center justify-center rounded-l border border-gray-200 md:h-10 md:w-10',
+          hasPrevDisabled ? 'cursor-not-allowed' : 'hover:bg-gray-50'
+        )}
       >
         <IcArrowLeft
           className={`${hasPrevDisabled ? 'text-gray-200' : 'text-gray-400'}`}
@@ -71,7 +73,7 @@ export default function NavigationButtons({
         onClick={onNext}
         disabled={hasNextDisabled}
         className={`-ml-px flex h-9 w-9 items-center justify-center rounded-r border border-gray-200 md:h-10 md:w-10 ${
-          hasNextDisabled ? 'pointer-events-none' : 'hover:bg-gray-50'
+          hasNextDisabled ? 'cursor-not-allowed' : 'hover:bg-gray-50'
         }`}
       >
         <IcArrowRight

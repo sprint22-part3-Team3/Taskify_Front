@@ -18,6 +18,7 @@ export type TitleProps = {
   as?: HeadingTag;
   size?: TitleSize;
   weight?: TitleWeight;
+  color?: string;
   children: ReactNode;
   className?: string;
 };
