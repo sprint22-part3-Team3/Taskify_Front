@@ -3,7 +3,7 @@ import DatePicker from 'react-datepicker';
 import { format, setHours, setMinutes } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import 'react-datepicker/dist/react-datepicker.css';
-import '@/shared/components/date-input/dateInputField.css';
+import '@/shared/components/date-input/dateInput.css';
 import {
   formatDateTimeValue,
   getDefaultDateTimeValue,
