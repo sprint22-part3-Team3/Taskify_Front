@@ -9,11 +9,11 @@ import {
   getDefaultDateTimeValue,
   parseDateTimeValue,
 } from '@/shared/utils/date';
-import { HOUR_OPTIONS, MINUTE_OPTIONS } from './dateInputField.constants';
+import { HOUR_OPTIONS, MINUTE_OPTIONS } from './dateInput.constants';
 import PickerFooter from './picker-footer';
 import DateInputFieldTrigger from './picker-trigger';
 import DatePickerHeader from './picker-header';
-import type { DateInputFieldProps } from './dateInputField.types';
+import type { DateInputFieldProps } from './dateInput.types';
 
 /**
  * 날짜와 시간을 함께 선택할 수 있는 공용 DateInputField 컴포넌트입니다.
