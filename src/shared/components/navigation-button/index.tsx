@@ -1,5 +1,5 @@
-import type { NavigationButtonsProps } from '@/shared/components/navigation-button/navigationButton.types';
-import { IcArrowLeft, IcArrowRight } from '@/shared/assets/icons';
+import type { NavigationButtonsProps } from '@/shared/components/navigation-button/navigationButtons.types';
+import NavigationButton from '@/shared/components/navigation-button/nav-button';
 import { cn } from '@/shared/utils/cn';
 
 /**
@@ -20,28 +20,22 @@ import { cn } from '@/shared/utils/cn';
  *
  * @example 페이지 상태와 함께 사용하는 예시
  * ```tsx
- * function Page() {
- *   const [page, setPage] = useState(0);
- *   const totalPage = 5;
- *
- *   const handlePrev = () => {
- *     setPage((prev) => Math.max(prev - 1, 0));
- *   };
- *
- *   const handleNext = () => {
- *     setPage((prev) => Math.min(prev + 1, totalPage - 1));
- *   };
- *
- *   return (
- *     <NavigationButtons
- *       onPrev={handlePrev}
- *       onNext={handleNext}
- *       hasPrevDisabled={page === 0}
- *       hasNextDisabled={page === totalPage - 1}
- *       isHidingOnMobile
- *     />
- *   );
- * }
+ * const [currentPage, setCurrentPage] = useState(1);
+ * const totalPages = 5;
+ *  * <NavigationButtons
+ *   onPrev={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+ *   onNext={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+ *   hasPrevDisabled={currentPage === 1}
+ *   hasNextDisabled={currentPage === totalPages}
+ * />
+ * ```
+ * @example 모바일에서 숨기는 예시
+ * ```tsx
+ * <NavigationButtons
+ *   onPrev={() => console.log('이전')}
+ *   onNext={() => console.log('다음')}
+ *   isHidingOnMobile={true}
+ * />
  * ```
  */
 
@@ -55,31 +49,18 @@ export default function NavigationButtons({
   return (
     <div className={cn('flex', isHidingOnMobile && 'hidden sm:flex')}>
       {/* 이전 버튼 */}
-      <button
-        onClick={onPrev}
+      <NavigationButton
+        direction="prev"
         disabled={hasPrevDisabled}
-        className={cn(
-          'flex h-9 w-9 items-center justify-center rounded-l border border-gray-200 md:h-10 md:w-10',
-          hasPrevDisabled ? 'cursor-not-allowed' : 'hover:bg-gray-50'
-        )}
-      >
-        <IcArrowLeft
-          className={`${hasPrevDisabled ? 'text-gray-200' : 'text-gray-400'}`}
-        />
-      </button>
+        onClick={onPrev}
+      />
 
       {/* 다음 버튼 */}
-      <button
-        onClick={onNext}
+      <NavigationButton
+        direction="next"
         disabled={hasNextDisabled}
-        className={`-ml-px flex h-9 w-9 items-center justify-center rounded-r border border-gray-200 md:h-10 md:w-10 ${
-          hasNextDisabled ? 'cursor-not-allowed' : 'hover:bg-gray-50'
-        }`}
-      >
-        <IcArrowRight
-          className={`${hasNextDisabled ? 'text-gray-200' : 'text-gray-400'}`}
-        />
-      </button>
+        onClick={onNext}
+      />
     </div>
   );
 }
