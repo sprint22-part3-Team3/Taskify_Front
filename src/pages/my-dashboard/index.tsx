@@ -38,7 +38,7 @@ function MyDashboardPage() {
     <main className="min-h-dvh bg-gray-50">
       <div className="mx-auto w-full px-10 pt-10 pb-10">
         <section className="max-w-240">
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
             <Button
               theme="outlined"
               size="icon"
@@ -66,7 +66,7 @@ function MyDashboardPage() {
                       <IcBookmark className="text-primary-500 h-4 w-4" />
                     )}
                   </div>
-                  <IcArrowRight className="text-black-200 h-5 w-5" />
+                  <IcArrowRight className="text-black-200 h-4.5 w-4.5" />
                 </Button>
               );
             })}
@@ -115,8 +115,8 @@ function MyDashboardPage() {
                 />
               </div>
 
-              <div className="mt-4 md:overflow-x-auto">
-                <div className="md:min-w-170">
+              <div className="mt-4 lg:overflow-x-auto">
+                <div className="lg:min-w-170">
                   <div className="typo-md-regular md:typo-lg-regular hidden grid-cols-3 px-6 py-4 text-gray-300 md:grid">
                     <span>이름</span>
                     <span>초대자</span>
@@ -135,7 +135,7 @@ function MyDashboardPage() {
               </div>
             </div>
           ) : (
-            <div className="flex flex-1 flex-col items-center justify-center gap-6">
+            <div className="flex h-81.75 flex-col items-center justify-center gap-6 md:h-97.5">
               <IcMailOff className="h-15 w-15 text-gray-200 md:h-18 md:w-18" />
               <p className="typo-xs-regular md:typo-lg-regular text-gray-300">
                 아직 초대받은 대시보드가 없어요

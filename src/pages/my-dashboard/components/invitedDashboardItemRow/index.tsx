@@ -53,10 +53,10 @@ function InvitedDashboardItemRow({
       </div>
 
       <div className="hidden md:grid md:grid-cols-3 md:items-center">
-        <span className="typo-lg-regular text-black-200">
+        <span className="md:typo-lg-regular typo-md-regular text-black-200">
           {invitedDashboardItem.name}
         </span>
-        <span className="typo-lg-regular text-black-200">
+        <span className="md:typo-lg-regular typo-md-regular text-black-200">
           {invitedDashboardItem.inviter}
         </span>
         <div className="flex items-center gap-2">
