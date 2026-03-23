@@ -28,15 +28,16 @@ function DateInputFieldTrigger({
       )}
     >
       <span
-        className={cn('block pl-8', value ? 'text-black' : 'text-gray-300')}
+        className={cn('block pl-8', value ? 'text-black-200' : 'text-gray-300')}
       >
         {displayValue}
       </span>
       <IcCalendar
         aria-hidden="true"
         className={cn(
-          'pointer-events-none absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-gray-400',
-          disabled && 'text-gray-300'
+          'absolute top-1/2 left-4 -translate-y-1/2',
+          disabled && 'text-gray-300',
+          !disabled && (value ? 'text-black-200' : 'text-gray-300')
         )}
       />
     </button>
