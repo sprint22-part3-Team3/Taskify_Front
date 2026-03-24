@@ -6,10 +6,16 @@ import PasswordField from '@/shared/components/input/password-field';
 import Title from '@/shared/components/title';
 import ImageUploadBox from '@/shared/components/image-uploader';
 
+import { IcArrowLeft } from '@/shared/assets';
+
+import { useNavigate } from 'react-router-dom';
+
 function MyPage() {
   const [password, setPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
+
+  const navigate = useNavigate();
 
   const isPasswordMismatch =
     confirmNewPassword.length > 0 && newPassword !== confirmNewPassword;
@@ -18,8 +24,18 @@ function MyPage() {
     <div className="bg-gray-50">
       {/* 헤더 */}
       {/* 사이드바 */}
-      {/* 돌아가기 버튼 */}
       <div className="p-3 pt-4 md:pt-4 md:pr-5 md:pl-4 lg:pt-12 lg:pl-5">
+        <button
+          onClick={() => navigate(-1)}
+          className="mb-2 flex cursor-pointer items-center md:mb-7"
+        >
+          <div className="flex h-4.5 w-4.5 items-center justify-center md:h-5 md:w-5">
+            <IcArrowLeft className="text-black-200" />
+          </div>
+          <div className="text-black-200 typo-md-medium md:typo-lg-medium md--line-height md:lg--line-height ml-2">
+            돌아가기
+          </div>
+        </button>
         <div className="rounded-xl bg-white p-4 sm:w-full md:w-137 md:p-6 lg:w-2xl">
           <Title as="h2" size="2xl" weight="bold" className="mb-20 md:mb-6">
             프로필
