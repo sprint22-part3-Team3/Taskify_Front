@@ -42,6 +42,7 @@ export default function ImageUploadBox({
 
   return (
     <label
+      aria-label="이미지 업로드"
       className={`bg-primary-500/10 flex cursor-pointer items-center justify-center overflow-hidden rounded-lg ${VARIANT_STYLE[variant].size} `}
     >
       {/* 실제 input */}
