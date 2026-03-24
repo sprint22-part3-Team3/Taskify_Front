@@ -1,11 +1,9 @@
 import { useState } from 'react';
-import { IcCalendar } from '@/shared/assets/icons';
 import ImageUploadBox from '@/shared/components/image-uploader';
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
-import InputField from '@/shared/components/input/input-field';
 import { Modal } from '@/shared/components/modal';
-import { Tag } from '@/shared/components/tag';
+import DateInputField from '@/shared/components/date-input';
 import TextArea from '@/shared/components/text-area';
 import type { TodoCreateModalProps } from '@/features/cards/components/todo-create-modal/todoCreateModal.types';
 
@@ -14,23 +12,6 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
-  const [tagInput, setTagInput] = useState('');
-  const [tags, setTags] = useState<string[]>([]);
-
-  const dueDateCalendarColor = dueDate.trim()
-    ? 'text-black-200'
-    : 'text-gray-300';
-
-  const handleTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const trimmed = tagInput.trim();
-      if (trimmed) {
-        setTags((prev) => [...prev, trimmed]);
-        setTagInput('');
-      }
-    }
-  };
 
   const handleCreate = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -81,35 +62,20 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
               <span className="typo-md-regular md:typo-lg-regular text-black-200">
                 마감일
               </span>
-              <div className="relative">
-                <IcCalendar
-                  className={`${dueDateCalendarColor} absolute top-1/2 left-4 h-4.5 w-4.5 -translate-y-1/2`}
-                />
-                <InputField
-                  type="text"
-                  placeholder="날짜를 입력해 주세요"
-                  value={dueDate}
-                  onChange={(event) => setDueDate(event.target.value)}
-                  className="typo-md-regular md:typo-lg-regular pl-12"
-                />
-              </div>
+              <DateInputField
+                name="dueDate"
+                value={dueDate}
+                onChange={setDueDate}
+              />
             </div>
             <div className="flex w-full flex-col gap-2">
               <span className="typo-md-regular md:typo-lg-regular text-black-200">
                 태그
               </span>
               <div className="flex min-h-12.5 flex-wrap items-center gap-2 rounded-lg border border-gray-200 px-4 py-2">
-                {tags.map((todoTag) => (
-                  <Tag key={todoTag} color="purple">
-                    {todoTag}
-                  </Tag>
-                ))}
                 <input
                   type="text"
                   placeholder="입력 후 Enter"
-                  value={tagInput}
-                  onChange={(e) => setTagInput(e.target.value)}
-                  onKeyDown={handleTagKeyDown}
                   className="typo-md-regular md:typo-lg-regular min-w-0 flex-1 outline-none placeholder:text-gray-300"
                 />
               </div>
