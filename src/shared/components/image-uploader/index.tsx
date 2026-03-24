@@ -2,7 +2,7 @@ import type {
   ChangeEvent,
   ImageUploadBoxProps,
 } from '@/shared/components/image-uploader/imageUploder.types';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { IcAdd } from '@/shared/assets/icons';
 import { VARIANT_STYLE } from '@/shared/components/image-uploader/imageUploder.constants';
 
@@ -39,6 +39,15 @@ export default function ImageUploadBox({
 
     e.target.value = '';
   };
+
+  useEffect(() => {
+    // cleanup: 이전 image URL 제거
+    return () => {
+      if (image) {
+        URL.revokeObjectURL(image);
+      }
+    };
+  }, [image]);
 
   return (
     <label
