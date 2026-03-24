@@ -68,8 +68,8 @@ export default function Sidebar({
             key={item.id}
             onClick={() => onDashboardClick?.(item.id)}
             className={cn(
-              'hover:bg-primary-8 flex w-full cursor-pointer items-center justify-center gap-3 rounded-md px-4 py-3 text-left md:justify-start md:px-5',
-              selectedId === item.id && 'bg-primary-8'
+              'hover:bg-primary-500/8 flex w-full cursor-pointer items-center justify-center gap-3 rounded-md px-4 py-3 text-left md:justify-start md:px-5',
+              selectedId === item.id && 'bg-primary-500/8'
             )}
           >
             {/* colorLabel 적용 */}
