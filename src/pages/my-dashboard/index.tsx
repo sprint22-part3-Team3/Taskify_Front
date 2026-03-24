@@ -13,8 +13,8 @@ import {
   DASHBOARD_ITEMS,
   INVITED_DASHBOARD_ITEMS,
   TOTAL_PAGES,
-} from './myDashboard.constants';
-import InvitedDashboardItemRow from './components/invitedDashboardItemRow';
+} from '@/pages/my-dashboard/myDashboard.constants';
+import InvitedDashboardItemRow from '@/pages/my-dashboard/components/invitedDashboardItemRow';
 
 function getPaginationArrowClass(isEnabled: boolean) {
   return isEnabled ? 'h-4 w-4 text-black-200' : 'h-4 w-4 text-gray-200';

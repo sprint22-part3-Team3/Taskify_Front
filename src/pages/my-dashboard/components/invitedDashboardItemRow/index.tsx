@@ -1,6 +1,6 @@
 import { Button } from '@/shared/components/button';
 import { cn } from '@/shared/utils/cn';
-import type { InvitedDashboardItemRowProps } from './invitedDashboardItemRow.types';
+import type { InvitedDashboardItemRowProps } from '@/pages/my-dashboard/components/invitedDashboardItemRow/invitedDashboardItemRow.types';
 
 /**
  * 초대받은 대시보드 목록의 단일 행을 렌더링합니다.

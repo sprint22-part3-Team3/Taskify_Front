@@ -1,4 +1,7 @@
-import type { DashboardItem, InvitedDashboardItem } from './myDashboard.types';
+import type {
+  DashboardItem,
+  InvitedDashboardItem,
+} from '@/pages/my-dashboard/myDashboard.types';
 
 /**
  * 암시 데이터 파일
