@@ -20,14 +20,6 @@ function getPaginationArrowClass(isEnabled: boolean) {
   return isEnabled ? 'h-4 w-4 text-black-200' : 'h-4 w-4 text-gray-200';
 }
 
-/**
- * 내 대시보드 페이지의 본문 영역을 렌더링합니다.
- *
- * @example
- * ```tsx
- * <MyDashboardPage />
- * ```
- */
 function MyDashboardPage() {
   const hasInvitedDashboards = INVITED_DASHBOARD_ITEMS.length > 0;
   const canGoPreviousPage = CURRENT_PAGE > 1;

@@ -4,7 +4,6 @@ export type DashboardItem = {
   id: number;
   title: string;
   color: DashboardColorName;
-  isCreatedByMe: boolean;
 };
 
 export type InvitedDashboardItem = {

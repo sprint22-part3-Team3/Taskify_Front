@@ -5,11 +5,11 @@ import type { DashboardItem, InvitedDashboardItem } from './myDashboard.types';
  */
 
 export const DASHBOARD_ITEMS: DashboardItem[] = [
-  { id: 1, title: '비브리지', color: 'blue', isCreatedByMe: true },
-  { id: 2, title: '코드잇', color: 'pink', isCreatedByMe: true },
-  { id: 3, title: '3분기 계획', color: 'orange', isCreatedByMe: false },
-  { id: 4, title: '회의록', color: 'yellow', isCreatedByMe: false },
-  { id: 5, title: '중요 문서함', color: 'purple', isCreatedByMe: false },
+  { id: 1, title: '비브리지', color: 'blue' },
+  { id: 2, title: '코드잇', color: 'pink' },
+  { id: 3, title: '3분기 계획', color: 'orange' },
+  { id: 4, title: '회의록', color: 'yellow' },
+  { id: 5, title: '중요 문서함', color: 'purple' },
 ];
 
 export const CURRENT_PAGE = 1;
