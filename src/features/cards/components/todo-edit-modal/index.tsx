@@ -10,8 +10,8 @@ import DateInputField from '@/shared/components/date-input';
 import { MOCK_ASSIGNEE, INITIAL_FORM_VALUES } from './todoEditModal.constants';
 import type { StatusOption } from './todoEditModal.constants';
 import type { TodoEditModalProps } from './todoEditModal.types';
-import FieldLabel from '@/features/cards/components/todo-edit-modal/components/FieldLabel';
-import FieldWrapper from '@/features/cards/components/todo-edit-modal/components/FieldWrapper';
+import FieldLabel from '@/features/cards/components/todo-edit-modal/components/fieldLabel';
+import FieldWrapper from '@/features/cards/components/todo-edit-modal/components/fieldWrapper';
 import StatusDropdown from '@/features/cards/components/todo-edit-modal/components/statusDropdown';
 
 function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
