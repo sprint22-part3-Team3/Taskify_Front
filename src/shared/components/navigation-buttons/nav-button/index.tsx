@@ -1,5 +1,5 @@
 import { IcArrowLeft, IcArrowRight } from '@/shared/assets/icons';
-import type { NavigationButtonProps } from '@/shared/components/navigation-button/navigationButtons.types';
+import type { NavigationButtonProps } from '@/shared/components/navigation-buttons/navigationButtons.types';
 import { cn } from '@/shared/utils/cn';
 
 export default function NavigationButton({
