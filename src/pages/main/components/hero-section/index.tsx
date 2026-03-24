@@ -1,4 +1,4 @@
-import { imgLanding } from '@/shared/assets/images';
+import { imgHero } from '@/shared/assets/images';
 import { Button } from '@/shared/components/button';
 import Logo from '@/shared/components/logo';
 import Title from '@/shared/components/title';
@@ -28,7 +28,7 @@ function HeroSection() {
 
           <div className="relative mt-15 w-full md:mt-5 lg:mt-0">
             <img
-              src={imgLanding}
+              src={imgHero}
               alt="Taskify를 사용하는 팀 협업 일러스트"
               className="w-full object-contain"
             />
