@@ -35,10 +35,10 @@ const serviceCards: ServiceCard[] = [
 
 function ServiceCardItem({ image, imageAlt, title, description }: ServiceCard) {
   return (
-    <li className="flex w-full max-w-94 flex-col">
+    <li className="group flex w-full max-w-94 flex-col transition-transform duration-300 hover:-translate-y-1">
       <div className="bg-black-100 flex h-65 items-center justify-center rounded-t-lg p-2">
         <img
-          className="w-full max-w-75"
+          className="w-full max-w-75 transition-transform duration-500 group-hover:scale-[1.03]"
           src={image}
           alt={imageAlt}
           loading="lazy"
