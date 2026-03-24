@@ -1,8 +1,10 @@
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
+import { useOnClickOutside } from '@/shared/hooks/useOnClickOutside';
 import { IcArrowBottom, IcCheck } from '@/shared/assets/icons';
 import { StatusBadge } from '@/shared/components/status-badge';
 import { STATUS_OPTIONS } from '@/features/cards/components/todo-edit-modal/todoEditModal.constants';
 import type { StatusOption } from '@/features/cards/components/todo-edit-modal/todoEditModal.constants';
+import { cn } from '@/shared/utils/cn';
 
 interface StatusDropdownProps {
   status: StatusOption;
@@ -19,19 +21,13 @@ function StatusDropdown({
 }: StatusDropdownProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        onToggle();
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isOpen, onToggle]);
+  useOnClickOutside(
+    dropdownRef,
+    () => {
+      if (isOpen) onToggle();
+    },
+    isOpen
+  );
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -42,9 +38,13 @@ function StatusDropdown({
       >
         <StatusBadge label={status} />
         <IcArrowBottom
-          className={`h-3 w-3 text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+          className={cn(
+            'h-3 w-3 text-gray-400 transition-transform duration-200',
+            { 'rotate-180': isOpen }
+          )}
         />
       </button>
+
       {isOpen && (
         <ul className="absolute z-50 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
           {STATUS_OPTIONS.map((statusOption) => (

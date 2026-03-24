@@ -7,25 +7,7 @@ import DateInputField from '@/shared/components/date-input';
 import TextArea from '@/shared/components/text-area';
 import type { TodoCreateModalProps } from '@/features/cards/components/todo-create-modal/todoCreateModal.types';
 import FieldWrapper from '@/features/cards/components/todo-create-modal/components/fieldWrapper';
-
-function FieldLabel({
-  children,
-  required = false,
-}: {
-  children: React.ReactNode;
-  required?: boolean;
-}) {
-  return (
-    <span className="typo-md-regular md:typo-lg-regular text-black-200">
-      {children}
-      {required && (
-        <>
-          &nbsp;<span className="text-primary-500">*</span>
-        </>
-      )}
-    </span>
-  );
-}
+import FieldLabel from '@/features/cards/components/todo-create-modal/components/fieldLabel';
 
 function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
   const [assigneeName, setAssigneeName] = useState('');
@@ -58,6 +40,7 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
           title="할 일 생성"
           className="typo-lg-bold md:typo-2xl-bold"
         />
+
         <form onSubmit={handleCreate} className="flex flex-col">
           <Modal.Main className="my-7 space-y-6">
             <Input
@@ -67,6 +50,7 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
               value={assigneeName}
               onChange={(event) => setAssigneeName(event.target.value)}
             />
+
             <Input
               label="제목"
               required
@@ -76,6 +60,7 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
               onChange={(event) => setTitle(event.target.value)}
               className="typo-md-regular md:typo-lg-regular"
             />
+
             <FieldWrapper>
               <FieldLabel required>설명</FieldLabel>
               <TextArea
@@ -85,6 +70,7 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
                 className="typo-md-regular md:typo-lg-regular"
               />
             </FieldWrapper>
+
             <FieldWrapper>
               <FieldLabel>마감일</FieldLabel>
               <DateInputField
@@ -93,6 +79,7 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
                 onChange={setDueDate}
               />
             </FieldWrapper>
+
             <FieldWrapper>
               <FieldLabel>태그</FieldLabel>
               <div className="flex min-h-12.5 flex-wrap items-center gap-2 rounded-lg border border-gray-200 px-4 py-2">
@@ -106,11 +93,13 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
                 />
               </div>
             </FieldWrapper>
+
             <FieldWrapper>
               <FieldLabel>이미지</FieldLabel>
               <ImageUploadBox variant="modal" />
             </FieldWrapper>
           </Modal.Main>
+
           <Modal.Footer className="shrink-0">
             <Button theme="cancel" type="button" onClick={onClose}>
               취소
