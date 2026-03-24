@@ -1,6 +1,7 @@
 import { imgLanding } from '@/shared/assets/images';
 import { Button } from '@/shared/components/button';
 import Logo from '@/shared/components/logo';
+import Title from '@/shared/components/title';
 import { Link } from 'react-router-dom';
 
 function HeroSection() {
@@ -8,20 +9,22 @@ function HeroSection() {
     <section className="flex min-h-[calc(100vh-70px)] justify-center bg-white">
       <div className="mx-auto flex w-full max-w-350 items-center justify-center px-6 md:px-8 lg:px-0">
         <div className="flex w-full flex-col items-center text-center">
-          <p className="typo-2lg-bold from-primary-800 to-primary-500 md:typo-2xl-bold lg:typo-2xl-bold bg-linear-to-r bg-clip-text tracking-wide text-transparent">
-            Simplify Your Tasks
-          </p>
+          <Title as="h2" className="flex flex-col items-center">
+            <span className="typo-2lg-bold from-primary-800 to-primary-500 md:typo-2xl-bold lg:typo-2xl-bold bg-linear-to-r bg-clip-text tracking-wide text-transparent">
+              Simplify Your Tasks
+            </span>
 
-          <div className="mt-3">
-            <Logo
-              size="medium"
-              className="inline-block w-70 max-w-full md:w-90 lg:w-105 [&>svg]:h-auto [&>svg]:w-full"
-            />
-          </div>
+            <span className="mt-3">
+              <Logo
+                size="medium"
+                className="inline-block w-70 max-w-full md:w-90 lg:w-105 [&>svg]:h-auto [&>svg]:w-full"
+              />
+            </span>
 
-          <p className="typo-2lg-semibold text-black-100 md:typo-2xl-semibold lg:typo-2xl-semibold mt-5">
-            작업을 더 쉽고 단순하게
-          </p>
+            <span className="typo-2lg-semibold text-black-100 md:typo-2xl-semibold lg:typo-2xl-semibold mt-5">
+              작업을 더 쉽고 단순하게
+            </span>
+          </Title>
 
           <div className="relative mt-15 w-full md:mt-5 lg:mt-0">
             <img
