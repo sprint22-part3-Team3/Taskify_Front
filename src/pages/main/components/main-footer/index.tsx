@@ -3,7 +3,7 @@ import { IcGithub } from '@/shared/assets/icons';
 function MainFooter() {
   return (
     <footer className="bg-black-200">
-      <div className="mx-auto flex h-58 w-full max-w-[1400px] flex-col items-center justify-center gap-10 px-6 text-center md:h-25 md:flex-row md:justify-between md:gap-0 md:px-8 md:text-left lg:px-0">
+      <div className="mx-auto flex h-58 w-full max-w-350 flex-col items-center justify-center gap-10 px-6 text-center md:h-25 md:flex-row md:justify-between md:gap-0 md:px-8 md:text-left lg:px-0">
         <p className="typo-lg-regular tracking-wide text-white">
           ©FE22 Part 3 Team3 - 2026
         </p>
