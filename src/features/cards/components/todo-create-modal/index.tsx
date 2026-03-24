@@ -6,6 +6,7 @@ import { Modal } from '@/shared/components/modal';
 import DateInputField from '@/shared/components/date-input';
 import TextArea from '@/shared/components/text-area';
 import type { TodoCreateModalProps } from '@/features/cards/components/todo-create-modal/todoCreateModal.types';
+import FieldWrapper from '@/features/cards/components/todo-create-modal/components/fieldWrapper';
 
 function FieldLabel({
   children,
@@ -24,10 +25,6 @@ function FieldLabel({
       )}
     </span>
   );
-}
-
-function FieldWrapper({ children }: { children: React.ReactNode }) {
-  return <div className="flex w-full flex-col gap-2">{children}</div>;
 }
 
 function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
