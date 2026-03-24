@@ -1,8 +1,9 @@
-import type { HeaderProps } from '@/features/dashboards/layout/dashboards-header/dashboards-header.types';
+import type { HeaderProps } from '@/features/dashboards/layout/dashboard-header/dashboardHeader.types';
 import { IcAddBox, IcBookmark, IcSettings } from '@/shared/assets';
 import Avatar from '@/shared/components/avatar';
 import AvatarGroup from '@/shared/components/avatar/avatar-group';
 import { Button } from '@/shared/components/button';
+import UserProfile from '@/shared/components/user-profile';
 
 /**
  * 페이지 상단에 표시되는 공통 헤더 컴포넌트입니다.
@@ -24,43 +25,47 @@ import { Button } from '@/shared/components/button';
  * />
  * ```
  */
+// TODO: API 연동 후 제거
+const SAMPLE_MEMBERS = [
+  { id: 1, nickname: '유철', profileImageUrl: '' },
+  { id: 2, nickname: '채연', profileImageUrl: '' },
+];
+
 export default function Header({
-  title,
-  isOwner = false,
-  members = [],
-  totalMemberCount = 0,
-  userName,
+  title = '비브리지', // 임시 기본값
+  isOwner = true,
+  members = SAMPLE_MEMBERS,
+  totalMemberCount = 6,
+  userName = '배유철',
   profileImage,
   onManageClick,
   onInviteClick,
 }: HeaderProps) {
   return (
-    <header className="flex h-[70px] items-center justify-between border-b border-gray-200 bg-white px-3 md:px-6">
+    <header className="flex h-17.5 items-center justify-between border-b border-gray-200 bg-white px-3 md:px-10 lg:justify-between">
       {/* 제목 - 데스크탑에서만 표시 */}
       <div className="hidden items-center gap-2 lg:flex">
-        <span className="text-lg font-bold text-gray-800">{title}</span>
+        <span className="typo-xl-bold text-black-200">{title}</span>
         {isOwner && <IcBookmark className="h-4 w-4" />}
       </div>
 
-      <div className="ml-auto flex items-center gap-2 md:gap-4">
+      <div className="ml-auto flex items-center gap-4 md:gap-8">
         {/* 관리 / 초대하기 버튼 */}
-        <div className="flex items-center gap-1 md:gap-2">
+        <div className="flex items-center gap-2 md:gap-4">
           <Button
-            theme="outlined"
-            size="icon"
-            className="h-8 px-2 text-xs text-gray-400 md:h-10 md:px-4 md:text-sm"
+            theme="icon"
+            className="gap-2 md:h-10 md:px-5 md:text-sm"
             onClick={onManageClick}
           >
-            <IcSettings className="hidden h-5 w-5 md:block" />
+            <IcSettings className="hidden md:block" />
             관리
           </Button>
           <Button
-            theme="outlined"
-            size="icon"
-            className="h-8 px-2 text-xs text-gray-400 md:h-10 md:px-4 md:text-sm"
+            theme="icon"
+            className="gap-2 md:h-10 md:px-5 md:text-sm"
             onClick={onInviteClick}
           >
-            <IcAddBox className="hidden h-5 w-5 md:block" />
+            <IcAddBox className="hidden md:block" />
             초대하기
           </Button>
         </div>
@@ -79,20 +84,16 @@ export default function Header({
         />
 
         {/* 유저 프로필 - 이름은 모바일에서 숨김 */}
-        <div className="flex items-center gap-3 border-l border-gray-200 pl-2 md:pl-4">
-          <Avatar
+        <div className="border-l border-gray-200 pl-4 md:pl-8">
+          <UserProfile
             user={{
               id: 0,
               nickname: userName,
               profileImageUrl: profileImage ?? '',
             }}
-            size="md"
-          >
-            {profileImage ? <Avatar.Img /> : <Avatar.Fallback />}
-          </Avatar>
-          <span className="hidden text-sm font-medium text-gray-700 md:block">
-            {userName}
-          </span>
+            size="lg"
+            nicknameClassName="hidden md:block text-sm"
+          />
         </div>
       </div>
     </header>
