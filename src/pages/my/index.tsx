@@ -19,18 +19,18 @@ function MyPage() {
       {/* 헤더 */}
       {/* 사이드바 */}
       {/* 돌아가기 버튼 */}
-      <div>
-        <div className="w-2xl rounded-xl bg-white p-6">
-          <Title as="h2" size="2xl" weight="bold" className="mb-6">
+      <div className="p-3 pt-4 md:pt-4 md:pr-5 md:pl-4 lg:pt-12 lg:pl-5">
+        <div className="rounded-xl bg-white p-4 sm:w-full md:w-137 md:p-6 lg:w-2xl">
+          <Title as="h2" size="2xl" weight="bold" className="mb-20 md:mb-6">
             프로필
           </Title>
-          <div className="flex justify-between">
+          <div className="md:flex md:justify-between">
             <ImageUploadBox />
-            <div className="w-100">
+            <div className="md:w-69 lg:w-100">
               <Label
                 aria-label="이메일"
                 htmlFor="email"
-                className="gray-200 text-lg"
+                className="gray-200 mt-20 block text-lg md:mt-0"
               >
                 이메일
               </Label>
@@ -61,8 +61,8 @@ function MyPage() {
             </div>
           </div>
         </div>
-        <div className="mt-6 w-2xl rounded-xl bg-white p-6">
-          <Title as="h2" size="2xl" weight="bold" className="mb-6">
+        <div className="mt-4 rounded-xl bg-white p-4 sm:w-full md:mt-6 md:w-137 md:p-6 lg:w-2xl">
+          <Title as="h2" size="2xl" weight="bold" className="mb-20 md:mb-6">
             비밀번호 변경
           </Title>
           <div>
