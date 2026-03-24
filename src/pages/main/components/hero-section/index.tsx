@@ -5,6 +5,13 @@ import Title from '@/shared/components/title';
 import { Link } from 'react-router-dom';
 
 function HeroSection() {
+  const handleScrollToServiceSection = () => {
+    document.getElementById('service-section')?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+  };
+
   return (
     <section className="flex min-h-[calc(100vh-70px)] justify-center bg-white">
       <div className="mx-auto flex w-full max-w-350 items-center justify-center px-6 md:px-8 lg:px-0">
@@ -44,11 +51,10 @@ function HeroSection() {
                 지금 시작하기
               </Button>
               <Button
-                as={Link}
-                to="#"
                 theme="secondary"
                 size="lg"
                 className="typo-md-semibold md:typo-lg-semibold lg:typo-2lg-semibold px-5 md:px-20 lg:px-25"
+                onClick={handleScrollToServiceSection}
               >
                 주요 기능 보기
               </Button>

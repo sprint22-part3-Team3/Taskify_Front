@@ -62,7 +62,7 @@ function ServiceCardItem({ image, imageAlt, title, description }: ServiceCard) {
 
 function ServiceSection() {
   return (
-    <section className="mx-auto mt-22.5 mb-40 max-w-300">
+    <section id="service-section" className="mx-auto mt-22.5 mb-40 max-w-300">
       <Title
         as="h3"
         weight="bold"
