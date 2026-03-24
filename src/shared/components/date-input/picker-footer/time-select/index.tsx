@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { IcArrowBottom } from '@/shared/assets/icons';
+import { useOnClickOutside } from '@/shared/hooks/useOnClickOutside';
 import { cn } from '@/shared/utils/cn';
 import type { TimeSelectProps } from './timeSelect.types';
 
@@ -8,21 +9,7 @@ function TimeSelect({ value, options, disabled, onSelect }: TimeSelectProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canOpen = !disabled;
 
-  useEffect(() => {
-    if (!isOpen) return undefined;
-
-    const handlePointerDown = (event: MouseEvent) => {
-      if (!containerRef.current?.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handlePointerDown);
-
-    return () => {
-      document.removeEventListener('mousedown', handlePointerDown);
-    };
-  }, [isOpen]);
+  useOnClickOutside(containerRef, () => setIsOpen(false), isOpen);
 
   return (
     <div ref={containerRef} className="relative">

@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { format, setHours, setMinutes } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import 'react-datepicker/dist/react-datepicker.css';
 import '@/shared/components/date-input/dateInput.css';
+import { useOnClickOutside } from '@/shared/hooks/useOnClickOutside';
 import {
   formatDateTimeValue,
   getDefaultDateTimeValue,
@@ -53,21 +54,7 @@ function DateInputField({
     ? parseDateTimeValue(value ?? '')
     : internalSelectedDate;
 
-  useEffect(() => {
-    if (!isOpen) return undefined;
-
-    const handlePointerDown = (event: MouseEvent) => {
-      if (!containerRef.current?.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handlePointerDown);
-
-    return () => {
-      document.removeEventListener('mousedown', handlePointerDown);
-    };
-  }, [isOpen]);
+  useOnClickOutside(containerRef, () => setIsOpen(false), isOpen);
 
   const displayValue = formatDateTimeValue(selectedDate);
   const selectedHour = selectedDate ? format(selectedDate, 'HH') : '00';
