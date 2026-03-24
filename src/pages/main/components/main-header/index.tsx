@@ -1,7 +1,7 @@
 import Logo from '@/shared/components/logo';
 import { Link } from 'react-router-dom';
 
-const linkStyle =
+const LINK_STYLE =
   'typo-md-regular rounded-sm py-1.5 px-2 md:px-3 md:py-2 hover:bg-primary-100 text-primary-500 transition-colors md: typo-lg-regular';
 
 function MainHeader() {
@@ -15,10 +15,10 @@ function MainHeader() {
           </>
         </h1>
         <nav className="text-gray-0 -mr-2 flex gap-2 sm:-mr-3 sm:gap-3">
-          <Link to="/login" className={linkStyle}>
+          <Link to="/login" className={LINK_STYLE}>
             로그인
           </Link>
-          <Link to="/signup" className={linkStyle}>
+          <Link to="/signup" className={LINK_STYLE}>
             회원가입
           </Link>
         </nav>
