@@ -8,6 +8,7 @@ import {
 import { ColorLabel } from '@/features/dashboards/components/color/color-label';
 import { getDashboardColorHex } from '@/features/dashboards/constants/dashboardColorMap.constants';
 import { Button } from '@/shared/components/button';
+import InputField from '@/shared/components/input/input-field';
 import {
   CURRENT_PAGE,
   DASHBOARD_ITEMS,
@@ -94,13 +95,9 @@ function MyDashboardPage() {
 
           {hasInvitedDashboards ? (
             <div className="mt-6">
-              <div className="flex h-9 items-center gap-2 rounded-lg border border-gray-200 px-4 md:h-10">
-                <IcSearch className="w-5.5 text-gray-300 md:w-6" />
-                <input
-                  type="text"
-                  placeholder="검색"
-                  className="typo-md-regular md:typo-lg-regular text-black-200 w-full placeholder:text-gray-300 focus:outline-none"
-                />
+              <div className="relative">
+                <IcSearch className="pointer-events-none absolute top-1/2 left-4 w-5.5 -translate-y-1/2 text-gray-300 md:w-6" />
+                <InputField type="text" placeholder="검색" className="pl-11" />
               </div>
 
               <div className="mt-4 lg:overflow-x-auto">
