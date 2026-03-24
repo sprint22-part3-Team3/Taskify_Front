@@ -1,6 +1,6 @@
 import type { DashboardLayoutProps } from '@/features/dashboards/layout/dashboardLayout.types';
 import Sidebar from '@/features/dashboards/layout/dashboard-sidebar';
-import Header from '@/features/dashboards/layout/dashboard-header/Index';
+import Header from '@/features/dashboards/layout/dashboard-header/index';
 
 /**
  * 대시보드 공통 레이아웃 컴포넌트입니다.
