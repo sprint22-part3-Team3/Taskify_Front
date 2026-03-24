@@ -42,8 +42,8 @@ import { cn } from '@/shared/utils/cn';
 export default function NavigationButtons({
   onPrev,
   onNext,
-  hasPrevDisabled = false,
-  hasNextDisabled = false,
+  isPrevDisabled = false,
+  isNextDisabled = false,
   isHidingOnMobile = false,
 }: NavigationButtonsProps) {
   return (
@@ -51,14 +51,14 @@ export default function NavigationButtons({
       {/* 이전 버튼 */}
       <NavigationButton
         direction="prev"
-        disabled={hasPrevDisabled}
+        disabled={isPrevDisabled}
         onClick={onPrev}
       />
 
       {/* 다음 버튼 */}
       <NavigationButton
         direction="next"
-        disabled={hasNextDisabled}
+        disabled={isNextDisabled}
         onClick={onNext}
       />
     </div>

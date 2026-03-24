@@ -7,7 +7,7 @@ export type NavigationButtonProps = {
 export type NavigationButtonsProps = {
   onPrev: () => void;
   onNext: () => void;
-  hasPrevDisabled?: boolean;
-  hasNextDisabled?: boolean;
+  isPrevDisabled?: boolean;
+  isNextDisabled?: boolean;
   isHidingOnMobile?: boolean;
 };
