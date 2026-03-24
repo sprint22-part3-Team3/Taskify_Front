@@ -8,6 +8,7 @@ import {
 import { ColorLabel } from '@/features/dashboards/components/color/color-label';
 import { getDashboardColorHex } from '@/features/dashboards/constants/dashboardColorMap.constants';
 import { Button } from '@/shared/components/button';
+import { PageIndicator } from '@/shared/components/page-indicator/index.tsx';
 import {
   CURRENT_PAGE,
   DASHBOARD_ITEMS,
@@ -43,7 +44,7 @@ function MyDashboardPage() {
               <IcAdd className="text-primary-500 h-5 w-5" />
             </Button>
 
-            {DASHBOARD_ITEMS.map(function (dashboardItem) {
+            {DASHBOARD_ITEMS.map((dashboardItem) => {
               return (
                 <Button
                   key={dashboardItem.id}
@@ -65,9 +66,10 @@ function MyDashboardPage() {
           </div>
 
           <div className="mt-4 flex items-center justify-end gap-3">
-            <span className="typo-md-regular text-black-200">
-              {CURRENT_PAGE} 페이지 중 {TOTAL_PAGES}
-            </span>
+            <PageIndicator
+              currentPage={CURRENT_PAGE}
+              totalPages={TOTAL_PAGES}
+            />
             <div className="flex">
               <Button
                 theme="outlined"
