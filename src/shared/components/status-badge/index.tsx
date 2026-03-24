@@ -1,4 +1,4 @@
-import type { StatusBadgeProps } from '@/shared/components/status-badge/statusbadge.types';
+import type { StatusBadgeProps } from '@/shared/components/status-badge/statusBadge.types';
 
 /**
  * label prop을 그대로 렌더링하는 상태 뱃지 컴포넌트입니다.
