@@ -39,36 +39,36 @@ export default function Sidebar({
   onDashboardClick,
 }: SidebarProps) {
   return (
-    <aside className="flex h-screen w-16.75 flex-col bg-white md:w-40 lg:w-75">
+    <aside className="flex h-screen w-17 shrink-0 flex-col bg-white md:w-40 lg:w-75">
       {/* 로고 */}
-      <h1 className="p-3 md:p-6">
+      <h1 className="flex justify-center px-5 pt-5 pb-3 md:justify-start md:p-5 md:pb-9">
         <Logo size="small" className="md:hidden" />
         <Logo size="medium" className="hidden md:block" />
       </h1>
 
       {/* Dash Boards 헤더 - 모바일에서 숨김 */}
-      <div className="hidden items-center justify-between px-6 py-3 md:flex">
+      <div className="mb-4 hidden items-center justify-between px-6 md:flex">
         <span className="typo-xs-medium text-gray-400">Dash Boards</span>
         <button onClick={onAddClick} className="cursor-pointer">
-          <IcAddBox className="h-5 w-5" />
+          <IcAddBox />
         </button>
       </div>
 
       {/* 모바일용 + 버튼 */}
       <div className="flex justify-center py-3 md:hidden">
         <button onClick={onAddClick} className="cursor-pointer">
-          <IcAddBox className="h-5 w-5" />
+          <IcAddBox />
         </button>
       </div>
 
       {/* 대시보드 목록 */}
-      <nav className="flex-1 overflow-y-auto px-2 md:px-3">
+      <nav className="flex-1 overflow-y-auto px-2 md:px-1 lg:py-1">
         {dashboards.map((item) => (
           <button
             key={item.id}
             onClick={() => onDashboardClick?.(item.id)}
             className={cn(
-              'hover:bg-primary-500/8 flex w-full cursor-pointer items-center justify-center gap-3 rounded-md px-4 py-3 text-left md:justify-start md:px-5',
+              'hover:bg-primary-8 flex w-full cursor-pointer items-center justify-center gap-1.5 py-5 text-left md:justify-start md:px-5 md:py-3',
               selectedId === item.id && 'bg-primary-500/8'
             )}
           >
@@ -77,7 +77,7 @@ export default function Sidebar({
               color={item.color}
               label={item.title}
               className="min-w-0"
-              labelClassName="hidden truncate md:block"
+              labelClassName="hidden truncate md:block md:typo-lg-medium lg:typo-2lg-medium"
             />
             {/* 북마크 아이콘 - 모바일에서 숨김 */}
             {item.isOwner && (
