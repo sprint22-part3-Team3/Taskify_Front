@@ -1,25 +1,44 @@
 import { useState, useRef, useEffect } from 'react';
-import { IcArrowBottom, IcCalendar, IcCheck } from '@/shared/assets/icons';
+import { IcArrowBottom, IcCheck } from '@/shared/assets/icons';
 import ImageUploadBox from '@/shared/components/image-uploader';
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
-import InputField from '@/shared/components/input/input-field';
 import { Modal } from '@/shared/components/modal';
 import { StatusBadge } from '@/shared/components/status-badge';
 import { Tag } from '@/shared/components/tag';
 import TextArea from '@/shared/components/text-area';
 import UserProfile from '@/shared/components/user-profile';
+import DateInputField from '@/shared/components/date-input';
 import {
   STATUS_OPTIONS,
   MOCK_ASSIGNEE,
   INITIAL_FORM_VALUES,
 } from '@/features/cards/components/todo-edit-modal/todoEditModal.constants';
 import type { StatusOption } from '@/features/cards/components/todo-edit-modal/todoEditModal.constants';
+import type { TodoEditModalProps } from '@/features/cards/components/todo-edit-modal/todoEditModal.types';
 
-type TodoEditModalProps = {
-  isOpen: boolean;
-  onClose: () => void;
-};
+function FieldLabel({
+  children,
+  required = false,
+}: {
+  children: React.ReactNode;
+  required?: boolean;
+}) {
+  return (
+    <span className="typo-md-regular md:typo-lg-regular text-black-200">
+      {children}
+      {required && (
+        <>
+          &nbsp;<span className="text-primary-500">*</span>
+        </>
+      )}
+    </span>
+  );
+}
+
+function FieldWrapper({ children }: { children: React.ReactNode }) {
+  return <div className="flex w-full flex-col gap-2">{children}</div>;
+}
 
 function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
   const [status, setStatus] = useState<StatusOption>(
@@ -30,20 +49,19 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
   const [description, setDescription] = useState(
     INITIAL_FORM_VALUES.description
   );
-  const [dueDate, setDueDate] = useState(INITIAL_FORM_VALUES.dueDate);
+  const [dueDate, setDueDate] = useState('2025-05-24 09:00');
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const calendarIconColor = dueDate.trim() ? 'text-black-200' : 'text-gray-300';
-
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
+    const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
-        !dropdownRef.current.contains(e.target as Node)
+        !dropdownRef.current.contains(event.target as Node)
       ) {
         setIsDropdownOpen(false);
       }
     };
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
@@ -51,6 +69,11 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
   const handleUpdate = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     onClose();
+  };
+
+  const handleStatusSelect = (selectedStatus: StatusOption) => {
+    setStatus(selectedStatus);
+    setIsDropdownOpen(false);
   };
 
   return (
@@ -67,11 +90,8 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
         <form onSubmit={handleUpdate} className="flex flex-col">
           <Modal.Main className="my-7 space-y-6">
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-              {/* 상태 커스텀 드롭다운 */}
-              <div className="flex w-full flex-col gap-2">
-                <span className="typo-md-regular md:typo-lg-regular text-black-200">
-                  상태
-                </span>
+              <FieldWrapper>
+                <FieldLabel>상태</FieldLabel>
                 <div className="relative" ref={dropdownRef}>
                   <button
                     type="button"
@@ -83,38 +103,31 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
                       className={`h-3 w-3 text-gray-400 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`}
                     />
                   </button>
-
                   {isDropdownOpen && (
                     <ul className="absolute z-50 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
-                      {STATUS_OPTIONS.map((option) => (
-                        <li key={option}>
+                      {STATUS_OPTIONS.map((statusOption) => (
+                        <li key={statusOption}>
                           <button
                             type="button"
-                            onClick={() => {
-                              setStatus(option);
-                              setIsDropdownOpen(false);
-                            }}
+                            onClick={() => handleStatusSelect(statusOption)}
                             className="typo-lg-regular text-black-200 flex w-full items-center gap-3 px-4 py-3 hover:bg-gray-50"
                           >
                             <span className="flex h-5 w-5 shrink-0 items-center justify-center">
-                              {status === option && (
+                              {status === statusOption && (
                                 <IcCheck className="text-primary-500 h-4 w-4" />
                               )}
                             </span>
-                            <StatusBadge label={option} />
+                            <StatusBadge label={statusOption} />
                           </button>
                         </li>
                       ))}
                     </ul>
                   )}
                 </div>
-              </div>
+              </FieldWrapper>
 
-              {/* 담당자 */}
-              <div className="flex w-full flex-col gap-2">
-                <span className="typo-md-regular md:typo-lg-regular text-black-200">
-                  담당자
-                </span>
+              <FieldWrapper>
+                <FieldLabel>담당자</FieldLabel>
                 <div className="flex h-12 items-center rounded-lg border border-gray-200 bg-white px-4">
                   <UserProfile
                     user={MOCK_ASSIGNEE}
@@ -122,7 +135,7 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
                     nicknameClassName="typo-md-regular md:typo-lg-regular"
                   />
                 </div>
-              </div>
+              </FieldWrapper>
             </div>
 
             <Input
@@ -133,47 +146,33 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
               onChange={(event) => setTitle(event.target.value)}
               className="typo-md-regular md:typo-lg-regular"
             />
-            <div className="flex w-full flex-col gap-2">
-              <span className="typo-md-regular md:typo-lg-regular text-black-200">
-                설명&nbsp;<span className="text-primary-500">*</span>
-              </span>
+            <FieldWrapper>
+              <FieldLabel required>설명</FieldLabel>
               <TextArea
                 value={description}
                 onChange={setDescription}
                 className="typo-md-regular md:typo-lg-regular"
               />
-            </div>
-            <div className="flex w-full flex-col gap-2">
-              <span className="typo-md-regular md:typo-lg-regular text-black-200">
-                마감일
-              </span>
-              <div className="relative">
-                <IcCalendar
-                  className={`${calendarIconColor} absolute top-1/2 left-4 h-4.5 w-4.5 -translate-y-1/2`}
-                />
-                <InputField
-                  type="text"
-                  value={dueDate}
-                  onChange={(event) => setDueDate(event.target.value)}
-                  className="typo-md-regular md:typo-lg-regular pl-12"
-                />
-              </div>
-            </div>
-            <div className="flex w-full flex-col gap-2">
-              <span className="typo-md-regular md:typo-lg-regular text-black-200">
-                태그
-              </span>
+            </FieldWrapper>
+            <FieldWrapper>
+              <FieldLabel>마감일</FieldLabel>
+              <DateInputField
+                name="dueDate"
+                value={dueDate}
+                onChange={setDueDate}
+              />
+            </FieldWrapper>
+            <FieldWrapper>
+              <FieldLabel>태그</FieldLabel>
               <div className="flex min-h-12.5 items-center gap-2 rounded-lg border border-gray-200 px-4 py-2">
                 <Tag color="purple">프로젝트</Tag>
                 <Tag color="yellow">일반</Tag>
               </div>
-            </div>
-            <div className="flex w-full flex-col gap-2">
-              <span className="typo-md-regular md:typo-lg-regular text-black-200">
-                이미지
-              </span>
+            </FieldWrapper>
+            <FieldWrapper>
+              <FieldLabel>이미지</FieldLabel>
               <ImageUploadBox variant="modal" />
-            </div>
+            </FieldWrapper>
           </Modal.Main>
           <Modal.Footer className="shrink-0">
             <Button theme="cancel" type="button" onClick={onClose}>

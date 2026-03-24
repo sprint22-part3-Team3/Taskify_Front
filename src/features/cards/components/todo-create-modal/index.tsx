@@ -7,15 +7,47 @@ import DateInputField from '@/shared/components/date-input';
 import TextArea from '@/shared/components/text-area';
 import type { TodoCreateModalProps } from '@/features/cards/components/todo-create-modal/todoCreateModal.types';
 
+function FieldLabel({
+  children,
+  required = false,
+}: {
+  children: React.ReactNode;
+  required?: boolean;
+}) {
+  return (
+    <span className="typo-md-regular md:typo-lg-regular text-black-200">
+      {children}
+      {required && (
+        <>
+          &nbsp;<span className="text-primary-500">*</span>
+        </>
+      )}
+    </span>
+  );
+}
+
+function FieldWrapper({ children }: { children: React.ReactNode }) {
+  return <div className="flex w-full flex-col gap-2">{children}</div>;
+}
+
 function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
   const [assigneeName, setAssigneeName] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
+  const [tagInput, setTagInput] = useState('');
 
   const handleCreate = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     onClose();
+  };
+
+  const handleTagKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      // TODO: 태그 추가 로직
+      setTagInput('');
+    }
   };
 
   return (
@@ -47,45 +79,40 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
               onChange={(event) => setTitle(event.target.value)}
               className="typo-md-regular md:typo-lg-regular"
             />
-            <div className="flex w-full flex-col gap-2">
-              <span className="typo-md-regular md:typo-lg-regular text-black-200">
-                설명&nbsp;<span className="text-primary-500">*</span>
-              </span>
+            <FieldWrapper>
+              <FieldLabel required>설명</FieldLabel>
               <TextArea
                 placeholder="설명을 입력해 주세요"
                 value={description}
                 onChange={setDescription}
                 className="typo-md-regular md:typo-lg-regular"
               />
-            </div>
-            <div className="flex w-full flex-col gap-2">
-              <span className="typo-md-regular md:typo-lg-regular text-black-200">
-                마감일
-              </span>
+            </FieldWrapper>
+            <FieldWrapper>
+              <FieldLabel>마감일</FieldLabel>
               <DateInputField
                 name="dueDate"
                 value={dueDate}
                 onChange={setDueDate}
               />
-            </div>
-            <div className="flex w-full flex-col gap-2">
-              <span className="typo-md-regular md:typo-lg-regular text-black-200">
-                태그
-              </span>
+            </FieldWrapper>
+            <FieldWrapper>
+              <FieldLabel>태그</FieldLabel>
               <div className="flex min-h-12.5 flex-wrap items-center gap-2 rounded-lg border border-gray-200 px-4 py-2">
                 <input
                   type="text"
                   placeholder="입력 후 Enter"
+                  value={tagInput}
+                  onChange={(event) => setTagInput(event.target.value)}
+                  onKeyDown={handleTagKeyDown}
                   className="typo-md-regular md:typo-lg-regular min-w-0 flex-1 outline-none placeholder:text-gray-300"
                 />
               </div>
-            </div>
-            <div className="flex w-full flex-col gap-2">
-              <span className="typo-md-regular md:typo-lg-regular text-black-200">
-                이미지
-              </span>
+            </FieldWrapper>
+            <FieldWrapper>
+              <FieldLabel>이미지</FieldLabel>
               <ImageUploadBox variant="modal" />
-            </div>
+            </FieldWrapper>
           </Modal.Main>
           <Modal.Footer className="shrink-0">
             <Button theme="cancel" type="button" onClick={onClose}>
