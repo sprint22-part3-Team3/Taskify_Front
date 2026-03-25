@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { useOnClickOutside } from '@/shared/hooks/useOnClickOutside';
 import { IcArrowBottom, IcCheck } from '@/shared/assets/icons';
-// import { StatusBadge } from '@/shared/components/status-badge';
+import { StatusBadge } from '@/shared/components/status-badge';
 import { STATUS_OPTIONS } from '@/features/cards/components/todo-edit-modal/todoEditModal.constants';
 import type { StatusDropdownProps } from '@/features/cards/components/todo-edit-modal/components/status-dropdown/statusDropdown.types';
 import { cn } from '@/shared/utils/cn';
@@ -45,7 +45,7 @@ function StatusDropdown({
         onClick={onToggle}
         className="typo-lg-regular focus:border-primary-500 text-black-200 flex h-12 w-full items-center justify-between rounded-lg border border-gray-200 bg-white px-4 outline-0"
       >
-        {/* <StatusBadge label={status} /> */}
+        <StatusBadge label={status} />
         <IcArrowBottom
           className={cn(
             'h-3 w-3 text-gray-400 transition-transform duration-200',
@@ -68,7 +68,7 @@ function StatusDropdown({
                     <IcCheck className="text-primary-500 h-4 w-4" />
                   )}
                 </span>
-                {/* <StatusBadge label={statusOption} /> */}
+                <StatusBadge label={statusOption} />
               </button>
             </li>
           ))}
