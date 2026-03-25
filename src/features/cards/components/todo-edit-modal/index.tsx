@@ -35,11 +35,6 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
     toggleDropdown,
   } = useTodoEditModal();
 
-  const handleUpdate = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    onClose();
-  };
-
   return (
     <Modal
       isOpen={isOpen}
@@ -51,7 +46,13 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
           title="할 일 수정"
           className="typo-lg-bold lg:typo-2xl-bold"
         />
-        <form onSubmit={handleUpdate} className="flex flex-col">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            onClose();
+          }}
+          className="flex flex-col"
+        >
           <Modal.Main className="my-7 space-y-6">
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
               <FieldWrapper>
