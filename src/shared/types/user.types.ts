@@ -1,6 +1,6 @@
 export type AvatarUser = {
   id: number;
   nickname: string;
-  profileImageUrl: string;
+  profileImageUrl: string | null;
   userId?: number;
 };
