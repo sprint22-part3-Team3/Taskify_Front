@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button } from '@/shared/components/button';
 import Label from '@/shared/components/input/label';
 import InputField from '@/shared/components/input/input-field';
+import Input from '@/shared/components/input';
 import PasswordField from '@/shared/components/input/password-field';
 import Title from '@/shared/components/title';
 import ImageUploadBox from '@/shared/components/image-uploader';
@@ -30,20 +31,17 @@ function MyPage() {
         <div className="md:flex md:justify-between">
           <ImageUploadBox />
           <div className="md:w-69 lg:w-100">
-            <Label
-              htmlFor="email"
-              className="gray-200 text-md mt-10 block md:mt-0 md:text-lg"
-            >
-              이메일
-            </Label>
-            <InputField type="email" readOnly className="mt-2 mb-4" />
-            <Label htmlFor="nickname" className="gray-200 text-md md:text-lg">
-              닉네임
-            </Label>
-            <InputField
+            <Input
+              label="이메일"
               type="text"
-              // placeholder="닉네임을 입력해주세요"
-              className="mt-2"
+              readOnly
+              labelClassName="gray-200 text-md mt-10 block md:mt-0 md:text-lg"
+              className="mb-4"
+            />
+            <Input
+              label="닉네임"
+              type="text"
+              labelClassName="gray-200 text-md mt-10 block md:mt-0 md:text-lg"
             />
             <Button
               theme="primary"
