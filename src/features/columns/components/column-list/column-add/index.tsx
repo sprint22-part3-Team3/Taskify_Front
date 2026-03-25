@@ -9,6 +9,10 @@ function ColumnAdd() {
     setIsCreateColumnModalOpen(true);
   };
 
+  const handleCloseCreateColumnModal = () => {
+    setIsCreateColumnModalOpen(false);
+  };
+
   return (
     <>
       <AddItemButton onClick={handleAddColumn} className="h-16.5 md:h-17.5">
@@ -16,7 +20,7 @@ function ColumnAdd() {
       </AddItemButton>
       <CreateColumnModal
         isOpen={isCreateColumnModalOpen}
-        onClose={() => setIsCreateColumnModalOpen(false)}
+        onClose={handleCloseCreateColumnModal}
       />
     </>
   );

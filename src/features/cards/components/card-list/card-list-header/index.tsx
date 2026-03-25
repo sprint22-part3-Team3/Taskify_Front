@@ -7,6 +7,14 @@ import Title from '@/shared/components/title';
 function CardListHeader({ title, cardCount }: CardListHeaderProps) {
   const [isEditColumnModalOpen, setIsEditColumnModalOpen] = useState(false);
 
+  const handleOpenEditColumnModal = () => {
+    setIsEditColumnModalOpen(true);
+  };
+
+  const handleCloseEditColumnModal = () => {
+    setIsEditColumnModalOpen(false);
+  };
+
   return (
     <>
       <div className="mb-6 flex items-center justify-between gap-3">
@@ -31,14 +39,14 @@ function CardListHeader({ title, cardCount }: CardListHeaderProps) {
           type="button"
           aria-label="컬럼 설정"
           className="flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center"
-          onClick={() => setIsEditColumnModalOpen(true)}
+          onClick={handleOpenEditColumnModal}
         >
           <IcSettings className="hover:text-black-100 h-full w-full text-gray-400" />
         </button>
       </div>
       <EditColumnModal
         isOpen={isEditColumnModalOpen}
-        onClose={() => setIsEditColumnModalOpen(false)}
+        onClose={handleCloseEditColumnModal}
         initialTitle={title}
       />
     </>
