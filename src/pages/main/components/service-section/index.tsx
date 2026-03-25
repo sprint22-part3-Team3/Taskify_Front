@@ -33,7 +33,7 @@ function ServiceSection() {
   return (
     <section
       id="service-section"
-      className="mx-auto mt-22.5 mb-40 max-w-300 px-4 md:px-0"
+      className="mx-auto mt-22.5 mb-40 max-w-300 scroll-mt-25 px-4 md:px-0"
     >
       <Title
         as="h3"
