@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import ImageUploadBox from '@/shared/components/image-uploader';
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
@@ -7,15 +6,12 @@ import { Tag } from '@/shared/components/tag';
 import TextArea from '@/shared/components/text-area';
 import UserProfile from '@/shared/components/user-profile';
 import DateInputField from '@/shared/components/date-input';
-import {
-  MOCK_ASSIGNEE,
-  INITIAL_FORM_VALUES,
-} from '@/features/cards/components/todo-edit-modal/todoEditModal.constants';
-import type { StatusOption } from '@/features/cards/components/todo-edit-modal/todoEditModal.constants';
+import { MOCK_ASSIGNEE } from '@/features/cards/components/todo-edit-modal/todoEditModal.constants';
 import type { TodoEditModalProps } from '@/features/cards/components/todo-edit-modal/todoEditModal.types';
 import FieldWrapper from '@/features/cards/components/todo-edit-modal/components/field-wrapper/fieldWrapper';
 import FieldLabel from '@/features/cards/components/todo-edit-modal/components/field-label/fieldLabel';
 import StatusDropdown from '@/features/cards/components/todo-edit-modal/components/status-dropdown/statusDropdown';
+import { useTodoEditModal } from '@/shared/hooks/useTodoEditModal';
 
 /**
  * 할 일 수정 모달을 렌더링합니다.
@@ -26,15 +22,18 @@ import StatusDropdown from '@/features/cards/components/todo-edit-modal/componen
  * ```
  */
 function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
-  const [status, setStatus] = useState<StatusOption>(
-    INITIAL_FORM_VALUES.status
-  );
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [title, setTitle] = useState(INITIAL_FORM_VALUES.title);
-  const [description, setDescription] = useState(
-    INITIAL_FORM_VALUES.description
-  );
-  const [dueDate, setDueDate] = useState('2025-05-24 09:00');
+  const {
+    status,
+    isDropdownOpen,
+    title,
+    description,
+    dueDate,
+    setTitle,
+    setDescription,
+    setDueDate,
+    handleSelectStatus,
+    toggleDropdown,
+  } = useTodoEditModal();
 
   const handleUpdate = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -60,11 +59,8 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
                 <StatusDropdown
                   status={status}
                   isOpen={isDropdownOpen}
-                  onToggle={() => setIsDropdownOpen((prev) => !prev)}
-                  onSelect={(statusOption) => {
-                    setStatus(statusOption);
-                    setIsDropdownOpen(false);
-                  }}
+                  onToggle={toggleDropdown}
+                  onSelect={handleSelectStatus}
                 />
               </FieldWrapper>
               <FieldWrapper>

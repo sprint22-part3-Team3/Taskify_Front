@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import ImageUploadBox from '@/shared/components/image-uploader';
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
@@ -8,6 +7,7 @@ import TextArea from '@/shared/components/text-area';
 import type { TodoCreateModalProps } from '@/features/cards/components/todo-create-modal/todoCreateModal.types';
 import FieldWrapper from '@/features/cards/components/todo-create-modal/components/field-wrapper/fieldWrapper';
 import FieldLabel from '@/features/cards/components/todo-create-modal/components/field-label/fieldLabel';
+import { useTodoCreateModal } from '@/shared/hooks/useTodoCreateModal';
 
 /**
  * 할 일 생성 모달을 렌더링합니다.
@@ -18,23 +18,23 @@ import FieldLabel from '@/features/cards/components/todo-create-modal/components
  * ```
  */
 function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
-  const [assigneeName, setAssigneeName] = useState('');
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [dueDate, setDueDate] = useState('');
-  const [tagInput, setTagInput] = useState('');
+  const {
+    assigneeName,
+    title,
+    description,
+    dueDate,
+    tagInput,
+    setAssigneeName,
+    setTitle,
+    setDescription,
+    setDueDate,
+    setTagInput,
+    handleTagKeyDown,
+  } = useTodoCreateModal();
 
   const handleCreate = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     onClose();
-  };
-
-  const handleTagKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      // TODO: 태그 추가 로직
-      setTagInput('');
-    }
   };
 
   return (
