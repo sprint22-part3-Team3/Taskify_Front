@@ -94,26 +94,86 @@ function MyDashboardPage() {
               <input
                 type="text"
                 placeholder="검색"
+                aria-label="대시보드 검색"
                 className="typo-md-regular md:typo-lg-regular text-black-200 w-full placeholder:text-gray-300 focus:outline-none"
               />
             </div>
 
             <div className="mt-4 lg:overflow-x-auto">
               <div className="lg:min-w-170">
-                <div className="typo-md-regular md:typo-lg-regular hidden grid-cols-3 px-6 py-4 text-gray-300 md:grid">
-                  <span>이름</span>
-                  <span>초대자</span>
-                  <span>수락 여부</span>
+                <div className="md:hidden">
+                  {INVITED_DASHBOARD_ITEMS.map((invitedDashboardItem) => {
+                    return (
+                      <InvitedDashboardItemRow
+                        key={invitedDashboardItem.id}
+                        invitedDashboardItem={invitedDashboardItem}
+                      />
+                    );
+                  })}
                 </div>
 
-                {INVITED_DASHBOARD_ITEMS.map((invitedDashboardItem) => {
-                  return (
-                    <InvitedDashboardItemRow
-                      key={invitedDashboardItem.id}
-                      invitedDashboardItem={invitedDashboardItem}
-                    />
-                  );
-                })}
+                <table
+                  className="hidden w-full table-fixed border-collapse md:table"
+                  aria-label="초대받은 대시보드 목록"
+                >
+                  <thead>
+                    <tr className="typo-md-regular md:typo-lg-regular text-gray-300">
+                      <th
+                        scope="col"
+                        className="px-6 py-4 text-left font-normal"
+                      >
+                        이름
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-4 text-left font-normal"
+                      >
+                        초대자
+                      </th>
+                      <th
+                        scope="col"
+                        className="px-6 py-4 text-left font-normal"
+                      >
+                        수락 여부
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {INVITED_DASHBOARD_ITEMS.map((invitedDashboardItem) => {
+                      return (
+                        <tr
+                          key={invitedDashboardItem.id}
+                          className="border-b border-gray-100"
+                        >
+                          <td className="typo-md-regular md:typo-lg-regular text-black-200 px-6 py-5.75">
+                            {invitedDashboardItem.name}
+                          </td>
+                          <td className="typo-md-regular md:typo-lg-regular text-black-200 px-6 py-5.75">
+                            {invitedDashboardItem.inviter}
+                          </td>
+                          <td className="px-6 py-5.75">
+                            <div className="flex items-center gap-2">
+                              <Button
+                                theme="primary"
+                                size="sm"
+                                className="min-w-21"
+                              >
+                                수락
+                              </Button>
+                              <Button
+                                theme="outlined"
+                                size="sm"
+                                className="text-primary-500 min-w-21"
+                              >
+                                거절
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
