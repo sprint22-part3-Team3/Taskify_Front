@@ -3,7 +3,7 @@ import Logo from '@/shared/components/logo';
 import { ColorLabel } from '@/features/dashboards/components/color/color-label';
 import { IcAddBox, IcBookmark } from '@/shared/assets';
 import { cn } from '@/shared/utils/cn';
-import NavigationButtons from '@/shared/components/navigation-buttons';
+import NavigationButtons from '@/shared/components/page-indicator/navigation-buttons';
 
 /**
  * 대시보드 목록을 보여주는 사이드바 컴포넌트입니다.
@@ -32,6 +32,9 @@ const SAMPLE_DASHBOARDS = [
   { id: 4, title: '회의록', color: '#3b82f6', isOwner: false },
   { id: 5, title: '중요 문서함', color: '#ec4899', isOwner: false },
 ];
+
+const handlePrevPage = () => undefined;
+const handleNextPage = () => undefined;
 
 export default function Sidebar({
   dashboards = SAMPLE_DASHBOARDS, //TODO: API 연결할 때 SAMPLE_DASHBOARDS 제거
@@ -91,8 +94,8 @@ export default function Sidebar({
       {/* 하단 페이지네이션 */}
       <div className="px-3 py-3">
         <NavigationButtons
-          onPrev={() => console.log('이전')}
-          onNext={() => console.log('다음')}
+          onPrev={handlePrevPage}
+          onNext={handleNextPage}
           isHidingOnMobile={true}
         />
       </div>
