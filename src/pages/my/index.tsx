@@ -5,37 +5,19 @@ import InputField from '@/shared/components/input/input-field';
 import PasswordField from '@/shared/components/input/password-field';
 import Title from '@/shared/components/title';
 import ImageUploadBox from '@/shared/components/image-uploader';
-
-import { IcArrowLeft } from '@/shared/assets';
-
-import { useNavigate } from 'react-router-dom';
-
-// todo
-// 돌아가기 버튼 공통컴포넌트 구현
+import BackButton from '@/shared/components/back-button';
 
 function MyPage() {
   const [password, setPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
-  const navigate = useNavigate();
-
   const isPasswordMismatch =
     confirmNewPassword.length > 0 && newPassword !== confirmNewPassword;
 
   return (
     <div className="p-3 pt-4 pl-3 md:pt-4 md:pr-5 md:pl-4 lg:pt-12 lg:pl-5">
-      <button
-        onClick={() => navigate(-1)}
-        className="mb-2 flex cursor-pointer items-center md:mb-7"
-      >
-        <div className="flex h-4.5 w-4.5 items-center justify-center md:h-5 md:w-5">
-          <IcArrowLeft className="text-black-200" />
-        </div>
-        <div className="text-black-200 typo-md-medium md:typo-lg-medium md--line-height md:lg--line-height ml-2">
-          돌아가기
-        </div>
-      </button>
+      <BackButton />
       <div className="rounded-xl bg-white p-4 sm:w-full md:w-137 md:p-6 lg:w-2xl">
         <Title
           as="h2"
