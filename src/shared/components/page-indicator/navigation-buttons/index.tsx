@@ -1,5 +1,5 @@
-import type { NavigationButtonsProps } from '@/shared/components/navigation-buttons/navigationButtons.types';
-import NavigationButton from '@/shared/components/navigation-buttons/nav-button';
+import type { NavigationButtonsProps } from '@/shared/components/page-indicator/navigation-buttons/navigationButtons.types';
+import NavigationButton from '@/shared/components/page-indicator/navigation-buttons/nav-button';
 import { cn } from '@/shared/utils/cn';
 
 /**

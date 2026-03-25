@@ -15,10 +15,13 @@ function PageIndicator({
 }: PageIndicatorProps) {
   return (
     <span
-      className={cn('typo-md-regular text-black-200', className)}
+      className={cn(
+        'typo-xs-regular md:typo-md-regular text-black-200',
+        className
+      )}
       {...props}
     >
-      {currentPage} 페이지 중 {totalPages}
+      {totalPages} 페이지 중 {currentPage}
     </span>
   );
 }

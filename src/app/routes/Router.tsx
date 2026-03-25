@@ -6,6 +6,7 @@ import MainPage from '@/pages/main';
 import MyDashboardPage from '@/pages/my-dashboard';
 import MyPage from '@/pages/my';
 import SignupPage from '@/pages/signup';
+import DashboardLayout from '@/features/dashboards/components/layout';
 
 function Router() {
   return (
@@ -14,10 +15,12 @@ function Router() {
         <Route path="/" element={<MainPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="/mydashboard" element={<MyDashboardPage />} />
-        <Route path="/dashboard/:id" element={<DashboardDetailPage />} />
-        <Route path="/dashboard/:id/edit" element={<DashboardEditPage />} />
-        <Route path="/mypage" element={<MyPage />} />
+        <Route element={<DashboardLayout />}>
+          <Route path="/mydashboard" element={<MyDashboardPage />} />
+          <Route path="/dashboard/:id" element={<DashboardDetailPage />} />
+          <Route path="/dashboard/:id/edit" element={<DashboardEditPage />} />
+          <Route path="/mypage" element={<MyPage />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
