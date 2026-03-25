@@ -6,7 +6,7 @@ export type Dashboard = {
 };
 
 export type SidebarProps = {
-  dashboards?: Dashboard[]; // 선택으로 변경
+  dashboards?: Dashboard[];
   selectedId?: number;
   onAddClick?: () => void;
   onDashboardClick?: (id: number) => void;

@@ -1,11 +1,11 @@
 import type { AvatarUser } from '@/shared/types/user.types';
 
 export type HeaderProps = {
-  title?: string; // 선택으로 변경
+  title?: string;
   isOwner?: boolean;
   members?: AvatarUser[];
   totalMemberCount?: number;
-  userName?: string; // 선택으로 변경
+  userName?: string;
   profileImage?: string;
   onManageClick?: () => void;
   onInviteClick?: () => void;
