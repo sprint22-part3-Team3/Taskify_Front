@@ -33,7 +33,7 @@ function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose}>
+    <Modal isOpen={isOpen} onClose={handleClose} className="w-73.75 md:w-130">
       <Modal.Header title="새 컬럼 생성" />
 
       <form onSubmit={handleSubmit}>

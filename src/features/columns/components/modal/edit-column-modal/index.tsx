@@ -56,7 +56,11 @@ function EditColumnModal({
 
   return (
     <>
-      <Modal isOpen={isOpen && !isDeleteConfirmModalOpen} onClose={handleClose}>
+      <Modal
+        isOpen={isOpen && !isDeleteConfirmModalOpen}
+        onClose={handleClose}
+        className="w-73.75 md:w-130"
+      >
         <Modal.Header title="컬럼 수정" hasCloseIcon />
 
         <form onSubmit={handleSubmit}>
