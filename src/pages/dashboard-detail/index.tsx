@@ -1,5 +1,7 @@
+import { ColumnList } from '@/features/columns/components/column-list';
+
 function DashboardDetailPage() {
-  return <div>Dashboard Detail Page</div>;
+  return <ColumnList />;
 }
 
 export default DashboardDetailPage;
