@@ -6,7 +6,7 @@ import type { StatusBadgeProps } from '@/shared/components/status-badge/statusBa
  *
  * @example
  * ```tsx
- * <StatusBadge label="To Do"></StatusBadge>
+ * <StatusBadge label="To Do" />
  * ```
  */
 function StatusBadge({ label }: StatusBadgeProps) {
