@@ -20,6 +20,13 @@ function MyPage() {
   const isPasswordMismatch =
     confirmNewPassword.length > 0 && newPassword !== confirmNewPassword;
 
+  // TODO
+  // 헤더 사이드바 공통 컴포넌트로 교체
+
+  // 기능
+  // 이메일, 닉네임 데이터 받아오기
+  // 현제 비밀번호 맞는지 체크
+
   return (
     <div className="relative bg-gray-50">
       {/* 헤더 */}
@@ -60,7 +67,8 @@ function MyPage() {
               </Label>
               <InputField
                 type="email"
-                placeholder="이메일을 입력해주세요"
+                readOnly
+                // placeholder="이메일을 입력해주세요"
                 className="mt-2 mb-4"
               />
               <Label
@@ -72,7 +80,7 @@ function MyPage() {
               </Label>
               <InputField
                 type="text"
-                placeholder="닉네임을 입력해주세요"
+                // placeholder="닉네임을 입력해주세요"
                 className="mt-2"
               />
               <Button
