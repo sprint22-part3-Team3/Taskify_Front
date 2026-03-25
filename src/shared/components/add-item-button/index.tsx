@@ -1,15 +1,14 @@
 import type { AddItemButtonProps } from '@/shared/components/add-item-button/addItemButton.types';
 import { IcAdd } from '@/shared/assets/icons';
 import { cn } from '@/shared/utils/cn';
+import { Button } from '@/shared/components/button';
 
 function AddItemButton({ onClick, className, children }: AddItemButtonProps) {
   return (
-    <button
+    <Button
       type="button"
-      className={cn(
-        'flex h-10 w-full cursor-pointer items-center justify-center rounded-md border border-gray-200 bg-white',
-        className
-      )}
+      theme="icon"
+      className={cn('h-10 w-full', className)}
       onClick={onClick}
     >
       {children && (
@@ -20,7 +19,7 @@ function AddItemButton({ onClick, className, children }: AddItemButtonProps) {
       <span className="bg-primary-500/8 inline-block rounded-sm px-1.5 py-1.5">
         <IcAdd />
       </span>
-    </button>
+    </Button>
   );
 }
 
