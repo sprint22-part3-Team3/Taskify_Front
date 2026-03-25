@@ -15,7 +15,7 @@ import type { AuthFooterLinkProps } from '@/features/auth/components/auth-footer
  */
 function AuthFooterLink({ message, linkText, to }: AuthFooterLinkProps) {
   return (
-    <div className="typo-lg-regular text-black-200 flex gap-2 text-center">
+    <p className="typo-lg-regular text-black-200 flex gap-2 text-center">
       <span>{message}</span>
       <Link
         to={to}
@@ -23,7 +23,7 @@ function AuthFooterLink({ message, linkText, to }: AuthFooterLinkProps) {
       >
         {linkText}
       </Link>
-    </div>
+    </p>
   );
 }
 
