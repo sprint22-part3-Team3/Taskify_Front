@@ -59,8 +59,12 @@ export default function DashboardEditPage() {
           </Title>
         </div>
 
-        <Label className="mb-2 block">대시보드 이름</Label>
-        <InputField type="text" placeholder="뉴프로젝트" className="mb-4" />
+        <Input
+          label="대시보드 이름"
+          type="text"
+          placeholder="뉴프로젝트"
+          containerClassName="mb-4"
+        />
 
         <ColorChipset
           colors={DASHBOARD_COLORS}
