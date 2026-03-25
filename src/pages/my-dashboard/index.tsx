@@ -132,7 +132,7 @@ function MyDashboardPage() {
                       </th>
                       <th
                         scope="col"
-                        className="px-6 py-4 text-left font-normal"
+                        className="px-6 py-4 text-center font-normal"
                       >
                         수락 여부
                       </th>
@@ -151,8 +151,8 @@ function MyDashboardPage() {
                           <td className="typo-md-regular md:typo-lg-regular text-black-200 px-6 py-5.75">
                             {invitedDashboardItem.inviter}
                           </td>
-                          <td className="px-6 py-5.75">
-                            <div className="flex items-center gap-2">
+                          <td className="py-5.75">
+                            <div className="flex items-center justify-center gap-2">
                               <Button
                                 theme="primary"
                                 size="sm"
