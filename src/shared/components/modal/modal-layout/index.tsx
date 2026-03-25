@@ -31,7 +31,7 @@ function ModalLayout({
       >
         <div
           className={cn(
-            'w-[90%] overflow-hidden rounded-lg bg-white px-4 py-6 md:px-6',
+            'flex max-h-[90vh] w-[90%] flex-col overflow-hidden rounded-lg bg-white px-4 py-6 md:px-6',
             isClosing ? 'animate-fade-move-out' : 'animate-fade-move-in',
             className
           )}
