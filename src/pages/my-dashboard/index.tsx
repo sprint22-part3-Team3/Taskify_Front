@@ -1,6 +1,6 @@
+import { useState } from 'react';
 import {
   IcAdd,
-  IcArrowLeft,
   IcArrowRight,
   IcMailOff,
   IcSearch,
@@ -8,7 +8,8 @@ import {
 import { ColorLabel } from '@/features/dashboards/components/color/color-label';
 import { getDashboardColorHex } from '@/features/dashboards/constants/dashboardColorMap.constants';
 import { Button } from '@/shared/components/button';
-import { PageIndicator } from '@/shared/components/page-indicator/index.tsx';
+import { PageIndicator } from '@/shared/components/page-indicator/index';
+import NavigationButtons from '@/shared/components/navigation-buttons/index';
 import {
   CURRENT_PAGE,
   DASHBOARD_ITEMS,
@@ -17,18 +18,20 @@ import {
 } from '@/pages/my-dashboard/myDashboard.constants';
 import InvitedDashboardItemRow from '@/pages/my-dashboard/components/invitedDashboardItemRow';
 
-function getPaginationArrowClass(isEnabled: boolean) {
-  return isEnabled ? 'h-4 w-4 text-black-200' : 'h-4 w-4 text-gray-200';
-}
-
 /**
- * 내가 생성한 대시보드 목록과 초대받은 대시보드를 확인하는 페이지
+ * 내가 생성한 대시보드 목록과 초대받은 대시보드를 확인하는 페이지입니다.
+ *
+ * @example
+ * ```tsx
+ * <MyDashboardPage />
+ * ```
  */
-
 function MyDashboardPage() {
+  const [currentPage, setCurrentPage] = useState(CURRENT_PAGE);
+
   const hasInvitedDashboards = INVITED_DASHBOARD_ITEMS.length > 0;
-  const canGoPreviousPage = CURRENT_PAGE > 1;
-  const canGoNextPage = CURRENT_PAGE < TOTAL_PAGES;
+  const canGoPreviousPage = currentPage > 1;
+  const canGoNextPage = currentPage < TOTAL_PAGES;
 
   return (
     <main className="min-h-dvh bg-gray-50">
@@ -41,7 +44,9 @@ function MyDashboardPage() {
               className="typo-md-semibold md:typo-lg-semibold h-14.5 w-full justify-between px-5 text-left md:h-17"
             >
               <span>새로운 대시보드</span>
-              <IcAdd className="text-primary-500 h-5 w-5" />
+              <div className="bg-primary-500/10 flex h-5 w-5 items-center justify-center rounded-sm md:h-5.5 md:w-5.5">
+                <IcAdd className="text-primary-500 h-2.25 w-2.25 md:h-2.5 md:w-2.5" />
+              </div>
             </Button>
 
             {DASHBOARD_ITEMS.map((dashboardItem) => {
@@ -66,30 +71,15 @@ function MyDashboardPage() {
           </div>
 
           <div className="mt-4 flex items-center justify-end gap-3">
-            <PageIndicator
-              currentPage={CURRENT_PAGE}
-              totalPages={TOTAL_PAGES}
+            <PageIndicator currentPage={currentPage} totalPages={TOTAL_PAGES} />
+            <NavigationButtons
+              onPrev={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              onNext={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, TOTAL_PAGES))
+              }
+              isPrevDisabled={!canGoPreviousPage}
+              isNextDisabled={!canGoNextPage}
             />
-            <div className="flex">
-              <Button
-                theme="outlined"
-                size="icon"
-                className="-mr-px h-9 w-9 rounded-r-none px-0 hover:relative hover:z-10 md:h-10 md:w-10"
-              >
-                <IcArrowLeft
-                  className={getPaginationArrowClass(canGoPreviousPage)}
-                />
-              </Button>
-              <Button
-                theme="outlined"
-                size="icon"
-                className="h-9 w-9 rounded-l-none px-0 md:h-10 md:w-10"
-              >
-                <IcArrowRight
-                  className={getPaginationArrowClass(canGoNextPage)}
-                />
-              </Button>
-            </div>
           </div>
         </section>
 
