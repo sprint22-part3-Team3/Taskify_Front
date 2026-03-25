@@ -31,7 +31,7 @@ function IntroSection() {
                 </Title>
               </div>
               <div
-                className={`${card.imageWrapClassName ?? ''} flex w-full items-end justify-center px-5 pt-10 md:justify-end md:px-10 md:pt-12 lg:h-full lg:w-auto lg:px-0 lg:pt-12`}
+                className={`${card.imageWrapClassName ?? ''} md: flex w-full items-end justify-center px-5 md:justify-end md:px-10 lg:h-full lg:w-auto lg:px-0 lg:pt-12`}
               >
                 {card.imageFrameClassName ? (
                   <div
