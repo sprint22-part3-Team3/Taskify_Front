@@ -20,7 +20,7 @@ function MyPage() {
       <BackButton />
       <div className="mt-1 rounded-xl bg-white p-4 sm:w-full md:mt-7 md:w-137 md:p-6 lg:w-2xl">
         <Title
-          as="h2"
+          as="h3"
           size="2lg"
           weight="bold"
           className="mb-10 md:mb-6 md:text-2xl"
@@ -56,7 +56,7 @@ function MyPage() {
         </div>
       </div>
       <div className="mt-4 rounded-xl bg-white p-4 sm:w-full md:mt-6 md:w-137 md:p-6 lg:w-2xl">
-        <Title as="h2" size="2xl" weight="bold" className="mb-20 md:mb-6">
+        <Title as="h3" size="2xl" weight="bold" className="mb-20 md:mb-6">
           비밀번호 변경
         </Title>
         <div>
