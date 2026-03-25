@@ -13,6 +13,7 @@
 
   --color-white: #ffffff;
 
+  --color-primary-800: #009e9d;
   --color-primary-700: #2b8d8d;
   --color-primary-600: #37b5b4;
   --color-primary-500: #3cc7c6;
@@ -25,4 +26,6 @@
   --color-pink: #fc7b8f;
 
   --color-error: #d6173a;
+
+  --shadow-lg: 0 4px 6px 0 rgb(0 0 0 / 0.05);
 }
