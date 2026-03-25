@@ -27,7 +27,7 @@ function CardListHeader({ title, cardTotalCount }: CardListHeaderProps) {
         aria-label="컬럼 설정"
         className="flex h-6 w-6 cursor-pointer items-center justify-center"
       >
-        <IcSettings className="h-full w-full" />
+        <IcSettings className="hover:text-black-100 h-full w-full text-gray-400" />
       </button>
     </div>
   );
