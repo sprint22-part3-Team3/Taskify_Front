@@ -82,8 +82,8 @@ function MyDashboardPage() {
         </div>
       </section>
 
-      <section className="mt-10 flex max-w-240 flex-col rounded-lg bg-white px-4 py-6 md:px-10 md:py-4.5 lg:py-8">
-        <h2 className="typo-md-bold text-black-200 md:typo-xl-bold">
+      <section className="mt-6 flex max-w-240 flex-col rounded-lg bg-white px-4 py-6 md:mt-4.5 md:px-7 md:py-4.5 lg:mt-8 lg:py-8">
+        <h2 className="typo-xl-bold text-black-200 md:typo-2xl-bold">
           초대받은 대시보드
         </h2>
 
@@ -99,7 +99,7 @@ function MyDashboardPage() {
               />
             </div>
 
-            <div className="-mx-4 mt-4 md:-mx-10 lg:overflow-x-auto">
+            <div className="mt-4 lg:overflow-x-auto">
               <div className="lg:min-w-170">
                 <div className="md:hidden">
                   {INVITED_DASHBOARD_ITEMS.map((invitedDashboardItem) => {
@@ -120,7 +120,7 @@ function MyDashboardPage() {
                     <tr className="typo-md-regular md:typo-lg-regular text-gray-300">
                       <th
                         scope="col"
-                        className="px-6 py-4 text-left font-normal"
+                        className="py-4 text-left font-normal lg:px-12"
                       >
                         이름
                       </th>
@@ -145,7 +145,7 @@ function MyDashboardPage() {
                           key={invitedDashboardItem.id}
                           className="border-b border-gray-100"
                         >
-                          <td className="typo-md-regular md:typo-lg-regular text-black-200 px-6 py-5.75">
+                          <td className="typo-md-regular md:typo-lg-regular text-black-200 py-5.75 lg:px-12">
                             {invitedDashboardItem.name}
                           </td>
                           <td className="typo-md-regular md:typo-lg-regular text-black-200 px-6 py-5.75">
