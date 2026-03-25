@@ -3,6 +3,7 @@ import BackButton from '@/shared/components/back-button';
 import { Button } from '@/shared/components/button';
 import InputField from '@/shared/components/input/input-field';
 import Label from '@/shared/components/input/label';
+import { Modal } from '@/shared/components/modal';
 import { PageIndicator } from '@/shared/components/page-indicator';
 import NavigationButtons from '@/shared/components/page-indicator/navigation-buttons';
 import Title from '@/shared/components/title';
@@ -14,6 +15,7 @@ export default function DashboardEditPage() {
   const [selectedColor, setSelectedColor] = useState<
     'purple' | 'blue' | 'yellow' | 'orange' | 'pink'
   >('purple');
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   return (
     <div className="flex max-w-155 flex-col gap-4 p-5">
@@ -72,7 +74,12 @@ export default function DashboardEditPage() {
               className="flex items-center justify-between border-b border-gray-100 py-3 last:border-b-0"
             >
               <UserProfile user={member} />
-              <Button theme="danger" size="sm" className="px-3.5 md:px-7">
+              <Button
+                theme="danger"
+                size="sm"
+                className="px-3.5 md:px-7"
+                onClick={() => setIsDeleteModalOpen(true)}
+              >
                 삭제
               </Button>
             </li>
@@ -135,6 +142,22 @@ export default function DashboardEditPage() {
       <button className="typo-lg-medium md:typo-2lg-medium text-black-200 w-full rounded-lg border border-gray-200 bg-transparent py-4 hover:bg-gray-50 md:w-[320px]">
         대시보드 삭제하기
       </button>
+
+      <Modal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        className="max-w-lg"
+      >
+        <h3 className="typo-xl-medium md:typo-xl-medium text-black-200 pb-10 text-center">
+          구성원을 <span className="text-error">삭제</span> 하시겠습니까?
+        </h3>
+        <Modal.Footer>
+          <Button theme="cancel" onClick={() => setIsDeleteModalOpen(false)}>
+            취소
+          </Button>
+          <Button>삭제</Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
