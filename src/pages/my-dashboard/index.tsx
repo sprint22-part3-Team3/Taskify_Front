@@ -8,8 +8,8 @@ import {
 import { ColorLabel } from '@/features/dashboards/components/color/color-label';
 import { getDashboardColorHex } from '@/features/dashboards/constants/dashboardColorMap.constants';
 import { Button } from '@/shared/components/button';
-import { PageIndicator } from '@/shared/components/page-indicator/index';
-import NavigationButtons from '@/shared/components/navigation-buttons/index';
+import { PageIndicator } from '@/shared/components/page-indicator';
+import NavigationButtons from '@/shared/components/navigation-buttons';
 import {
   CURRENT_PAGE,
   DASHBOARD_ITEMS,
