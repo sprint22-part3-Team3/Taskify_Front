@@ -10,6 +10,7 @@ import PasswordField from '@/shared/components/input/password-field';
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const isSubmitDisabled = !email || !password;
 
   const handleSubmit = () => {
     // TODO: 이메일/비밀번호 유효성 검사 후 로그인 API 호출
@@ -44,7 +45,7 @@ function LoginPage() {
           theme="primary"
           size="md"
           type="submit"
-          disabled={!email || !password}
+          disabled={isSubmitDisabled}
           className="mt-4 mb-6 w-full"
         >
           로그인

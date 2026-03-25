@@ -14,6 +14,8 @@ function SignupPage() {
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [isAgreementChecked, setIsAgreementChecked] = useState(false);
+  const isSubmitDisabled =
+    !nickname || !email || !password || !passwordConfirm || !isAgreementChecked;
 
   const handleSubmit = () => {
     // TODO: 입력값 유효성 검사와 약관 동의 여부 확인 후 회원가입 API 호출
@@ -65,13 +67,7 @@ function SignupPage() {
           theme="primary"
           size="md"
           type="submit"
-          disabled={
-            !nickname ||
-            !email ||
-            !password ||
-            !passwordConfirm ||
-            !isAgreementChecked
-          }
+          disabled={isSubmitDisabled}
           className="mt-4 mb-6 w-full"
         >
           가입하기
