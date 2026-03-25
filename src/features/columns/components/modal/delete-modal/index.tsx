@@ -1,11 +1,6 @@
 import { Button } from '@/shared/components/button';
 import { Modal } from '@/shared/components/modal';
-
-type DeleteModalProps = {
-  isOpen: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-};
+import type { DeleteModalProps } from '@/features/columns/components/modal/delete-modal/deleteModal.types';
 
 /**
  * 컬럼 삭제 전 확인을 받는 모달입니다.
