@@ -71,7 +71,7 @@ function MyPage() {
             <Button
               theme="primary"
               type="submit"
-              className="typo-lg-semibold mt-6 h-13.5 w-full"
+              className="mt-6 h-13.5 w-full"
             >
               저장
             </Button>
@@ -125,11 +125,7 @@ function MyPage() {
               비밀번호가 일치하지 않습니다.
             </p>
           )}
-          <Button
-            theme="primary"
-            type="submit"
-            className="typo-md-regular mt-6 h-13.5 w-full"
-          >
+          <Button theme="primary" type="submit" className="mt-6 h-13.5 w-full">
             변경
           </Button>
         </div>
