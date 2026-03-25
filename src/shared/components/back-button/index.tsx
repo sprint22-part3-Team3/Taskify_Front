@@ -4,17 +4,18 @@ import { useNavigate } from 'react-router-dom';
 function BackButton() {
   const navigate = useNavigate();
 
+  const onGoBack = () => navigate(-1);
+
   return (
     <button
-      onClick={() => navigate(-1)}
-      className="mb-2 flex cursor-pointer items-center md:mb-7"
+      type="button"
+      onClick={onGoBack}
+      className="mb-2 flex cursor-pointer items-center"
     >
-      <div className="flex h-4.5 w-4.5 items-center justify-center md:h-5 md:w-5">
-        <IcArrowLeft className="text-black-200" />
-      </div>
-      <div className="text-black-200 typo-md-medium md:typo-lg-medium md--line-height md:lg--line-height ml-2">
+      <IcArrowLeft className="text-black-200" aria-hidden="true" />
+      <span className="text-black-200 typo-md-medium md:typo-lg-medium ml-4">
         돌아가기
-      </div>
+      </span>
     </button>
   );
 }
