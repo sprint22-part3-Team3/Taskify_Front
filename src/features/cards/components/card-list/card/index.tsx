@@ -42,7 +42,7 @@ function Card({ card }: CardProps) {
             {title}
           </Title>
           <div className="flex flex-col gap-1.5 md:flex-row md:gap-4 lg:flex-col lg:gap-2">
-            <ul className="flex shrink-0 gap-1.5">
+            <ul className="flex shrink-0 flex-wrap gap-1.5 md:w-[50%] lg:w-auto">
               {tags.map((tag) => (
                 <li key={tag}>
                   <Tag color={getTagColor(tag)}>{tag}</Tag>
