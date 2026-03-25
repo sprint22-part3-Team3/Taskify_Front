@@ -63,7 +63,7 @@ function MyDashboardPage() {
                     labelClassName="typo-md-semibold md:typo-lg-semibold text-black-200"
                   />
                 </div>
-                <IcArrowRight className="text-black-200 h-4.5 w-4.5" />
+                <IcArrowRight className="text-black-200 h-3.5" />
               </Button>
             );
           })}
@@ -99,7 +99,7 @@ function MyDashboardPage() {
               />
             </div>
 
-            <div className="mt-4 lg:overflow-x-auto">
+            <div className="-mx-4 mt-4 md:-mx-10 lg:overflow-x-auto">
               <div className="lg:min-w-170">
                 <div className="md:hidden">
                   {INVITED_DASHBOARD_ITEMS.map((invitedDashboardItem) => {
