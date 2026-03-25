@@ -1,4 +1,5 @@
 import { ColorChipset } from '@/features/dashboards/components/color/color-chipset';
+import type { DashboardColorName } from '@/features/dashboards/types/dashboardColor.types';
 import BackButton from '@/shared/components/back-button';
 import { Button } from '@/shared/components/button';
 import InputField from '@/shared/components/input/input-field';
@@ -12,10 +13,12 @@ import { DASHBOARD_COLORS } from '@/shared/constants/color.constants';
 import { useState } from 'react';
 
 export default function DashboardEditPage() {
-  const [selectedColor, setSelectedColor] = useState<
-    'purple' | 'blue' | 'yellow' | 'orange' | 'pink'
-  >('purple');
+  const [selectedColor, setSelectedColor] =
+    useState<DashboardColorName>('purple');
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const handleOpenDeleteModal = () => setIsDeleteModalOpen(true);
+  const handleCloseDeleteModal = () => setIsDeleteModalOpen(false);
 
   return (
     <div className="flex max-w-155 flex-col gap-4 p-5">
@@ -52,8 +55,8 @@ export default function DashboardEditPage() {
           <div className="flex items-center gap-3">
             <PageIndicator currentPage={1} totalPages={1} />
             <NavigationButtons
-              onPrev={() => {}}
-              onNext={() => {}}
+              onPrev={() => {}} // TODO: 페이지네이션 로직 구현
+              onNext={() => {}} // TODO: 페이지네이션 로직 구현
               isPrevDisabled={true}
               isNextDisabled={true}
             />
@@ -64,7 +67,7 @@ export default function DashboardEditPage() {
 
         <ul>
           {[
-            { id: 1, nickname: '최승철', profileImageUrl: '' },
+            { id: 1, nickname: '최승철', profileImageUrl: '' }, // TODO: API 연결 후 샘플 데이터 삭제
             { id: 2, nickname: '윤정한', profileImageUrl: '' },
             { id: 3, nickname: '홍지수', profileImageUrl: '' },
             { id: 4, nickname: '문준휘', profileImageUrl: '' },
@@ -74,12 +77,7 @@ export default function DashboardEditPage() {
               className="flex items-center justify-between border-b border-gray-100 py-3 last:border-b-0"
             >
               <UserProfile user={member} />
-              <Button
-                theme="danger"
-                size="sm"
-                className="px-3.5 md:px-7"
-                onClick={() => setIsDeleteModalOpen(true)}
-              >
+              <Button theme="danger" size="sm" onClick={handleOpenDeleteModal}>
                 삭제
               </Button>
             </li>
@@ -99,8 +97,8 @@ export default function DashboardEditPage() {
             <NavigationButtons
               onPrev={() => {}}
               onNext={() => {}}
-              isPrevDisabled={true}
-              isNextDisabled={true}
+              isPrevDisabled={true} // TODO: 페이지네이션 로직 구현
+              isNextDisabled={true} // TODO: 페이지네이션 로직 구현
             />
             {/* PC/태블릿에서만 보이는 초대하기 */}
             <Button size="sm" className="hidden md:inline-flex">
@@ -145,14 +143,14 @@ export default function DashboardEditPage() {
 
       <Modal
         isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
+        onClose={handleCloseDeleteModal}
         className="max-w-xl"
       >
         <h3 className="typo-xl-medium md:typo-xl-medium text-black-200 pb-10 text-center">
           구성원을 <span className="text-error">삭제</span> 하시겠습니까?
         </h3>
         <Modal.Footer>
-          <Button theme="cancel" onClick={() => setIsDeleteModalOpen(false)}>
+          <Button theme="cancel" onClick={handleCloseDeleteModal}>
             취소
           </Button>
           <Button>삭제</Button>
