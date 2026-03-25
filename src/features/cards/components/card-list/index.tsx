@@ -1,4 +1,4 @@
-import type { CardListProps } from '@/features/cards/card.types';
+import type { CardListProps } from '@/features/cards/components/card-list/cardList.types';
 import { Card } from '@/features/cards/components/card';
 import { CardListHeader } from '@/features/cards/components/card-list-header';
 import { CardAdd } from '@/features/cards/components/card-add';

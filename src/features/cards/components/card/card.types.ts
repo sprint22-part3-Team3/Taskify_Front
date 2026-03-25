@@ -1,4 +1,3 @@
-// 1. Base Data Types
 export type Assignee = {
   profileImageUrl: string | null;
   nickname: string;
@@ -19,24 +18,6 @@ export type Card = {
   updatedAt: string;
 };
 
-export type CardColumn = {
-  id: number;
-  title: string;
-  teamId: string;
-  createdAt: string;
-  updatedAt: string;
-};
-
-// 2. Component Props Types
 export type CardProps = {
   card: Card;
-};
-
-export type CardListProps = {
-  column: CardColumn;
-};
-
-export type CardListHeaderProps = {
-  title: string;
-  cardCount: number;
 };
