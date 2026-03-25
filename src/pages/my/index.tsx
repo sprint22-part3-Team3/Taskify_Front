@@ -16,7 +16,7 @@ function MyPage() {
     confirmNewPassword.length > 0 && newPassword !== confirmNewPassword;
 
   return (
-    <div className="p-3 pt-4 pl-3 md:pt-4 md:pr-5 md:pl-4 lg:pt-5 lg:pl-5">
+    <form className="p-3 pt-4 pl-3 md:pt-4 md:pr-5 md:pl-4 lg:pt-5 lg:pl-5">
       <BackButton />
       <div className="mt-1 rounded-xl bg-white p-4 sm:w-full md:mt-7 md:w-137 md:p-6 lg:w-2xl">
         <Title
@@ -31,18 +31,13 @@ function MyPage() {
           <ImageUploadBox />
           <div className="md:w-69 lg:w-100">
             <Label
-              aria-label="이메일"
               htmlFor="email"
               className="gray-200 text-md mt-10 block md:mt-0 md:text-lg"
             >
               이메일
             </Label>
             <InputField type="email" readOnly className="mt-2 mb-4" />
-            <Label
-              aria-label="닉네임"
-              htmlFor="nickname"
-              className="gray-200 text-md md:text-lg"
-            >
+            <Label htmlFor="nickname" className="gray-200 text-md md:text-lg">
               닉네임
             </Label>
             <InputField
@@ -66,7 +61,6 @@ function MyPage() {
         </Title>
         <div>
           <Label
-            aria-label="현재 비밀번호"
             htmlFor="current-password"
             className="gray-200 text-md mb-2 block md:text-lg"
           >
@@ -78,7 +72,6 @@ function MyPage() {
             placeholder="비밀번호를 입력"
           />
           <Label
-            aria-label="새 비밀번호"
             htmlFor="new-password"
             className="gray-200 text-md mt-4 mb-2 block md:text-lg"
           >
@@ -90,7 +83,6 @@ function MyPage() {
             placeholder="새 비밀번호를 입력"
           />
           <Label
-            aria-label="새 비밀번호 확인"
             htmlFor="new-password-confirm"
             className="gray-200 text-md mt-4 mb-2 block md:text-lg"
           >
@@ -112,7 +104,7 @@ function MyPage() {
           </Button>
         </div>
       </div>
-    </div>
+    </form>
   );
 }
 
