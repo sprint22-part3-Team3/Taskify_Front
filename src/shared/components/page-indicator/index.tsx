@@ -18,7 +18,7 @@ function PageIndicator({
       className={cn('typo-md-regular text-black-200', className)}
       {...props}
     >
-      {currentPage} 페이지 중 {totalPages}
+      {totalPages} 페이지 중 {currentPage}
     </span>
   );
 }
