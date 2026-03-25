@@ -1,6 +1,8 @@
 import type { CardProps } from '@/features/cards/card.types';
 import { IcCalendar } from '@/shared/assets/icons';
 import Avatar from '@/shared/components/avatar';
+import { Tag } from '@/shared/components/tag';
+import { getTagColor } from '@/shared/utils/getTagColor';
 
 function Card({ card }: CardProps) {
   if (!card) {
@@ -21,14 +23,10 @@ function Card({ card }: CardProps) {
             {title}
           </h3>
           <div className="flex flex-col gap-1.5 md:flex-row md:gap-4 lg:flex-col lg:gap-2">
-            <ul className="flex shrink-0">
+            <ul className="flex shrink-0 gap-1.5">
               {tags.map((tag, index) => (
-                // TODO : 공통 컴포넌트로 변경
-                <li
-                  key={tag + index}
-                  className="rounded-sm bg-gray-100 px-2 py-1 text-xs"
-                >
-                  {tag}
+                <li key={tag + index}>
+                  <Tag color={getTagColor(tag)}>{tag}</Tag>
                 </li>
               ))}
             </ul>
