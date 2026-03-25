@@ -23,17 +23,16 @@ function EditColumnModal({
   initialTitle,
 }: EditColumnModalProps) {
   const [draftTitle, setDraftTitle] = useState<string | null>(null);
-  const [isDeleteConfirmModalOpen, setIsDeleteConfirmModalOpen] =
-    useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const columnTitle = draftTitle ?? initialTitle;
   const isSubmitDisabled = !columnTitle.trim();
 
   const handleOpenDeleteModal = () => {
-    setIsDeleteConfirmModalOpen(true);
+    setIsDeleteModalOpen(true);
   };
 
   const handleClose = () => {
-    setIsDeleteConfirmModalOpen(false);
+    setIsDeleteModalOpen(false);
     setDraftTitle(null);
     onClose();
   };
@@ -57,7 +56,7 @@ function EditColumnModal({
   return (
     <>
       <Modal
-        isOpen={isOpen && !isDeleteConfirmModalOpen}
+        isOpen={isOpen && !isDeleteModalOpen}
         onClose={handleClose}
         className="w-73.75 md:w-130"
       >
@@ -89,7 +88,7 @@ function EditColumnModal({
       </Modal>
 
       <DeleteModal
-        isOpen={isDeleteConfirmModalOpen}
+        isOpen={isDeleteModalOpen}
         onClose={handleClose}
         onConfirm={handleDelete}
       />
