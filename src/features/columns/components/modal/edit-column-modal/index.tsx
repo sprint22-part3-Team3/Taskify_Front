@@ -1,0 +1,73 @@
+import { useState } from 'react';
+import { Button } from '@/shared/components/button';
+import Input from '@/shared/components/input';
+import { Modal } from '@/shared/components/modal';
+import type { EditColumnModalProps } from '@/features/columns/components/modal/edit-column-modal/editColumnModal.types';
+
+/**
+ * 컬럼 이름을 수정하거나 삭제할 수 있는 모달입니다.
+ *
+ * @example
+ * ```tsx
+ * <EditColumnModal
+ *   isOpen={isOpen}
+ *   onClose={handleClose}
+ *   initialTitle="Done"
+ * />
+ * ```
+ */
+function EditColumnModal({
+  isOpen,
+  onClose,
+  initialTitle,
+}: EditColumnModalProps) {
+  const [draftTitle, setDraftTitle] = useState<string | null>(null);
+  const columnTitle = draftTitle ?? initialTitle;
+  const isSubmitDisabled = !columnTitle.trim();
+
+  const handleDelete = () => {
+    // TODO: 컬럼 삭제 API 연동
+    setDraftTitle(null);
+    onClose();
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (isSubmitDisabled) {
+      return;
+    }
+
+    // TODO: 컬럼 수정 API 연동
+    setDraftTitle(null);
+    onClose();
+  };
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal.Header title="컬럼 수정" hasCloseIcon />
+
+      <form onSubmit={handleSubmit}>
+        <Modal.Main>
+          <Input
+            label="이름"
+            value={columnTitle}
+            onChange={(event) => setDraftTitle(event.target.value)}
+            labelClassName="typo-lg-medium md:typo-2lg-medium"
+          />
+        </Modal.Main>
+
+        <Modal.Footer>
+          <Button theme="cancel" type="button" onClick={handleDelete}>
+            삭제
+          </Button>
+          <Button theme="primary" type="submit" disabled={isSubmitDisabled}>
+            변경
+          </Button>
+        </Modal.Footer>
+      </form>
+    </Modal>
+  );
+}
+
+export default EditColumnModal;
