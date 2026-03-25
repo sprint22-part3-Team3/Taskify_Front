@@ -19,7 +19,7 @@ const buttonStyle = cva(
         cancel:
           'border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:bg-gray-50 hover:text-black-200 active:border-gray-400 active:bg-gray-100 active:text-black-200 disabled:border-gray-100 disabled:text-gray-300 disabled:hover:border-gray-100 disabled:hover:bg-white disabled:hover:text-gray-300 aria-disabled:border-gray-100 aria-disabled:text-gray-300 aria-disabled:hover:border-gray-100 aria-disabled:hover:bg-white aria-disabled:hover:text-gray-300',
         outlined:
-          'border-gray-200 bg-white text-black-200 hover:border-gray-300 hover:bg-gray-50 active:border-gray-400 active:bg-gray-100  disabled:border-gray-100 disabled:text-gray-300 disabled:hover:border-gray-100 disabled:hover:bg-white aria-disabled:border-gray-100 aria-disabled:text-gray-300 aria-disabled:hover:border-gray-100 aria-disabled:hover:bg-white',
+          'border-gray-200 bg-transparent text-black-200 hover:border-gray-300 hover:bg-gray-50 active:border-gray-400 active:bg-gray-100  disabled:border-gray-100 disabled:text-gray-300 disabled:hover:border-gray-100 disabled:hover:bg-transparent aria-disabled:border-gray-100 aria-disabled:text-gray-300 aria-disabled:hover:border-gray-100 aria-disabled:hover:bg-transparent',
         icon: 'border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:bg-gray-50 hover:text-black-200 active:border-gray-400 active:bg-gray-100 active:text-black-200 disabled:border-gray-100 disabled:text-gray-300 disabled:hover:border-gray-100 disabled:hover:bg-white disabled:hover:text-gray-300 aria-disabled:border-gray-100 aria-disabled:text-gray-300 aria-disabled:hover:border-gray-100 aria-disabled:hover:bg-white aria-disabled:hover:text-gray-300',
       },
       size: {

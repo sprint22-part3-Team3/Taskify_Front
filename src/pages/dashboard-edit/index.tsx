@@ -139,14 +139,14 @@ export default function DashboardEditPage() {
       </section>
 
       {/* 대시보드 삭제하기 */}
-      <button className="typo-lg-medium md:typo-2lg-medium text-black-200 w-full rounded-lg border border-gray-200 bg-transparent py-4 hover:bg-gray-50 md:w-[320px]">
+      <Button theme="outlined" size="md" className="w-full md:w-[320px]">
         대시보드 삭제하기
-      </button>
+      </Button>
 
       <Modal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
-        className="max-w-lg"
+        className="max-w-xl"
       >
         <h3 className="typo-xl-medium md:typo-xl-medium text-black-200 pb-10 text-center">
           구성원을 <span className="text-error">삭제</span> 하시겠습니까?
