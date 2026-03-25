@@ -6,7 +6,7 @@ import MainPage from '@/pages/main';
 import MyDashboardPage from '@/pages/my-dashboard';
 import MyPage from '@/pages/my';
 import SignupPage from '@/pages/signup';
-import DashboardLayout from '@/features/dashboards/layout';
+import DashboardLayout from '@/features/dashboards/components/layout';
 
 function Router() {
   return (
@@ -15,7 +15,6 @@ function Router() {
         <Route path="/" element={<MainPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        {/* 사이드바 + 헤더 레이아웃 적용 */}
         <Route element={<DashboardLayout />}>
           <Route path="/mydashboard" element={<MyDashboardPage />} />
           <Route path="/dashboard/:id" element={<DashboardDetailPage />} />
