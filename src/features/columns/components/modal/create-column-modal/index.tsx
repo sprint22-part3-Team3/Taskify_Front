@@ -21,7 +21,7 @@ function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
     onClose();
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (isCreateDisabled) {
