@@ -38,19 +38,15 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      className="h-auto max-h-[90vh] overflow-y-auto md:h-241.5 md:w-146"
-    >
-      <div className="flex flex-col">
+    <Modal isOpen={isOpen} onClose={onClose} className="md:w-146">
+      <div className="flex min-h-0 flex-col">
         <Modal.Header
           title="할 일 생성"
           className="typo-lg-bold md:typo-2xl-bold"
         />
 
-        <form onSubmit={handleCreate} className="flex flex-col">
-          <Modal.Main className="my-7 space-y-6">
+        <form onSubmit={handleCreate} className="flex min-h-0 flex-col">
+          <Modal.Main className="space-y-6">
             <Input
               label="담당자"
               labelClassName="typo-md-regular md:typo-lg-regular"

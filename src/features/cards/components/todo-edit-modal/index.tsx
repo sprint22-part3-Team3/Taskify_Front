@@ -36,12 +36,8 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
   } = useTodoEditModal();
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      className="h-auto max-h-[90vh] overflow-y-auto md:h-241.5 md:w-146"
-    >
-      <div className="flex flex-col">
+    <Modal isOpen={isOpen} onClose={onClose} className="md:w-146">
+      <div className="flex min-h-0 flex-col">
         <Modal.Header
           title="할 일 수정"
           className="typo-lg-bold lg:typo-2xl-bold"
@@ -51,9 +47,9 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
             event.preventDefault();
             onClose();
           }}
-          className="flex flex-col"
+          className="flex min-h-0 flex-col"
         >
-          <Modal.Main className="my-7 space-y-6">
+          <Modal.Main className="space-y-6">
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
               <FieldWrapper>
                 <FieldLabel>상태</FieldLabel>
