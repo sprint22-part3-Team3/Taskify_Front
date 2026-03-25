@@ -3,10 +3,4 @@ import type { ComponentProps } from 'react';
 export type PageIndicatorProps = ComponentProps<'span'> & {
   currentPage: number;
   totalPages: number;
-  onPrev?: () => void;
-  onNext?: () => void;
-  isPrevDisabled?: boolean;
-  isNextDisabled?: boolean;
-  isHidingOnMobile?: boolean;
-  wrapperClassName?: string;
 };

@@ -1,5 +1,5 @@
 import { IcArrowLeft, IcArrowRight } from '@/shared/assets/icons';
-import type { NavigationButtonProps } from '@/shared/components/page-indicator/navigationButtons.types';
+import type { NavigationButtonProps } from '@/shared/components/page-indicator/navigation-buttons/navigationButtons.types';
 import { cn } from '@/shared/utils/cn';
 
 export default function NavigationButton({
@@ -8,6 +8,7 @@ export default function NavigationButton({
   onClick,
 }: NavigationButtonProps) {
   const isPrev = direction === 'prev';
+
   const ariaLabel = isPrev ? '이전 페이지' : '다음 페이지';
 
   return (
