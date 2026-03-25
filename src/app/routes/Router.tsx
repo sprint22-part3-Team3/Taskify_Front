@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AuthLayout from '@/features/auth/components/auth-layout';
+import DashboardLayout from '@/features/dashboards/components/layout';
 import DashboardDetailPage from '@/pages/dashboard-detail';
 import DashboardEditPage from '@/pages/dashboard-edit';
 import LoginPage from '@/pages/login';
@@ -17,10 +18,12 @@ function Router() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
         </Route>
-        <Route path="/mydashboard" element={<MyDashboardPage />} />
-        <Route path="/dashboard/:id" element={<DashboardDetailPage />} />
-        <Route path="/dashboard/:id/edit" element={<DashboardEditPage />} />
-        <Route path="/mypage" element={<MyPage />} />
+        <Route element={<DashboardLayout />}>
+          <Route path="/mydashboard" element={<MyDashboardPage />} />
+          <Route path="/dashboard/:id" element={<DashboardDetailPage />} />
+          <Route path="/dashboard/:id/edit" element={<DashboardEditPage />} />
+          <Route path="/mypage" element={<MyPage />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
