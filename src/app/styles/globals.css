@@ -5,3 +5,15 @@
 @import './colors.css';
 @import './animations.css';
 @import './scrollbar.css';
+
+@theme {
+  /* Navigation & Layout */
+  --z-index-header: 100;
+
+  /* Floating UI */
+  --z-index-dropdown: 500;
+
+  /* Full-screen Overlays */
+  --z-index-modal-backdrop: 900;
+  --z-index-modal: 1000;
+}

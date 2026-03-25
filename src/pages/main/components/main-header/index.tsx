@@ -6,7 +6,7 @@ const LINK_STYLE =
 
 function MainHeader() {
   return (
-    <header className="sticky top-0 z-200 w-full bg-white shadow-lg">
+    <header className="z-header sticky top-0 w-full bg-white shadow-lg">
       <div className="mx-auto flex h-17.5 max-w-440 items-center justify-between px-6 md:px-8">
         <h1>
           <>
