@@ -1,12 +1,5 @@
 import type { DashboardColorName } from '@/features/dashboards/types/dashboardColor.types';
-
-const TAG_COLORS: DashboardColorName[] = [
-  'purple',
-  'blue',
-  'yellow',
-  'orange',
-  'pink',
-];
+import { COLORS } from '@/shared/constants/color.constants';
 
 /**
  * 태그의 텍스트를 기반으로 항상 동일한 색상을 반환하는 함수
@@ -18,6 +11,6 @@ export const getTagColor = (tagText: string): DashboardColorName => {
     hash += tagText.charCodeAt(i);
   }
 
-  const index = hash % TAG_COLORS.length;
-  return TAG_COLORS[index];
+  const index = hash % COLORS.length;
+  return COLORS[index];
 };
