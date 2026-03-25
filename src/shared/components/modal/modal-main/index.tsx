@@ -6,7 +6,13 @@ import { cn } from '@/shared/utils/cn';
  */
 function ModalMain({ className, children, ...props }: ModalMainProps) {
   return (
-    <div className={cn('my-6', className)} {...props}>
+    <div
+      className={cn(
+        'custom-modal-scrollbar my-6 flex-1 overflow-y-auto',
+        className
+      )}
+      {...props}
+    >
       {children}
     </div>
   );

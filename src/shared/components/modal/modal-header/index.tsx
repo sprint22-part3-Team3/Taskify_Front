@@ -4,7 +4,7 @@ import type {
 } from '@/shared/components/modal/modal.types';
 import { cn } from '@/shared/utils/cn';
 import { IcClose, IcMenu } from '@/shared/assets/icons';
-import { useModalContext } from '@/shared/components/modal/modalContext';
+import { useModalContext } from '@/shared/context/modal/modalContext';
 
 function ModalHeaderIcon({
   className,
