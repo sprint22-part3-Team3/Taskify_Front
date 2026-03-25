@@ -6,9 +6,17 @@ import { Modal } from '@/shared/components/modal';
 import DateInputField from '@/shared/components/date-input';
 import TextArea from '@/shared/components/text-area';
 import type { TodoCreateModalProps } from '@/features/cards/components/todo-create-modal/todoCreateModal.types';
-import FieldWrapper from '@/features/cards/components/todo-create-modal/components/fieldWrapper';
-import FieldLabel from '@/features/cards/components/todo-create-modal/components/fieldLabel';
+import FieldWrapper from '@/features/cards/components/todo-create-modal/components/field-wrapper/fieldWrapper';
+import FieldLabel from '@/features/cards/components/todo-create-modal/components/field-label/fieldLabel';
 
+/**
+ * 할 일 생성 모달을 렌더링합니다.
+ *
+ * @example
+ * ```tsx
+ * <TodoCreateModal isOpen={isOpen} onClose={handleClose} />
+ * ```
+ */
 function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
   const [assigneeName, setAssigneeName] = useState('');
   const [title, setTitle] = useState('');

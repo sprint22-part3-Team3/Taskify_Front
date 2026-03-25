@@ -7,13 +7,24 @@ import { Tag } from '@/shared/components/tag';
 import TextArea from '@/shared/components/text-area';
 import UserProfile from '@/shared/components/user-profile';
 import DateInputField from '@/shared/components/date-input';
-import { MOCK_ASSIGNEE, INITIAL_FORM_VALUES } from './todoEditModal.constants';
-import type { StatusOption } from './todoEditModal.constants';
-import type { TodoEditModalProps } from './todoEditModal.types';
-import FieldLabel from '@/features/cards/components/todo-edit-modal/components/fieldLabel';
-import FieldWrapper from '@/features/cards/components/todo-edit-modal/components/fieldWrapper';
-import StatusDropdown from '@/features/cards/components/todo-edit-modal/components/statusDropdown';
+import {
+  MOCK_ASSIGNEE,
+  INITIAL_FORM_VALUES,
+} from '@/features/cards/components/todo-edit-modal/todoEditModal.constants';
+import type { StatusOption } from '@/features/cards/components/todo-edit-modal/todoEditModal.constants';
+import type { TodoEditModalProps } from '@/features/cards/components/todo-edit-modal/todoEditModal.types';
+import FieldWrapper from '@/features/cards/components/todo-edit-modal/components/field-wrapper/fieldWrapper';
+import FieldLabel from '@/features/cards/components/todo-edit-modal/components/field-label/fieldLabel';
+import StatusDropdown from '@/features/cards/components/todo-edit-modal/components/status-dropdown/statusDropdown';
 
+/**
+ * 할 일 수정 모달을 렌더링합니다.
+ *
+ * @example
+ * ```tsx
+ * <TodoEditModal isOpen={isOpen} onClose={handleClose} />
+ * ```
+ */
 function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
   const [status, setStatus] = useState<StatusOption>(
     INITIAL_FORM_VALUES.status
@@ -50,8 +61,8 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
                   status={status}
                   isOpen={isDropdownOpen}
                   onToggle={() => setIsDropdownOpen((prev) => !prev)}
-                  onSelect={(s) => {
-                    setStatus(s);
+                  onSelect={(statusOption) => {
+                    setStatus(statusOption);
                     setIsDropdownOpen(false);
                   }}
                 />
@@ -73,7 +84,7 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
               required
               labelClassName="typo-md-regular md:typo-lg-regular"
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(event) => setTitle(event.target.value)}
               className="typo-md-regular md:typo-lg-regular"
             />
             <FieldWrapper>

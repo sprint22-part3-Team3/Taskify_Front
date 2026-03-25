@@ -3,16 +3,25 @@ import { useOnClickOutside } from '@/shared/hooks/useOnClickOutside';
 import { IcArrowBottom, IcCheck } from '@/shared/assets/icons';
 import { StatusBadge } from '@/shared/components/status-badge';
 import { STATUS_OPTIONS } from '@/features/cards/components/todo-edit-modal/todoEditModal.constants';
-import type { StatusOption } from '@/features/cards/components/todo-edit-modal/todoEditModal.constants';
+import type { StatusDropdownProps } from '@/features/cards/components/todo-edit-modal/components/status-dropdown/statusDropdown.types';
 import { cn } from '@/shared/utils/cn';
 
-interface StatusDropdownProps {
-  status: StatusOption;
-  isOpen: boolean;
-  onToggle: () => void;
-  onSelect: (status: StatusOption) => void;
-}
-
+/**
+ * 할 일의 상태를 선택하는 드롭다운 컴포넌트입니다.
+ *
+ * @example
+ * ```tsx
+ * <StatusDropdown
+ *   status={status}
+ *   isOpen={isDropdownOpen}
+ *   onToggle={() => setIsDropdownOpen((prev) => !prev)}
+ *   onSelect={(status) => {
+ *     setStatus(status);
+ *     setIsDropdownOpen(false);
+ *   }}
+ * />
+ * ```
+ */
 function StatusDropdown({
   status,
   isOpen,
