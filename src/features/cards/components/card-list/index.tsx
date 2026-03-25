@@ -1,7 +1,7 @@
 import type { CardListProps } from '@/features/cards/components/card-list/cardList.types';
-import { Card } from '@/features/cards/components/card';
-import { CardListHeader } from '@/features/cards/components/card-list-header';
-import { CardAdd } from '@/features/cards/components/card-add';
+import { Card } from '@/features/cards/components/card-list/card';
+import { CardListHeader } from '@/features/cards/components/card-list/card-list-header';
+import { CardAdd } from '@/features/cards/components/card-list/card-add';
 import { DUMMY_CARDS } from '@/features/cards/dummyCards';
 
 function CardList({ column }: CardListProps) {

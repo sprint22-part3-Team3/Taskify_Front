@@ -1,4 +1,4 @@
-import type { CardProps } from '@/features/cards/components/card/card.types';
+import type { CardProps } from '@/features/cards/components/card-list/card/card.types';
 import { IcCalendar } from '@/shared/assets/icons';
 import Avatar from '@/shared/components/avatar';
 import { Tag } from '@/shared/components/tag';

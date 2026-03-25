@@ -1,4 +1,4 @@
-import type { CardListHeaderProps } from '@/features/cards/components/card-list-header/cardListHeader.types';
+import type { CardListHeaderProps } from '@/features/cards/components/card-list/card-list-header/cardListHeader.types';
 import { IcSettings } from '@/shared/assets';
 import Title from '@/shared/components/title';
 

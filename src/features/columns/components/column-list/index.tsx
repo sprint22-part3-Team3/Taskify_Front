@@ -1,5 +1,5 @@
 import { CardList } from '@/features/cards/components/card-list';
-import { ColumnAdd } from '@/features/columns/components/column-add';
+import { ColumnAdd } from '@/features/columns/components/column-list/column-add';
 import { cn } from '@/shared/utils/cn';
 import { DUMMY_COLUMNS } from '@/features/columns/dummyColumns';
 
