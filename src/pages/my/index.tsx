@@ -16,9 +16,9 @@ function MyPage() {
     confirmNewPassword.length > 0 && newPassword !== confirmNewPassword;
 
   return (
-    <div className="p-3 pt-4 pl-3 md:pt-4 md:pr-5 md:pl-4 lg:pt-12 lg:pl-5">
+    <div className="p-3 pt-4 pl-3 md:pt-4 md:pr-5 md:pl-4 lg:pt-5 lg:pl-5">
       <BackButton />
-      <div className="rounded-xl bg-white p-4 sm:w-full md:w-137 md:p-6 lg:w-2xl">
+      <div className="mt-1 rounded-xl bg-white p-4 sm:w-full md:mt-7 md:w-137 md:p-6 lg:w-2xl">
         <Title
           as="h2"
           size="2lg"
