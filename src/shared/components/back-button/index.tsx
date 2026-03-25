@@ -4,12 +4,12 @@ import { useNavigate } from 'react-router-dom';
 function BackButton() {
   const navigate = useNavigate();
 
-  const onGoBack = () => navigate(-1);
+  const handleGoBack = () => navigate(-1);
 
   return (
     <button
       type="button"
-      onClick={onGoBack}
+      onClick={handleGoBack}
       className="mb-2 flex cursor-pointer items-center"
     >
       <IcArrowLeft className="text-black-200" aria-hidden="true" />
