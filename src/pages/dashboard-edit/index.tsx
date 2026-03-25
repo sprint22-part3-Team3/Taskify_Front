@@ -3,8 +3,6 @@ import type { DashboardColorName } from '@/features/dashboards/types/dashboardCo
 import BackButton from '@/shared/components/back-button';
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
-import InputField from '@/shared/components/input/input-field';
-import Label from '@/shared/components/input/label';
 import { Modal } from '@/shared/components/modal';
 import { PageIndicator } from '@/shared/components/page-indicator';
 import NavigationButtons from '@/shared/components/page-indicator/navigation-buttons';
