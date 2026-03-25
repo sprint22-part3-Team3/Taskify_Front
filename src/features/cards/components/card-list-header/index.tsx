@@ -2,7 +2,7 @@ import type { CardListHeaderProps } from '@/features/cards/card.types';
 import { IcSettings } from '@/shared/assets';
 import Title from '@/shared/components/title';
 
-function CardListHeader({ title, cardTotalCount }: CardListHeaderProps) {
+function CardListHeader({ title, cardCount }: CardListHeaderProps) {
   return (
     <div className="mb-6 flex items-center justify-between">
       <div className="flex items-center gap-3">
@@ -19,7 +19,7 @@ function CardListHeader({ title, cardTotalCount }: CardListHeaderProps) {
           </Title>
         </div>
         <span className="typo-xs-medium flex h-5 w-5 items-center justify-center rounded-sm bg-gray-100 text-gray-400">
-          {cardTotalCount}
+          {cardCount}
         </span>
       </div>
       <button

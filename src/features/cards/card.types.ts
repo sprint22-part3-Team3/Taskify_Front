@@ -38,5 +38,5 @@ export type CardListProps = {
 
 export type CardListHeaderProps = {
   title: string;
-  cardTotalCount: number;
+  cardCount: number;
 };

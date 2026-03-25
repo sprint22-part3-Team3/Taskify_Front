@@ -9,15 +9,15 @@ function CardList({ column }: CardListProps) {
   // TODO : API 데이터 연동 후, dummyCards.ts 삭제
   const data = DUMMY_CARDS.cards;
 
-  const filteredCards = data.filter((card) => card.columnId === id);
-  const cardTotalCount = filteredCards.length;
+  const cards = data.filter((card) => card.columnId === id);
+  const cardCount = cards.length;
 
   return (
     <>
-      <CardListHeader title={title} cardTotalCount={cardTotalCount} />
+      <CardListHeader title={title} cardCount={cardCount} />
       <CardAdd />
       <ul className="flex flex-col gap-2.5 md:gap-4">
-        {filteredCards.map((cardItem) => (
+        {cards.map((cardItem) => (
           <li key={cardItem.id}>
             <Card card={cardItem} />
           </li>
