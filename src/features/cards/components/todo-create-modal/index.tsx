@@ -5,8 +5,8 @@ import { Modal } from '@/shared/components/modal';
 import DateInputField from '@/shared/components/date-input';
 import TextArea from '@/shared/components/text-area';
 import type { TodoCreateModalProps } from '@/features/cards/components/todo-create-modal/todoCreateModal.types';
-import FieldWrapper from '@/features/cards/components/todo-create-modal/components/field-wrapper/fieldWrapper';
-import FieldLabel from '@/features/cards/components/todo-create-modal/components/field-label/fieldLabel';
+import FieldWrapper from '@/features/cards/components/form-field/field-wrapper';
+import FieldLabel from '@/features/cards/components/form-field/field-label';
 import { useTodoCreateModal } from '@/shared/hooks/useTodoCreateModal';
 
 /**

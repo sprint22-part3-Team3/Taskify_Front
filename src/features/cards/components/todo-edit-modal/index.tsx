@@ -8,8 +8,8 @@ import UserProfile from '@/shared/components/user-profile';
 import DateInputField from '@/shared/components/date-input';
 import { MOCK_ASSIGNEE } from '@/features/cards/components/todo-edit-modal/todoEditModal.constants';
 import type { TodoEditModalProps } from '@/features/cards/components/todo-edit-modal/todoEditModal.types';
-import FieldWrapper from '@/features/cards/components/todo-edit-modal/components/field-wrapper/fieldWrapper';
-import FieldLabel from '@/features/cards/components/todo-edit-modal/components/field-label/fieldLabel';
+import FieldWrapper from '@/features/cards/components/form-field/field-wrapper';
+import FieldLabel from '@/features/cards/components/form-field/field-label';
 import StatusDropdown from '@/features/cards/components/todo-edit-modal/components/status-dropdown/statusDropdown';
 import { useTodoEditModal } from '@/shared/hooks/useTodoEditModal';
 
@@ -47,8 +47,8 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
           className="typo-lg-bold lg:typo-2xl-bold"
         />
         <form
-          onSubmit={(e) => {
-            e.preventDefault();
+          onSubmit={(event) => {
+            event.preventDefault();
             onClose();
           }}
           className="flex flex-col"

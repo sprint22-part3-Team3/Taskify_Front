@@ -1,7 +1,7 @@
-import type { FieldLabelProps } from '@/features/cards/components/todo-create-modal/components/field-label/fieldLabel.types';
+import type { FieldLabelProps } from '@/features/cards/components/form-field/field-label/fieldLabel.types';
 
 /**
- * 폼 필드의 레이블을 렌더링합니다.
+ * 카드 폼 필드의 레이블을 렌더링합니다.
  *
  * @example
  * ```tsx

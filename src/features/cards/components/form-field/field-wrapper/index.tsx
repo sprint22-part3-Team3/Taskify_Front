@@ -1,7 +1,7 @@
-import type { FieldWrapperProps } from '@/features/cards/components/todo-create-modal/components/field-wrapper/fieldWrapper.types';
+import type { FieldWrapperProps } from '@/features/cards/components/form-field/field-wrapper/fieldWrapper.types';
 
 /**
- * 폼 필드의 레이블과 입력 요소를 감싸는 래퍼입니다.
+ * 카드 폼 필드의 레이블과 입력 요소를 감싸는 래퍼입니다.
  *
  * @example
  * ```tsx
