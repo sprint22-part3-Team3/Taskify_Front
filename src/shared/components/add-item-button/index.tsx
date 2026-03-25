@@ -5,6 +5,7 @@ import { cn } from '@/shared/utils/cn';
 function AddItemButton({ onClick, className, children }: AddItemButtonProps) {
   return (
     <button
+      type="button"
       className={cn(
         'flex h-10 w-full cursor-pointer items-center justify-center rounded-md border border-gray-200 bg-white',
         className

@@ -15,7 +15,11 @@ function CardListHeader({ title, cardTotalCount }: CardListHeaderProps) {
           {cardTotalCount}
         </span>
       </div>
-      <button className="flex h-6 w-6 cursor-pointer items-center justify-center">
+      <button
+        type="button"
+        aria-label="컬럼 설정"
+        className="flex h-6 w-6 cursor-pointer items-center justify-center"
+      >
         <IcSettings className="h-full w-full" />
       </button>
     </div>

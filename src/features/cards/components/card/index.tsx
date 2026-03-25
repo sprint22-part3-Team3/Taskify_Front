@@ -10,8 +10,20 @@ function Card({ card }: CardProps) {
   }
   const { imageUrl, title, tags, dueDate, assignee } = card;
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      // TODO : 모달 여는 함수
+    }
+  };
+
   return (
-    <article className="cursor-pointer rounded-md border border-gray-200 bg-white px-3 py-3 md:px-5 md:py-5 lg:py-4">
+    <article
+      role="button"
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+      className="cursor-pointer rounded-md border border-gray-200 bg-white px-3 py-3 md:px-5 md:py-5 lg:py-4"
+    >
       <div className="md:flex md:items-center md:gap-5 lg:block">
         {imageUrl && (
           <figure className="mb-1.25 shrink-0 overflow-hidden rounded-md md:mb-0 md:w-22.75 lg:mb-3.75 lg:w-full">
@@ -24,8 +36,8 @@ function Card({ card }: CardProps) {
           </h3>
           <div className="flex flex-col gap-1.5 md:flex-row md:gap-4 lg:flex-col lg:gap-2">
             <ul className="flex shrink-0 gap-1.5">
-              {tags.map((tag, index) => (
-                <li key={tag + index}>
+              {tags.map((tag) => (
+                <li key={tag}>
                   <Tag color={getTagColor(tag)}>{tag}</Tag>
                 </li>
               ))}
