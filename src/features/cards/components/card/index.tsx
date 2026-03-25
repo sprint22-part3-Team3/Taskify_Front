@@ -2,6 +2,7 @@ import type { CardProps } from '@/features/cards/card.types';
 import { IcCalendar } from '@/shared/assets/icons';
 import Avatar from '@/shared/components/avatar';
 import { Tag } from '@/shared/components/tag';
+import Title from '@/shared/components/title';
 import { getTagColor } from '@/shared/utils/getTagColor';
 
 function Card({ card }: CardProps) {
@@ -31,9 +32,15 @@ function Card({ card }: CardProps) {
           </figure>
         )}
         <section className="flex w-full flex-col gap-1.5 md:gap-2.5">
-          <h3 className="typo-md-medium md:typo-lg-medium text-black-200">
+          <Title
+            as="h4"
+            size="md"
+            weight="medium"
+            color="text-black-200"
+            className="md:typo-lg-medium"
+          >
             {title}
-          </h3>
+          </Title>
           <div className="flex flex-col gap-1.5 md:flex-row md:gap-4 lg:flex-col lg:gap-2">
             <ul className="flex shrink-0 gap-1.5">
               {tags.map((tag) => (
