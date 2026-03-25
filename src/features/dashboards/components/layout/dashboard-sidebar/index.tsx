@@ -34,7 +34,7 @@ const SAMPLE_DASHBOARDS = [
 ];
 
 export default function Sidebar({
-  dashboards = SAMPLE_DASHBOARDS, // 임시 기본값
+  dashboards = SAMPLE_DASHBOARDS, //TODO: API 연결할 때 SAMPLE_DASHBOARDS 제거
   selectedId,
   onAddClick,
   onDashboardClick,

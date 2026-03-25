@@ -3,6 +3,7 @@ import { IcAddBox, IcBookmark, IcSettings } from '@/shared/assets';
 import Avatar from '@/shared/components/avatar';
 import AvatarGroup from '@/shared/components/avatar/avatar-group';
 import { Button } from '@/shared/components/button';
+import Title from '@/shared/components/title';
 import UserProfile from '@/shared/components/user-profile';
 
 /**
@@ -35,7 +36,7 @@ const SAMPLE_MEMBERS = [
 ];
 
 export default function Header({
-  title = '비브리지', // 임시 기본값
+  title = '비브리지', //TODO: API 연결할 때 SAMPLE_DASHBOARDS 제거
   isOwner = true,
   members = SAMPLE_MEMBERS,
   totalMemberCount = 7,
@@ -48,7 +49,9 @@ export default function Header({
     <header className="lg:justify-betweenn flex h-15 min-w-0 items-center justify-between border-b border-gray-200 bg-white pl-4 md:h-17.5 md:px-10">
       {/* 제목 - 데스크탑에서만 표시 */}
       <div className="hidden items-center gap-2 lg:flex">
-        <span className="typo-xl-bold text-black-200">{title}</span>
+        <Title as="h2" size="xl" weight="bold">
+          {title}
+        </Title>
         {isOwner && <IcBookmark className="ml-1" />}
       </div>
 
