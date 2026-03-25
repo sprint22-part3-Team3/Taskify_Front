@@ -21,10 +21,13 @@ function MyPage() {
     confirmNewPassword.length > 0 && newPassword !== confirmNewPassword;
 
   return (
-    <div className="bg-gray-50">
+    <div className="relative bg-gray-50">
       {/* 헤더 */}
+      <div className="h-15 w-full bg-white md:h-17.5 lg:h-10" />
       {/* 사이드바 */}
-      <div className="p-3 pt-4 md:pt-4 md:pr-5 md:pl-4 lg:pt-12 lg:pl-5">
+      <div className="absolute top-0 left-0 h-dvh w-16.75 bg-white md:w-40 lg:w-75" />
+
+      <div className="p-3 pt-4 pl-20 md:pt-4 md:pr-5 md:pl-44 lg:pt-12 lg:pl-80">
         <button
           onClick={() => navigate(-1)}
           className="mb-2 flex cursor-pointer items-center md:mb-7"
@@ -37,7 +40,12 @@ function MyPage() {
           </div>
         </button>
         <div className="rounded-xl bg-white p-4 sm:w-full md:w-137 md:p-6 lg:w-2xl">
-          <Title as="h2" size="2xl" weight="bold" className="mb-20 md:mb-6">
+          <Title
+            as="h2"
+            size="2lg"
+            weight="bold"
+            className="mb-10 md:mb-6 md:text-2xl"
+          >
             프로필
           </Title>
           <div className="md:flex md:justify-between">
@@ -46,7 +54,7 @@ function MyPage() {
               <Label
                 aria-label="이메일"
                 htmlFor="email"
-                className="gray-200 mt-20 block text-lg md:mt-0"
+                className="gray-200 text-md mt-10 block md:mt-0 md:text-lg"
               >
                 이메일
               </Label>
@@ -58,7 +66,7 @@ function MyPage() {
               <Label
                 aria-label="닉네임"
                 htmlFor="nickname"
-                className="gray-200 text-lg"
+                className="gray-200 text-md md:text-lg"
               >
                 닉네임
               </Label>
@@ -85,7 +93,7 @@ function MyPage() {
             <Label
               aria-label="현재 비밀번호"
               htmlFor="current-password"
-              className="gray-200 mb-2 block text-lg"
+              className="gray-200 text-md mb-2 block md:text-lg"
             >
               현재 비밀번호
             </Label>
@@ -97,7 +105,7 @@ function MyPage() {
             <Label
               aria-label="새 비밀번호"
               htmlFor="new-password"
-              className="gray-200 mt-4 mb-2 block text-lg"
+              className="gray-200 text-md mt-4 mb-2 block md:text-lg"
             >
               새 비밀번호
             </Label>
@@ -109,7 +117,7 @@ function MyPage() {
             <Label
               aria-label="새 비밀번호 확인"
               htmlFor="new-password-confirm"
-              className="gray-200 mt-4 mb-2 block text-lg"
+              className="gray-200 text-md mt-4 mb-2 block md:text-lg"
             >
               새 비밀번호 확인
             </Label>
