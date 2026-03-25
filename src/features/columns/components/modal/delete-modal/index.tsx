@@ -21,12 +21,10 @@ type DeleteModalProps = {
  */
 function DeleteModal({ isOpen, onClose, onConfirm }: DeleteModalProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <Modal.Main>
-        <p className="typo-lg-medium md:typo-2lg-medium text-black-200 text-center">
-          컬럼을 모두 <span className="text-error">삭제</span> 하시겠습니까?
-        </p>
-      </Modal.Main>
+    <Modal isOpen={isOpen} onClose={onClose} className="w-73.75 md:w-130">
+      <p className="typo-xl-medium text-black-200 md:typo-xl-medium pb-10 text-center">
+        컬럼을 모두 <span className="text-error">삭제</span> 하시겠습니까?
+      </p>
 
       <Modal.Footer>
         <Button theme="cancel" type="button" onClick={onClose}>
