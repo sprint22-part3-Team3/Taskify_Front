@@ -14,7 +14,7 @@ function StatusBadge({ label, className, textClassName }: StatusBadgeProps) {
   return (
     <span
       className={cn(
-        'bg-primary-500/10 text-primary-500 inline-flex h-6.5 items-center gap-1 rounded-full px-2 md:h-7 md:gap-1.5 md:px-2.5',
+        'bg-primary-500/10 text-primary-500 inline-flex items-center gap-1.5 rounded-full px-2 py-1 md:px-2.5',
         className
       )}
     >
