@@ -2,6 +2,7 @@ import { ColorChipset } from '@/features/dashboards/components/color/color-chips
 import type { DashboardColorName } from '@/features/dashboards/types/dashboardColor.types';
 import BackButton from '@/shared/components/back-button';
 import { Button } from '@/shared/components/button';
+import Input from '@/shared/components/input';
 import InputField from '@/shared/components/input/input-field';
 import Label from '@/shared/components/input/label';
 import { Modal } from '@/shared/components/modal';
@@ -15,10 +16,35 @@ import { useState } from 'react';
 export default function DashboardEditPage() {
   const [selectedColor, setSelectedColor] =
     useState<DashboardColorName>('purple');
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const handleOpenDeleteModal = () => setIsDeleteModalOpen(true);
   const handleCloseDeleteModal = () => setIsDeleteModalOpen(false);
+
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+  const [inviteEmail, setInviteEmail] = useState('');
+  const [inviteError, setInviteError] = useState('');
+
+  const handleOpenInviteModal = () => setIsInviteModalOpen(true);
+  const handleCloseInviteModal = () => {
+    setIsInviteModalOpen(false);
+    setInviteEmail('');
+    setInviteError('');
+  };
+
+  const handleInviteSubmit = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!inviteEmail.trim()) {
+      setInviteError('이메일을 입력해 주세요.');
+      return;
+    }
+    if (!emailRegex.test(inviteEmail)) {
+      setInviteError('이메일 형식을 확인해 주세요.');
+      return;
+    }
+    setInviteError('');
+    // TODO: API 호출
+  };
 
   return (
     <div className="flex max-w-155 flex-col gap-4 p-5">
@@ -101,7 +127,11 @@ export default function DashboardEditPage() {
               isNextDisabled={true} // TODO: 페이지네이션 로직 구현
             />
             {/* PC/태블릿에서만 보이는 초대하기 */}
-            <Button size="sm" className="hidden md:inline-flex">
+            <Button
+              size="sm"
+              className="hidden md:inline-flex"
+              onClick={handleOpenInviteModal}
+            >
               초대하기
             </Button>
           </div>
@@ -110,7 +140,11 @@ export default function DashboardEditPage() {
         {/* 이메일 라벨 + 모바일에서만 보이는 초대하기 */}
         <div className="mb-1 flex items-center justify-between">
           <span className="text-sm text-gray-400">이메일</span>
-          <Button size="sm" className="md:hidden">
+          <Button
+            size="sm"
+            className="md:hidden"
+            onClick={handleOpenInviteModal}
+          >
             초대하기
           </Button>
         </div>
@@ -141,6 +175,7 @@ export default function DashboardEditPage() {
         대시보드 삭제하기
       </Button>
 
+      {/* 구성원 삭제 모달 */}
       <Modal
         isOpen={isDeleteModalOpen}
         onClose={handleCloseDeleteModal}
@@ -154,6 +189,31 @@ export default function DashboardEditPage() {
             취소
           </Button>
           <Button>삭제</Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* 구성원 초대 모달 */}
+      <Modal
+        isOpen={isInviteModalOpen}
+        className="max-w-xl"
+        onClose={handleCloseInviteModal}
+      >
+        <Modal.Header title="초대하기" hasCloseIcon />
+        <Modal.Main>
+          <Input
+            label="이메일"
+            type="email"
+            placeholder="이메일을 입력해 주세요."
+            value={inviteEmail}
+            onChange={(e) => setInviteEmail(e.target.value)}
+            errorMessage={inviteError}
+          />
+        </Modal.Main>
+        <Modal.Footer>
+          <Button theme="cancel" onClick={handleCloseInviteModal}>
+            취소
+          </Button>
+          <Button onClick={handleInviteSubmit}>생성</Button>
         </Modal.Footer>
       </Modal>
     </div>
