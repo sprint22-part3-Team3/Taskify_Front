@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import Title from '@/shared/components/title';
-import Label from '@/shared/components/input/label';
-import PasswordField from '@/shared/components/input/password-field';
 import { Button } from '@/shared/components/button';
+import Input from '@/shared/components/input';
 
 export default function PasswordEditForm() {
   const [password, setPassword] = useState('');
@@ -24,38 +23,32 @@ export default function PasswordEditForm() {
           비밀번호 변경
         </Title>
         <div>
-          <Label
-            htmlFor="current-password"
-            className="gray-200 text-md mb-2 block md:text-lg"
-          >
-            현재 비밀번호
-          </Label>
-          <PasswordField
+          <Input
+            id="current-password"
+            type="password"
+            label="현재 비밀번호"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             placeholder="비밀번호를 입력"
+            labelClassName="gray-200 text-md block md:text-lg"
           />
-          <Label
-            htmlFor="new-password"
-            className="gray-200 text-md mt-4 mb-2 block md:text-lg"
-          >
-            새 비밀번호
-          </Label>
-          <PasswordField
+          <Input
+            id="new-password"
+            type="password"
+            label="새 비밀번호"
             value={newPassword}
             onChange={(event) => setNewPassword(event.target.value)}
             placeholder="새 비밀번호를 입력"
+            labelClassName="gray-200 text-md mt-4 block md:text-lg"
           />
-          <Label
-            htmlFor="new-password-confirm"
-            className="gray-200 text-md mt-4 mb-2 block md:text-lg"
-          >
-            새 비밀번호 확인
-          </Label>
-          <PasswordField
+          <Input
+            id="new-password-confirm"
+            type="password"
+            label="새 비밀번호 확인"
             value={confirmNewPassword}
             onChange={(event) => setConfirmNewPassword(event.target.value)}
             placeholder="새 비밀번호를 입력"
+            labelClassName="gray-200 text-md mt-4 block md:text-lg"
           />
 
           {isPasswordMismatch && (
