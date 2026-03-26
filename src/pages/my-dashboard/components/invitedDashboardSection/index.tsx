@@ -12,7 +12,7 @@ function InvitedDashboardSection({
 
   return (
     <section className="mt-6 flex max-w-240 flex-col rounded-lg bg-white px-4 py-6 md:mt-4.5 md:px-7 md:py-4.5 lg:mt-8 lg:py-8">
-      <Title as="h3" size="xl" className="md:text-[24px]">
+      <Title as="h3" className="md:typo-2xl-bold typo-xl-bold">
         초대받은 대시보드
       </Title>
 
