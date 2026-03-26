@@ -68,7 +68,6 @@ export function useValidation({
     const newValue = e.target.value;
     setValue(newValue);
     setError('');
-    setIsValid(false);
   };
 
   const onBlur = () => {
