@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { DUMMY_COMMENTS } from '@/features/comments/dummyComments';
 import { TaskCommentItem } from '@/features/comments/components/task-comments/task-comment-item';
 
-// TODO : API 연동 [ Comments ]
+// TODO : API 연동 [ Comments ] > 연동 후 dummyComments 삭제
 function TaskComments({ id }: TaskCommentsProps) {
   const [content, setContent] = useState('');
 
