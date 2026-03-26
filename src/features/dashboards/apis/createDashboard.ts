@@ -7,8 +7,6 @@ type CreateDashboardRequest = {
   color: DashboardColorName;
 };
 
-const DASHBOARD_TEAM_ID = import.meta.env.VITE_TEAM_ID ?? '22-3';
-
 /**
  * 새로운 대시보드를 생성합니다.
  *
@@ -21,7 +19,7 @@ export async function createDashboard({
   title,
   color,
 }: CreateDashboardRequest) {
-  await post<unknown>(`${DASHBOARD_TEAM_ID}/dashboards`, {
+  await post<unknown>('dashboards', {
     title,
     color: DASHBOARD_COLOR_HEX[color],
   });
