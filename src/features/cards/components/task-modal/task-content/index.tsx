@@ -7,7 +7,7 @@ function TaskContent({ description, title, imageUrl }: TaskContentProps) {
       <p className="typo-md-regular text-black">{description}</p>
       {imageUrl && (
         <article className="mt-8 overflow-hidden rounded-md md:mt-4">
-          <img src={imgCard} alt={title} className="w-full" />
+          <img src={imgCard} alt={title} className="w-full max-w-110" />
         </article>
       )}
     </div>

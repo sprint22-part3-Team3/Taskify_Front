@@ -49,9 +49,11 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
             />
             <TaskComments id={id} />
           </div>
-          <aside className="w-full shrink-0 md:w-[30%]">
-            <TaskAssignee assignee={assignee} dueDate={dueDate} />
-          </aside>
+          {(assignee || dueDate) && (
+            <aside className="w-full shrink-0 md:w-[30%]">
+              <TaskAssignee assignee={assignee} dueDate={dueDate} />
+            </aside>
+          )}
         </div>
       </Modal.Main>
     </Modal>

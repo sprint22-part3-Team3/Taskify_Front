@@ -58,15 +58,19 @@ function Card({ card }: CardProps) {
               <div className="flex w-full items-center justify-between">
                 <div className="flex items-center gap-1 md:gap-2.25">
                   <IcCalendar className="w-2.5 text-gray-400 md:w-3.25" />
-                  <p className="typo-xs-medium text-gray-400">{dueDate}</p>
+                  <p className="typo-xs-medium text-gray-400">
+                    {dueDate || '-'}
+                  </p>
                 </div>
-                <Avatar user={assignee} size="sm">
-                  {assignee?.profileImageUrl ? (
-                    <Avatar.Img />
-                  ) : (
-                    <Avatar.Fallback />
-                  )}
-                </Avatar>
+                {assignee && (
+                  <Avatar user={assignee} size="sm">
+                    {assignee?.profileImageUrl ? (
+                      <Avatar.Img />
+                    ) : (
+                      <Avatar.Fallback />
+                    )}
+                  </Avatar>
+                )}
               </div>
             </div>
           </section>
