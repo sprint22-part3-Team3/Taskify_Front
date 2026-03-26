@@ -2,8 +2,8 @@ import { Outlet } from 'react-router';
 
 export default function AuthLayout() {
   return (
-    <div className="min-h-dvh bg-gray-50 px-3 py-27">
-      <main className="mx-auto flex w-full max-w-140 flex-col items-center">
+    <div className="flex min-h-dvh items-center justify-center bg-gray-50 px-3 py-20">
+      <main className="flex w-full max-w-140 flex-col items-center">
         <Outlet />
       </main>
     </div>
