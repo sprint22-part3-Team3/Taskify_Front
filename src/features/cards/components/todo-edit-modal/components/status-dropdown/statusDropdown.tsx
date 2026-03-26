@@ -61,7 +61,7 @@ function StatusDropdown({
               <button
                 type="button"
                 onClick={() => onSelect(statusOption)}
-                className="typo-lg-regular text-black-200 flex w-full items-center gap-3 px-4 py-3 hover:bg-gray-50"
+                className="typo-lg-regular text-black-200 flex h-12 w-full items-center gap-3 px-4 hover:bg-gray-50"
               >
                 <span className="flex h-5 w-5 shrink-0 items-center justify-center">
                   {status === statusOption && (

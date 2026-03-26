@@ -15,7 +15,7 @@ export function useTodoEditModal() {
   const [description, setDescription] = useState(
     INITIAL_FORM_VALUES.description
   );
-  const [dueDate, setDueDate] = useState('2025-05-24 09:00');
+  const [dueDate, setDueDate] = useState(INITIAL_FORM_VALUES.dueDate);
   const [selectedAssignee, setSelectedAssignee] = useState<AvatarUser | null>(
     MOCK_ASSIGNEE
   );

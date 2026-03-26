@@ -43,10 +43,7 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} className="md:w-146">
       <div className="flex min-h-0 flex-col">
-        <Modal.Header
-          title="할 일 생성"
-          className="typo-lg-bold md:typo-2xl-bold"
-        />
+        <Modal.Header title="할 일 생성" />
 
         <form
           onSubmit={(event) => handleCreate(event.nativeEvent as SubmitEvent)}
@@ -63,7 +60,7 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
             <Input
               label="제목"
               required
-              labelClassName="typo-md-regular md:typo-lg-regular"
+              labelClassName="typo-md-regular md:typo-2lg-regular"
               placeholder="제목을 입력해 주세요"
               value={title}
               onChange={(event) => setTitle(event.target.value)}
@@ -86,6 +83,7 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
                 name="dueDate"
                 value={dueDate}
                 onChange={setDueDate}
+                className="typo-md-regular md:typo-lg-regular"
               />
             </FieldWrapper>
 

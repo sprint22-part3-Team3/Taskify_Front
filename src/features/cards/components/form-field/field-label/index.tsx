@@ -10,7 +10,7 @@ import type { FieldLabelProps } from '@/features/cards/components/form-field/fie
  */
 function FieldLabel({ children, required = false }: FieldLabelProps) {
   return (
-    <span className="typo-md-regular md:typo-lg-regular text-black-200">
+    <span className="typo-md-regular md:typo-2lg-regular text-black-200">
       {children}
       {required && (
         <>

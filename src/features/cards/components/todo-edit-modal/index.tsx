@@ -41,10 +41,7 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} className="md:w-146">
       <div className="flex min-h-0 flex-col">
-        <Modal.Header
-          title="할 일 수정"
-          className="typo-lg-bold lg:typo-2xl-bold"
-        />
+        <Modal.Header title="할 일 수정" />
         <form
           onSubmit={(event) => {
             const submitEvent = event.nativeEvent as SubmitEvent;
@@ -54,7 +51,7 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
           className="flex min-h-0 flex-col"
         >
           <Modal.Main className="space-y-6">
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <FieldWrapper>
                 <FieldLabel>상태</FieldLabel>
                 <StatusDropdown
@@ -75,7 +72,7 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
             <Input
               label="제목"
               required
-              labelClassName="typo-md-regular md:typo-lg-regular"
+              labelClassName="typo-md-regular md:typo-2lg-regular"
               value={title}
               onChange={(event) => setTitle(event.target.value)}
               className="typo-md-regular md:typo-lg-regular"
@@ -94,6 +91,7 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
                 name="dueDate"
                 value={dueDate}
                 onChange={setDueDate}
+                className="typo-md-regular md:typo-lg-regular"
               />
             </FieldWrapper>
             <FieldWrapper>

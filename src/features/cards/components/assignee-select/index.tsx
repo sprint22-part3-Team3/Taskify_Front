@@ -47,7 +47,10 @@ function AssigneeSelect({
 
   return (
     <div className="flex w-full flex-col gap-2" ref={containerRef}>
-      <Label required={required} className="typo-md-regular md:typo-lg-regular">
+      <Label
+        required={required}
+        className="typo-md-regular md:typo-2lg-regular"
+      >
         {label}
       </Label>
 
@@ -62,20 +65,20 @@ function AssigneeSelect({
             setQuery(event.target.value);
             setIsOpen(true);
           }}
-          className="typo-md-regular md:typo-lg-regular h-12 py-0 pl-11 md:pl-12"
+          className="typo-md-regular md:typo-lg-regular focus:border-primary-500 text-black-200 h-12 bg-white py-0 pr-4 pl-11 md:pl-12"
         />
 
         {isOpen && (
-          <div className="absolute z-10 mt-2 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
+          <div className="absolute z-50 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
             {filteredAssignees.length > 0 ? (
-              <ul className="max-h-52 overflow-y-auto py-2">
+              <ul className="max-h-52 overflow-y-auto">
                 {filteredAssignees.map((assignee) => (
                   <li key={assignee.id}>
                     <button
                       type="button"
                       onClick={() => handleSelect(assignee)}
                       className={cn(
-                        'flex w-full items-center px-4 py-2 text-left hover:bg-gray-50',
+                        'text-black-200 flex h-12 w-full items-center px-4 text-left hover:bg-gray-50',
                         selectedAssignee?.id === assignee.id && 'bg-gray-50'
                       )}
                     >
