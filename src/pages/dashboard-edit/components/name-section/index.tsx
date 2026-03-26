@@ -3,7 +3,7 @@ import type { DashboardColorName } from '@/features/dashboards/types/dashboardCo
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
 import Title from '@/shared/components/title';
-import { DASHBOARD_COLORS } from '@/shared/constants/dashboardColorMap.constants';
+import { DASHBOARD_COLORS } from '@/features/dashboards/constants/dashboardColorMap.constants';
 import { useState } from 'react';
 
 export default function NameSection() {
