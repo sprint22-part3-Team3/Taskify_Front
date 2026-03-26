@@ -5,8 +5,8 @@ export type Card = {
   title: string;
   description: string;
   tags: string[];
-  dueDate: string;
-  assignee: AvatarUser;
+  dueDate: string | null;
+  assignee: AvatarUser | null;
   imageUrl: string | null;
   teamId: string;
   columnId: number;
