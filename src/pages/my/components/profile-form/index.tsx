@@ -30,7 +30,7 @@ export default function ProfileForm() {
               name="email"
               type="text"
               readOnly
-              labelClassName="gray-200 text-md block md:mt-0 md:text-lg"
+              labelClassName="text-md md:mt-0 md:text-lg"
               className="mb-4"
             />
 
@@ -38,7 +38,7 @@ export default function ProfileForm() {
               label="닉네임"
               name="nickname"
               type="text"
-              labelClassName="gray-200 text-md block md:mt-0 md:text-lg"
+              labelClassName="text-md md:mt-0 md:text-lg"
             />
 
             <Button

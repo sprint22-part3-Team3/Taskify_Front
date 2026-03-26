@@ -30,7 +30,7 @@ export default function PasswordEditForm() {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             placeholder="비밀번호를 입력"
-            labelClassName="gray-200 text-md block md:text-lg"
+            labelClassName="text-md md:text-lg"
           />
           <Input
             id="new-password"
@@ -39,7 +39,7 @@ export default function PasswordEditForm() {
             value={newPassword}
             onChange={(event) => setNewPassword(event.target.value)}
             placeholder="새 비밀번호를 입력"
-            labelClassName="gray-200 text-md mt-4 block md:text-lg"
+            labelClassName="text-md mt-4 md:text-lg"
           />
           <Input
             id="new-password-confirm"
@@ -48,7 +48,7 @@ export default function PasswordEditForm() {
             value={confirmNewPassword}
             onChange={(event) => setConfirmNewPassword(event.target.value)}
             placeholder="새 비밀번호를 입력"
-            labelClassName="gray-200 text-md mt-4 block md:text-lg"
+            labelClassName="text-gray-200 text-md mt-4 block md:text-lg"
           />
 
           {isPasswordMismatch && (
