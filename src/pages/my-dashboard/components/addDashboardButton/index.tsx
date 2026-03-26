@@ -1,12 +1,17 @@
 import { IcAdd } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 
-function AddDashboardButton() {
+type AddDashboardButtonProps = {
+  onClick?: () => void;
+};
+
+function AddDashboardButton({ onClick }: AddDashboardButtonProps) {
   return (
     <Button
       theme="outlined"
       size="icon"
-      className="typo-md-semibold md:typo-lg-semibold h-14.5 w-full justify-between px-5 text-left md:h-17"
+      onClick={onClick}
+      className="typo-md-semibold md:typo-lg-semibold h-14.5 w-full justify-between bg-white px-5 text-left md:h-17"
     >
       <span>새로운 대시보드</span>
       <div className="bg-primary-500/10 flex h-5 w-5 items-center justify-center rounded-sm md:h-5.5 md:w-5.5">

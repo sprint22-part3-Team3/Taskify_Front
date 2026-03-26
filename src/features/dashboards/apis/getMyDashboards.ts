@@ -4,6 +4,8 @@ import type {
 } from '@/features/dashboards/types/myDashboard.types';
 import { get } from '@/shared/apis/fetchInstance';
 
+const DASHBOARD_TEAM_ID = import.meta.env.VITE_TEAM_ID ?? '22-3';
+
 /**
  * 내 대시보드 목록을 가져옵니다.
  *
@@ -14,7 +16,7 @@ export async function getMyDashboards(): Promise<{
   dashboards: DashboardItem[];
 }> {
   const response = await get<DashboardListResponse>(
-    'dashboards?navigationMethod=pagination&page=1&size=5'
+    `${DASHBOARD_TEAM_ID}/dashboards?navigationMethod=pagination&page=1&size=5`
   );
 
   return {

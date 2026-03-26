@@ -4,6 +4,8 @@ import type {
 } from '@/features/dashboards/types/myDashboard.types';
 import { get } from '@/shared/apis/fetchInstance';
 
+const DASHBOARD_TEAM_ID = import.meta.env.VITE_TEAM_ID ?? '22-3';
+
 /**
  * 내가 초대받은 대시보드 목록을 가져옵니다.
  *
@@ -20,8 +22,10 @@ export async function getInvitedDashboards(
     searchParams.set('title', trimmedTitle);
   }
 
-  const query = trimmedTitle ? `?${searchParams.toString()}` : '';
-  const response = await get<InvitationListResponse>(`invitations${query}`);
+  const query = searchParams.toString() ? `?${searchParams.toString()}` : '';
+  const response = await get<InvitationListResponse>(
+    `${DASHBOARD_TEAM_ID}/invitations${query}`
+  );
 
   return {
     invitations:

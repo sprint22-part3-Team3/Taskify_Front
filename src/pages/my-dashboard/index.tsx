@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
 import { IcArrowRight, IcBookmark } from '@/shared/assets/icons';
 import { ColorLabel } from '@/features/dashboards/components/color/color-label';
-import { getDashboardColorHex } from '@/features/dashboards/constants/dashboardColorMap.constants';
 import { Button } from '@/shared/components/button';
 import { PageIndicator } from '@/shared/components/page-indicator';
 import NavigationButtons from '@/shared/components/page-indicator/navigation-buttons';
 import AddDashboardButton from '@/pages/my-dashboard/components/addDashboardButton';
+import CreateDashboardModal from '@/pages/my-dashboard/components/create-dashboard-modal';
 import InvitedDashboardSection from '@/pages/my-dashboard/components/invitedDashboardSection';
 import { useMyDashboardPage } from '@/pages/my-dashboard/hooks/useMyDashboardPage';
 
@@ -22,14 +22,19 @@ function MyDashboardPage() {
     dashboardItems,
     invitedDashboardItems,
     isLoadingDashboards,
+    isCreateDashboardModalOpen,
+    isCreatingDashboard,
     dashboardError,
+    openCreateDashboardModal,
+    closeCreateDashboardModal,
+    handleCreateDashboard,
   } = useMyDashboardPage();
 
   return (
     <div className="mx-auto w-full px-4 pt-6 pb-10 md:px-10 md:pt-10">
       <section className="max-w-240">
         <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
-          <AddDashboardButton />
+          <AddDashboardButton onClick={openCreateDashboardModal} />
 
           {dashboardItems.map((dashboardItem) => {
             return (
@@ -43,7 +48,7 @@ function MyDashboardPage() {
               >
                 <div className="flex items-center gap-2">
                   <ColorLabel
-                    color={getDashboardColorHex(dashboardItem.color)}
+                    color={dashboardItem.color}
                     label={dashboardItem.title}
                     labelClassName="typo-md-semibold md:typo-lg-semibold text-black-200"
                   />
@@ -81,6 +86,12 @@ function MyDashboardPage() {
       </section>
 
       <InvitedDashboardSection invitedDashboards={invitedDashboardItems} />
+      <CreateDashboardModal
+        isOpen={isCreateDashboardModalOpen}
+        isCreating={isCreatingDashboard}
+        onClose={closeCreateDashboardModal}
+        onCreate={handleCreateDashboard}
+      />
     </div>
   );
 }

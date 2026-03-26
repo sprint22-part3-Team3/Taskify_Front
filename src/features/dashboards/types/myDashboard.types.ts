@@ -1,9 +1,7 @@
-import type { DashboardColorName } from '@/features/dashboards/types/dashboardColor.types';
-
 export type DashboardItem = {
   id: number;
   title: string;
-  color: DashboardColorName;
+  color: string;
   createdByMe: boolean;
 };
 
@@ -19,7 +17,7 @@ export type DashboardListResponse = {
   dashboards: {
     id: number;
     title: string;
-    color: DashboardColorName;
+    color: string;
     createdByMe: boolean;
   }[];
 };
