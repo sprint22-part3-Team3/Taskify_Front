@@ -1,15 +1,11 @@
 import type { TaskModalProps } from '@/features/cards/components/task-modal/taskModal.types';
+import { useState } from 'react';
 import { Modal } from '@/shared/components/modal';
 import { TaskMeta } from '@/features/columns/components/task-meta';
 import { TaskComments } from '@/features/comments/components/task-comments';
 import { TaskContent } from '@/features/cards/components/task-modal/task-content';
 import { TaskAssignee } from '@/features/cards/components/task-modal/task-assignee';
-import { useState } from 'react';
-import { cn } from '@/shared/utils/cn';
-
-const DROP_MENU_CLASS = cn(
-  'typo-md-regular text-black-200 hover:bg-primary-500/8 hover:text-primary-500 flex h-8 w-full cursor-pointer items-center justify-center rounded-sm'
-);
+import { TaskMenu } from '@/features/cards/components/task-modal/task-menu';
 
 function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -41,17 +37,7 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
           className="lg:pr-5.5"
         />
       </div>
-      {/* TODO : 드롭다운 메뉴 별도 컴포넌트로 분리 */}
-      {isMenuOpen && (
-        <div className="shadow-dropdown absolute top-10 right-12 z-10 w-23.25 overflow-hidden rounded-md border border-gray-200 bg-white px-1.5 py-1.75 md:top-14.5 md:right-20 lg:top-16.25 lg:right-21.25">
-          <button type="button" className={DROP_MENU_CLASS}>
-            수정하기
-          </button>
-          <button type="button" className={DROP_MENU_CLASS}>
-            삭제하기
-          </button>
-        </div>
-      )}
+      {isMenuOpen && <TaskMenu />}
       <Modal.Main className="mb-0">
         <div className="flex flex-col-reverse gap-4 md:flex-row md:gap-3.25 lg:gap-10">
           <div className="flex grow flex-col gap-4">
