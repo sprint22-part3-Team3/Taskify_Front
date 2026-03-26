@@ -53,28 +53,28 @@ export function useMyDashboardPage() {
   }, []);
 
   useEffect(() => {
-    let isMounted = true;
+    const invitedDashboardsController = new AbortController();
 
     const loadInvitedDashboards = async () => {
       try {
-        const { invitations } = await getInvitedDashboards();
+        const { invitations } = await getInvitedDashboards('', {
+          signal: invitedDashboardsController.signal,
+        });
 
-        if (!isMounted) {
+        setInvitedDashboardItems(invitations);
+      } catch (error) {
+        if (error instanceof Error && error.name === 'AbortError') {
           return;
         }
 
-        setInvitedDashboardItems(invitations);
-      } catch {
-        if (isMounted) {
-          setInvitedDashboardItems([]);
-        }
+        setInvitedDashboardItems([]);
       }
     };
 
     void loadInvitedDashboards();
 
     return () => {
-      isMounted = false;
+      invitedDashboardsController.abort();
     };
   }, []);
 

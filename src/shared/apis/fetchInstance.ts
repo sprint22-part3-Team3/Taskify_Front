@@ -24,6 +24,11 @@ export async function fetchInstance<T>(
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 5000);
 
+  //내부 timeout signal과 외부 options.signal을 함께 사용할 수 있도록 수정
+  const signal = options.signal
+    ? AbortSignal.any([controller.signal, options.signal])
+    : controller.signal;
+
   try {
     const res = await fetch(url, {
       ...options,
@@ -31,7 +36,7 @@ export async function fetchInstance<T>(
         'Content-Type': 'application/json',
         ...options.headers,
       },
-      signal: controller.signal,
+      signal,
     });
 
     if (!res.ok) {

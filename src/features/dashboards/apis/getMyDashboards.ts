@@ -10,11 +10,14 @@ import { get } from '@/shared/apis/fetchInstance';
  * @example
  * const { dashboards } = await getMyDashboards();
  */
-export async function getMyDashboards(): Promise<{
+export async function getMyDashboards(
+  page = 1,
+  size = 5
+): Promise<{
   dashboards: DashboardItem[];
 }> {
   const response = await get<DashboardListResponse>(
-    'dashboards?navigationMethod=pagination&page=1&size=5'
+    `dashboards?navigationMethod=pagination&page=${page}&size=${size}`
   );
 
   return {

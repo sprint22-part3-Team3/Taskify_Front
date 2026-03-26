@@ -11,7 +11,8 @@ import { get } from '@/shared/apis/fetchInstance';
  * const { invitations } = await getInvitedDashboards('프로젝트');
  */
 export async function getInvitedDashboards(
-  title = ''
+  title = '',
+  options?: RequestInit
 ): Promise<{ invitations: InvitedDashboardItem[] }> {
   const searchParams = new URLSearchParams();
   const trimmedTitle = title.trim();
@@ -21,7 +22,10 @@ export async function getInvitedDashboards(
   }
 
   const query = searchParams.toString() ? `?${searchParams.toString()}` : '';
-  const response = await get<InvitationListResponse>(`invitations${query}`);
+  const response = await get<InvitationListResponse>(
+    `invitations${query}`,
+    options
+  );
 
   return {
     invitations:
