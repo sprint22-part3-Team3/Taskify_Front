@@ -29,7 +29,7 @@ export default function InvitationsSection() {
           <Button
             type="button"
             size="sm"
-            className="hidden md:inline-flex"
+            className="hidden md:inline-flex md:w-26.25"
             onClick={handleOpenInviteModal}
           >
             초대하기
@@ -42,7 +42,7 @@ export default function InvitationsSection() {
         <Button
           type="button"
           size="sm"
-          className="md:hidden"
+          className="w-21 md:hidden"
           onClick={handleOpenInviteModal}
         >
           초대하기

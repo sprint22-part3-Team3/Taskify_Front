@@ -38,11 +38,12 @@ export default function MembersSection() {
             key={member.id}
             className="flex items-center justify-between border-b border-gray-100 py-3 last:border-b-0"
           >
-            <UserProfile user={member} />
+            <UserProfile user={member} className="typo-lg-regular" />
             <Button
               type="button"
               theme="danger"
               size="sm"
+              className="px-3.5 md:px-7"
               onClick={handleOpenDeleteModal}
             >
               삭제
