@@ -1,4 +1,4 @@
-import type { FormEvent } from 'react';
+import type { SubmitEvent } from 'react';
 import ImageUploadBox from '@/shared/components/image-uploader';
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
@@ -10,7 +10,6 @@ import DateInputField from '@/shared/components/date-input';
 import AssigneeSelect from '@/features/cards/components/assignee-select';
 import { ASSIGNEE_OPTIONS } from '@/features/cards/components/todo-edit-modal/todoEditModal.mock';
 import type { TodoEditModalProps } from '@/features/cards/components/todo-edit-modal/todoEditModal.types';
-import TagFieldBox from '@/features/cards/components/form-field/tag-field-box';
 import FieldWrapper from '@/features/cards/components/form-field/field-wrapper';
 import StatusDropdown from '@/features/cards/components/todo-edit-modal/components/status-dropdown/statusDropdown';
 import { useTodoEditModal } from '@/features/cards/hooks/useTodoEditModal';
@@ -38,8 +37,10 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
     handleSelectStatus,
     toggleDropdown,
   } = useTodoEditModal();
+
   const isSubmitDisabled = !title.trim() || !description.trim();
-  const handleEdit = (event: FormEvent<HTMLFormElement>) => {
+
+  const handleEdit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     onClose();
   };
@@ -103,10 +104,10 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
               <Label className="typo-md-regular md:typo-2lg-regular">
                 태그
               </Label>
-              <TagFieldBox>
+              <div className="flex min-h-12.5 items-center gap-2 rounded-lg border border-gray-200 px-4 py-2">
                 <Tag color="purple">프로젝트</Tag>
                 <Tag color="yellow">일반</Tag>
-              </TagFieldBox>
+              </div>
             </FieldWrapper>
             <FieldWrapper>
               <Label className="typo-md-regular md:typo-2lg-regular">

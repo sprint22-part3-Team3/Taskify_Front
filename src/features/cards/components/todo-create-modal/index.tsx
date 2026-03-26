@@ -2,15 +2,14 @@ import type { FormEvent } from 'react';
 import ImageUploadBox from '@/shared/components/image-uploader';
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
-import InputField from '@/shared/components/input/input-field';
 import Label from '@/shared/components/input/label';
 import { Modal } from '@/shared/components/modal';
 import DateInputField from '@/shared/components/date-input';
 import TextArea from '@/shared/components/text-area';
 import type { TodoCreateModalProps } from '@/features/cards/components/todo-create-modal/todoCreateModal.types';
 import AssigneeSelect from '@/features/cards/components/assignee-select';
-import TagFieldBox from '@/features/cards/components/form-field/tag-field-box';
 import FieldWrapper from '@/features/cards/components/form-field/field-wrapper';
+import TagInput from '@/features/cards/components/tag-input';
 import { ASSIGNEE_OPTIONS } from '@/features/cards/components/todo-edit-modal/todoEditModal.mock';
 import { useTodoCreateModal } from '@/features/cards/hooks/useTodoCreateModal';
 
@@ -95,16 +94,11 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
               <Label className="typo-md-regular md:typo-2lg-regular">
                 태그
               </Label>
-              <TagFieldBox className="flex-wrap">
-                <InputField
-                  type="text"
-                  placeholder="입력 후 Enter"
-                  value={tagInput}
-                  onChange={(event) => setTagInput(event.target.value)}
-                  onKeyDown={handleTagKeyDown}
-                  className="typo-md-regular md:typo-lg-regular min-w-0 flex-1 border-0 p-0 outline-none focus:border-0"
-                />
-              </TagFieldBox>
+              <TagInput
+                value={tagInput}
+                onChange={(event) => setTagInput(event.target.value)}
+                onKeyDown={handleTagKeyDown}
+              />
             </FieldWrapper>
 
             <FieldWrapper>
