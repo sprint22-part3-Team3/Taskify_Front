@@ -5,3 +5,7 @@
 @import './colors.css';
 @import './animations.css';
 @import './scrollbar.css';
+
+@theme {
+  --shadow-dropdown: 0 4px 20px 0 rgba(0, 0, 0, 0.08);
+}
