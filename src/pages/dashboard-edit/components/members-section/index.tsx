@@ -38,7 +38,10 @@ export default function MembersSection() {
             key={member.id}
             className="flex items-center justify-between border-b border-gray-100 py-3 last:border-b-0"
           >
-            <UserProfile user={member} className="typo-lg-regular" />
+            <UserProfile
+              user={member}
+              className="typo-lg-regular md:typo-lg-regular"
+            />
             <Button
               type="button"
               theme="danger"
