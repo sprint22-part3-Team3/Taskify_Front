@@ -13,8 +13,16 @@ const DROP_MENU_CLASS = cn(
 
 function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { title, description, tags, dueDate, assignee, imageUrl, columnId } =
-    card;
+  const {
+    id,
+    title,
+    description,
+    tags,
+    dueDate,
+    assignee,
+    imageUrl,
+    columnId,
+  } = card;
 
   const handleClickMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -53,7 +61,7 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
               title={title}
               imageUrl={imageUrl}
             />
-            <TaskComments card={card} />
+            <TaskComments id={id} />
           </div>
           <aside className="w-full shrink-0 md:w-[30%]">
             <TaskAssignee assignee={assignee} dueDate={dueDate} />

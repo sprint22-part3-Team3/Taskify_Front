@@ -7,11 +7,11 @@ import { DUMMY_COMMENTS } from '@/features/comments/dummyComments';
 import { TaskCommentItem } from '@/features/comments/components/task-comments/task-comment-item';
 
 // TODO : API 연동 [ Comments ]
-function TaskComments({ card }: TaskCommentsProps) {
+function TaskComments({ id }: TaskCommentsProps) {
   const [content, setContent] = useState('');
 
   const comments = DUMMY_COMMENTS.comments.filter(
-    (comment) => comment.cardId === card.id
+    (comment) => comment.cardId === id
   );
 
   return (
