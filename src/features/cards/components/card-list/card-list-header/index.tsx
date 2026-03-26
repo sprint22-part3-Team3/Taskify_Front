@@ -1,19 +1,15 @@
-import { useState } from 'react';
 import EditColumnModal from '@/features/columns/components/modal/edit-column-modal';
 import type { CardListHeaderProps } from '@/features/cards/components/card-list/card-list-header/cardListHeader.types';
 import { IcSettings } from '@/shared/assets';
+import { useModal } from '@/shared/hooks/useModal';
 import Title from '@/shared/components/title';
 
 function CardListHeader({ title, cardCount }: CardListHeaderProps) {
-  const [isEditColumnModalOpen, setIsEditColumnModalOpen] = useState(false);
-
-  const handleOpenEditColumnModal = () => {
-    setIsEditColumnModalOpen(true);
-  };
-
-  const handleCloseEditColumnModal = () => {
-    setIsEditColumnModalOpen(false);
-  };
+  const {
+    isOpen: isEditColumnModalOpen,
+    openModal: handleOpenEditColumnModal,
+    closeModal: handleCloseEditColumnModal,
+  } = useModal();
 
   return (
     <>

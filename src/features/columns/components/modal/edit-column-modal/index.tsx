@@ -3,6 +3,7 @@ import DeleteModal from '@/features/columns/components/modal/delete-modal';
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
 import { Modal } from '@/shared/components/modal';
+import { useModal } from '@/shared/hooks/useModal';
 import type { EditColumnModalProps } from '@/features/columns/components/modal/edit-column-modal/editColumnModal.types';
 
 /**
@@ -23,16 +24,16 @@ function EditColumnModal({
   initialTitle,
 }: EditColumnModalProps) {
   const [draftTitle, setDraftTitle] = useState<string | null>(null);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const {
+    isOpen: isDeleteModalOpen,
+    openModal: handleOpenDeleteModal,
+    closeModal: handleCloseDeleteModal,
+  } = useModal();
   const columnTitle = draftTitle ?? initialTitle;
   const isSubmitDisabled = !columnTitle.trim();
 
-  const handleOpenDeleteModal = () => {
-    setIsDeleteModalOpen(true);
-  };
-
   const handleClose = () => {
-    setIsDeleteModalOpen(false);
+    handleCloseDeleteModal();
     setDraftTitle(null);
     onClose();
   };

@@ -1,17 +1,13 @@
-import { useState } from 'react';
 import CreateColumnModal from '@/features/columns/components/modal/create-column-modal';
 import { AddItemButton } from '@/shared/components/add-item-button';
+import { useModal } from '@/shared/hooks/useModal';
 
 function ColumnAdd() {
-  const [isCreateColumnModalOpen, setIsCreateColumnModalOpen] = useState(false);
-
-  const handleAddColumn = () => {
-    setIsCreateColumnModalOpen(true);
-  };
-
-  const handleCloseCreateColumnModal = () => {
-    setIsCreateColumnModalOpen(false);
-  };
+  const {
+    isOpen: isCreateColumnModalOpen,
+    openModal: handleAddColumn,
+    closeModal: handleCloseCreateColumnModal,
+  } = useModal();
 
   return (
     <>
