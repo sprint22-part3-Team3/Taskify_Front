@@ -12,7 +12,7 @@ import ImageUploadBox from '@/shared/components/image-uploader';
 export default function ProfileForm() {
   return (
     <form>
-      <div className="mt-1 rounded-xl bg-white p-4 sm:w-full md:mt-7 md:w-137 md:p-6 lg:w-2xl">
+      <div className="mt-1 w-71 rounded-xl bg-white p-4 md:mt-7 md:w-137 md:p-6 lg:w-2xl">
         <Title
           as="h3"
           size="2lg"
@@ -22,16 +22,15 @@ export default function ProfileForm() {
           프로필
         </Title>
 
-        <div className="md:flex md:justify-between">
+        <div className="w-full md:flex md:justify-between">
           <ImageUploadBox />
-
-          <div className="md:w-69 lg:w-100">
+          <div className="mt-10 md:mt-0 md:w-69 lg:w-100">
             <Input
               label="이메일"
               name="email"
               type="text"
               readOnly
-              labelClassName="gray-200 text-md mt-10 block md:mt-0 md:text-lg"
+              labelClassName="gray-200 text-md block md:mt-0 md:text-lg"
               className="mb-4"
             />
 
@@ -39,7 +38,7 @@ export default function ProfileForm() {
               label="닉네임"
               name="nickname"
               type="text"
-              labelClassName="gray-200 text-md mt-10 block md:mt-0 md:text-lg"
+              labelClassName="gray-200 text-md block md:mt-0 md:text-lg"
             />
 
             <Button

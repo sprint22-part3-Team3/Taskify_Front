@@ -14,8 +14,13 @@ export default function PasswordEditForm() {
 
   return (
     <form>
-      <div className="mt-4 rounded-xl bg-white p-4 sm:w-full md:mt-6 md:w-137 md:p-6 lg:w-2xl">
-        <Title as="h3" size="2xl" weight="bold" className="mb-20 md:mb-6">
+      <div className="mt-4 w-71 rounded-xl bg-white p-4 md:mt-7 md:w-137 md:p-6 lg:w-2xl">
+        <Title
+          as="h3"
+          size="2lg"
+          weight="bold"
+          className="mb-10 md:mb-6 md:text-2xl"
+        >
           비밀번호 변경
         </Title>
         <div>
