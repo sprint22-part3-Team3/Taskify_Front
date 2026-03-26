@@ -1,5 +1,7 @@
 import { IcMailOff } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
+import { PageIndicator } from '@/shared/components/page-indicator';
+import NavigationButtons from '@/shared/components/page-indicator/navigation-buttons';
 import Title from '@/shared/components/title';
 import InvitedDashboardItemRow from '@/pages/my-dashboard/components/invitedDashboardItemRow';
 import SearchInput from '@/pages/my-dashboard/components/searchInput';
@@ -11,7 +13,7 @@ function InvitedDashboardSection({
   const hasInvitedDashboards = invitedDashboards.length > 0;
 
   return (
-    <section className="mt-6 flex max-w-240 flex-col rounded-lg bg-white px-4 py-6 md:mt-4.5 md:px-7 md:py-4.5 lg:mt-8 lg:py-8">
+    <section className="mt-18.5 flex max-w-240 flex-col rounded-lg bg-white px-4 py-6 md:px-7 md:py-4.5 lg:py-8">
       <Title as="h3" className="md:typo-2xl-bold typo-xl-bold">
         초대받은 대시보드
       </Title>
@@ -93,6 +95,16 @@ function InvitedDashboardSection({
                 </tbody>
               </table>
             </div>
+          </div>
+
+          <div className="mt-4 flex items-center justify-end gap-3">
+            <PageIndicator currentPage={1} totalPages={1} />
+            <NavigationButtons
+              onPrev={() => undefined}
+              onNext={() => undefined}
+              isPrevDisabled={true}
+              isNextDisabled={true}
+            />
           </div>
         </div>
       ) : (
