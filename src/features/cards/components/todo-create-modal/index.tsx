@@ -5,9 +5,11 @@ import { Modal } from '@/shared/components/modal';
 import DateInputField from '@/shared/components/date-input';
 import TextArea from '@/shared/components/text-area';
 import type { TodoCreateModalProps } from '@/features/cards/components/todo-create-modal/todoCreateModal.types';
+import AssigneeSelect from '@/features/cards/components/assignee-select';
 import FieldWrapper from '@/features/cards/components/form-field/field-wrapper';
 import FieldLabel from '@/features/cards/components/form-field/field-label';
-import { useTodoCreateModal } from '@/shared/hooks/useTodoCreateModal';
+import { ASSIGNEE_OPTIONS } from '@/features/cards/components/todo-edit-modal/todoEditModal.mock';
+import { useTodoCreateModal } from '@/features/cards/hooks/useTodoCreateModal';
 
 /**
  * 할 일 생성 모달을 렌더링합니다.
@@ -19,20 +21,21 @@ import { useTodoCreateModal } from '@/shared/hooks/useTodoCreateModal';
  */
 function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
   const {
-    assigneeName,
+    selectedAssignee,
     title,
     description,
     dueDate,
     tagInput,
-    setAssigneeName,
+    setSelectedAssignee,
     setTitle,
     setDescription,
     setDueDate,
     setTagInput,
     handleTagKeyDown,
   } = useTodoCreateModal();
+  const isSubmitDisabled = !title.trim() || !description.trim();
 
-  const handleCreate = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleCreate = (event: SubmitEvent) => {
     event.preventDefault();
     onClose();
   };
@@ -45,14 +48,16 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
           className="typo-lg-bold md:typo-2xl-bold"
         />
 
-        <form onSubmit={handleCreate} className="flex min-h-0 flex-col">
+        <form
+          onSubmit={(event) => handleCreate(event.nativeEvent as SubmitEvent)}
+          className="flex min-h-0 flex-col"
+        >
           <Modal.Main className="space-y-6">
-            <Input
+            <AssigneeSelect
               label="담당자"
-              labelClassName="typo-md-regular md:typo-lg-regular"
-              placeholder="이름을 입력해 주세요"
-              value={assigneeName}
-              onChange={(event) => setAssigneeName(event.target.value)}
+              selectedAssignee={selectedAssignee}
+              assigneeOptions={ASSIGNEE_OPTIONS}
+              onSelect={setSelectedAssignee}
             />
 
             <Input
@@ -108,7 +113,7 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
             <Button theme="cancel" type="button" onClick={onClose}>
               취소
             </Button>
-            <Button theme="primary" type="submit">
+            <Button theme="primary" type="submit" disabled={isSubmitDisabled}>
               생성
             </Button>
           </Modal.Footer>

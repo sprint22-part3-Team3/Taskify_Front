@@ -1,0 +1,103 @@
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { IcSearch } from '@/shared/assets/icons';
+import InputField from '@/shared/components/input/input-field';
+import Label from '@/shared/components/input/label';
+import UserProfile from '@/shared/components/user-profile';
+import { useOnClickOutside } from '@/shared/hooks/useOnClickOutside';
+import type { AvatarUser } from '@/shared/types/user.types';
+import { cn } from '@/shared/utils/cn';
+import type { AssigneeSelectProps } from '@/features/cards/components/assignee-select/assigneeSelect.types';
+
+const getAssigneeQuery = (selectedAssignee: AvatarUser | null): string =>
+  selectedAssignee ? `@${selectedAssignee.nickname}` : '';
+
+function AssigneeSelect({
+  label,
+  selectedAssignee,
+  assigneeOptions,
+  onSelect,
+  required = false,
+  placeholder = '@이름을 입력해 주세요',
+}: AssigneeSelectProps) {
+  const [query, setQuery] = useState<string>(
+    getAssigneeQuery(selectedAssignee)
+  );
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setQuery(getAssigneeQuery(selectedAssignee));
+  }, [selectedAssignee]);
+
+  useOnClickOutside(containerRef, () => setIsOpen(false), isOpen);
+
+  const normalizedQuery = query.replace(/^@/, '').trim().toLowerCase();
+  const filteredAssignees = useMemo(() => {
+    if (!normalizedQuery) return assigneeOptions;
+
+    return assigneeOptions.filter((assignee: AvatarUser) =>
+      assignee.nickname.toLowerCase().includes(normalizedQuery)
+    );
+  }, [assigneeOptions, normalizedQuery]);
+
+  const handleSelect = (assignee: AvatarUser) => {
+    onSelect(assignee);
+    setIsOpen(false);
+  };
+
+  return (
+    <div className="flex w-full flex-col gap-2" ref={containerRef}>
+      <Label required={required} className="typo-md-regular md:typo-lg-regular">
+        {label}
+      </Label>
+
+      <div className="relative">
+        <IcSearch className="absolute top-1/2 left-4 w-5.5 -translate-y-1/2 text-gray-300 md:w-6" />
+        <InputField
+          type="text"
+          value={query}
+          placeholder={placeholder}
+          onFocus={() => setIsOpen(true)}
+          onChange={(event) => {
+            setQuery(event.target.value);
+            setIsOpen(true);
+          }}
+          className="typo-md-regular md:typo-lg-regular h-12 py-0 pl-11 md:pl-12"
+        />
+
+        {isOpen && (
+          <div className="absolute z-10 mt-2 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
+            {filteredAssignees.length > 0 ? (
+              <ul className="max-h-52 overflow-y-auto py-2">
+                {filteredAssignees.map((assignee) => (
+                  <li key={assignee.id}>
+                    <button
+                      type="button"
+                      onClick={() => handleSelect(assignee)}
+                      className={cn(
+                        'flex w-full items-center px-4 py-2 text-left hover:bg-gray-50',
+                        selectedAssignee?.id === assignee.id && 'bg-gray-50'
+                      )}
+                    >
+                      <UserProfile
+                        user={assignee}
+                        size="md"
+                        nicknameClassName="typo-md-regular md:typo-lg-regular"
+                      />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="typo-md-regular px-4 py-3 text-gray-400">
+                검색 결과가 없어요
+              </p>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default AssigneeSelect;

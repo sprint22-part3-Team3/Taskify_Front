@@ -4,14 +4,14 @@ import Input from '@/shared/components/input';
 import { Modal } from '@/shared/components/modal';
 import { Tag } from '@/shared/components/tag';
 import TextArea from '@/shared/components/text-area';
-import UserProfile from '@/shared/components/user-profile';
 import DateInputField from '@/shared/components/date-input';
-import { MOCK_ASSIGNEE } from '@/features/cards/components/todo-edit-modal/todoEditModal.constants';
+import AssigneeSelect from '@/features/cards/components/assignee-select';
+import { ASSIGNEE_OPTIONS } from '@/features/cards/components/todo-edit-modal/todoEditModal.mock';
 import type { TodoEditModalProps } from '@/features/cards/components/todo-edit-modal/todoEditModal.types';
 import FieldWrapper from '@/features/cards/components/form-field/field-wrapper';
 import FieldLabel from '@/features/cards/components/form-field/field-label';
 import StatusDropdown from '@/features/cards/components/todo-edit-modal/components/status-dropdown/statusDropdown';
-import { useTodoEditModal } from '@/shared/hooks/useTodoEditModal';
+import { useTodoEditModal } from '@/features/cards/hooks/useTodoEditModal';
 
 /**
  * 할 일 수정 모달을 렌더링합니다.
@@ -28,12 +28,15 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
     title,
     description,
     dueDate,
+    selectedAssignee,
     setTitle,
     setDescription,
     setDueDate,
+    setSelectedAssignee,
     handleSelectStatus,
     toggleDropdown,
   } = useTodoEditModal();
+  const isSubmitDisabled = !title.trim() || !description.trim();
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} className="md:w-146">
@@ -44,7 +47,8 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
         />
         <form
           onSubmit={(event) => {
-            event.preventDefault();
+            const submitEvent = event.nativeEvent as SubmitEvent;
+            submitEvent.preventDefault();
             onClose();
           }}
           className="flex min-h-0 flex-col"
@@ -60,16 +64,12 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
                   onSelect={handleSelectStatus}
                 />
               </FieldWrapper>
-              <FieldWrapper>
-                <FieldLabel>담당자</FieldLabel>
-                <div className="flex h-12 items-center rounded-lg border border-gray-200 bg-white px-4">
-                  <UserProfile
-                    user={MOCK_ASSIGNEE}
-                    size="md"
-                    nicknameClassName="typo-md-regular md:typo-lg-regular"
-                  />
-                </div>
-              </FieldWrapper>
+              <AssigneeSelect
+                label="담당자"
+                selectedAssignee={selectedAssignee}
+                assigneeOptions={ASSIGNEE_OPTIONS}
+                onSelect={setSelectedAssignee}
+              />
             </div>
 
             <Input
@@ -112,7 +112,7 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
             <Button theme="cancel" type="button" onClick={onClose}>
               취소
             </Button>
-            <Button theme="primary" type="submit">
+            <Button theme="primary" type="submit" disabled={isSubmitDisabled}>
               수정
             </Button>
           </Modal.Footer>

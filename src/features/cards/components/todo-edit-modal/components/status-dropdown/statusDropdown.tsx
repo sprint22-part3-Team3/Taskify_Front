@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { useOnClickOutside } from '@/shared/hooks/useOnClickOutside';
 import { IcArrowBottom, IcCheck } from '@/shared/assets/icons';
 import { StatusBadge } from '@/shared/components/status-badge';
-import { STATUS_OPTIONS } from '@/features/cards/components/todo-edit-modal/todoEditModal.constants';
+import { STATUS_OPTIONS } from '@/features/cards/components/todo-edit-modal/todoEditModal.mock';
 import type { StatusDropdownProps } from '@/features/cards/components/todo-edit-modal/components/status-dropdown/statusDropdown.types';
 import { cn } from '@/shared/utils/cn';
 

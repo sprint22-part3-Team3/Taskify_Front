@@ -1,7 +1,10 @@
 import { useState } from 'react';
+import type { AvatarUser } from '@/shared/types/user.types';
 
 export function useTodoCreateModal() {
-  const [assigneeName, setAssigneeName] = useState('');
+  const [selectedAssignee, setSelectedAssignee] = useState<AvatarUser | null>(
+    null
+  );
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
@@ -16,12 +19,12 @@ export function useTodoCreateModal() {
   };
 
   return {
-    assigneeName,
+    selectedAssignee,
     title,
     description,
     dueDate,
     tagInput,
-    setAssigneeName,
+    setSelectedAssignee,
     setTitle,
     setDescription,
     setDueDate,
