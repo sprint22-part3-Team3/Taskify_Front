@@ -10,7 +10,6 @@ import type { ValidationResult } from '@/shared/utils/validators/validators.type
  * - 숫자 포함
  * - 특수문자 포함 (`!@#$%^&*` 등)
  *
- * @param value - 검사할 비밀번호 문자열
  * @returns `ValidationResult` - 유효성 검사 결과
  *
  * @example
