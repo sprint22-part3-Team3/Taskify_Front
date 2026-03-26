@@ -1,10 +1,5 @@
 import { useState } from 'react';
-import {
-  IcAdd,
-  IcArrowRight,
-  IcMailOff,
-  IcSearch,
-} from '@/shared/assets/icons';
+import { IcArrowRight } from '@/shared/assets/icons';
 import { ColorLabel } from '@/features/dashboards/components/color/color-label';
 import { getDashboardColorHex } from '@/features/dashboards/constants/dashboardColorMap.constants';
 import { Button } from '@/shared/components/button';
@@ -15,8 +10,9 @@ import {
   DASHBOARD_ITEMS,
   INVITED_DASHBOARD_ITEMS,
   TOTAL_PAGES,
-} from '@/pages/my-dashboard/myDashboard.constants';
-import InvitedDashboardItemRow from '@/pages/my-dashboard/components/invitedDashboardItemRow';
+} from '@/pages/my-dashboard/myDashboard.mock';
+import AddDashboardButton from '@/pages/my-dashboard/components/addDashboardButton';
+import InvitedDashboardSection from '@/pages/my-dashboard/components/invitedDashboardSection';
 
 /**
  * 내가 생성한 대시보드 목록과 초대받은 대시보드를 확인하는 페이지입니다.
@@ -29,7 +25,6 @@ import InvitedDashboardItemRow from '@/pages/my-dashboard/components/invitedDash
 function MyDashboardPage() {
   const [currentPage, setCurrentPage] = useState(CURRENT_PAGE);
 
-  const hasInvitedDashboards = INVITED_DASHBOARD_ITEMS.length > 0;
   const canGoPreviousPage = currentPage > 1;
   const canGoNextPage = currentPage < TOTAL_PAGES;
 
@@ -37,16 +32,7 @@ function MyDashboardPage() {
     <div className="mx-auto w-full px-4 pt-6 pb-10 md:px-10 md:pt-10">
       <section className="max-w-240">
         <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
-          <Button
-            theme="outlined"
-            size="icon"
-            className="typo-md-semibold md:typo-lg-semibold h-14.5 w-full justify-between px-5 text-left md:h-17"
-          >
-            <span>새로운 대시보드</span>
-            <div className="bg-primary-500/10 flex h-5 w-5 items-center justify-center rounded-sm md:h-5.5 md:w-5.5">
-              <IcAdd className="text-primary-500 h-2.25 w-2.25 md:h-2.5 md:w-2.5" />
-            </div>
-          </Button>
+          <AddDashboardButton />
 
           {DASHBOARD_ITEMS.map((dashboardItem) => {
             return (
@@ -82,110 +68,7 @@ function MyDashboardPage() {
         </div>
       </section>
 
-      <section className="mt-6 flex max-w-240 flex-col rounded-lg bg-white px-4 py-6 md:mt-4.5 md:px-7 md:py-4.5 lg:mt-8 lg:py-8">
-        <h2 className="typo-xl-bold text-black-200 md:typo-2xl-bold">
-          초대받은 대시보드
-        </h2>
-
-        {hasInvitedDashboards ? (
-          <div className="mt-6">
-            <div className="flex h-9 items-center gap-2 rounded-lg border border-gray-200 px-4 md:h-10">
-              <IcSearch className="w-5.5 text-gray-300 md:w-6" />
-              <input
-                type="text"
-                placeholder="검색"
-                aria-label="대시보드 검색"
-                className="typo-md-regular md:typo-lg-regular text-black-200 w-full placeholder:text-gray-300 focus:outline-none"
-              />
-            </div>
-
-            <div className="mt-4 lg:overflow-x-auto">
-              <div className="lg:min-w-170">
-                <div className="md:hidden">
-                  {INVITED_DASHBOARD_ITEMS.map((invitedDashboardItem) => {
-                    return (
-                      <InvitedDashboardItemRow
-                        key={invitedDashboardItem.id}
-                        invitedDashboardItem={invitedDashboardItem}
-                      />
-                    );
-                  })}
-                </div>
-
-                <table
-                  className="hidden w-full table-fixed border-collapse md:table"
-                  aria-label="초대받은 대시보드 목록"
-                >
-                  <thead>
-                    <tr className="typo-md-regular md:typo-lg-regular text-gray-300">
-                      <th
-                        scope="col"
-                        className="py-4 text-left font-normal lg:px-12"
-                      >
-                        이름
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-4 text-left font-normal"
-                      >
-                        초대자
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-4 text-center font-normal"
-                      >
-                        수락 여부
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {INVITED_DASHBOARD_ITEMS.map((invitedDashboardItem) => {
-                      return (
-                        <tr
-                          key={invitedDashboardItem.id}
-                          className="border-b border-gray-100"
-                        >
-                          <td className="typo-md-regular md:typo-lg-regular text-black-200 py-5.75 lg:px-12">
-                            {invitedDashboardItem.name}
-                          </td>
-                          <td className="typo-md-regular md:typo-lg-regular text-black-200 px-6 py-5.75">
-                            {invitedDashboardItem.inviter}
-                          </td>
-                          <td className="py-5.75">
-                            <div className="flex items-center justify-center gap-2">
-                              <Button
-                                theme="primary"
-                                size="sm"
-                                className="min-w-21"
-                              >
-                                수락
-                              </Button>
-                              <Button
-                                theme="outlined"
-                                size="sm"
-                                className="text-primary-500 min-w-21"
-                              >
-                                거절
-                              </Button>
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="flex h-81.75 flex-col items-center justify-center gap-6 md:h-97.5">
-            <IcMailOff className="h-15 w-15 text-gray-200 md:h-18 md:w-18" />
-            <p className="typo-xs-regular md:typo-lg-regular text-gray-300">
-              아직 초대받은 대시보드가 없어요
-            </p>
-          </div>
-        )}
-      </section>
+      <InvitedDashboardSection invitedDashboards={INVITED_DASHBOARD_ITEMS} />
     </div>
   );
 }

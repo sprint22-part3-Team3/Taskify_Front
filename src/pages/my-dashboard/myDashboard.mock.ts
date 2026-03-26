@@ -1,11 +1,15 @@
+/**
+ * Mock 데이터입니다.
+ *
+ * TODO:
+ * - API 연결 시 해당 데이터 제거
+ * - 서버 데이터로 교체
+ */
+
 import type {
   DashboardItem,
   InvitedDashboardItem,
 } from '@/pages/my-dashboard/myDashboard.types';
-
-/**
- * 암시 데이터 파일
- */
 
 export const DASHBOARD_ITEMS: DashboardItem[] = [
   { id: 1, title: '비브리지', color: 'blue' },
