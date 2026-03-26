@@ -11,7 +11,12 @@ export default function DashboardEditPage() {
       <NameSection />
       <MembersSection />
       <InvitationsSection />
-      <Button theme="outlined" size="md" className="w-full md:w-[320px]">
+      <Button
+        type="button"
+        theme="outlined"
+        size="md"
+        className="w-full md:w-[320px]"
+      >
         대시보드 삭제하기
       </Button>
     </div>

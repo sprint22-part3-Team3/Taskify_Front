@@ -16,7 +16,7 @@ export default function MembersSection() {
   return (
     <section className="rounded-xl bg-white px-4 pt-5 pb-2 md:px-6 lg:px-7">
       <div className="mb-6 flex items-center justify-between">
-        <Title size="xl" className="md:text-2xl">
+        <Title size="xl" as="h3" className="md:text-2xl">
           구성원
         </Title>
         <div className="flex items-center gap-3">
@@ -39,7 +39,12 @@ export default function MembersSection() {
             className="flex items-center justify-between border-b border-gray-100 py-3 last:border-b-0"
           >
             <UserProfile user={member} />
-            <Button theme="danger" size="sm" onClick={handleOpenDeleteModal}>
+            <Button
+              type="button"
+              theme="danger"
+              size="sm"
+              onClick={handleOpenDeleteModal}
+            >
               삭제
             </Button>
           </li>
