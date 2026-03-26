@@ -1,6 +1,7 @@
 import { useId } from 'react';
 import InputField from '@/shared/components/input/input-field';
 import Label from '@/shared/components/input/label';
+import PasswordField from '@/shared/components/input/password-field';
 import { cn } from '@/shared/utils/cn';
 import type { InputProps } from './input.types';
 
@@ -43,6 +44,10 @@ function Input({
 }: InputProps) {
   const generatedId = useId();
   const inputId = id ?? generatedId;
+  const { type, ...restProps } = props;
+  const isPasswordInput = type === 'password';
+  const InputComponent = isPasswordInput ? PasswordField : InputField;
+  const inputProps = isPasswordInput ? restProps : { ...restProps, type };
 
   return (
     <div className={cn('flex w-full flex-col gap-2', containerClassName)}>
@@ -51,13 +56,13 @@ function Input({
           {label}
         </Label>
       )}
-      <InputField
+      <InputComponent
         ref={ref}
         id={inputId}
         required={required}
         disabled={disabled}
         aria-invalid={Boolean(errorMessage)}
-        {...props}
+        {...inputProps}
         className={className}
       />
       {errorMessage && (
