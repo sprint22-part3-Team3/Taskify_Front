@@ -44,7 +44,10 @@ function Input({
 }: InputProps) {
   const generatedId = useId();
   const inputId = id ?? generatedId;
-  const InputComponent = props.type === 'password' ? PasswordField : InputField;
+  const { type, ...restProps } = props;
+  const isPasswordInput = type === 'password';
+  const InputComponent = isPasswordInput ? PasswordField : InputField;
+  const inputProps = isPasswordInput ? restProps : { ...restProps, type };
 
   return (
     <div className={cn('flex w-full flex-col gap-2', containerClassName)}>
@@ -59,7 +62,7 @@ function Input({
         required={required}
         disabled={disabled}
         aria-invalid={Boolean(errorMessage)}
-        {...props}
+        {...inputProps}
         className={className}
       />
       {errorMessage && (
