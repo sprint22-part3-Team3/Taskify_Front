@@ -6,7 +6,7 @@ import type { FieldWrapperProps } from '@/features/cards/components/form-field/f
  * @example
  * ```tsx
  * <FieldWrapper>
- *   <FieldLabel>마감일</FieldLabel>
+ *   <Label className="typo-md-regular md:typo-2lg-regular">마감일</Label>
  *   <DateInputField name="dueDate" value={dueDate} onChange={setDueDate} />
  * </FieldWrapper>
  * ```

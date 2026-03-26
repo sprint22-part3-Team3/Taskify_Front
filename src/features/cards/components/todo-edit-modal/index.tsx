@@ -1,6 +1,8 @@
+import type { FormEvent } from 'react';
 import ImageUploadBox from '@/shared/components/image-uploader';
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
+import Label from '@/shared/components/input/label';
 import { Modal } from '@/shared/components/modal';
 import { Tag } from '@/shared/components/tag';
 import TextArea from '@/shared/components/text-area';
@@ -8,8 +10,8 @@ import DateInputField from '@/shared/components/date-input';
 import AssigneeSelect from '@/features/cards/components/assignee-select';
 import { ASSIGNEE_OPTIONS } from '@/features/cards/components/todo-edit-modal/todoEditModal.mock';
 import type { TodoEditModalProps } from '@/features/cards/components/todo-edit-modal/todoEditModal.types';
+import TagFieldBox from '@/features/cards/components/form-field/tag-field-box';
 import FieldWrapper from '@/features/cards/components/form-field/field-wrapper';
-import FieldLabel from '@/features/cards/components/form-field/field-label';
 import StatusDropdown from '@/features/cards/components/todo-edit-modal/components/status-dropdown/statusDropdown';
 import { useTodoEditModal } from '@/features/cards/hooks/useTodoEditModal';
 
@@ -37,23 +39,22 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
     toggleDropdown,
   } = useTodoEditModal();
   const isSubmitDisabled = !title.trim() || !description.trim();
+  const handleEdit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    onClose();
+  };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} className="md:w-146">
       <div className="flex min-h-0 flex-col">
         <Modal.Header title="할 일 수정" />
-        <form
-          onSubmit={(event) => {
-            const submitEvent = event.nativeEvent as SubmitEvent;
-            submitEvent.preventDefault();
-            onClose();
-          }}
-          className="flex min-h-0 flex-col"
-        >
+        <form onSubmit={handleEdit} className="flex min-h-0 flex-col">
           <Modal.Main className="space-y-6">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <FieldWrapper>
-                <FieldLabel>상태</FieldLabel>
+                <Label className="typo-md-regular md:typo-2lg-regular">
+                  상태
+                </Label>
                 <StatusDropdown
                   status={status}
                   isOpen={isDropdownOpen}
@@ -78,7 +79,9 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
               className="typo-md-regular md:typo-lg-regular"
             />
             <FieldWrapper>
-              <FieldLabel required>설명</FieldLabel>
+              <Label required className="typo-md-regular md:typo-2lg-regular">
+                설명
+              </Label>
               <TextArea
                 value={description}
                 onChange={setDescription}
@@ -86,7 +89,9 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
               />
             </FieldWrapper>
             <FieldWrapper>
-              <FieldLabel>마감일</FieldLabel>
+              <Label className="typo-md-regular md:typo-2lg-regular">
+                마감일
+              </Label>
               <DateInputField
                 name="dueDate"
                 value={dueDate}
@@ -95,14 +100,18 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
               />
             </FieldWrapper>
             <FieldWrapper>
-              <FieldLabel>태그</FieldLabel>
-              <div className="flex min-h-12.5 items-center gap-2 rounded-lg border border-gray-200 px-4 py-2">
+              <Label className="typo-md-regular md:typo-2lg-regular">
+                태그
+              </Label>
+              <TagFieldBox>
                 <Tag color="purple">프로젝트</Tag>
                 <Tag color="yellow">일반</Tag>
-              </div>
+              </TagFieldBox>
             </FieldWrapper>
             <FieldWrapper>
-              <FieldLabel>이미지</FieldLabel>
+              <Label className="typo-md-regular md:typo-2lg-regular">
+                이미지
+              </Label>
               <ImageUploadBox variant="modal" />
             </FieldWrapper>
           </Modal.Main>

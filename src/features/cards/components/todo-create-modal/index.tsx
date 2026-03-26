@@ -1,13 +1,16 @@
+import type { FormEvent } from 'react';
 import ImageUploadBox from '@/shared/components/image-uploader';
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
+import InputField from '@/shared/components/input/input-field';
+import Label from '@/shared/components/input/label';
 import { Modal } from '@/shared/components/modal';
 import DateInputField from '@/shared/components/date-input';
 import TextArea from '@/shared/components/text-area';
 import type { TodoCreateModalProps } from '@/features/cards/components/todo-create-modal/todoCreateModal.types';
 import AssigneeSelect from '@/features/cards/components/assignee-select';
+import TagFieldBox from '@/features/cards/components/form-field/tag-field-box';
 import FieldWrapper from '@/features/cards/components/form-field/field-wrapper';
-import FieldLabel from '@/features/cards/components/form-field/field-label';
 import { ASSIGNEE_OPTIONS } from '@/features/cards/components/todo-edit-modal/todoEditModal.mock';
 import { useTodoCreateModal } from '@/features/cards/hooks/useTodoCreateModal';
 
@@ -35,7 +38,7 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
   } = useTodoCreateModal();
   const isSubmitDisabled = !title.trim() || !description.trim();
 
-  const handleCreate = (event: SubmitEvent) => {
+  const handleCreate = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     onClose();
   };
@@ -45,10 +48,7 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
       <div className="flex min-h-0 flex-col">
         <Modal.Header title="할 일 생성" />
 
-        <form
-          onSubmit={(event) => handleCreate(event.nativeEvent as SubmitEvent)}
-          className="flex min-h-0 flex-col"
-        >
+        <form onSubmit={handleCreate} className="flex min-h-0 flex-col">
           <Modal.Main className="space-y-6">
             <AssigneeSelect
               label="담당자"
@@ -68,7 +68,9 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
             />
 
             <FieldWrapper>
-              <FieldLabel required>설명</FieldLabel>
+              <Label required className="typo-md-regular md:typo-2lg-regular">
+                설명
+              </Label>
               <TextArea
                 placeholder="설명을 입력해 주세요"
                 value={description}
@@ -78,7 +80,9 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
             </FieldWrapper>
 
             <FieldWrapper>
-              <FieldLabel>마감일</FieldLabel>
+              <Label className="typo-md-regular md:typo-2lg-regular">
+                마감일
+              </Label>
               <DateInputField
                 name="dueDate"
                 value={dueDate}
@@ -88,21 +92,25 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
             </FieldWrapper>
 
             <FieldWrapper>
-              <FieldLabel>태그</FieldLabel>
-              <div className="flex min-h-12.5 flex-wrap items-center gap-2 rounded-lg border border-gray-200 px-4 py-2">
-                <input
+              <Label className="typo-md-regular md:typo-2lg-regular">
+                태그
+              </Label>
+              <TagFieldBox className="flex-wrap">
+                <InputField
                   type="text"
                   placeholder="입력 후 Enter"
                   value={tagInput}
                   onChange={(event) => setTagInput(event.target.value)}
                   onKeyDown={handleTagKeyDown}
-                  className="typo-md-regular md:typo-lg-regular min-w-0 flex-1 outline-none placeholder:text-gray-300"
+                  className="typo-md-regular md:typo-lg-regular min-w-0 flex-1 border-0 p-0 outline-none focus:border-0"
                 />
-              </div>
+              </TagFieldBox>
             </FieldWrapper>
 
             <FieldWrapper>
-              <FieldLabel>이미지</FieldLabel>
+              <Label className="typo-md-regular md:typo-2lg-regular">
+                이미지
+              </Label>
               <ImageUploadBox variant="modal" />
             </FieldWrapper>
           </Modal.Main>
