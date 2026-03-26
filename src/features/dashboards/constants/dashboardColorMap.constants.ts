@@ -31,3 +31,14 @@ export const getDashboardColorHex = function (
 ): string {
   return DASHBOARD_COLOR_MAP[colorId];
 };
+
+/**
+ * API 연결용 hex 맵 추가
+ */
+export const DASHBOARD_COLOR_HEX: Record<DashboardColorName, string> = {
+  purple: '#a932ff',
+  blue: '#01b4bb',
+  yellow: '#f5d51e',
+  orange: '#fb8926',
+  pink: '#fc7b8f',
+};
