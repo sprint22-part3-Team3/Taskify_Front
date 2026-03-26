@@ -42,7 +42,7 @@ export default function InvitationsSection() {
         <Button
           type="button"
           size="sm"
-          className="w-21 md:hidden"
+          className="typo-xs-medium w-21 md:hidden"
           onClick={handleOpenInviteModal}
         >
           초대하기
