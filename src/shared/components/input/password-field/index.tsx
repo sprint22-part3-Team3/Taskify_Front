@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import InputField from '@/shared/components/input/input-field';
-import PasswordToggleButton from '@/shared/components/input/password-toggle-button';
+import PasswordToggleButton from '@/shared/components/input/password-field/password-toggle-button';
 import { cn } from '@/shared/utils/cn';
 import type { PasswordFieldProps } from './passwordField.types';
 
