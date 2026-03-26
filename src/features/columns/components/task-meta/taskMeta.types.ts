@@ -1,4 +1,3 @@
-export type TaskMetaProps = {
-  columnId: number;
-  tags: string[];
-};
+import type { Card } from '@/shared/types/card.types';
+
+export type TaskMetaProps = Pick<Card, 'columnId' | 'tags'>;

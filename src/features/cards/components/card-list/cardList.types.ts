@@ -1,11 +1,5 @@
-export type CardColumn = {
-  id: number;
-  title: string;
-  teamId: string;
-  createdAt: string;
-  updatedAt: string;
-};
+import type { Column } from '@/shared/types/column.types';
 
 export type CardListProps = {
-  column: CardColumn;
+  column: Column;
 };

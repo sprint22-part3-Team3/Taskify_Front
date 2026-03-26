@@ -1,5 +1,3 @@
-export type TaskContentProps = {
-  description: string;
-  title: string;
-  imageUrl: string | null;
-};
+import type { Card } from '@/shared/types/card.types';
+
+export type TaskContentProps = Pick<Card, 'description' | 'title' | 'imageUrl'>;

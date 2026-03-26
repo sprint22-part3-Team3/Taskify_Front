@@ -1,8 +1,3 @@
-export type TaskAssigneeProps = {
-  assignee: {
-    profileImageUrl: string | null;
-    nickname: string;
-    id: number;
-  };
-  dueDate: string;
-};
+import type { Card } from '@/shared/types/card.types';
+
+export type TaskAssigneeProps = Pick<Card, 'assignee' | 'dueDate'>;
