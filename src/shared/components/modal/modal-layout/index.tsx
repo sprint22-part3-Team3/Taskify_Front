@@ -24,14 +24,14 @@ function ModalLayout({
     <ModalContext.Provider value={{ onClose }}>
       <div
         className={cn(
-          'fixed inset-0 z-50 flex items-center justify-center bg-black/70',
+          'z-modal-backdrop fixed inset-0 flex items-center justify-center bg-black/70',
           isClosing ? 'animate-fade-out' : 'animate-fade-in'
         )}
         onAnimationEnd={handleAnimationEnd}
       >
         <div
           className={cn(
-            'flex max-h-[90vh] w-[90%] flex-col overflow-hidden rounded-lg bg-white px-4 py-6 md:px-6',
+            'z-modal flex max-h-[90vh] w-[90%] flex-col overflow-hidden rounded-lg bg-white px-4 py-6 md:px-6',
             isClosing ? 'animate-fade-move-out' : 'animate-fade-move-in',
             className
           )}

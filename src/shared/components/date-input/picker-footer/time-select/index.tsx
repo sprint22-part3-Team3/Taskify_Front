@@ -35,7 +35,7 @@ function TimeSelect({ value, options, disabled, onSelect }: TimeSelectProps) {
       </button>
 
       {canOpen && isOpen && (
-        <div className="absolute bottom-full left-1/2 z-10 mb-2 max-h-36 w-18 -translate-x-1/2 overflow-y-auto rounded-xl border border-gray-100 bg-white p-1 shadow-lg">
+        <div className="z-dropdown absolute bottom-full left-1/2 mb-2 max-h-36 w-18 -translate-x-1/2 overflow-y-auto rounded-xl border border-gray-100 bg-white p-1 shadow-lg">
           {options.map((option) => (
             <button
               key={option}
