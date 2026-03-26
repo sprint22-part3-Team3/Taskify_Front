@@ -46,7 +46,7 @@ export default function Header({
   onInviteClick,
 }: HeaderProps) {
   return (
-    <header className="lg:justify-betweenn flex h-15 min-w-0 items-center justify-between border-b border-gray-200 bg-white pl-4 md:h-17.5 md:px-10">
+    <header className="z-header flex h-15 min-w-0 items-center justify-between border-b border-gray-200 bg-white pl-4 md:h-17.5 md:px-10 lg:justify-between">
       {/* 제목 - 데스크탑에서만 표시 */}
       <div className="hidden items-center gap-2 lg:flex">
         <Title as="h2" size="xl" weight="bold">
