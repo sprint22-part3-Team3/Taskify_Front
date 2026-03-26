@@ -17,7 +17,7 @@ export default function NavigationButton({
       disabled={disabled}
       aria-label={ariaLabel}
       className={cn(
-        'flex h-9 w-9 items-center justify-center border border-gray-200 md:h-10 md:w-10',
+        'flex h-9 w-9 items-center justify-center border border-gray-200 bg-white md:h-10 md:w-10',
         isPrev ? 'rounded-l' : '-ml-px rounded-r',
         disabled ? 'cursor-not-allowed' : 'hover:bg-gray-50'
       )}
