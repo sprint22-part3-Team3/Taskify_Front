@@ -13,7 +13,9 @@ function TaskMeta({ columnId, tags }: TaskMetaProps) {
       <div className="shrink-0">
         <StatusBadge label={column?.title ?? ''} />
       </div>
-      <span className="h-[77%] w-px bg-gray-200" />
+      <div className="flex shrink-0 items-center self-stretch py-1 md:py-1.5">
+        <span className="h-full w-px bg-gray-200" />
+      </div>
       <ul className="flex flex-wrap gap-2 md:gap-1.5">
         {tags.map((tag) => (
           <li key={tag}>
