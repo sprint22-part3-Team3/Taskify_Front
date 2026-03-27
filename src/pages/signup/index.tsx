@@ -17,8 +17,8 @@ function SignupPage() {
     emailApiError,
     submitError,
     isSubmitting,
-    clearSignupErrors,
-    clearSubmitError,
+    resetEmailApiError,
+    resetSubmitError,
     handleSignup,
   } = useSignup();
   const isSubmitDisabled =
@@ -31,14 +31,14 @@ function SignupPage() {
 
   const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
-    clearSignupErrors();
+    resetEmailApiError();
   };
 
   const handleChangePasswordConfirm = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setPasswordConfirm(event.target.value);
-    clearSubmitError();
+    resetSubmitError();
   };
 
   const handleSubmit = async () => {
