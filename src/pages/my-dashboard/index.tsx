@@ -4,7 +4,6 @@ import { ColorLabel } from '@/features/dashboards/components/color/color-label';
 import { getDashboardColorHex } from '@/features/dashboards/constants/dashboardColorMap.constants';
 import { Button } from '@/shared/components/button';
 import { PageIndicator } from '@/shared/components/page-indicator';
-import NavigationButtons from '@/shared/components/page-indicator/navigation-buttons';
 import {
   CURRENT_PAGE,
   DASHBOARD_ITEMS,
@@ -55,9 +54,10 @@ function MyDashboardPage() {
           })}
         </div>
 
-        <div className="mt-4 flex items-center justify-end gap-3">
-          <PageIndicator currentPage={currentPage} totalPages={TOTAL_PAGES} />
-          <NavigationButtons
+        <div className="mt-4 flex justify-end">
+          <PageIndicator
+            currentPage={currentPage}
+            totalPages={TOTAL_PAGES}
             onPrev={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
             onNext={() =>
               setCurrentPage((prev) => Math.min(prev + 1, TOTAL_PAGES))
