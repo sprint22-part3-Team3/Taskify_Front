@@ -1,29 +1,31 @@
-import type { Column } from '@/features/columns/types/column.types';
+import type { Card } from '@/features/cards/types/card.types';
 import { useEffect, useState } from 'react';
-import { getColumns } from '@/features/columns/apis/columns';
+import { getCards } from '@/features/cards/apis/cards';
 import { ApiError } from '@/shared/apis/apiError';
 
 const NOT_FOUND_OR_FORBIDDEN_ERROR =
-  '대시보드를 찾을 수 없거나 접근 권한이 없습니다';
+  '컬럼을 찾을 수 없거나 접근 권한이 없습니다';
 
 /**
- * 대시보드의 컬럼 목록을 조회하는 훅
+ * 카드 목록을 조회하는 훅
  */
-export const useColumnList = (dashboardId: number) => {
-  const [columns, setColumns] = useState<Column[]>([]);
+export const useCardList = (columnId: number) => {
+  const [cards, setCards] = useState<Card[]>([]);
+  const [cardCount, setCardCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    if (Number.isNaN(dashboardId)) return;
+    if (Number.isNaN(columnId)) return;
 
-    const fetchColumns = async () => {
+    const fetchCards = async () => {
       setIsLoading(true);
       setErrorMessage(null);
 
       try {
-        const res = await getColumns({ dashboardId });
-        setColumns(res?.data || []);
+        const res = await getCards({ columnId });
+        setCards(res?.cards || []);
+        setCardCount(res?.totalCount || 0);
       } catch (err) {
         if (err instanceof ApiError && err.status === 404) {
           setErrorMessage(NOT_FOUND_OR_FORBIDDEN_ERROR);
@@ -37,8 +39,8 @@ export const useColumnList = (dashboardId: number) => {
       }
     };
 
-    fetchColumns();
-  }, [dashboardId]);
+    fetchCards();
+  }, [columnId]);
 
-  return { columns, isLoading, errorMessage };
+  return { cards, cardCount, isLoading, errorMessage };
 };
