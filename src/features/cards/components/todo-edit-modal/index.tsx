@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import type { SubmitEvent } from 'react';
 import ImageUploadBox from '@/shared/components/image-uploader';
 import { Button } from '@/shared/components/button';
@@ -22,7 +23,7 @@ import { useTodoEditModal } from '@/features/cards/hooks/useTodoEditModal';
  * <TodoEditModal isOpen={isOpen} onClose={handleClose} />
  * ```
  */
-function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
+function TodoEditModal({ isOpen, onClose, card }: TodoEditModalProps) {
   const {
     status,
     isDropdownOpen,
@@ -36,7 +37,16 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
     setSelectedAssignee,
     handleSelectStatus,
     toggleDropdown,
-  } = useTodoEditModal();
+    resetForm,
+  } = useTodoEditModal(card);
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    resetForm(card);
+  }, [card, isOpen, resetForm]);
 
   const isSubmitDisabled = !title.trim() || !description.trim();
 

@@ -13,11 +13,11 @@ import { type LogoProps } from '@/shared/components/logo/logo.types';
  * <Logo size="large" className="header-logo" />
  * ```
  */
-function Logo({ size = 'medium', className }: LogoProps) {
+function Logo({ size = 'medium', className, to = '/' }: LogoProps) {
   const LogoImage = LOGO_MAP[size];
 
   return (
-    <Link to="/" className={className} aria-label="홈으로 이동">
+    <Link to={to} className={className} aria-label="홈으로 이동">
       <LogoImage />
     </Link>
   );
