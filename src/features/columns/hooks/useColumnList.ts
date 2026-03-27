@@ -9,7 +9,6 @@ const NOT_FOUND_OR_FORBIDDEN_ERROR =
  * 대시보드의 컬럼 목록을 조회하는 훅
  */
 export const useColumnList = (dashboardId: number) => {
-  // TODO : #59 머지 후, @/shared/types/column.types의 `Column[]` 으로 변경
   const [columns, setColumns] = useState<Column[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
