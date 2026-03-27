@@ -26,7 +26,11 @@ export const useColumnList = (dashboardId: number) => {
       setErrorMessage(null);
 
       try {
-        const res = await getColumns(dashboardId);
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+          throw new Error('로그인이 필요한 서비스입니다');
+        }
+        const res = await getColumns(dashboardId, token);
         setColumns(res?.data || []);
       } catch (err) {
         const message = (err as Error).message;
