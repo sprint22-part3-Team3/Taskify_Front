@@ -27,15 +27,12 @@ export const useCardList = (columnId: number) => {
         setCards(res?.cards || []);
         setCardCount(res?.totalCount || 0);
       } catch (err) {
-        const message =
-          err instanceof Error
-            ? err.message
-            : '알 수 없는 에러가 발생했습니다.';
-
         if (err instanceof ApiError && err.status === 404) {
           setErrorMessage(NOT_FOUND_OR_FORBIDDEN_ERROR);
+        } else if (err instanceof Error) {
+          setErrorMessage(err.message);
         } else {
-          setErrorMessage(message);
+          setErrorMessage('알 수 없는 에러가 발생했습니다.');
         }
       } finally {
         setIsLoading(false);
