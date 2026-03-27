@@ -5,6 +5,7 @@ import type {
   UseAsyncValidationReturn,
   UseAsyncValidationOptions,
 } from '@/shared/utils/validators';
+import { COLUMN_NAME_RULES } from '@/shared/utils/validators/validators.constants';
 
 /**
  * `useAsyncValidation` 훅의 옵션 타입입니다.
@@ -79,6 +80,14 @@ export function useAsyncValidation({
   const onBlur = async (): Promise<void> => {
     if (!value.trim()) {
       setError('칼럼 이름을 입력해주세요.');
+      setIsValid(false);
+      return;
+    }
+
+    if (value.length > COLUMN_NAME_RULES.MAX_LENGTH) {
+      setError(
+        `칼럼 이름은 ${COLUMN_NAME_RULES.MAX_LENGTH}자 이내로 입력해주세요.`
+      );
       setIsValid(false);
       return;
     }

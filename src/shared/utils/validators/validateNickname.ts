@@ -1,4 +1,5 @@
 import type { ValidationResult } from '@/shared/utils/validators/validators.types';
+import { NICKNAME_RULES } from '@/shared/utils/validators/validators.constants';
 
 /**
  * 닉네임 유효성을 검사합니다.
@@ -31,29 +32,25 @@ import type { ValidationResult } from '@/shared/utils/validators/validators.type
  */
 
 export function validateNickname(value: string): ValidationResult {
-  const MAX_NICKNAME_LENGTH = 5;
-
   if (!value || value.trim() === '') {
     return { isValid: false, message: '닉네임을 입력해주세요.' };
   }
 
-  const hasIncompleteKorean = /[ㄱ-ㅎㅏ-ㅣ]/.test(value);
-  if (hasIncompleteKorean) {
+  if (NICKNAME_RULES.INCOMPLETE_KOREAN_REGEX.test(value)) {
     return { isValid: false, message: '완성된 한글을 입력해주세요.' };
   }
 
-  const nicknameRegex = /^[가-힣a-zA-Z]+$/;
-  if (!nicknameRegex.test(value)) {
+  if (!NICKNAME_RULES.REGEX.test(value)) {
     return {
       isValid: false,
       message: '닉네임은 한글, 영문만 사용할 수 있습니다.',
     };
   }
 
-  if (value.length > MAX_NICKNAME_LENGTH) {
+  if (value.length > NICKNAME_RULES.MAX_LENGTH) {
     return {
       isValid: false,
-      message: `닉네임은 ${MAX_NICKNAME_LENGTH}자 이내로 입력해주세요.`,
+      message: `닉네임은 ${NICKNAME_RULES.MAX_LENGTH}자 이내로 입력해주세요.`,
     };
   }
 
