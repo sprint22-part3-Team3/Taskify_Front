@@ -1,14 +1,14 @@
 import type { TaskAssigneeProps } from '@/features/cards/components/task-modal/task-assignee/taskAssignee.types';
 import Avatar from '@/shared/components/avatar';
+import { TASK_MODAL_AVATAR_SIZE } from '@/shared/components/avatar/avatar.constants';
 import Title from '@/shared/components/title';
-import { AVATAR_SIZES } from '@/shared/constants/avatar.constants';
 import useResponsiveValue from '@/shared/hooks/useResponsiveValue';
 import { cn } from '@/shared/utils/cn';
 
 const TEXT_CLASS = cn('typo-xs-regular text-black-200 md:typo-md-regular');
 
 function TaskAssignee({ assignee, dueDate }: TaskAssigneeProps) {
-  const avatarSize = useResponsiveValue<'md' | 'lg'>(AVATAR_SIZES);
+  const avatarSize = useResponsiveValue<'md' | 'lg'>(TASK_MODAL_AVATAR_SIZE);
 
   const { profileImageUrl, nickname } = assignee || {};
 

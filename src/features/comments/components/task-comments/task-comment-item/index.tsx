@@ -1,6 +1,6 @@
 import type { TaskCommentItemProps } from '@/features/comments/components/task-comments/task-comment-item/taskCommentItem.types';
 import Avatar from '@/shared/components/avatar';
-import { AVATAR_SIZES } from '@/shared/constants/avatar.constants';
+import { TASK_MODAL_AVATAR_SIZE } from '@/shared/components/avatar/avatar.constants';
 import useResponsiveValue from '@/shared/hooks/useResponsiveValue';
 import { cn } from '@/shared/utils/cn';
 import { formatDateTimeValue } from '@/shared/utils/date';
@@ -13,7 +13,7 @@ const TEXT_BUTTON_CLASS = cn(
 function TaskCommentItem({ comment }: TaskCommentItemProps) {
   const { author, createdAt, content } = comment;
 
-  const avatarSize = useResponsiveValue<'md' | 'lg'>(AVATAR_SIZES);
+  const avatarSize = useResponsiveValue<'md' | 'lg'>(TASK_MODAL_AVATAR_SIZE);
 
   return (
     <>
