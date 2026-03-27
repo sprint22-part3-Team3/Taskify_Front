@@ -31,9 +31,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     };
 
     window.addEventListener(AUTH_EVENTS.TOKEN_CHANGE, syncAccessToken);
+    window.addEventListener('storage', syncAccessToken);
 
     return () => {
       window.removeEventListener(AUTH_EVENTS.TOKEN_CHANGE, syncAccessToken);
+      window.removeEventListener('storage', syncAccessToken);
     };
   }, []);
 
