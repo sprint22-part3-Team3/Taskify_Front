@@ -78,13 +78,14 @@ export function useColumnNameValidation({
   };
 
   const onBlur = async (): Promise<void> => {
-    if (!value.trim()) {
+    const trimmed = value.trim();
+    if (!trimmed) {
       setError('칼럼 이름을 입력해주세요.');
       setIsValid(false);
       return;
     }
 
-    if (value.length > COLUMN_NAME_RULES.MAX_LENGTH) {
+    if (trimmed.length > COLUMN_NAME_RULES.MAX_LENGTH) {
       setError(
         `칼럼 이름은 ${COLUMN_NAME_RULES.MAX_LENGTH}자 이내로 입력해주세요.`
       );
@@ -95,7 +96,7 @@ export function useColumnNameValidation({
     setIsChecking(true);
 
     try {
-      const isDuplicate = await checkFn(value);
+      const isDuplicate = await checkFn(trimmed);
 
       if (isDuplicate) {
         setError('중복된 컬럼 이름입니다.');

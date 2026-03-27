@@ -89,15 +89,15 @@ export function useValidation({
   };
 
   const onBlur = () => {
-    const normalizedValue = value.trim();
+    const trimmed = value.trim();
 
-    setValue(normalizedValue);
-    validate(normalizedValue);
+    setValue(trimmed);
+    validate(trimmed);
   };
 
   const trigger = (): ValidationResult => {
-    const normalizedValue = value.trim();
-    const result = validateFn(normalizedValue);
+    const trimmed = value.trim();
+    const result = validateFn(trimmed);
 
     setError(result.message);
     setIsValid(result.isValid);
