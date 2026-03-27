@@ -8,6 +8,7 @@ import { createColumn } from '@/features/columns/apis/createColum';
 import { useColumnNameValidation } from '@/shared/hooks/useColumnNameValidation';
 import { checkColumnNameDuplicate } from '@/features/columns/apis/checkColumnName';
 import { useParams } from 'react-router-dom';
+import { COLUMN_NAME_RULES } from '@/shared/utils/validators';
 
 /**
  * 새 컬럼 이름을 입력받는 생성 모달입니다.
@@ -27,7 +28,10 @@ function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const isCreateDisabled = !columnNameField.isValid || isLoading;
+  const isCreateDisabled =
+    !columnNameField.value.trim() ||
+    columnNameField.value.length > COLUMN_NAME_RULES.MAX_LENGTH ||
+    isLoading;
 
   const handleClose = () => {
     columnNameField.reset();
@@ -50,7 +54,6 @@ function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
       handleClose();
     } catch {
       // 생성 실패는 서버 에러 → 중복 외 예외 처리
-      // columnNameField.setError('중복된 컬럼 이름입니다.');
     } finally {
       setIsLoading(false);
     }
