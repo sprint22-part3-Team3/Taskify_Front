@@ -22,7 +22,7 @@ import { useTodoEditModal } from '@/features/cards/hooks/useTodoEditModal';
  * <TodoEditModal isOpen={isOpen} onClose={handleClose} />
  * ```
  */
-function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
+function TodoEditModal({ isOpen, onClose, card }: TodoEditModalProps) {
   const {
     status,
     isDropdownOpen,
@@ -36,7 +36,7 @@ function TodoEditModal({ isOpen, onClose }: TodoEditModalProps) {
     setSelectedAssignee,
     handleSelectStatus,
     toggleDropdown,
-  } = useTodoEditModal();
+  } = useTodoEditModal(card);
 
   const isSubmitDisabled = !title.trim() || !description.trim();
 

@@ -4,20 +4,23 @@ import {
   MOCK_ASSIGNEE,
 } from '@/features/cards/components/todo-edit-modal/todoEditModal.mock';
 import type { StatusOption } from '@/features/cards/components/todo-edit-modal/todoEditModal.mock';
+import type { Card } from '@/features/cards/types/card.types';
 import type { AvatarUser } from '@/shared/types/user.types';
 
-export function useTodoEditModal() {
+export function useTodoEditModal(card: Card) {
   const [status, setStatus] = useState<StatusOption>(
     INITIAL_FORM_VALUES.status
   );
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [title, setTitle] = useState(INITIAL_FORM_VALUES.title);
+  const [title, setTitle] = useState(card.title || INITIAL_FORM_VALUES.title);
   const [description, setDescription] = useState(
-    INITIAL_FORM_VALUES.description
+    card.description || INITIAL_FORM_VALUES.description
   );
-  const [dueDate, setDueDate] = useState(INITIAL_FORM_VALUES.dueDate);
+  const [dueDate, setDueDate] = useState(
+    card.dueDate ?? INITIAL_FORM_VALUES.dueDate
+  );
   const [selectedAssignee, setSelectedAssignee] = useState<AvatarUser | null>(
-    MOCK_ASSIGNEE
+    card.assignee ?? MOCK_ASSIGNEE
   );
 
   const handleSelectStatus = (statusOption: StatusOption) => {
