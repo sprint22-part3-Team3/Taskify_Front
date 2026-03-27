@@ -30,7 +30,9 @@ import { PASSWORD_RULES } from '@/shared/utils/validators/validators.constants';
  */
 
 export function validatePassword(value: string): ValidationResult {
-  if (!value || value.trim() === '') {
+  const trimmed = value.trim();
+
+  if (!trimmed) {
     return { isValid: false, message: '비밀번호를 입력해주세요.' };
   }
 

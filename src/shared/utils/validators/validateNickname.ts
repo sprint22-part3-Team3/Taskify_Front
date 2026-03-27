@@ -32,7 +32,9 @@ import { NICKNAME_RULES } from '@/shared/utils/validators/validators.constants';
  */
 
 export function validateNickname(value: string): ValidationResult {
-  if (!value || value.trim() === '') {
+  const trimmed = value.trim();
+
+  if (!trimmed) {
     return { isValid: false, message: '닉네임을 입력해주세요.' };
   }
 

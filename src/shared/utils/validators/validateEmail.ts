@@ -24,7 +24,9 @@ import { EMAIL_RULES } from './validators.constants';
  */
 
 export function validateEmail(value: string): ValidationResult {
-  if (!value || value.trim() === '') {
+  const trimmed = value.trim();
+
+  if (!trimmed) {
     return { isValid: false, message: '이메일을 입력해주세요.' };
   }
 
