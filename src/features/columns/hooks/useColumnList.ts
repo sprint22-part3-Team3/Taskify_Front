@@ -22,11 +22,7 @@ export const useColumnList = (dashboardId: number) => {
       setErrorMessage(null);
 
       try {
-        const token = localStorage.getItem('accessToken');
-        if (!token) {
-          throw new Error('로그인이 필요한 서비스입니다');
-        }
-        const res = await getColumns({ dashboardId, token });
+        const res = await getColumns({ dashboardId });
         setColumns(res?.data || []);
       } catch (err) {
         const message =
