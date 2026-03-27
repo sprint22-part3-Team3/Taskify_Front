@@ -94,7 +94,6 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
         </Modal.Main>
       </Modal>
       <TodoEditModal
-        key={`${card.id}-${String(isEditModalOpen)}`}
         isOpen={isEditModalOpen}
         onClose={handleCloseEditModal}
         card={card}

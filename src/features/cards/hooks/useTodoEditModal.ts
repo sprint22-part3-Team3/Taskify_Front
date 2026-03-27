@@ -29,6 +29,14 @@ export function useTodoEditModal(card: Card) {
   };
 
   const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
+  const resetForm = (nextCard: Card) => {
+    setStatus(INITIAL_FORM_VALUES.status);
+    setIsDropdownOpen(false);
+    setTitle(nextCard.title || INITIAL_FORM_VALUES.title);
+    setDescription(nextCard.description || INITIAL_FORM_VALUES.description);
+    setDueDate(nextCard.dueDate ?? INITIAL_FORM_VALUES.dueDate);
+    setSelectedAssignee(nextCard.assignee ?? MOCK_ASSIGNEE);
+  };
 
   return {
     status,
@@ -43,5 +51,6 @@ export function useTodoEditModal(card: Card) {
     setSelectedAssignee,
     handleSelectStatus,
     toggleDropdown,
+    resetForm,
   };
 }
