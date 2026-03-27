@@ -5,8 +5,3 @@ export type Column = {
   createdAt: string;
   updatedAt: string;
 };
-
-export type GetColumnsResponse = {
-  result: string;
-  data: Column[];
-};
