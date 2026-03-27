@@ -36,22 +36,22 @@ export function validatePassword(value: string): ValidationResult {
     return { isValid: false, message: '비밀번호를 입력해주세요.' };
   }
 
-  if (value.length < PASSWORD_RULES.MIN_LENGTH) {
+  if (trimmed.length < PASSWORD_RULES.MIN_LENGTH) {
     return {
       isValid: false,
       message: `비밀번호는 ${PASSWORD_RULES.MIN_LENGTH}자 이상이어야 합니다.`,
     };
   }
 
-  if (!PASSWORD_RULES.LETTER_REGEX.test(value)) {
+  if (!PASSWORD_RULES.LETTER_REGEX.test(trimmed)) {
     return { isValid: false, message: '영문자를 포함해야 합니다.' };
   }
 
-  if (!PASSWORD_RULES.NUMBER_REGEX.test(value)) {
+  if (!PASSWORD_RULES.NUMBER_REGEX.test(trimmed)) {
     return { isValid: false, message: '숫자를 포함해야 합니다.' };
   }
 
-  if (!PASSWORD_RULES.SPECIAL_REGEX.test(value)) {
+  if (!PASSWORD_RULES.SPECIAL_REGEX.test(trimmed)) {
     return {
       isValid: false,
       message: '특수문자를 포함해야 합니다. (예: !@#$%^&*)',

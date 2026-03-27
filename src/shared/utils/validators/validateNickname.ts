@@ -38,18 +38,18 @@ export function validateNickname(value: string): ValidationResult {
     return { isValid: false, message: '닉네임을 입력해주세요.' };
   }
 
-  if (NICKNAME_RULES.INCOMPLETE_KOREAN_REGEX.test(value)) {
+  if (NICKNAME_RULES.INCOMPLETE_KOREAN_REGEX.test(trimmed)) {
     return { isValid: false, message: '완성된 한글을 입력해주세요.' };
   }
 
-  if (!NICKNAME_RULES.REGEX.test(value)) {
+  if (!NICKNAME_RULES.REGEX.test(trimmed)) {
     return {
       isValid: false,
       message: '닉네임은 한글, 영문만 사용할 수 있습니다.',
     };
   }
 
-  if (value.length > NICKNAME_RULES.MAX_LENGTH) {
+  if (trimmed.length > NICKNAME_RULES.MAX_LENGTH) {
     return {
       isValid: false,
       message: `닉네임은 ${NICKNAME_RULES.MAX_LENGTH}자 이내로 입력해주세요.`,
