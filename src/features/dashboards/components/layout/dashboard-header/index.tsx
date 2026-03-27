@@ -42,6 +42,7 @@ export default function Header({
   totalMemberCount = 7,
   userName = '배유철',
   profileImage,
+  showActionButtons = true,
   onManageClick,
   onInviteClick,
   onProfileClick,
@@ -57,27 +58,28 @@ export default function Header({
       </div>
 
       <div className="ml-auto flex min-w-0 shrink items-center gap-1 md:gap-6">
-        {/* 관리 / 초대하기 버튼 */}
-        <div className="flex items-center gap-2 md:gap-4">
-          <Button
-            theme="icon"
-            size="icon"
-            className="px-3"
-            onClick={onManageClick}
-          >
-            <IcSettings className="hidden md:block" />
-            관리
-          </Button>
-          <Button
-            theme="icon"
-            size="icon"
-            className="px-3"
-            onClick={onInviteClick}
-          >
-            <IcAddBox className="hidden md:block" />
-            초대하기
-          </Button>
-        </div>
+        {showActionButtons && (
+          <div className="flex items-center gap-2 md:gap-4">
+            <Button
+              theme="icon"
+              size="icon"
+              className="px-3"
+              onClick={onManageClick}
+            >
+              <IcSettings className="hidden md:block" />
+              관리
+            </Button>
+            <Button
+              theme="icon"
+              size="icon"
+              className="px-3"
+              onClick={onInviteClick}
+            >
+              <IcAddBox className="hidden md:block" />
+              초대하기
+            </Button>
+          </div>
+        )}
 
         {/* 멤버 프로필 */}
         <AvatarGroup
