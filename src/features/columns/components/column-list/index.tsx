@@ -13,13 +13,20 @@ const LIST_CLASS = cn(
 function ColumnList() {
   const { id } = useParams();
   const dashboardId = Number(id);
-  const { columns, isLoading } = useColumnList(dashboardId);
+  const { columns, isLoading, errorMessage } = useColumnList(dashboardId);
 
   // TODO : 로딩 화면 처리
   if (isLoading)
     return (
       <div className="flex items-center justify-center">
         <p>Loading...</p>
+      </div>
+    );
+  // TODO : 에러 화면 처리
+  if (errorMessage)
+    return (
+      <div className="flex items-center justify-center">
+        <p>⚠️ {errorMessage}</p>
       </div>
     );
 

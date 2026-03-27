@@ -16,18 +16,27 @@ export const useColumnList = (dashboardId: number) => {
   // TODO : #59 머지 후, @/shared/types/column.types의 `Column[]` 으로 변경
   const [columns, setColumns] = useState<Column[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (!dashboardId || Number.isNaN(dashboardId)) return;
 
     const fetchColumns = async () => {
+      setIsLoading(true);
+      setErrorMessage(null);
+
       try {
-        setIsLoading(true);
         const res = await getColumns(dashboardId);
         setColumns(res?.data || []);
       } catch (err) {
-        // TODO : 에러 처리
-        console.error('컬럼 조회 실패', err);
+        const message = (err as Error).message;
+        const customMessage = '대시보드를 찾을 수 없거나 접근 권한이 없습니다';
+
+        if (message.includes('404')) {
+          setErrorMessage(customMessage);
+        } else {
+          setErrorMessage(message);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -36,5 +45,5 @@ export const useColumnList = (dashboardId: number) => {
     fetchColumns();
   }, [dashboardId]);
 
-  return { columns, isLoading };
+  return { columns, isLoading, errorMessage };
 };
