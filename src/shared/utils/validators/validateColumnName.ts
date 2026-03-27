@@ -89,14 +89,14 @@ export function useAsyncValidation({
       const isDuplicate = await checkFn(value);
 
       if (isDuplicate) {
-        setError('이미 사용 중인 칼럼 이름입니다.');
+        setError('중복된 컬럼 이름입니다.');
         setIsValid(false);
       } else {
-        setSuccessMessage('사용 가능한 칼럼 이름입니다.');
+        setSuccessMessage('사용 가능한 컬럼 이름입니다.');
         setIsValid(true);
       }
     } catch {
-      setError('중복된 칼럼 이름입니다.');
+      setError('중복 확인 중 오류가 발생했습니다. 다시 시도해주세요.');
       setIsValid(false);
     } finally {
       setIsChecking(false);

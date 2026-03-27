@@ -41,7 +41,6 @@ type UseValidationReturn = {
  * - `trigger()`로 onSubmit 시 강제 검사 가능
  * - `isValid`로 제출 버튼 `disabled` 제어
  *
- * @param options - `UseValidationOptions`
  * @returns `UseValidationReturn`
  *
  * @example
