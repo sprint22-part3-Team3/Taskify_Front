@@ -61,7 +61,7 @@ import { COLUMN_NAME_RULES } from '@/shared/utils/validators/validators.constant
  * <Button disabled={!columnNameField.isValid}>생성</Button>
  * ```
  */
-export function useAsyncValidation({
+export function useColumnNameValidation({
   checkFn,
 }: UseAsyncValidationOptions): UseAsyncValidationReturn {
   const [value, setValue] = useState<string>('');
