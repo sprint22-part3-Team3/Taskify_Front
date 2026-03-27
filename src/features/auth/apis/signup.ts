@@ -6,11 +6,15 @@ export async function signup({
   nickname,
   password,
 }: SignupRequest): Promise<void> {
-  const response = await post<unknown>(`/users`, {
-    email,
-    nickname,
-    password,
-  });
+  const response = await post<unknown>(
+    `/users`,
+    {
+      email,
+      nickname,
+      password,
+    },
+    { auth: false }
+  );
 
   if (!response) {
     throw new Error('회원가입에 실패했습니다.');

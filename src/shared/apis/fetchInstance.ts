@@ -6,10 +6,8 @@ const REQUEST_TIMEOUT = 5000;
 const JSON_CONTENT_TYPE = 'application/json';
 const UNAUTHORIZED_STATUS = 401;
 
-const isPublicAuthEndpoint = (endpoint: string) => {
-  const normalizedEndpoint = endpoint.replace(/^\//, '');
-
-  return normalizedEndpoint === 'auth/login' || normalizedEndpoint === 'users';
+type FetchRequestOptions = RequestInit & {
+  auth?: boolean;
 };
 
 const buildRequestUrl = (endpoint: string, query = '') =>
@@ -21,7 +19,7 @@ const buildRequestUrl = (endpoint: string, query = '') =>
 const request = <T>(
   path: string,
   method: RequestInit['method'],
-  options?: RequestInit,
+  options?: FetchRequestOptions,
   body?: unknown
 ) => {
   return fetchInstance<T>(path, {
@@ -42,11 +40,12 @@ const request = <T>(
  */
 export async function fetchInstance<T>(
   endpoint: string,
-  options: RequestInit = {},
+  options: FetchRequestOptions = {},
   query: string = ''
 ): Promise<T | null> {
   const url = buildRequestUrl(endpoint, query);
-  const accessToken = isPublicAuthEndpoint(endpoint) ? null : getAccessToken();
+  const { auth = true, ...requestOptions } = options;
+  const accessToken = auth ? getAccessToken() : null;
   const defaultHeaders = {
     'Content-Type': JSON_CONTENT_TYPE,
     ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
@@ -57,10 +56,10 @@ export async function fetchInstance<T>(
 
   try {
     const res = await fetch(url, {
-      ...options,
+      ...requestOptions,
       headers: {
         ...defaultHeaders,
-        ...options.headers,
+        ...requestOptions.headers,
       },
       signal: controller.signal,
     });
@@ -92,18 +91,26 @@ export async function fetchInstance<T>(
 }
 
 // HTTP 메서드별 편의 함수
-export function get<T>(path: string, options?: RequestInit) {
+export function get<T>(path: string, options?: FetchRequestOptions) {
   return request<T>(path, 'GET', options);
 }
 
-export function post<T>(path: string, body: unknown, options?: RequestInit) {
+export function post<T>(
+  path: string,
+  body: unknown,
+  options?: FetchRequestOptions
+) {
   return request<T>(path, 'POST', options, body);
 }
 
-export function put<T>(path: string, body: unknown, options?: RequestInit) {
+export function put<T>(
+  path: string,
+  body: unknown,
+  options?: FetchRequestOptions
+) {
   return request<T>(path, 'PUT', options, body);
 }
 
-export function del<T>(path: string, options?: RequestInit) {
+export function del<T>(path: string, options?: FetchRequestOptions) {
   return request<T>(path, 'DELETE', options);
 }

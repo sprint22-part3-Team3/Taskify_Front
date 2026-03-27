@@ -8,10 +8,14 @@ export async function login({
   email,
   password,
 }: LoginRequest): Promise<LoginResponse> {
-  const response = await post<LoginResponse>('/auth/login', {
-    email,
-    password,
-  });
+  const response = await post<LoginResponse>(
+    '/auth/login',
+    {
+      email,
+      password,
+    },
+    { auth: false }
+  );
 
   if (!response) {
     throw new Error('로그인에 실패했습니다.');
