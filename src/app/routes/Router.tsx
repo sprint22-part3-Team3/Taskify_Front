@@ -15,8 +15,8 @@ function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<MainPage />} />
         <Route element={<PublicRoute />}>
+          <Route path="/" element={<MainPage />} />
           <Route element={<AuthLayout />}>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
