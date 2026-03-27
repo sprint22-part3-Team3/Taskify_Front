@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { MOCK_INVITATIONS } from '@/pages/dashboard-edit/mock';
 import InviteModal from '@/pages/dashboard-edit/components/invitations-section/invite-modal';
 import { useModal } from '@/shared/hooks/useModal';
+import { runAfterModalClose } from '@/shared/utils/modal';
 
 export default function InvitationsSection() {
   const [selectedInvitationEmail, setSelectedInvitationEmail] = useState<
@@ -32,7 +33,9 @@ export default function InvitationsSection() {
   };
   const handleCloseDeleteInvitationModal = () => {
     handleCloseDeleteModal();
-    handleResetSelectedInvitationEmail();
+    runAfterModalClose(() => {
+      handleResetSelectedInvitationEmail();
+    });
   };
   const handleConfirmCancelInvitation = () => {
     // TODO: 초대 취소 API 연동

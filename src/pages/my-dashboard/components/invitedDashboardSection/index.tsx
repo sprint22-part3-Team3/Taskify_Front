@@ -3,11 +3,12 @@ import { IcMailOff } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import DeleteModal from '@/shared/components/modal/delete-modal';
 import Title from '@/shared/components/title';
+import { useModal } from '@/shared/hooks/useModal';
+import { runAfterModalClose } from '@/shared/utils/modal';
 import InvitedDashboardItemRow from '@/pages/my-dashboard/components/invitedDashboardItemRow';
 import SearchInput from '@/pages/my-dashboard/components/searchInput';
 import type { InvitedDashboardSectionProps } from '@/pages/my-dashboard/components/invitedDashboardSection/invitedDashboardSection.types';
 import type { InvitedDashboardItem } from '@/pages/my-dashboard/myDashboard.types';
-import { useModal } from '@/shared/hooks/useModal';
 
 function InvitedDashboardSection({
   invitedDashboards,
@@ -28,7 +29,9 @@ function InvitedDashboardSection({
 
   const handleCloseDeleteModalWithReset = () => {
     handleCloseDeleteModal();
-    setSelectedInvitedDashboard(null);
+    runAfterModalClose(() => {
+      setSelectedInvitedDashboard(null);
+    });
   };
 
   const handleConfirmRejectInvite = () => {

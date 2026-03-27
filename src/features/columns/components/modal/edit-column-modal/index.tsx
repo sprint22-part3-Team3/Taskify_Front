@@ -4,7 +4,7 @@ import DeleteModal from '@/shared/components/modal/delete-modal';
 import Input from '@/shared/components/input';
 import { Modal } from '@/shared/components/modal';
 import { useModal } from '@/shared/hooks/useModal';
-import { MODAL_CLOSE_DELAY } from '@/features/columns/components/modal/edit-column-modal/editColumnModal.constants';
+import { runAfterModalClose } from '@/shared/utils/modal';
 import type { EditColumnModalProps } from '@/features/columns/components/modal/edit-column-modal/editColumnModal.types';
 
 /**
@@ -36,9 +36,9 @@ function EditColumnModal({
   const handleClose = () => {
     setDraftTitle(null);
     onClose();
-    window.setTimeout(() => {
+    runAfterModalClose(() => {
       handleCloseDeleteModal();
-    }, MODAL_CLOSE_DELAY);
+    });
   };
 
   const handleDelete = () => {
