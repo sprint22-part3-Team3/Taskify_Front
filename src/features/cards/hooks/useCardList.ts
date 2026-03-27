@@ -16,9 +16,9 @@ export const useCardList = (columnId: number) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!columnId || Number.isNaN(columnId)) return;
+    if (Number.isNaN(columnId)) return;
 
-    const fetchColumns = async () => {
+    const fetchCards = async () => {
       setIsLoading(true);
       setErrorMessage(null);
 
@@ -42,7 +42,7 @@ export const useCardList = (columnId: number) => {
       }
     };
 
-    fetchColumns();
+    fetchCards();
   }, [columnId]);
 
   return { cards, cardCount, isLoading, errorMessage };

@@ -15,7 +15,7 @@ export const useColumnList = (dashboardId: number) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!dashboardId || Number.isNaN(dashboardId)) return;
+    if (Number.isNaN(dashboardId)) return;
 
     const fetchColumns = async () => {
       setIsLoading(true);
