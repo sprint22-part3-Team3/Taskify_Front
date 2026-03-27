@@ -2,6 +2,7 @@ import { useState } from 'react';
 import AuthFooterLink from '@/features/auth/components/auth-footer-link';
 import AuthForm from '@/features/auth/components/auth-form';
 import AuthHeader from '@/features/auth/components/auth-header';
+import { useSignup } from '@/features/auth/hooks/useSignup';
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
 import SignupAgreement from '@/pages/signup/components/signup-agreement';
@@ -12,11 +13,42 @@ function SignupPage() {
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [isAgreementChecked, setIsAgreementChecked] = useState(false);
+  const {
+    emailApiError,
+    submitError,
+    isSubmitting,
+    clearSignupErrors,
+    clearSubmitError,
+    handleSignup,
+  } = useSignup();
   const isSubmitDisabled =
-    !nickname || !email || !password || !passwordConfirm || !isAgreementChecked;
+    isSubmitting ||
+    !nickname ||
+    !email ||
+    !password ||
+    !passwordConfirm ||
+    !isAgreementChecked;
 
-  const handleSubmit = () => {
-    // TODO: 입력값 유효성 검사와 약관 동의 여부 확인 후 회원가입 API 호출
+  const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
+    clearSignupErrors();
+  };
+
+  const handleChangePasswordConfirm = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setPasswordConfirm(event.target.value);
+    clearSubmitError();
+  };
+
+  const handleSubmit = async () => {
+    await handleSignup({
+      nickname,
+      email,
+      password,
+      passwordConfirm,
+      isAgreementChecked,
+    });
   };
 
   return (
@@ -34,8 +66,9 @@ function SignupPage() {
           label="이메일"
           type="email"
           value={email}
-          onChange={(event) => setEmail(event.target.value)}
+          onChange={handleChangeEmail}
           placeholder="이메일을 입력해 주세요"
+          errorMessage={emailApiError}
         />
         <Input
           id="signup-password"
@@ -50,13 +83,21 @@ function SignupPage() {
           label="비밀번호 확인"
           type="password"
           value={passwordConfirm}
-          onChange={(event) => setPasswordConfirm(event.target.value)}
+          onChange={handleChangePasswordConfirm}
           placeholder="비밀번호를 다시 입력해 주세요"
+          errorMessage={
+            passwordConfirm && password !== passwordConfirm
+              ? '비밀번호가 일치하지 않습니다.'
+              : ''
+          }
         />
         <SignupAgreement
           isChecked={isAgreementChecked}
           onChange={setIsAgreementChecked}
         />
+        {submitError && (
+          <p className="typo-md-regular text-error">{submitError}</p>
+        )}
         <Button
           theme="primary"
           size="md"
