@@ -8,9 +8,11 @@ import { get } from '@/shared/apis/fetchInstance';
  * GET 카드 목록 조회
  */
 export const getCards = async ({ columnId, size = 10 }: GetCardsParams) => {
-  const res = await get<GetCardsResponse>(
-    `cards?size=${size}&columnId=${columnId}`
-  );
+  const params = new URLSearchParams({
+    size: size.toString(),
+    columnId: columnId.toString(),
+  });
+  const res = await get<GetCardsResponse>(`cards?${params.toString()}`);
 
   return res;
 };
