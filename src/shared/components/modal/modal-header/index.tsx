@@ -61,7 +61,7 @@ function ModalHeader({
               aria-label="메뉴 열기"
               onClick={onClickMenu}
             >
-              <IcMenu className="w-0.75 text-black md:w-1" />
+              <IcMenu className="h-full w-0.75 text-black md:w-1" />
             </ModalHeaderIcon>
           )}
           {hasCloseIcon && (

@@ -9,4 +9,5 @@ export type HeaderProps = {
   profileImage?: string;
   onManageClick?: () => void;
   onInviteClick?: () => void;
+  onProfileClick?: () => void;
 };

@@ -1,7 +1,6 @@
 import { Button } from '@/shared/components/button';
 import DeleteModal from '@/shared/components/modal/delete-modal';
 import { PageIndicator } from '@/shared/components/page-indicator';
-import NavigationButtons from '@/shared/components/page-indicator/navigation-buttons';
 import Title from '@/shared/components/title';
 import UserProfile from '@/shared/components/user-profile';
 import { MOCK_MEMBERS } from '@/pages/dashboard-edit/mock';
@@ -24,9 +23,10 @@ export default function MembersSection() {
           <Title size="xl" as="h3" className="md:text-2xl">
             구성원
           </Title>
-          <div className="flex items-center gap-3">
-            <PageIndicator currentPage={1} totalPages={1} />
-            <NavigationButtons
+          <div>
+            <PageIndicator
+              currentPage={1}
+              totalPages={1}
               onPrev={() => {}}
               onNext={() => {}}
               isPrevDisabled={true} // TODO: 페이지네이션 로직 구현

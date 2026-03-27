@@ -13,3 +13,9 @@ export const AVATAR_FALLBACK_TEXT_CLASS_NAMES: Record<AvatarSize, string> = {
   lg: 'text-md leading-none font-semibold',
   xl: 'text-lg leading-none font-semibold',
 };
+
+export const TASK_MODAL_AVATAR_SIZE = {
+  mobile: 'md',
+  tablet: 'lg',
+  desktop: 'lg',
+} as const;
