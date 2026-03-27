@@ -31,6 +31,7 @@ function AssigneeSelect({
 
   useOnClickOutside(containerRef, () => setIsOpen(false), isOpen);
 
+  const hasMentionTrigger = query.trim().startsWith('@');
   const normalizedQuery = query.replace(/^@/, '').trim().toLowerCase();
   const filteredAssignees = useMemo(() => {
     if (!normalizedQuery) return assigneeOptions;
@@ -60,15 +61,17 @@ function AssigneeSelect({
           type="text"
           value={query}
           placeholder={placeholder}
-          onFocus={() => setIsOpen(true)}
+          onFocus={() => setIsOpen(hasMentionTrigger)}
           onChange={(event) => {
-            setQuery(event.target.value);
-            setIsOpen(true);
+            const nextQuery = event.target.value;
+
+            setQuery(nextQuery);
+            setIsOpen(nextQuery.trim().startsWith('@'));
           }}
           className="typo-md-regular md:typo-lg-regular focus:border-primary-500 text-black-200 h-12 bg-white py-0 pr-4 pl-11 md:pl-12"
         />
 
-        {isOpen && (
+        {isOpen && hasMentionTrigger && (
           <div className="absolute z-50 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
             {filteredAssignees.length > 0 ? (
               <ul className="max-h-52 overflow-y-auto">
