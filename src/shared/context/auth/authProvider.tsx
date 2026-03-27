@@ -19,12 +19,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const handleSetAuthToken = (nextAccessToken: string) => {
     setAccessToken(nextAccessToken);
-    setAccessTokenState(nextAccessToken);
   };
 
   const handleClearAuth = () => {
     removeAccessToken();
-    setAccessTokenState(null);
   };
 
   useEffect(() => {
