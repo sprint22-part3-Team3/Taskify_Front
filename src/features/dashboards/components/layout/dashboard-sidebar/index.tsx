@@ -46,8 +46,8 @@ export default function Sidebar({
     <aside className="flex h-screen w-17 shrink-0 flex-col bg-white md:w-40 lg:w-75">
       {/* 로고 */}
       <h1 className="flex justify-center px-5 pt-5 pb-3 md:justify-start md:p-5 md:pb-9">
-        <Logo size="small" className="md:hidden" />
-        <Logo size="medium" className="hidden md:block" />
+        <Logo size="small" to="/mydashboard" className="md:hidden" />
+        <Logo size="medium" to="/mydashboard" className="hidden md:block" />
       </h1>
 
       {/* Dash Boards 헤더 - 모바일에서 숨김 */}
