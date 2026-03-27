@@ -1,29 +1,47 @@
-import { useState } from 'react';
 import AuthFooterLink from '@/features/auth/components/auth-footer-link';
 import AuthForm from '@/features/auth/components/auth-form';
 import AuthHeader from '@/features/auth/components/auth-header';
 import { useLogin } from '@/features/auth/hooks/useLogin';
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
+import { useValidation } from '@/shared/hooks/useValidation';
+import {
+  validateAll,
+  validateEmail,
+  validatePassword,
+} from '@/shared/utils/validators';
 
 function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const emailField = useValidation({ validateFn: validateEmail });
+  const passwordField = useValidation({ validateFn: validatePassword });
   const { submitError, isSubmitting, resetSubmitError, handleLogin } =
     useLogin();
-  const isSubmitDisabled = isSubmitting || !email || !password;
+  const isSubmitDisabled =
+    isSubmitting || !emailField.value || !passwordField.value;
 
   const handleSubmit = async () => {
-    await handleLogin({ email, password });
+    const { isAllValid } = validateAll({
+      email: () => emailField.trigger(),
+      password: () => passwordField.trigger(),
+    });
+
+    if (!isAllValid) {
+      return;
+    }
+
+    await handleLogin({
+      email: emailField.value.trim(),
+      password: passwordField.value.trim(),
+    });
   };
 
   const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
+    emailField.onChange(event);
     resetSubmitError();
   };
 
   const handleChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
+    passwordField.onChange(event);
     resetSubmitError();
   };
 
@@ -37,17 +55,21 @@ function LoginPage() {
         <Input
           label="이메일"
           type="email"
-          value={email}
+          value={emailField.value}
           onChange={handleChangeEmail}
+          onBlur={emailField.onBlur}
           placeholder="이메일을 입력해 주세요"
+          errorMessage={emailField.error}
         />
         <Input
           id="login-password"
           label="비밀번호"
           type="password"
-          value={password}
+          value={passwordField.value}
           onChange={handleChangePassword}
+          onBlur={passwordField.onBlur}
           placeholder="비밀번호를 입력해 주세요"
+          errorMessage={passwordField.error}
         />
         {submitError && (
           <p className="typo-md-regular text-error">{submitError}</p>
