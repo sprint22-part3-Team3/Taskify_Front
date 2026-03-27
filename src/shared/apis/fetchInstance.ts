@@ -1,4 +1,27 @@
+import { ApiError } from '@/shared/apis/apiError';
 import { ENV } from '@/shared/apis/env.ts';
+
+const REQUEST_TIMEOUT = 5000;
+const JSON_CONTENT_TYPE = 'application/json';
+
+const buildRequestUrl = (endpoint: string, query = '') =>
+  new URL(
+    [endpoint.replace(/^\//, ''), query].filter(Boolean).join('/'),
+    ENV.API_BASE_URL
+  ).toString();
+
+const request = <T>(
+  path: string,
+  method: RequestInit['method'],
+  options?: RequestInit,
+  body?: unknown
+) => {
+  return fetchInstance<T>(path, {
+    ...options,
+    method,
+    ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
+  });
+};
 /**
  * @example
  * import { get, post, del } from '@/shared/apis/fetchInstance';
@@ -14,34 +37,38 @@ export async function fetchInstance<T>(
   options: RequestInit = {},
   query: string = ''
 ): Promise<T | null> {
-  // new URL() 적용
-  const url = new URL(
-    [endpoint.replace(/^\//, ''), query].filter(Boolean).join('/'),
-    ENV.API_BASE_URL
-  ).toString();
+  const url = buildRequestUrl(endpoint, query);
 
-  // 5초 타임아웃 설정
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 5000);
+  const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
 
   try {
     const res = await fetch(url, {
       ...options,
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': JSON_CONTENT_TYPE,
         ...options.headers,
       },
       signal: controller.signal,
     });
 
+    const text = await res.text();
+    const isJsonResponse = res.headers
+      .get('content-type')
+      ?.includes('application/json');
+    const data = text && isJsonResponse ? JSON.parse(text) : null;
+
     if (!res.ok) {
-      throw new Error(`API 요청 실패: ${res.status}`);
+      throw new ApiError(
+        res.status,
+        data?.message || text || `API 요청 실패: ${res.status}`
+      );
     }
     if (res.status === 204) {
       return null;
     }
-    const text = await res.text();
-    return text ? JSON.parse(text) : null;
+
+    return data;
   } finally {
     clearTimeout(timeoutId);
   }
@@ -49,31 +76,17 @@ export async function fetchInstance<T>(
 
 // HTTP 메서드별 편의 함수
 export function get<T>(path: string, options?: RequestInit) {
-  return fetchInstance<T>(path, {
-    ...options,
-    method: 'GET',
-  });
+  return request<T>(path, 'GET', options);
 }
 
 export function post<T>(path: string, body: unknown, options?: RequestInit) {
-  return fetchInstance<T>(path, {
-    ...options,
-    method: 'POST',
-    body: JSON.stringify(body),
-  });
+  return request<T>(path, 'POST', options, body);
 }
 
 export function put<T>(path: string, body: unknown, options?: RequestInit) {
-  return fetchInstance<T>(path, {
-    ...options,
-    method: 'PUT',
-    body: JSON.stringify(body),
-  });
+  return request<T>(path, 'PUT', options, body);
 }
 
 export function del<T>(path: string, options?: RequestInit) {
-  return fetchInstance<T>(path, {
-    ...options,
-    method: 'DELETE',
-  });
+  return request<T>(path, 'DELETE', options);
 }
