@@ -1,4 +1,4 @@
-import type { Comment } from '@/shared/types/comment.types';
+import type { Comment } from '@/features/comments/comment.types';
 
 export type TaskCommentItemProps = {
   comment: Comment;

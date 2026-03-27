@@ -1,4 +1,4 @@
-import type { Column } from '@/shared/types/column.types';
+import type { Column } from '@/features/columns/column.types';
 
 export type CardListHeaderProps = Pick<Column, 'title'> & {
   cardCount: number;
