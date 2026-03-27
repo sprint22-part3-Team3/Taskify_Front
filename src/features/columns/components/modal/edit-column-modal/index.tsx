@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Button } from '@/shared/components/button';
+import DeleteModal from '@/shared/components/modal/delete-modal';
 import Input from '@/shared/components/input';
 import { Modal } from '@/shared/components/modal';
-import DeleteModal from '@/features/columns/components/modal/delete-modal';
 import { useModal } from '@/shared/hooks/useModal';
-import { MODAL_CLOSE_DELAY } from '@/features/columns/components/modal/edit-column-modal/editColumnModal.constants';
+import { runAfterModalClose } from '@/shared/utils/modal';
 import type { EditColumnModalProps } from '@/features/columns/components/modal/edit-column-modal/editColumnModal.types';
 
 /**
@@ -36,9 +36,9 @@ function EditColumnModal({
   const handleClose = () => {
     setDraftTitle(null);
     onClose();
-    window.setTimeout(() => {
+    runAfterModalClose(() => {
       handleCloseDeleteModal();
-    }, MODAL_CLOSE_DELAY);
+    });
   };
 
   const handleDelete = () => {
@@ -90,7 +90,16 @@ function EditColumnModal({
       )}
 
       {isDeleteModalOpen && (
-        <DeleteModal onClose={handleClose} onConfirm={handleDelete} />
+        <DeleteModal
+          renderInModal={false}
+          onClose={handleClose}
+          onConfirm={handleDelete}
+          message={
+            <>
+              컬럼을 모두 <span className="text-error">삭제</span> 하시겠습니까?
+            </>
+          }
+        />
       )}
     </Modal>
   );

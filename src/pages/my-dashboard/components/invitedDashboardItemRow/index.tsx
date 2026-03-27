@@ -13,6 +13,7 @@ import type { InvitedDashboardItemRowProps } from '@/pages/my-dashboard/componen
  */
 function InvitedDashboardItemRow({
   invitedDashboardItem,
+  onReject,
   className,
   ...props
 }: InvitedDashboardItemRowProps) {
@@ -43,6 +44,7 @@ function InvitedDashboardItemRow({
           theme="outlined"
           size="sm"
           className="text-primary-500 h-8 flex-1"
+          onClick={() => onReject(invitedDashboardItem)}
         >
           거절
         </Button>

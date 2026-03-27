@@ -3,4 +3,5 @@ import type { InvitedDashboardItem } from '@/features/dashboards/types/myDashboa
 
 export type InvitedDashboardItemRowProps = ComponentProps<'div'> & {
   invitedDashboardItem: InvitedDashboardItem;
+  onReject: (invitedDashboardItem: InvitedDashboardItem) => void;
 };
