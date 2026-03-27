@@ -1,10 +1,10 @@
 import { Button } from '@/shared/components/button';
+import DeleteModal from '@/shared/components/delete-modal';
 import { PageIndicator } from '@/shared/components/page-indicator';
 import NavigationButtons from '@/shared/components/page-indicator/navigation-buttons';
 import Title from '@/shared/components/title';
 import UserProfile from '@/shared/components/user-profile';
 import { MOCK_MEMBERS } from '@/pages/dashboard-edit/mock';
-import DeleteModal from '@/pages/dashboard-edit/components/members-section/delete-modal';
 import { useState } from 'react';
 
 export default function MembersSection() {
@@ -57,6 +57,13 @@ export default function MembersSection() {
       <DeleteModal
         isOpen={isDeleteModalOpen}
         onClose={handleCloseDeleteModal}
+        onConfirm={handleCloseDeleteModal}
+        className="max-w-142"
+        message={
+          <>
+            구성원을 <span className="text-error">삭제</span> 하시겠습니까?
+          </>
+        }
       />
     </section>
   );
