@@ -4,8 +4,8 @@ import { runAfterModalClose } from '@/shared/utils/modal';
 import { getInvitedDashboards } from '@/features/dashboards/apis/getInvitedDashboards';
 import { respondToInvitation } from '@/features/dashboards/apis/respondToInvitation';
 import type { InvitedDashboardItem } from '@/features/dashboards/types/myDashboard.types';
-import { MY_DASHBOARD_ERROR_MESSAGE } from '@/pages/my-dashboard/constants/myDashboard.constants';
-import { getApiErrorMessage } from '@/pages/my-dashboard/utils/getApiErrorMessage';
+import { DASHBOARD_ERROR_MESSAGE } from '@/features/dashboards/constants/dashboardErrorMessage.constants';
+import { getApiErrorMessage } from '@/features/dashboards/utils/getApiErrorMessage';
 
 /**
  * 초대받은 대시보드 섹션의 검색과 초대 응답 상태를 관리합니다.
@@ -25,15 +25,13 @@ import { getApiErrorMessage } from '@/pages/my-dashboard/utils/getApiErrorMessag
  *   handleRejectInvite,
  *   handleCloseDeleteModalWithReset,
  *   handleConfirmRejectInvite,
- * } = useInvitedDashboardSection(invitedDashboards);
+ * } = useInvitedDashboardList();
  * ```
  */
-export function useInvitedDashboardSection(
-  initialInvitedDashboards: InvitedDashboardItem[]
-) {
-  const [invitedDashboardItems, setInvitedDashboardItems] = useState(
-    initialInvitedDashboards
-  );
+export function useInvitedDashboardList() {
+  const [invitedDashboardItems, setInvitedDashboardItems] = useState<
+    InvitedDashboardItem[]
+  >([]);
   const [searchKeyword, setSearchKeyword] = useState('');
   const [isSearchingInvitedDashboards, setIsSearchingInvitedDashboards] =
     useState(false);
@@ -71,10 +69,7 @@ export function useInvitedDashboardSection(
       setInvitedDashboardItems(invitations);
     } catch (error) {
       setInvitedDashboardError(
-        getApiErrorMessage(
-          error,
-          MY_DASHBOARD_ERROR_MESSAGE.loadInvitedDashboards
-        )
+        getApiErrorMessage(error, DASHBOARD_ERROR_MESSAGE.loadInvitedDashboards)
       );
       setInvitedDashboardItems([]);
     } finally {

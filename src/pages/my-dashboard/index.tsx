@@ -1,14 +1,15 @@
 import { Link } from 'react-router-dom';
 import { IcArrowRight } from '@/shared/assets/icons';
+import CreateDashboardModal from '@/features/dashboards/components/create-dashboard-modal';
 import { ColorLabel } from '@/features/dashboards/components/color/color-label';
 import { getDashboardColorHex } from '@/features/dashboards/constants/dashboardColorMap.constants';
+import { useDashboardList } from '@/features/dashboards/hooks/useDashboardList';
 import { Button } from '@/shared/components/button';
 import { PageIndicator } from '@/shared/components/page-indicator';
 import AddDashboardButton from '@/pages/my-dashboard/components/add-dashboard-button';
-import CreateDashboardModal from '@/pages/my-dashboard/components/create-dashboard-modal';
 import InvitedDashboardSection from '@/pages/my-dashboard/components/invited-dashboard-section';
-import { useMyDashboardPage } from '@/pages/my-dashboard/hooks/useMyDashboardPage';
 import NavigationButtons from '@/shared/components/page-indicator/navigation-buttons';
+import { useModal } from '@/shared/hooks/useModal';
 
 /**
  * 내가 생성한 대시보드 목록과 초대받은 대시보드를 확인하는 페이지입니다.
@@ -20,16 +21,17 @@ import NavigationButtons from '@/shared/components/page-indicator/navigation-but
  */
 function MyDashboardPage() {
   const {
+    isOpen: isCreateDashboardModalOpen,
+    openModal: openCreateDashboardModal,
+    closeModal: closeCreateDashboardModal,
+  } = useModal();
+  const {
     dashboardItems,
-    invitedDashboardItems,
     isLoadingDashboards,
-    isCreateDashboardModalOpen,
     isCreatingDashboard,
     dashboardError,
-    openCreateDashboardModal,
-    closeCreateDashboardModal,
     handleCreateDashboard,
-  } = useMyDashboardPage();
+  } = useDashboardList();
 
   return (
     <div className="mx-auto w-full px-4 pt-6 pb-10 md:px-10 md:pt-10">
@@ -83,7 +85,7 @@ function MyDashboardPage() {
         )}
       </section>
 
-      <InvitedDashboardSection invitedDashboards={invitedDashboardItems} />
+      <InvitedDashboardSection />
       <CreateDashboardModal
         isOpen={isCreateDashboardModalOpen}
         isCreating={isCreatingDashboard}

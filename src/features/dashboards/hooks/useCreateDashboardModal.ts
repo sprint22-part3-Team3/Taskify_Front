@@ -1,9 +1,9 @@
 import { useState } from 'react';
+import type { CreateDashboardModalProps } from '@/features/dashboards/components/create-dashboard-modal/createDashboardModal.types';
 import { getDashboardColors } from '@/features/dashboards/constants/dashboardColorMap.constants';
+import { DASHBOARD_ERROR_MESSAGE } from '@/features/dashboards/constants/dashboardErrorMessage.constants';
 import type { DashboardColorName } from '@/features/dashboards/types/dashboardColor.types';
-import type { CreateDashboardModalProps } from '@/pages/my-dashboard/components/create-dashboard-modal/createDashboardModal.types';
-import { MY_DASHBOARD_ERROR_MESSAGE } from '@/pages/my-dashboard/constants/myDashboard.constants';
-import { getApiErrorMessage } from '@/pages/my-dashboard/utils/getApiErrorMessage';
+import { getApiErrorMessage } from '@/features/dashboards/utils/getApiErrorMessage';
 
 const dashboardColors = getDashboardColors();
 const initialDashboardColor = dashboardColors[0]?.id ?? 'purple';
@@ -73,7 +73,7 @@ export function useCreateDashboardModal({
     event.preventDefault();
 
     if (dashboardTitle.trim().length === 0) {
-      setDashboardErrorMessage(MY_DASHBOARD_ERROR_MESSAGE.emptyDashboardTitle);
+      setDashboardErrorMessage(DASHBOARD_ERROR_MESSAGE.emptyDashboardTitle);
       return;
     }
 
@@ -82,7 +82,7 @@ export function useCreateDashboardModal({
       handleClose();
     } catch (error) {
       setDashboardErrorMessage(
-        getApiErrorMessage(error, MY_DASHBOARD_ERROR_MESSAGE.createDashboard)
+        getApiErrorMessage(error, DASHBOARD_ERROR_MESSAGE.createDashboard)
       );
     }
   };

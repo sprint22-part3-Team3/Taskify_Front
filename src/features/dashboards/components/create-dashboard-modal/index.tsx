@@ -1,9 +1,9 @@
 import { ColorChipset } from '@/features/dashboards/components/color/color-chipset';
+import type { CreateDashboardModalProps } from '@/features/dashboards/components/create-dashboard-modal/createDashboardModal.types';
+import { useCreateDashboardModal } from '@/features/dashboards/hooks/useCreateDashboardModal';
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
 import { Modal } from '@/shared/components/modal';
-import type { CreateDashboardModalProps } from '@/pages/my-dashboard/components/create-dashboard-modal/createDashboardModal.types';
-import { useCreateDashboardModal } from '@/pages/my-dashboard/hooks/useCreateDashboardModal';
 
 /**
  * 새로운 대시보드를 생성하는 모달입니다.

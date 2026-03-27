@@ -4,22 +4,19 @@ import DeleteModal from '@/shared/components/modal/delete-modal';
 import { PageIndicator } from '@/shared/components/page-indicator';
 import NavigationButtons from '@/shared/components/page-indicator/navigation-buttons';
 import Title from '@/shared/components/title';
+import { useInvitedDashboardList } from '@/features/dashboards/hooks/useInvitedDashboardList';
 import InvitedDashboardItemRow from '@/pages/my-dashboard/components/invited-dashboard-item-row';
 import SearchInput from '@/pages/my-dashboard/components/search-input';
-import { useInvitedDashboardSection } from '@/pages/my-dashboard/hooks/useInvitedDashboardSection';
-import type { InvitedDashboardSectionProps } from '@/pages/my-dashboard/components/invited-dashboard-section/invitedDashboardSection.types';
 
 /**
  * 초대받은 대시보드 목록과 검색, 수락/거절 UI를 렌더링합니다.
  *
  * @example
  * ```tsx
- * <InvitedDashboardSection invitedDashboards={invitedDashboardItems} />
+ * <InvitedDashboardSection />
  * ```
  */
-function InvitedDashboardSection({
-  invitedDashboards,
-}: InvitedDashboardSectionProps) {
+function InvitedDashboardSection() {
   const {
     invitedDashboardItems,
     searchKeyword,
@@ -33,7 +30,7 @@ function InvitedDashboardSection({
     handleRejectInvite,
     handleCloseDeleteModalWithReset,
     handleConfirmRejectInvite,
-  } = useInvitedDashboardSection(invitedDashboards);
+  } = useInvitedDashboardList();
   const hasInvitedDashboards = invitedDashboardItems.length > 0;
   const shouldShowInvitedDashboardContent =
     hasInvitedDashboards ||
