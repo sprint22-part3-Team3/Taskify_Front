@@ -1,31 +1,29 @@
 import AuthFooterLink from '@/features/auth/components/auth-footer-link';
 import AuthForm from '@/features/auth/components/auth-form';
 import AuthHeader from '@/features/auth/components/auth-header';
+import { useAuthFieldValidation } from '@/features/auth/hooks/useAuthFieldValidation';
 import { useLogin } from '@/features/auth/hooks/useLogin';
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
-import { useValidation } from '@/shared/hooks/useValidation';
-import {
-  validateAll,
-  validateEmail,
-  validatePassword,
-} from '@/shared/utils/validators';
 
 function LoginPage() {
-  const emailField = useValidation({ validateFn: validateEmail });
-  const passwordField = useValidation({ validateFn: validatePassword });
   const { submitError, isSubmitting, resetSubmitError, handleLogin } =
     useLogin();
-  const isSubmitDisabled =
-    isSubmitting || !emailField.value || !passwordField.value;
+  const {
+    emailField,
+    passwordField,
+    isSubmitDisabled,
+    handleChangeEmail,
+    handleChangePassword,
+    validateFields,
+  } = useAuthFieldValidation({
+    onEmailChange: resetSubmitError,
+    onPasswordChange: resetSubmitError,
+  });
+  const isDisabled = isSubmitting || isSubmitDisabled;
 
   const handleSubmit = async () => {
-    const { isAllValid } = validateAll({
-      email: () => emailField.trigger(),
-      password: () => passwordField.trigger(),
-    });
-
-    if (!isAllValid) {
+    if (!validateFields()) {
       return;
     }
 
@@ -33,16 +31,6 @@ function LoginPage() {
       email: emailField.value.trim(),
       password: passwordField.value.trim(),
     });
-  };
-
-  const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    emailField.onChange(event);
-    resetSubmitError();
-  };
-
-  const handleChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-    passwordField.onChange(event);
-    resetSubmitError();
   };
 
   return (
@@ -78,7 +66,7 @@ function LoginPage() {
           theme="primary"
           size="md"
           type="submit"
-          disabled={isSubmitDisabled}
+          disabled={isDisabled}
           className="mt-4 mb-6 w-full"
         >
           로그인

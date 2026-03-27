@@ -1,25 +1,13 @@
-import { useState } from 'react';
 import AuthFooterLink from '@/features/auth/components/auth-footer-link';
 import AuthForm from '@/features/auth/components/auth-form';
 import AuthHeader from '@/features/auth/components/auth-header';
+import { useAuthFieldValidation } from '@/features/auth/hooks/useAuthFieldValidation';
 import { useSignup } from '@/features/auth/hooks/useSignup';
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
-import { useValidation } from '@/shared/hooks/useValidation';
 import SignupAgreement from '@/pages/signup/components/signup-agreement';
-import {
-  validateAll,
-  validateEmail,
-  validateNickname,
-  validatePassword,
-} from '@/shared/utils/validators';
 
 function SignupPage() {
-  const nicknameField = useValidation({ validateFn: validateNickname });
-  const emailField = useValidation({ validateFn: validateEmail });
-  const passwordField = useValidation({ validateFn: validatePassword });
-  const [passwordConfirm, setPasswordConfirm] = useState('');
-  const [isAgreementChecked, setIsAgreementChecked] = useState(false);
   const {
     emailApiError,
     submitError,
@@ -28,51 +16,33 @@ function SignupPage() {
     resetSubmitError,
     handleSignup,
   } = useSignup();
-  const isSubmitDisabled =
-    isSubmitting ||
-    !nicknameField.value ||
-    !emailField.value ||
-    !passwordField.value ||
-    !passwordConfirm ||
-    !isAgreementChecked;
-  const passwordConfirmError =
-    passwordConfirm && passwordField.value.trim() !== passwordConfirm.trim()
-      ? '비밀번호가 일치하지 않습니다.'
-      : '';
-
-  const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    emailField.onChange(event);
-    resetEmailApiError();
-  };
-
-  const handleChangeNickname = (event: React.ChangeEvent<HTMLInputElement>) => {
-    nicknameField.onChange(event);
-  };
-
-  const handleChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-    passwordField.onChange(event);
-    resetSubmitError();
-  };
-
-  const handleChangePasswordConfirm = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setPasswordConfirm(event.target.value);
-    resetSubmitError();
-  };
-
-  const handleBlurPasswordConfirm = () => {
-    setPasswordConfirm((prev) => prev.trim());
-  };
+  const {
+    nicknameField,
+    emailField,
+    passwordField,
+    passwordConfirm,
+    isAgreementChecked,
+    isSubmitDisabled,
+    passwordConfirmError,
+    setIsAgreementChecked,
+    handleChangeNickname,
+    handleChangeEmail,
+    handleChangePassword,
+    handleChangePasswordConfirm,
+    handleBlurPasswordConfirm,
+    validateFields,
+  } = useAuthFieldValidation({
+    includeNickname: true,
+    includePasswordConfirm: true,
+    includeAgreement: true,
+    onEmailChange: resetEmailApiError,
+    onPasswordChange: resetSubmitError,
+    onPasswordConfirmChange: resetSubmitError,
+  });
+  const isDisabled = isSubmitting || isSubmitDisabled;
 
   const handleSubmit = async () => {
-    const { isAllValid } = validateAll({
-      nickname: () => nicknameField.trigger(),
-      email: () => emailField.trigger(),
-      password: () => passwordField.trigger(),
-    });
-
-    if (!isAllValid || passwordField.value.trim() !== passwordConfirm.trim()) {
+    if (!validateFields()) {
       return;
     }
 
@@ -138,7 +108,7 @@ function SignupPage() {
           theme="primary"
           size="md"
           type="submit"
-          disabled={isSubmitDisabled}
+          disabled={isDisabled}
           className="mt-4 mb-6 w-full"
         >
           가입하기
