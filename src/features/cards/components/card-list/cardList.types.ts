@@ -1,4 +1,4 @@
-import type { Column } from '@/features/columns/column.types';
+import type { Column } from '@/features/columns/types/column.types';
 
 export type CardListProps = {
   column: Column;
