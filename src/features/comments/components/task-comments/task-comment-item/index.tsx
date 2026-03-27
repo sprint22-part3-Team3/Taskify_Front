@@ -6,8 +6,8 @@ import { cn } from '@/shared/utils/cn';
 import { formatDateTimeValue } from '@/shared/utils/date';
 
 const TEXT_BUTTON_CLASS = cn(
-  'cursor-pointer text-gray-300',
-  'hover:text-gray-400 hover:underline'
+  'cursor-pointer text-gray-300 underline',
+  'hover:text-gray-400'
 );
 
 function TaskCommentItem({ comment }: TaskCommentItemProps) {
