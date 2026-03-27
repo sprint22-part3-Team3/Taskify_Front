@@ -42,8 +42,10 @@ export default function Header({
   totalMemberCount = 7,
   userName = '배유철',
   profileImage,
+  isActionButtonsVisible = true,
   onManageClick,
   onInviteClick,
+  onProfileClick,
 }: HeaderProps) {
   return (
     <header className="z-header flex h-15 min-w-0 items-center justify-between border-b border-gray-200 bg-white pl-4 md:h-17.5 md:px-10 lg:justify-between">
@@ -56,27 +58,28 @@ export default function Header({
       </div>
 
       <div className="ml-auto flex min-w-0 shrink items-center gap-1 md:gap-6">
-        {/* 관리 / 초대하기 버튼 */}
-        <div className="flex items-center gap-2 md:gap-4">
-          <Button
-            theme="icon"
-            size="icon"
-            className="px-3"
-            onClick={onManageClick}
-          >
-            <IcSettings className="hidden md:block" />
-            관리
-          </Button>
-          <Button
-            theme="icon"
-            size="icon"
-            className="px-3"
-            onClick={onInviteClick}
-          >
-            <IcAddBox className="hidden md:block" />
-            초대하기
-          </Button>
-        </div>
+        {isActionButtonsVisible && (
+          <div className="flex items-center gap-2 md:gap-4">
+            <Button
+              theme="icon"
+              size="icon"
+              className="px-3"
+              onClick={onManageClick}
+            >
+              <IcSettings className="hidden md:block" />
+              관리
+            </Button>
+            <Button
+              theme="icon"
+              size="icon"
+              className="px-3"
+              onClick={onInviteClick}
+            >
+              <IcAddBox className="hidden md:block" />
+              초대하기
+            </Button>
+          </div>
+        )}
 
         {/* 멤버 프로필 */}
         <AvatarGroup
@@ -93,7 +96,11 @@ export default function Header({
         />
 
         {/* 유저 프로필 - 이름은 모바일에서 숨김 */}
-        <div className="border-l border-gray-200 pl-3 md:pl-6">
+        <button
+          type="button"
+          className="cursor-pointer border-l border-gray-200 pl-3 md:pl-6"
+          onClick={onProfileClick}
+        >
           <UserProfile
             user={{
               id: 0,
@@ -103,7 +110,7 @@ export default function Header({
             size="lg"
             nicknameClassName="hidden md:block"
           />
-        </div>
+        </button>
       </div>
     </header>
   );

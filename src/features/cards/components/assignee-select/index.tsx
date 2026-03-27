@@ -11,6 +11,15 @@ import type { AssigneeSelectProps } from '@/features/cards/components/assignee-s
 const getAssigneeQuery = (selectedAssignee: AvatarUser | null): string =>
   selectedAssignee ? `@${selectedAssignee.nickname}` : '';
 
+const parseAssigneeQuery = (value: string) => {
+  const trimmedValue = value.trim();
+
+  return {
+    hasMentionTrigger: trimmedValue.startsWith('@'),
+    normalizedQuery: trimmedValue.replace(/^@/, '').toLowerCase(),
+  };
+};
+
 function AssigneeSelect({
   label,
   selectedAssignee,
@@ -31,7 +40,7 @@ function AssigneeSelect({
 
   useOnClickOutside(containerRef, () => setIsOpen(false), isOpen);
 
-  const normalizedQuery = query.replace(/^@/, '').trim().toLowerCase();
+  const { hasMentionTrigger, normalizedQuery } = parseAssigneeQuery(query);
   const filteredAssignees = useMemo(() => {
     if (!normalizedQuery) return assigneeOptions;
 
@@ -43,6 +52,15 @@ function AssigneeSelect({
   const handleSelect = (assignee: AvatarUser) => {
     onSelect(assignee);
     setIsOpen(false);
+  };
+
+  const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const nextQuery = event.target.value;
+    const { hasMentionTrigger: hasNextMentionTrigger } =
+      parseAssigneeQuery(nextQuery);
+
+    setQuery(nextQuery);
+    setIsOpen(hasNextMentionTrigger);
   };
 
   return (
@@ -60,11 +78,8 @@ function AssigneeSelect({
           type="text"
           value={query}
           placeholder={placeholder}
-          onFocus={() => setIsOpen(true)}
-          onChange={(event) => {
-            setQuery(event.target.value);
-            setIsOpen(true);
-          }}
+          onFocus={() => setIsOpen(hasMentionTrigger)}
+          onChange={handleChangeQuery}
           className="typo-md-regular md:typo-lg-regular focus:border-primary-500 text-black-200 h-12 bg-white py-0 pr-4 pl-11 md:pl-12"
         />
 

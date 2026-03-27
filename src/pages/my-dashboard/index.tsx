@@ -3,11 +3,17 @@ import { IcArrowRight, IcBookmark } from '@/shared/assets/icons';
 import { ColorLabel } from '@/features/dashboards/components/color/color-label';
 import { Button } from '@/shared/components/button';
 import { PageIndicator } from '@/shared/components/page-indicator';
-import NavigationButtons from '@/shared/components/page-indicator/navigation-buttons';
+import {
+  CURRENT_PAGE,
+  DASHBOARD_ITEMS,
+  INVITED_DASHBOARD_ITEMS,
+  TOTAL_PAGES,
+} from '@/pages/my-dashboard/myDashboard.mock';
 import AddDashboardButton from '@/pages/my-dashboard/components/addDashboardButton';
 import CreateDashboardModal from '@/pages/my-dashboard/components/create-dashboard-modal';
 import InvitedDashboardSection from '@/pages/my-dashboard/components/invitedDashboardSection';
 import { useMyDashboardPage } from '@/pages/my-dashboard/hooks/useMyDashboardPage';
+import NavigationButtons from '@/shared/components/page-indicator/navigation-buttons';
 
 /**
  * 내가 생성한 대시보드 목록과 초대받은 대시보드를 확인하는 페이지입니다.
