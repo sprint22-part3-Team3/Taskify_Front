@@ -8,11 +8,20 @@ import { TaskContent } from '@/features/cards/components/task-modal/task-content
 import { TaskAssignee } from '@/features/cards/components/task-modal/task-assignee';
 import { TaskMenu } from '@/features/cards/components/task-modal/task-menu';
 import TodoEditModal from '@/features/cards/components/todo-edit-modal';
+import { useModal } from '@/shared/hooks/useModal';
 
 function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const {
+    isOpen: isEditModalOpen,
+    openModal: handleOpenEditModal,
+    closeModal: handleCloseEditModal,
+  } = useModal();
+  const {
+    isOpen: isDeleteModalOpen,
+    openModal: handleOpenDeleteModal,
+    closeModal: handleCloseDeleteModal,
+  } = useModal();
   const {
     id,
     title,
@@ -29,19 +38,13 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
     closeModal();
     setIsMenuOpen(false);
   };
-  const handleOpenEditModal = () => {
+  const handleClickEditMenu = () => {
     setIsMenuOpen(false);
-    setIsEditModalOpen(true);
+    handleOpenEditModal();
   };
-  const handleCloseEditModal = () => {
-    setIsEditModalOpen(false);
-  };
-  const handleOpenDeleteModal = () => {
+  const handleClickDeleteMenu = () => {
     setIsMenuOpen(false);
-    setIsDeleteModalOpen(true);
-  };
-  const handleCloseDeleteModal = () => {
-    setIsDeleteModalOpen(false);
+    handleOpenDeleteModal();
   };
   const handleDeleteCard = () => {
     // TODO: 카드 삭제 API 연동
@@ -67,8 +70,8 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
         </div>
         {isMenuOpen && (
           <TaskMenu
-            onEdit={handleOpenEditModal}
-            onDelete={handleOpenDeleteModal}
+            onEdit={handleClickEditMenu}
+            onDelete={handleClickDeleteMenu}
           />
         )}
         <Modal.Main className="mb-0">
