@@ -1,6 +1,7 @@
 import { useState, type ChangeEvent } from 'react';
 import { useValidation } from '@/shared/hooks/useValidation';
 import {
+  NICKNAME_RULES,
   validateAll,
   validateEmail,
   validateNickname,
@@ -43,6 +44,10 @@ export function useAuthFieldValidation({
     (includeNickname && !nicknameField.value) ||
     (includePasswordConfirm && !passwordConfirm) ||
     (includeAgreement && !isAgreementChecked);
+
+  if (event.target.value.length > NICKNAME_RULES.MAX_LENGTH) {
+    return;
+  }
 
   const handleChangeNickname = (event: ChangeEvent<HTMLInputElement>) => {
     nicknameField.onChange(event);
