@@ -44,7 +44,7 @@ function MyDashboardPage() {
                 to={`/dashboard/${dashboardItem.id}`}
                 theme="outlined"
                 size="icon"
-                className="h-14.5 w-full justify-between px-5 md:h-17"
+                className="h-14.5 w-full justify-between bg-white px-5 md:h-17"
               >
                 <div className="flex items-center gap-2">
                   <ColorLabel
