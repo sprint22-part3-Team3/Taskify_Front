@@ -5,3 +5,12 @@ export type Column = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type CreateColumnRequest = {
+  title: string;
+  dashboardId: number;
+};
+
+export type UpdateColumnRequest = {
+  title: string;
+};
