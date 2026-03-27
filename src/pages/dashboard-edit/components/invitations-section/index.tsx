@@ -47,7 +47,7 @@ export default function InvitationsSection() {
         <Title size="xl" as="h3" className="md:text-2xl">
           초대 내역
         </Title>
-        <div>
+        <div className="flex items-center gap-3">
           <PageIndicator
             currentPage={1}
             totalPages={1}
