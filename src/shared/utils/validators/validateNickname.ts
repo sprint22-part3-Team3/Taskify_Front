@@ -31,6 +31,8 @@ import type { ValidationResult } from '@/shared/utils/validators/validators.type
  */
 
 export function validateNickname(value: string): ValidationResult {
+  const MAX_NICKNAME_LENGTH = 5;
+
   if (!value || value.trim() === '') {
     return { isValid: false, message: '닉네임을 입력해주세요.' };
   }
@@ -48,8 +50,11 @@ export function validateNickname(value: string): ValidationResult {
     };
   }
 
-  if (value.length > 5) {
-    return { isValid: false, message: '닉네임은 5자 이내로 입력해주세요.' };
+  if (value.length > MAX_NICKNAME_LENGTH) {
+    return {
+      isValid: false,
+      message: `닉네임은 ${MAX_NICKNAME_LENGTH}자 이내로 입력해주세요.`,
+    };
   }
 
   return { isValid: true, message: '' };
