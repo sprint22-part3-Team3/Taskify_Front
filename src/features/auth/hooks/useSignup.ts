@@ -2,17 +2,10 @@ import { ApiError } from '@/shared/apis/apiError';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signup } from '@/features/auth/apis/signup';
+import type { SignupFormValues } from '@/features/auth/types/auth.types';
 
 const DUPLICATE_EMAIL_STATUS = 409;
 const SIGNUP_ERROR_MESSAGE = '회원가입에 실패했습니다. 다시 시도해 주세요.';
-
-type SignupParams = {
-  nickname: string;
-  email: string;
-  password: string;
-  passwordConfirm: string;
-  isAgreementChecked: boolean;
-};
 
 export function useSignup() {
   const navigate = useNavigate();
@@ -22,16 +15,12 @@ export function useSignup() {
 
   const resetEmailApiError = () => setEmailApiError('');
   const resetSubmitError = () => setSubmitError('');
-  const resetSignupErrors = () => {
-    resetEmailApiError();
-    resetSubmitError();
-  };
 
   const isInvalidSignupState = ({
     password,
     passwordConfirm,
     isAgreementChecked,
-  }: SignupParams) => {
+  }: SignupFormValues) => {
     return !isAgreementChecked || password !== passwordConfirm;
   };
 
@@ -45,7 +34,7 @@ export function useSignup() {
     password,
     passwordConfirm,
     isAgreementChecked,
-  }: SignupParams) => {
+  }: SignupFormValues) => {
     if (
       isInvalidSignupState({
         nickname,
@@ -88,7 +77,6 @@ export function useSignup() {
     isSubmitting,
     resetEmailApiError,
     resetSubmitError,
-    resetSignupErrors,
     handleSignup,
   };
 }
