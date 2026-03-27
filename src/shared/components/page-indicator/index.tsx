@@ -19,22 +19,20 @@ function PageIndicator({
   isHidingOnMobile = false,
   ...props
 }: PageIndicatorProps) {
-  const navigationButtons = onPrev && onNext && (
-    <NavigationButtons
-      onPrev={onPrev}
-      onNext={onNext}
-      isPrevDisabled={isPrevDisabled}
-      isNextDisabled={isNextDisabled}
-      isHidingOnMobile={isHidingOnMobile}
-    />
-  );
-
   return (
     <div className={cn('flex items-center gap-3', className)} {...props}>
       <span className="typo-xs-regular md:typo-md-regular text-black-200">
         {totalPages} 페이지 중 {currentPage}
       </span>
-      {navigationButtons}
+      {onPrev && onNext && (
+        <NavigationButtons
+          onPrev={onPrev}
+          onNext={onNext}
+          isPrevDisabled={isPrevDisabled}
+          isNextDisabled={isNextDisabled}
+          isHidingOnMobile={isHidingOnMobile}
+        />
+      )}
     </div>
   );
 }
