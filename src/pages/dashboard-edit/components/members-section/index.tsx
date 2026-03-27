@@ -12,6 +12,10 @@ export default function MembersSection() {
 
   const handleOpenDeleteModal = () => setIsDeleteModalOpen(true);
   const handleCloseDeleteModal = () => setIsDeleteModalOpen(false);
+  const handleConfirmDeleteMember = () => {
+    // TODO: 구성원 삭제 API 연동
+    handleCloseDeleteModal();
+  };
 
   return (
     <section className="rounded-xl bg-white px-4 pt-5 pb-2 md:px-6 lg:px-7">
@@ -57,7 +61,7 @@ export default function MembersSection() {
       <DeleteModal
         isOpen={isDeleteModalOpen}
         onClose={handleCloseDeleteModal}
-        onConfirm={handleCloseDeleteModal}
+        onConfirm={handleConfirmDeleteMember}
         className="max-w-142"
         message={
           <>
