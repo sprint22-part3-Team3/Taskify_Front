@@ -7,6 +7,7 @@ import type { CreateColumnModalProps } from '@/features/columns/components/modal
 import { createColumn } from '@/features/columns/apis/createColum';
 import { useColumnNameValidation } from '@/shared/hooks/useColumnNameValidation';
 import { checkColumnNameDuplicate } from '@/features/columns/apis/checkColumnName';
+import { useParams } from 'react-router-dom';
 
 /**
  * 새 컬럼 이름을 입력받는 생성 모달입니다.
@@ -17,9 +18,9 @@ import { checkColumnNameDuplicate } from '@/features/columns/apis/checkColumnNam
  * ```
  */
 
-const TEMP_DASHBOARD_ID = 17586;
-
 function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
+  const { id } = useParams();
+  const dashboardId = Number(id);
   const columnNameField = useColumnNameValidation({
     checkFn: checkColumnNameDuplicate,
   });
@@ -44,7 +45,7 @@ function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
     try {
       await createColumn({
         title: columnNameField.value.trim(),
-        dashboardId: TEMP_DASHBOARD_ID,
+        dashboardId: dashboardId,
       });
       handleClose();
     } catch {
