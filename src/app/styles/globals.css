@@ -7,9 +7,6 @@
 @import './scrollbar.css';
 
 @theme {
-  /* Box Shadows */
-  --shadow-dropdown: 0 4px 20px 0 rgba(0, 0, 0, 0.08);
-
   /* Z-Index */
   --z-index-header: 100; /* Navigation & Layout */
   --z-index-dropdown: 500; /* Floating UI */
