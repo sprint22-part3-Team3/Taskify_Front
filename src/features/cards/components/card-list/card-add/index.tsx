@@ -1,10 +1,26 @@
 import { AddItemButton } from '@/shared/components/add-item-button';
+import TodoCreateModal from '@/features/cards/components/todo-create-modal';
+import { useModal } from '@/shared/hooks/useModal';
 
 function CardAdd() {
-  // TODO : 할 일 카드 추가 버튼 이벤트 핸들러 함수 작성
-  const handleAddCard = () => {};
+  const {
+    isOpen: isTodoCreateModalOpen,
+    openModal: handleOpenTodoCreateModal,
+    closeModal: handleCloseTodoCreateModal,
+  } = useModal();
 
-  return <AddItemButton onClick={handleAddCard} className="mb-2.5 md:mb-4" />;
+  return (
+    <>
+      <AddItemButton
+        onClick={handleOpenTodoCreateModal}
+        className="mb-2.5 md:mb-4"
+      />
+      <TodoCreateModal
+        isOpen={isTodoCreateModalOpen}
+        onClose={handleCloseTodoCreateModal}
+      />
+    </>
+  );
 }
 
 export { CardAdd };

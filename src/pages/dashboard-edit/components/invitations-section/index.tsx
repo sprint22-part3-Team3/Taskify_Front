@@ -1,16 +1,45 @@
 import { Button } from '@/shared/components/button';
+import DeleteModal from '@/shared/components/modal/delete-modal';
 import { PageIndicator } from '@/shared/components/page-indicator';
-import NavigationButtons from '@/shared/components/page-indicator/navigation-buttons';
 import Title from '@/shared/components/title';
 import { useState } from 'react';
 import { MOCK_INVITATIONS } from '@/pages/dashboard-edit/mock';
 import InviteModal from '@/pages/dashboard-edit/components/invitations-section/invite-modal';
+import { useModal } from '@/shared/hooks/useModal';
+import { runAfterModalClose } from '@/shared/utils/modal';
 
 export default function InvitationsSection() {
-  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+  const [selectedInvitationEmail, setSelectedInvitationEmail] = useState<
+    string | null
+  >(null);
+  const {
+    isOpen: isInviteModalOpen,
+    openModal: handleOpenInviteModal,
+    closeModal: handleCloseInviteModal,
+  } = useModal();
+  const {
+    isOpen: isDeleteModalOpen,
+    openModal: handleOpenDeleteModal,
+    closeModal: handleCloseDeleteModal,
+  } = useModal();
 
-  const handleOpenInviteModal = () => setIsInviteModalOpen(true);
-  const handleCloseInviteModal = () => setIsInviteModalOpen(false);
+  const handleCancelInvitation = (email: string) => {
+    setSelectedInvitationEmail(email);
+    handleOpenDeleteModal();
+  };
+  const handleResetSelectedInvitationEmail = () => {
+    setSelectedInvitationEmail(null);
+  };
+  const handleCloseDeleteInvitationModal = () => {
+    handleCloseDeleteModal();
+    runAfterModalClose(() => {
+      handleResetSelectedInvitationEmail();
+    });
+  };
+  const handleConfirmCancelInvitation = () => {
+    // TODO: 초대 취소 API 연동
+    handleCloseDeleteInvitationModal();
+  };
 
   return (
     <section className="rounded-xl bg-white px-4 pt-5 md:px-6 lg:px-7">
@@ -19,8 +48,9 @@ export default function InvitationsSection() {
           초대 내역
         </Title>
         <div className="flex items-center gap-3">
-          <PageIndicator currentPage={1} totalPages={1} />
-          <NavigationButtons
+          <PageIndicator
+            currentPage={1}
+            totalPages={1}
             onPrev={() => {}}
             onNext={() => {}}
             isPrevDisabled={true} // TODO: 페이지네이션 로직 구현
@@ -61,6 +91,7 @@ export default function InvitationsSection() {
               theme="secondary"
               size="sm"
               className="px-3.5 md:px-7"
+              onClick={() => handleCancelInvitation(email)}
             >
               취소
             </Button>
@@ -71,6 +102,20 @@ export default function InvitationsSection() {
       <InviteModal
         isOpen={isInviteModalOpen}
         onClose={handleCloseInviteModal}
+      />
+
+      <DeleteModal
+        isOpen={isDeleteModalOpen}
+        onClose={handleCloseDeleteInvitationModal}
+        onConfirm={handleConfirmCancelInvitation}
+        className="max-w-142"
+        message={
+          <>
+            {selectedInvitationEmail ?? '초대 내역'}을{' '}
+            <span className="text-error">취소</span> 하시겠습니까?
+          </>
+        }
+        confirmText="취소"
       />
     </section>
   );

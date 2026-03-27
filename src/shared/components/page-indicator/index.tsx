@@ -1,3 +1,4 @@
+import NavigationButtons from '@/shared/components/page-indicator/navigation-buttons';
 import type { PageIndicatorProps } from '@/shared/components/page-indicator/pageIndicator.types';
 import { cn } from '@/shared/utils/cn';
 
@@ -11,18 +12,28 @@ function PageIndicator({
   currentPage,
   totalPages,
   className,
+  onPrev,
+  onNext,
+  isPrevDisabled = false,
+  isNextDisabled = false,
+  isHidingOnMobile = false,
   ...props
 }: PageIndicatorProps) {
   return (
-    <span
-      className={cn(
-        'typo-xs-regular md:typo-md-regular text-black-200',
-        className
+    <div className={cn('flex items-center gap-3', className)} {...props}>
+      <span className="typo-xs-regular md:typo-md-regular text-black-200">
+        {totalPages} 페이지 중 {currentPage}
+      </span>
+      {onPrev && onNext && (
+        <NavigationButtons
+          onPrev={onPrev}
+          onNext={onNext}
+          isPrevDisabled={isPrevDisabled}
+          isNextDisabled={isNextDisabled}
+          isHidingOnMobile={isHidingOnMobile}
+        />
       )}
-      {...props}
-    >
-      {totalPages} 페이지 중 {currentPage}
-    </span>
+    </div>
   );
 }
 

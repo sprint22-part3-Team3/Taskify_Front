@@ -3,4 +3,5 @@ import type { InvitedDashboardItem } from '@/pages/my-dashboard/myDashboard.type
 
 export type InvitedDashboardItemRowProps = ComponentProps<'div'> & {
   invitedDashboardItem: InvitedDashboardItem;
+  onReject: (invitedDashboardItem: InvitedDashboardItem) => void;
 };
