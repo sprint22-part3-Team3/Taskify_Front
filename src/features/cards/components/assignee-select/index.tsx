@@ -83,7 +83,7 @@ function AssigneeSelect({
           className="typo-md-regular md:typo-lg-regular focus:border-primary-500 text-black-200 h-12 bg-white py-0 pr-4 pl-11 md:pl-12"
         />
 
-        {isOpen && hasMentionTrigger && (
+        {isOpen && (
           <div className="absolute z-50 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
             {filteredAssignees.length > 0 ? (
               <ul className="max-h-52 overflow-y-auto">
