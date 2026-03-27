@@ -16,7 +16,7 @@ const parseAssigneeQuery = (value: string) => {
 
   return {
     hasMentionTrigger: trimmedValue.startsWith('@'),
-    normalizedQuery: value.replace(/^@/, '').trim().toLowerCase(),
+    normalizedQuery: trimmedValue.replace(/^@/, '').toLowerCase(),
   };
 };
 
