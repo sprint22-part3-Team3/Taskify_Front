@@ -1,8 +1,16 @@
 import { ApiError } from '@/shared/apis/apiError';
 import { ENV } from '@/shared/apis/env.ts';
+import { getAccessToken, removeAccessToken } from '@/shared/utils/token';
 
 const REQUEST_TIMEOUT = 5000;
 const JSON_CONTENT_TYPE = 'application/json';
+const UNAUTHORIZED_STATUS = 401;
+
+const isPublicAuthEndpoint = (endpoint: string) => {
+  const normalizedEndpoint = endpoint.replace(/^\//, '');
+
+  return normalizedEndpoint === 'auth/login' || normalizedEndpoint === 'users';
+};
 
 const buildRequestUrl = (endpoint: string, query = '') =>
   new URL(
@@ -38,6 +46,11 @@ export async function fetchInstance<T>(
   query: string = ''
 ): Promise<T | null> {
   const url = buildRequestUrl(endpoint, query);
+  const accessToken = isPublicAuthEndpoint(endpoint) ? null : getAccessToken();
+  const defaultHeaders = {
+    'Content-Type': JSON_CONTENT_TYPE,
+    ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+  };
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
@@ -46,7 +59,7 @@ export async function fetchInstance<T>(
     const res = await fetch(url, {
       ...options,
       headers: {
-        'Content-Type': JSON_CONTENT_TYPE,
+        ...defaultHeaders,
         ...options.headers,
       },
       signal: controller.signal,
@@ -59,6 +72,10 @@ export async function fetchInstance<T>(
     const data = text && isJsonResponse ? JSON.parse(text) : null;
 
     if (!res.ok) {
+      if (res.status === UNAUTHORIZED_STATUS) {
+        removeAccessToken();
+      }
+
       throw new ApiError(
         res.status,
         data?.message || text || `API 요청 실패: ${res.status}`
