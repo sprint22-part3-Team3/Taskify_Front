@@ -1,7 +1,6 @@
 import { Button } from '@/shared/components/button';
 import DeleteModal from '@/shared/components/modal/delete-modal';
 import { PageIndicator } from '@/shared/components/page-indicator';
-import NavigationButtons from '@/shared/components/page-indicator/navigation-buttons';
 import Title from '@/shared/components/title';
 import { useState } from 'react';
 import { MOCK_INVITATIONS } from '@/pages/dashboard-edit/mock';
@@ -49,8 +48,9 @@ export default function InvitationsSection() {
           초대 내역
         </Title>
         <div className="flex items-center gap-3">
-          <PageIndicator currentPage={1} totalPages={1} />
-          <NavigationButtons
+          <PageIndicator
+            currentPage={1}
+            totalPages={1}
             onPrev={() => {}}
             onNext={() => {}}
             isPrevDisabled={true} // TODO: 페이지네이션 로직 구현
