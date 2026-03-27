@@ -2,15 +2,13 @@ import { useState } from 'react';
 import { IcMailOff } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import DeleteModal from '@/shared/components/modal/delete-modal';
-import { PageIndicator } from '@/shared/components/page-indicator';
-import NavigationButtons from '@/shared/components/page-indicator/navigation-buttons';
 import Title from '@/shared/components/title';
 import { useModal } from '@/shared/hooks/useModal';
 import { runAfterModalClose } from '@/shared/utils/modal';
 import InvitedDashboardItemRow from '@/pages/my-dashboard/components/invitedDashboardItemRow';
 import SearchInput from '@/pages/my-dashboard/components/searchInput';
 import type { InvitedDashboardSectionProps } from '@/pages/my-dashboard/components/invitedDashboardSection/invitedDashboardSection.types';
-import type { InvitedDashboardItem } from '@/pages/my-dashboard/myDashboard.types';
+import type { InvitedDashboardItem } from '@/features/dashboards/types/myDashboard.types';
 
 function InvitedDashboardSection({
   invitedDashboards,
