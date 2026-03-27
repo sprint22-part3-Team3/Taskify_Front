@@ -1,13 +1,6 @@
+import type { Column } from '@/features/columns/types/column.types';
 import { useEffect, useState } from 'react';
 import { getColumns } from '@/features/columns/apis/columns';
-
-type Column = {
-  id: number;
-  title: string;
-  teamId: string;
-  createdAt: string;
-  updatedAt: string;
-};
 
 const NOT_FOUND_OR_FORBIDDEN_ERROR =
   '대시보드를 찾을 수 없거나 접근 권한이 없습니다';

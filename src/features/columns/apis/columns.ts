@@ -1,4 +1,4 @@
-import type { GetColumnsResponse } from '@/features/columns/columns.types';
+import type { GetColumnsResponse } from '@/features/columns/types/column.types';
 import { get } from '@/shared/apis/fetchInstance';
 
 /**
