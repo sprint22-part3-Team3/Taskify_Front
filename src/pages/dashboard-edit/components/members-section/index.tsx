@@ -1,5 +1,5 @@
 import { Button } from '@/shared/components/button';
-import DeleteModal from '@/shared/components/delete-modal';
+import DeleteModal from '@/shared/components/modal/delete-modal';
 import { PageIndicator } from '@/shared/components/page-indicator';
 import NavigationButtons from '@/shared/components/page-indicator/navigation-buttons';
 import Title from '@/shared/components/title';

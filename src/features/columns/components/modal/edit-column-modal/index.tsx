@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@/shared/components/button';
-import DeleteModal from '@/shared/components/delete-modal';
+import DeleteModal from '@/shared/components/modal/delete-modal';
 import Input from '@/shared/components/input';
 import { Modal } from '@/shared/components/modal';
 import { useModal } from '@/shared/hooks/useModal';

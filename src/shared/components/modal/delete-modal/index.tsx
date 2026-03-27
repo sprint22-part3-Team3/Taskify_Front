@@ -1,6 +1,6 @@
 import { Button } from '@/shared/components/button';
 import { Modal } from '@/shared/components/modal';
-import type { DeleteModalProps } from '@/shared/components/delete-modal/deleteModal.types';
+import type { DeleteModalProps } from '@/shared/components/modal/delete-modal/deleteModal.types';
 
 /**
  * 삭제 확인 UI를 공통으로 렌더링하는 컴포넌트입니다.
