@@ -1,14 +1,9 @@
-import { useState } from 'react';
 import { ColorChipset } from '@/features/dashboards/components/color/color-chipset';
-import { getDashboardColors } from '@/features/dashboards/constants/dashboardColorMap.constants';
-import type { DashboardColorName } from '@/features/dashboards/types/dashboardColor.types';
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
 import { Modal } from '@/shared/components/modal';
 import type { CreateDashboardModalProps } from '@/pages/my-dashboard/components/create-dashboard-modal/createDashboardModal.types';
-
-const dashboardColors = getDashboardColors();
-const initialDashboardColor = dashboardColors[0]?.id ?? 'purple';
+import { useCreateDashboardModal } from '@/pages/my-dashboard/hooks/useCreateDashboardModal';
 
 /**
  * 새로운 대시보드를 생성하는 모달입니다.
@@ -29,36 +24,22 @@ function CreateDashboardModal({
   onClose,
   onCreate,
 }: CreateDashboardModalProps) {
-  const [dashboardTitle, setDashboardTitle] = useState('');
-  const [dashboardColor, setDashboardColor] = useState<DashboardColorName>(
-    initialDashboardColor
-  );
-  const [dashboardErrorMessage, setDashboardErrorMessage] = useState('');
-
-  const isCreateDisabled = dashboardTitle.trim().length === 0 || isCreating;
-
-  const handleClose = () => {
-    setDashboardTitle('');
-    setDashboardColor(initialDashboardColor);
-    setDashboardErrorMessage('');
-    onClose();
-  };
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (dashboardTitle.trim().length === 0) {
-      setDashboardErrorMessage('대시보드 이름을 입력해 주세요.');
-      return;
-    }
-
-    try {
-      await onCreate(dashboardTitle.trim(), dashboardColor);
-      handleClose();
-    } catch {
-      setDashboardErrorMessage('대시보드를 생성하지 못했어요.');
-    }
-  };
+  const {
+    dashboardColors,
+    dashboardTitle,
+    dashboardColor,
+    dashboardErrorMessage,
+    isCreateDisabled,
+    handleDashboardTitleChange,
+    handleDashboardColorChange,
+    handleClose,
+    handleSubmit,
+  } = useCreateDashboardModal({
+    isOpen,
+    isCreating,
+    onClose,
+    onCreate,
+  });
 
   return (
     <Modal isOpen={isOpen} onClose={handleClose} className="max-w-142">
@@ -69,10 +50,7 @@ function CreateDashboardModal({
             label="대시보드 이름"
             value={dashboardTitle}
             onChange={(event) => {
-              setDashboardTitle(event.target.value);
-              if (dashboardErrorMessage) {
-                setDashboardErrorMessage('');
-              }
+              handleDashboardTitleChange(event.target.value);
             }}
             placeholder="대시보드 이름을 입력해 주세요"
             errorMessage={dashboardErrorMessage}
@@ -83,7 +61,7 @@ function CreateDashboardModal({
             <ColorChipset
               colors={dashboardColors}
               selectedColor={dashboardColor}
-              onChange={setDashboardColor}
+              onChange={handleDashboardColorChange}
             />
           </div>
         </Modal.Main>

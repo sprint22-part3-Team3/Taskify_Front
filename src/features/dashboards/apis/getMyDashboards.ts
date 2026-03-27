@@ -2,7 +2,10 @@ import type {
   DashboardItem,
   DashboardListResponse,
 } from '@/features/dashboards/types/myDashboard.types';
+import { COLORS } from '@/shared/constants/color.constants';
 import { get } from '@/shared/apis/fetchInstance';
+
+const dashboardColors = [...COLORS];
 
 /**
  * 내 대시보드 목록을 가져옵니다.
@@ -22,11 +25,19 @@ export async function getMyDashboards(
 
   return {
     dashboards:
-      response?.dashboards.map((dashboard) => ({
-        id: dashboard.id,
-        title: dashboard.title,
-        color: dashboard.color,
-        createdByMe: dashboard.createdByMe,
-      })) ?? [],
+      response?.dashboards.map((dashboard, dashboardIndex) => {
+        const matchedDashboardColor = dashboardColors.find(
+          (dashboardColor) => dashboardColor === dashboard.color
+        );
+
+        return {
+          id: dashboard.id,
+          title: dashboard.title,
+          color:
+            matchedDashboardColor ??
+            dashboardColors[dashboardIndex % dashboardColors.length],
+          createdByMe: dashboard.createdByMe,
+        };
+      }) ?? [],
   };
 }

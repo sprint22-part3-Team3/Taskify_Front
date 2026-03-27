@@ -7,7 +7,9 @@ import type {
   DashboardItem,
   InvitedDashboardItem,
 } from '@/features/dashboards/types/myDashboard.types';
+import { MY_DASHBOARD_ERROR_MESSAGE } from '@/pages/my-dashboard/constants/myDashboard.constants';
 import { useModal } from '@/shared/hooks/useModal';
+import { getApiErrorMessage } from '@/pages/my-dashboard/utils/getApiErrorMessage';
 
 /**
  * 내 대시보드 페이지에 필요한 목록 조회 상태를 관리합니다.
@@ -40,8 +42,10 @@ export function useMyDashboardPage() {
       const { dashboards } = await getMyDashboards();
 
       setDashboardItems(dashboards);
-    } catch {
-      setDashboardError('내 대시보드 목록을 불러오지 못했어요.');
+    } catch (error) {
+      setDashboardError(
+        getApiErrorMessage(error, MY_DASHBOARD_ERROR_MESSAGE.loadDashboards)
+      );
       setDashboardItems([]);
     } finally {
       setIsLoadingDashboards(false);

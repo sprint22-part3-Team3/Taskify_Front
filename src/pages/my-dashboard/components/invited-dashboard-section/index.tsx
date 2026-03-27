@@ -1,43 +1,44 @@
-import { useState } from 'react';
 import { IcMailOff } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import DeleteModal from '@/shared/components/modal/delete-modal';
+import { PageIndicator } from '@/shared/components/page-indicator';
+import NavigationButtons from '@/shared/components/page-indicator/navigation-buttons';
 import Title from '@/shared/components/title';
-import { useModal } from '@/shared/hooks/useModal';
-import { runAfterModalClose } from '@/shared/utils/modal';
-import InvitedDashboardItemRow from '@/pages/my-dashboard/components/invitedDashboardItemRow';
-import SearchInput from '@/pages/my-dashboard/components/searchInput';
-import type { InvitedDashboardSectionProps } from '@/pages/my-dashboard/components/invitedDashboardSection/invitedDashboardSection.types';
-import type { InvitedDashboardItem } from '@/features/dashboards/types/myDashboard.types';
+import InvitedDashboardItemRow from '@/pages/my-dashboard/components/invited-dashboard-item-row';
+import SearchInput from '@/pages/my-dashboard/components/search-input';
+import { useInvitedDashboardSection } from '@/pages/my-dashboard/hooks/useInvitedDashboardSection';
+import type { InvitedDashboardSectionProps } from '@/pages/my-dashboard/components/invited-dashboard-section/invitedDashboardSection.types';
 
+/**
+ * 초대받은 대시보드 목록과 검색, 수락/거절 UI를 렌더링합니다.
+ *
+ * @example
+ * ```tsx
+ * <InvitedDashboardSection invitedDashboards={invitedDashboardItems} />
+ * ```
+ */
 function InvitedDashboardSection({
   invitedDashboards,
 }: InvitedDashboardSectionProps) {
-  const [selectedInvitedDashboard, setSelectedInvitedDashboard] =
-    useState<InvitedDashboardItem | null>(null);
   const {
-    isOpen: isDeleteModalOpen,
-    openModal: handleOpenDeleteModal,
-    closeModal: handleCloseDeleteModal,
-  } = useModal();
-  const hasInvitedDashboards = invitedDashboards.length > 0;
-
-  const handleRejectInvite = (invitedDashboardItem: InvitedDashboardItem) => {
-    setSelectedInvitedDashboard(invitedDashboardItem);
-    handleOpenDeleteModal();
-  };
-
-  const handleCloseDeleteModalWithReset = () => {
-    handleCloseDeleteModal();
-    runAfterModalClose(() => {
-      setSelectedInvitedDashboard(null);
-    });
-  };
-
-  const handleConfirmRejectInvite = () => {
-    // TODO: 초대 거절 API 연동
-    handleCloseDeleteModalWithReset();
-  };
+    invitedDashboardItems,
+    searchKeyword,
+    isSearchingInvitedDashboards,
+    invitedDashboardError,
+    respondingInvitationId,
+    selectedInvitedDashboard,
+    isDeleteModalOpen,
+    handleSearchKeywordChange,
+    handleInvitationAccept,
+    handleRejectInvite,
+    handleCloseDeleteModalWithReset,
+    handleConfirmRejectInvite,
+  } = useInvitedDashboardSection(invitedDashboards);
+  const hasInvitedDashboards = invitedDashboardItems.length > 0;
+  const shouldShowInvitedDashboardContent =
+    hasInvitedDashboards ||
+    Boolean(searchKeyword) ||
+    Boolean(invitedDashboardError);
 
   return (
     <>
@@ -46,19 +47,42 @@ function InvitedDashboardSection({
           초대받은 대시보드
         </Title>
 
-        {hasInvitedDashboards ? (
+        {shouldShowInvitedDashboardContent ? (
           <div className="mt-6">
-            <SearchInput placeholder="검색" aria-label="대시보드 검색" />
+            <SearchInput
+              placeholder="검색"
+              aria-label="대시보드 검색"
+              value={searchKeyword}
+              onChange={(event) => {
+                void handleSearchKeywordChange(event.target.value);
+              }}
+            />
+
+            {isSearchingInvitedDashboards && (
+              <p className="typo-md-regular mt-3 text-gray-300">
+                초대 목록을 불러오는 중이에요.
+              </p>
+            )}
+
+            {invitedDashboardError && (
+              <p className="typo-md-regular text-error mt-3">
+                {invitedDashboardError}
+              </p>
+            )}
 
             <div className="mt-4 lg:overflow-x-auto">
               <div className="lg:min-w-170">
                 <div className="md:hidden">
-                  {invitedDashboards.map((invitedDashboardItem) => {
+                  {invitedDashboardItems.map((invitedDashboardItem) => {
                     return (
                       <InvitedDashboardItemRow
                         key={invitedDashboardItem.id}
                         invitedDashboardItem={invitedDashboardItem}
+                        onAccept={handleInvitationAccept}
                         onReject={handleRejectInvite}
+                        isResponding={
+                          respondingInvitationId === invitedDashboardItem.id
+                        }
                       />
                     );
                   })}
@@ -91,7 +115,7 @@ function InvitedDashboardSection({
                     </tr>
                   </thead>
                   <tbody>
-                    {invitedDashboards.map((invitedDashboardItem) => {
+                    {invitedDashboardItems.map((invitedDashboardItem) => {
                       return (
                         <tr
                           key={invitedDashboardItem.id}
@@ -109,6 +133,15 @@ function InvitedDashboardSection({
                                 theme="primary"
                                 size="sm"
                                 className="min-w-21"
+                                disabled={
+                                  respondingInvitationId ===
+                                  invitedDashboardItem.id
+                                }
+                                onClick={() =>
+                                  handleInvitationAccept(
+                                    invitedDashboardItem.id
+                                  )
+                                }
                               >
                                 수락
                               </Button>
@@ -116,6 +149,10 @@ function InvitedDashboardSection({
                                 theme="outlined"
                                 size="sm"
                                 className="text-primary-500 min-w-21"
+                                disabled={
+                                  respondingInvitationId ===
+                                  invitedDashboardItem.id
+                                }
                                 onClick={() =>
                                   handleRejectInvite(invitedDashboardItem)
                                 }
@@ -131,6 +168,18 @@ function InvitedDashboardSection({
                 </table>
               </div>
             </div>
+
+            {hasInvitedDashboards && (
+              <div className="mt-4 flex items-center justify-end gap-3">
+                <PageIndicator currentPage={1} totalPages={1} />
+                <NavigationButtons
+                  onPrev={() => undefined}
+                  onNext={() => undefined}
+                  isPrevDisabled={true}
+                  isNextDisabled={true}
+                />
+              </div>
+            )}
           </div>
         ) : (
           <div className="flex h-81.75 flex-col items-center justify-center gap-6 md:h-97.5">

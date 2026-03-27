@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom';
-import { IcArrowRight, IcBookmark } from '@/shared/assets/icons';
+import { IcArrowRight } from '@/shared/assets/icons';
 import { ColorLabel } from '@/features/dashboards/components/color/color-label';
+import { getDashboardColorHex } from '@/features/dashboards/constants/dashboardColorMap.constants';
 import { Button } from '@/shared/components/button';
 import { PageIndicator } from '@/shared/components/page-indicator';
-import AddDashboardButton from '@/pages/my-dashboard/components/addDashboardButton';
+import AddDashboardButton from '@/pages/my-dashboard/components/add-dashboard-button';
 import CreateDashboardModal from '@/pages/my-dashboard/components/create-dashboard-modal';
-import InvitedDashboardSection from '@/pages/my-dashboard/components/invitedDashboardSection';
+import InvitedDashboardSection from '@/pages/my-dashboard/components/invited-dashboard-section';
 import { useMyDashboardPage } from '@/pages/my-dashboard/hooks/useMyDashboardPage';
 import NavigationButtons from '@/shared/components/page-indicator/navigation-buttons';
 
@@ -48,13 +49,10 @@ function MyDashboardPage() {
               >
                 <div className="flex items-center gap-2">
                   <ColorLabel
-                    color={dashboardItem.color}
+                    color={getDashboardColorHex(dashboardItem.color)}
                     label={dashboardItem.title}
                     labelClassName="typo-md-semibold md:typo-lg-semibold text-black-200"
                   />
-                  {dashboardItem.createdByMe && (
-                    <IcBookmark className="text-black-200 h-4 w-4 shrink-0" />
-                  )}
                 </div>
                 <IcArrowRight className="text-black-200 h-3.5" />
               </Button>

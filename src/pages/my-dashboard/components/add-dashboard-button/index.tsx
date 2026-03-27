@@ -1,10 +1,15 @@
 import { IcAdd } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
+import type { AddDashboardButtonProps } from '@/pages/my-dashboard/components/add-dashboard-button/addDashboardButton.types';
 
-type AddDashboardButtonProps = {
-  onClick?: () => void;
-};
-
+/**
+ * 새로운 대시보드 생성 모달을 여는 버튼입니다.
+ *
+ * @example
+ * ```tsx
+ * <AddDashboardButton onClick={openCreateDashboardModal} />
+ * ```
+ */
 function AddDashboardButton({ onClick }: AddDashboardButtonProps) {
   return (
     <Button
