@@ -4,6 +4,10 @@ import Input from '@/shared/components/input';
 import { Modal } from '@/shared/components/modal';
 import type { CreateColumnModalProps } from '@/features/columns/components/modal/create-column-modal/createColumnModal.types';
 
+import { createColumn } from '@/features/columns/apis/createColum';
+import { useColumnNameValidation } from '@/shared/hooks/useColumnNameValidation';
+import { checkColumnNameDuplicate } from '@/features/columns/apis/checkColumnName';
+
 /**
  * 새 컬럼 이름을 입력받는 생성 모달입니다.
  *
@@ -12,24 +16,43 @@ import type { CreateColumnModalProps } from '@/features/columns/components/modal
  * <CreateColumnModal isOpen={isOpen} onClose={handleClose} />
  * ```
  */
+
+const TEMP_DASHBOARD_ID = 17586;
+
 function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
-  const [columnTitle, setColumnTitle] = useState('');
-  const isCreateDisabled = !columnTitle.trim();
+  const columnNameField = useColumnNameValidation({
+    checkFn: checkColumnNameDuplicate,
+  });
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const isCreateDisabled = !columnNameField.isValid || isLoading;
 
   const handleClose = () => {
-    setColumnTitle('');
+    columnNameField.reset();
     onClose();
   };
 
-  const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (isCreateDisabled) {
-      return;
-    }
+    if (isCreateDisabled) return;
+    if (columnNameField.error) return;
 
-    // TODO: 새 컬럼 생성 API 연동
-    handleClose();
+    setIsLoading(true);
+
+    try {
+      await createColumn({
+        title: columnNameField.value.trim(),
+        dashboardId: TEMP_DASHBOARD_ID,
+      });
+      handleClose();
+    } catch {
+      // 생성 실패는 서버 에러 → 중복 외 예외 처리
+      // columnNameField.setError('중복된 컬럼 이름입니다.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -40,10 +63,12 @@ function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
         <Modal.Main>
           <Input
             label="이름"
-            value={columnTitle}
-            onChange={(event) => setColumnTitle(event.target.value)}
+            value={columnNameField.value}
+            onChange={columnNameField.onChange}
+            onBlur={columnNameField.onBlur}
             placeholder="컬럼 이름을 입력해 주세요."
             labelClassName="typo-lg-medium md:typo-2lg-medium"
+            errorMessage={columnNameField.error}
           />
         </Modal.Main>
 
