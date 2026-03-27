@@ -44,6 +44,7 @@ export default function Header({
   profileImage,
   onManageClick,
   onInviteClick,
+  onProfileClick,
 }: HeaderProps) {
   return (
     <header className="z-header flex h-15 min-w-0 items-center justify-between border-b border-gray-200 bg-white pl-4 md:h-17.5 md:px-10 lg:justify-between">
@@ -93,7 +94,11 @@ export default function Header({
         />
 
         {/* 유저 프로필 - 이름은 모바일에서 숨김 */}
-        <div className="border-l border-gray-200 pl-3 md:pl-6">
+        <button
+          type="button"
+          className="cursor-pointer border-l border-gray-200 pl-3 md:pl-6"
+          onClick={onProfileClick}
+        >
           <UserProfile
             user={{
               id: 0,
@@ -103,7 +108,7 @@ export default function Header({
             size="lg"
             nicknameClassName="hidden md:block"
           />
-        </div>
+        </button>
       </div>
     </header>
   );
