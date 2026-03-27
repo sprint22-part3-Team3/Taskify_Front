@@ -9,6 +9,9 @@ type Column = {
   updatedAt: string;
 };
 
+const NOT_FOUND_OR_FORBIDDEN_ERROR =
+  '대시보드를 찾을 수 없거나 접근 권한이 없습니다';
+
 /**
  * 대시보드의 컬럼 목록을 조회하는 훅
  */
@@ -33,11 +36,13 @@ export const useColumnList = (dashboardId: number) => {
         const res = await getColumns(dashboardId, token);
         setColumns(res?.data || []);
       } catch (err) {
-        const message = (err as Error).message;
-        const customMessage = '대시보드를 찾을 수 없거나 접근 권한이 없습니다';
+        const message =
+          err instanceof Error
+            ? err.message
+            : '알 수 없는 에러가 발생했습니다.';
 
         if (message.includes('404')) {
-          setErrorMessage(customMessage);
+          setErrorMessage(NOT_FOUND_OR_FORBIDDEN_ERROR);
         } else {
           setErrorMessage(message);
         }
