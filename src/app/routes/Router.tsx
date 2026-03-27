@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import ProtectedRoute from '@/app/routes/ProtectedRoute';
+import PublicRoute from '@/app/routes/PublicRoute';
 import AuthLayout from '@/features/auth/components/auth-layout';
 import DashboardLayout from '@/features/dashboards/components/layout';
 import DashboardDetailPage from '@/pages/dashboard-detail';
@@ -14,15 +16,19 @@ function Router() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route element={<AuthLayout />}>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
+        <Route element={<PublicRoute />}>
+          <Route element={<AuthLayout />}>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+          </Route>
         </Route>
-        <Route element={<DashboardLayout />}>
-          <Route path="/mydashboard" element={<MyDashboardPage />} />
-          <Route path="/dashboard/:id" element={<DashboardDetailPage />} />
-          <Route path="/dashboard/:id/edit" element={<DashboardEditPage />} />
-          <Route path="/mypage" element={<MyPage />} />
+        <Route element={<ProtectedRoute />}>
+          <Route element={<DashboardLayout />}>
+            <Route path="/mydashboard" element={<MyDashboardPage />} />
+            <Route path="/dashboard/:id" element={<DashboardDetailPage />} />
+            <Route path="/dashboard/:id/edit" element={<DashboardEditPage />} />
+            <Route path="/mypage" element={<MyPage />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>
