@@ -7,7 +7,7 @@ export type HeaderProps = {
   totalMemberCount?: number;
   userName?: string;
   profileImage?: string;
-  showActionButtons?: boolean;
+  isActionButtonsVisible?: boolean;
   onManageClick?: () => void;
   onInviteClick?: () => void;
   onProfileClick?: () => void;

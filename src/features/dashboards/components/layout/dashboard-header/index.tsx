@@ -42,7 +42,7 @@ export default function Header({
   totalMemberCount = 7,
   userName = '배유철',
   profileImage,
-  showActionButtons = true,
+  isActionButtonsVisible = true,
   onManageClick,
   onInviteClick,
   onProfileClick,
@@ -58,7 +58,7 @@ export default function Header({
       </div>
 
       <div className="ml-auto flex min-w-0 shrink items-center gap-1 md:gap-6">
-        {showActionButtons && (
+        {isActionButtonsVisible && (
           <div className="flex items-center gap-2 md:gap-4">
             <Button
               theme="icon"

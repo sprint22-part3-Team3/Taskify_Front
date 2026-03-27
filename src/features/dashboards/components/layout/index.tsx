@@ -50,7 +50,7 @@ export default function DashboardLayout() {
         <Sidebar />
         <div className="flex min-w-0 flex-1 flex-col">
           <Header
-            showActionButtons={!isMyDashboardPage}
+            isActionButtonsVisible={!isMyDashboardPage}
             onManageClick={handleNavigateDashboardEdit}
             onInviteClick={handleOpenDashboardInviteModal}
             onProfileClick={handleNavigateMyPage}
