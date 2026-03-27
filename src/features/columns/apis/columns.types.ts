@@ -1,0 +1,10 @@
+import type { Column } from '@/features/columns/types/column.types';
+
+export type getColumnsParams = {
+  dashboardId: number;
+};
+
+export type GetColumnsResponse = {
+  result: string;
+  data: Column[];
+};

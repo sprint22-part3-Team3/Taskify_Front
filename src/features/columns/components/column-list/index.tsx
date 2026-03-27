@@ -1,7 +1,8 @@
 import { CardList } from '@/features/cards/components/card-list';
 import { ColumnAdd } from '@/features/columns/components/column-list/column-add';
+import { useColumnList } from '@/features/columns/hooks/useColumnList';
 import { cn } from '@/shared/utils/cn';
-import { DUMMY_COLUMNS } from '@/features/columns/dummyColumns';
+import { useParams } from 'react-router-dom';
 
 const LIST_CLASS = cn(
   'shrink-0 px-3 pt-8 pb-6 md:px-5 md:py-5',
@@ -10,8 +11,24 @@ const LIST_CLASS = cn(
 );
 
 function ColumnList() {
-  // TODO : API 데이터 연동 후, dummyColumns.ts 삭제
-  const columns = DUMMY_COLUMNS.data;
+  const { id } = useParams();
+  const dashboardId = Number(id);
+  const { columns, isLoading, errorMessage } = useColumnList(dashboardId);
+
+  // TODO : 로딩 화면 처리
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center">
+        <p>Loading...</p>
+      </div>
+    );
+  // TODO : 에러 화면 처리
+  if (errorMessage)
+    return (
+      <div className="flex items-center justify-center">
+        <p>⚠️ {errorMessage}</p>
+      </div>
+    );
 
   return (
     <ul className="flex flex-col divide-y divide-gray-100 lg:min-h-screen lg:flex-row lg:divide-x lg:divide-y-0">
