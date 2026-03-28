@@ -50,7 +50,11 @@ export default function DashboardLayout() {
         <Sidebar />
         <div className="flex min-w-0 flex-1 flex-col">
           <Header
+            title={isMyDashboardPage ? '내 대시보드' : undefined}
+            isOwner={!isMyDashboardPage}
+            isTitleVisible={isMyDashboardPage}
             isActionButtonsVisible={!isMyDashboardPage}
+            isMemberProfilesVisible={!isMyDashboardPage}
             onManageClick={handleNavigateDashboardEdit}
             onInviteClick={handleOpenDashboardInviteModal}
             onProfileClick={handleNavigateMyPage}
