@@ -1,6 +1,6 @@
 import Sidebar from '@/features/dashboards/components/layout/dashboard-sidebar';
 import Header from '@/features/dashboards/components/layout/dashboard-header/index';
-import InviteModal from '@/pages/dashboard-edit/components/invitations-section/invite-modal';
+import InviteModal from '@/features/invitations/components/invitations-section/invite-modal';
 import { useModal } from '@/shared/hooks/useModal';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 

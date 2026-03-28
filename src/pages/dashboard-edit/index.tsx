@@ -2,9 +2,9 @@ import BackButton from '@/shared/components/back-button';
 import { Button } from '@/shared/components/button';
 import DeleteModal from '@/shared/components/modal/delete-modal';
 import { useModal } from '@/shared/hooks/useModal';
-import NameSection from '@/pages/dashboard-edit/components/name-section';
-import MembersSection from '@/pages/dashboard-edit/components/members-section';
-import InvitationsSection from '@/pages/dashboard-edit/components/invitations-section';
+import NameSection from '@/features/dashboards/components/name-section';
+import MembersSection from '@/features/members/components/members-section';
+import InvitationsSection from '@/features/invitations/components/invitations-section';
 
 export default function DashboardEditPage() {
   const {
