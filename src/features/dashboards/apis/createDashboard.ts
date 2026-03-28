@@ -1,11 +1,6 @@
-import type { DashboardColorName } from '@/features/dashboards/types/dashboardColor.types';
+import type { CreateDashboardRequest } from '@/features/dashboards/apis/dashboards.types';
 import { DASHBOARD_COLOR_HEX } from '@/features/dashboards/constants/dashboardColorMap.constants';
 import { post } from '@/shared/apis/fetchInstance';
-
-type CreateDashboardRequest = {
-  title: string;
-  color: DashboardColorName;
-};
 
 /**
  * 새로운 대시보드를 생성합니다.
