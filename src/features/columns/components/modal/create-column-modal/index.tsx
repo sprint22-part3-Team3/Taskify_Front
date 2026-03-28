@@ -82,7 +82,11 @@ function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
             label="이름"
             value={columnNameField.value}
             onChange={columnNameField.onChange}
-            onBlur={columnNameField.onBlur}
+            onBlur={(e) => {
+              const relatedTarget = e.relatedTarget as HTMLElement;
+              if (relatedTarget?.hasAttribute('data-close-modal')) return;
+              columnNameField.onBlur();
+            }}
             placeholder="컬럼 이름을 입력해 주세요."
             labelClassName="typo-lg-medium md:typo-2lg-medium"
             errorMessage={columnNameField.error}
@@ -90,7 +94,12 @@ function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
         </Modal.Main>
 
         <Modal.Footer>
-          <Button theme="cancel" type="button" onClick={handleClose}>
+          <Button
+            theme="cancel"
+            type="button"
+            onClick={handleClose}
+            data-close-modal
+          >
             취소
           </Button>
           <Button theme="primary" type="submit" disabled={isCreateDisabled}>
