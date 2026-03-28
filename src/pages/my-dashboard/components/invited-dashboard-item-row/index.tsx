@@ -1,6 +1,6 @@
 import { Button } from '@/shared/components/button';
 import { cn } from '@/shared/utils/cn';
-import type { InvitedDashboardItemRowProps } from '@/pages/my-dashboard/components/invitedDashboardItemRow/invitedDashboardItemRow.types';
+import type { InvitedDashboardItemRowProps } from '@/pages/my-dashboard/components/invited-dashboard-item-row/invitedDashboardItemRow.types';
 
 /**
  * 초대받은 대시보드 목록의 단일 행을 렌더링합니다.
@@ -8,12 +8,18 @@ import type { InvitedDashboardItemRowProps } from '@/pages/my-dashboard/componen
  *
  * @example
  * ```tsx
- * <InvitedDashboardItemRow invitedDashboardItem={invitedDashboardItem} />
+ * <InvitedDashboardItemRow
+ *   invitedDashboardItem={invitedDashboardItem}
+ *   onAccept={handleInvitationAccept}
+ *   onReject={handleRejectInvite}
+ * />
  * ```
  */
 function InvitedDashboardItemRow({
   invitedDashboardItem,
+  onAccept,
   onReject,
+  isResponding = false,
   className,
   ...props
 }: InvitedDashboardItemRowProps) {
@@ -37,13 +43,20 @@ function InvitedDashboardItemRow({
         </span>
       </div>
       <div className="mt-4 flex items-center gap-2">
-        <Button theme="primary" size="sm" className="h-8 flex-1">
+        <Button
+          theme="primary"
+          size="sm"
+          className="h-8 flex-1"
+          disabled={isResponding}
+          onClick={() => onAccept(invitedDashboardItem.id)}
+        >
           수락
         </Button>
         <Button
           theme="outlined"
           size="sm"
           className="text-primary-500 h-8 flex-1"
+          disabled={isResponding}
           onClick={() => onReject(invitedDashboardItem)}
         >
           거절
