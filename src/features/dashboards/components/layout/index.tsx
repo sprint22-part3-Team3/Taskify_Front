@@ -1,5 +1,6 @@
 import Sidebar from '@/features/dashboards/components/layout/dashboard-sidebar';
 import Header from '@/features/dashboards/components/layout/dashboard-header/index';
+import CreateDashboardModal from '@/features/dashboards/components/create-dashboard-modal';
 import { useSidebar } from '@/features/dashboards/hooks/useSidebar';
 import InviteModal from '@/pages/dashboard-edit/components/invitations-section/invite-modal';
 import { useModal } from '@/shared/hooks/useModal';
@@ -23,11 +24,18 @@ export default function DashboardLayout() {
     closeModal: handleCloseInviteModal,
   } = useModal();
   const {
+    isOpen: isCreateDashboardModalOpen,
+    openModal: handleOpenCreateDashboardModal,
+    closeModal: handleCloseCreateDashboardModal,
+  } = useModal();
+  const {
     sidebarDashboards,
     selectedDashboardId,
     isLoadingSidebarDashboards,
     sidebarDashboardsError,
+    isCreatingDashboard,
     handleDashboardClick,
+    handleCreateDashboard,
   } = useSidebar();
 
   const handleNavigateDashboardEdit = () => {
@@ -60,6 +68,7 @@ export default function DashboardLayout() {
           selectedId={selectedDashboardId}
           isLoading={isLoadingSidebarDashboards}
           errorMessage={sidebarDashboardsError}
+          onAddClick={handleOpenCreateDashboardModal}
           onDashboardClick={handleDashboardClick}
         />
         <div className="flex min-w-0 flex-1 flex-col">
@@ -81,6 +90,12 @@ export default function DashboardLayout() {
       <InviteModal
         isOpen={isInviteModalOpen}
         onClose={handleCloseInviteModal}
+      />
+      <CreateDashboardModal
+        isOpen={isCreateDashboardModalOpen}
+        isCreating={isCreatingDashboard}
+        onClose={handleCloseCreateDashboardModal}
+        onCreate={handleCreateDashboard}
       />
     </>
   );

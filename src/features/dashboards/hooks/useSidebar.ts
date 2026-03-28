@@ -1,5 +1,9 @@
 import { useNavigate, useParams } from 'react-router-dom';
+import { createDashboard } from '@/features/dashboards/apis/createDashboard';
 import { useSidebarDashboards } from '@/features/dashboards/hooks/useSidebarDashboards';
+import type { DashboardColorName } from '@/features/dashboards/types/dashboardColor.types';
+import { dispatchDashboardListChangeEvent } from '@/features/dashboards/utils/dashboardEvents';
+import { useState } from 'react';
 
 /**
  * 사이드바 렌더링에 필요한 상태와 이동 로직을 조합합니다.
@@ -22,7 +26,9 @@ export function useSidebar() {
     sidebarDashboards,
     isLoadingSidebarDashboards,
     sidebarDashboardsError,
+    loadSidebarDashboards,
   } = useSidebarDashboards();
+  const [isCreatingDashboard, setIsCreatingDashboard] = useState(false);
 
   const selectedDashboardId = id ? Number(id) : undefined;
 
@@ -30,11 +36,31 @@ export function useSidebar() {
     navigate(`/dashboard/${dashboardId}`);
   };
 
+  const handleCreateDashboard = async (
+    dashboardTitle: string,
+    dashboardColor: DashboardColorName
+  ) => {
+    setIsCreatingDashboard(true);
+
+    try {
+      await createDashboard({
+        title: dashboardTitle,
+        color: dashboardColor,
+      });
+      await loadSidebarDashboards();
+      dispatchDashboardListChangeEvent({ source: 'sidebar' });
+    } finally {
+      setIsCreatingDashboard(false);
+    }
+  };
+
   return {
     sidebarDashboards,
     selectedDashboardId,
     isLoadingSidebarDashboards,
     sidebarDashboardsError,
+    isCreatingDashboard,
     handleDashboardClick,
+    handleCreateDashboard,
   };
 }

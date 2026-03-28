@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { getMyDashboards } from '@/features/dashboards/apis/getMyDashboards';
 import { DASHBOARD_ERROR_MESSAGE } from '@/features/dashboards/constants/dashboardErrorMessage.constants';
 import type { SidebarDashboardItem } from '@/features/dashboards/components/layout/dashboard-sidebar/dashboardSidebar.types';
+import { DASHBOARD_EVENTS } from '@/features/dashboards/utils/dashboardEvents';
 import { getApiErrorMessage } from '@/features/dashboards/utils/getApiErrorMessage';
 
 /**
@@ -23,31 +24,58 @@ export function useSidebarDashboards() {
     string | null
   >(null);
 
+  const loadSidebarDashboards = async () => {
+    setIsLoadingSidebarDashboards(true);
+    setSidebarDashboardsError(null);
+
+    try {
+      const { dashboards } = await getMyDashboards();
+
+      setSidebarDashboards(dashboards);
+    } catch (error) {
+      setSidebarDashboards([]);
+      setSidebarDashboardsError(
+        getApiErrorMessage(error, DASHBOARD_ERROR_MESSAGE.loadDashboards)
+      );
+    } finally {
+      setIsLoadingSidebarDashboards(false);
+    }
+  };
+
   useEffect(() => {
-    const loadSidebarDashboards = async () => {
-      setIsLoadingSidebarDashboards(true);
-      setSidebarDashboardsError(null);
+    void loadSidebarDashboards();
+  }, []);
 
-      try {
-        const { dashboards } = await getMyDashboards();
+  useEffect(() => {
+    const handleDashboardListChange = (event: Event) => {
+      const dashboardListChangeEvent = event as CustomEvent<{
+        source: 'dashboard-list' | 'sidebar';
+      }>;
 
-        setSidebarDashboards(dashboards);
-      } catch (error) {
-        setSidebarDashboards([]);
-        setSidebarDashboardsError(
-          getApiErrorMessage(error, DASHBOARD_ERROR_MESSAGE.loadDashboards)
-        );
-      } finally {
-        setIsLoadingSidebarDashboards(false);
+      if (dashboardListChangeEvent.detail.source === 'sidebar') {
+        return;
       }
+
+      void loadSidebarDashboards();
     };
 
-    void loadSidebarDashboards();
+    window.addEventListener(
+      DASHBOARD_EVENTS.LIST_CHANGE,
+      handleDashboardListChange
+    );
+
+    return () => {
+      window.removeEventListener(
+        DASHBOARD_EVENTS.LIST_CHANGE,
+        handleDashboardListChange
+      );
+    };
   }, []);
 
   return {
     sidebarDashboards,
     isLoadingSidebarDashboards,
     sidebarDashboardsError,
+    loadSidebarDashboards,
   };
 }

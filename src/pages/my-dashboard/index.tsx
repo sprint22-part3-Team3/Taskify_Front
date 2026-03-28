@@ -37,8 +37,6 @@ function MyDashboardPage() {
     <div className="mx-auto w-full px-4 pt-6 pb-10 md:px-10 md:pt-10">
       <section className="max-w-240">
         <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
-          <AddDashboardButton onClick={openCreateDashboardModal} />
-
           {dashboardItems.map((dashboardItem) => {
             return (
               <Button
@@ -60,6 +58,8 @@ function MyDashboardPage() {
               </Button>
             );
           })}
+
+          <AddDashboardButton onClick={openCreateDashboardModal} />
         </div>
 
         {isLoadingDashboards && (
