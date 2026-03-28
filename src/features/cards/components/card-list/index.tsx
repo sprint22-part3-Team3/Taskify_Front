@@ -3,6 +3,7 @@ import { Card } from '@/features/cards/components/card-list/card';
 import { CardListHeader } from '@/features/cards/components/card-list/card-list-header';
 import { CardAdd } from '@/features/cards/components/card-list/card-add';
 import { useCardList } from '@/features/cards/hooks/useCardList';
+import { ColumnProvider } from '@/features/columns/contexts/columnProvider';
 
 function CardList({ column }: CardListProps) {
   const { id, title } = column;
@@ -24,7 +25,7 @@ function CardList({ column }: CardListProps) {
     );
 
   return (
-    <>
+    <ColumnProvider column={column}>
       <CardListHeader title={title} cardCount={cardCount} />
       <CardAdd />
       <ul className="flex flex-col gap-2.5 md:gap-4">
@@ -34,7 +35,7 @@ function CardList({ column }: CardListProps) {
           </li>
         ))}
       </ul>
-    </>
+    </ColumnProvider>
   );
 }
 
