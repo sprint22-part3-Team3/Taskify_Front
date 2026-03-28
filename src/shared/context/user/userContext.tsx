@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import type { UserMe } from '@/shared/types/userMe';
+import type { UserMe } from '@/shared/types/userMe.types';
 
 export type UserContextType = {
   userProfile: UserMe | null;

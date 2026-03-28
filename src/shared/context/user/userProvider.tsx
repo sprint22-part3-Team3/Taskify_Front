@@ -2,7 +2,7 @@ import { useContext, useEffect, useMemo, useState } from 'react';
 import { UserContext } from '@/shared/context/user/userContext';
 import { getCurrentUser } from '@/features/users/apis/getCurrentUser';
 import type { ReactNode } from 'react';
-import type { UserMe } from '@/shared/types/userMe';
+import type { UserMe } from '@/shared/types/userMe.types';
 import { AuthContext } from '@/shared/context/auth/authContext';
 
 type UserProviderProps = {
