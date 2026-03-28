@@ -46,18 +46,15 @@ export const DASHBOARD_COLOR_HEX: Record<DashboardColorName, string> = {
 /**
  * API에서 받은 hex 값에 해당하는 대시보드 색상 이름을 조회합니다.
  */
-export const getDashboardColorName = function (
-  colorHex: string
-): DashboardColorName | null {
-  const normalizedColorHex = colorHex.toLowerCase();
+export const getDashboardColorName = (() => {
+  const hexToNameMap = Object.fromEntries(
+    Object.entries(DASHBOARD_COLOR_HEX).map(([dashboardColorName, hex]) => [
+      hex.toLowerCase(),
+      dashboardColorName,
+    ])
+  ) as Record<string, DashboardColorName>;
 
-  const matchedDashboardColorEntry = Object.entries(DASHBOARD_COLOR_HEX).find(
-    ([, dashboardColorHex]) => {
-      return dashboardColorHex.toLowerCase() === normalizedColorHex;
-    }
-  );
-
-  return (
-    (matchedDashboardColorEntry?.[0] as DashboardColorName | undefined) ?? null
-  );
-};
+  return (colorHex: string): DashboardColorName | null => {
+    return hexToNameMap[colorHex.toLowerCase()] ?? null;
+  };
+})();
