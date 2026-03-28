@@ -3,16 +3,27 @@ import { Button } from '@/shared/components/button';
 import TextArea from '@/shared/components/text-area';
 import Title from '@/shared/components/title';
 import { useState } from 'react';
-import { DUMMY_COMMENTS } from '@/features/comments/dummyComments';
 import { TaskCommentItem } from '@/features/comments/components/task-comments/task-comment-item';
+import { useCommentList } from '@/features/comments/hooks/useCommentList';
 
-// TODO : API 연동 [ Comments ] > 연동 후 dummyComments 삭제
 function TaskComments({ id }: TaskCommentsProps) {
   const [content, setContent] = useState('');
+  const { comments, isLoading, errorMessage } = useCommentList(id);
 
-  const comments = DUMMY_COMMENTS.comments.filter(
-    (comment) => comment.cardId === id
-  );
+  // TODO : 로딩 화면 처리
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center">
+        <p>Loading...</p>
+      </div>
+    );
+  // TODO : 에러 화면 처리
+  if (errorMessage)
+    return (
+      <div className="flex items-center justify-center">
+        <p>⚠️ {errorMessage}</p>
+      </div>
+    );
 
   return (
     <section>
