@@ -74,11 +74,16 @@ function Button<T extends ElementType = 'button'>({
   ...props
 }: PolymorphicButtonProps<T>) {
   const Component = as || 'button';
+  const shouldShowLoading = isLoading && theme !== 'outlined';
   const isDisabled = disabled || isLoading;
   const loadingSize = LOADING_SIZE[size ?? 'lg'];
 
   const componentProps = {
-    className: cn(buttonStyle({ theme, size }), className),
+    className: cn(
+      buttonStyle({ theme, size }),
+      shouldShowLoading && 'text-transparent',
+      className
+    ),
     ...(Component === 'button' ? { type } : {}),
     ...(Component === 'button' ? { disabled: isDisabled } : {}),
     ...(Component !== 'button' ? { 'aria-disabled': isDisabled } : {}),
@@ -89,8 +94,8 @@ function Button<T extends ElementType = 'button'>({
 
   return (
     <Component {...componentProps}>
-      <span className={cn(isLoading && 'invisible')}>{children}</span>
-      {isLoading && (
+      {children}
+      {shouldShowLoading && (
         <span className="absolute inset-0 flex items-center justify-center">
           <Loading size={loadingSize} color="currentColor" />
         </span>
