@@ -68,6 +68,11 @@ function TagInput({
     }
   };
 
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
+    setError('');
+  };
+
   return (
     <div className="flex flex-col gap-1">
       <div className="focus-within:border-primary-500 flex min-h-12.5 w-full flex-wrap items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2">
@@ -103,10 +108,7 @@ function TagInput({
           value={inputValue}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          onChange={(event) => {
-            setInputValue(event.target.value);
-            setError('');
-          }}
+          onChange={handleInputChange}
           onKeyDown={handleKeyDown}
         />
       </div>
