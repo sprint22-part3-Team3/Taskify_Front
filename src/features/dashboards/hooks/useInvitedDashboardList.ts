@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { InvitedDashboardItem } from '@/features/invitations/types/invitation.types';
+import type { InvitedDashboardItem } from '@/features/invitations/apis/inviations.types';
 import { getInvitedDashboards } from '@/features/invitations/apis/getInvitedDashboards';
 import { DASHBOARD_ERROR_MESSAGE } from '@/features/dashboards/constants/dashboardErrorMessage.constants';
 import { getApiErrorMessage } from '@/features/dashboards/utils/getApiErrorMessage';
