@@ -73,7 +73,7 @@ function MyDashboardPage() {
         )}
 
         {dashboardItems.length > 0 && (
-          <div className="mt-4 flex items-center justify-end gap-3">
+          <div className="mt-4 flex items-center justify-end gap-3 md:mt-3">
             <PageIndicator currentPage={1} totalPages={1} />
             <NavigationButtons
               onPrev={() => undefined}

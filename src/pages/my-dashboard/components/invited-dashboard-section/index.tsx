@@ -1,8 +1,6 @@
 import { IcMailOff } from '@/shared/assets/icons';
 import { Button } from '@/shared/components/button';
 import DeleteModal from '@/shared/components/modal/delete-modal';
-import { PageIndicator } from '@/shared/components/page-indicator';
-import NavigationButtons from '@/shared/components/page-indicator/navigation-buttons';
 import Title from '@/shared/components/title';
 import { useInvitedDashboardList } from '@/features/invitations/hooks/useInvitedDashboardList';
 import InvitedDashboardItemRow from '@/pages/my-dashboard/components/invited-dashboard-item-row';
@@ -40,8 +38,8 @@ function InvitedDashboardSection() {
 
   return (
     <>
-      <section className="mt-6 flex max-w-240 flex-col rounded-lg bg-white px-4 py-6 md:mt-4.5 md:px-7 md:py-4.5 lg:mt-8 lg:py-8">
-        <Title as="h3" className="md:typo-2xl-bold typo-xl-bold">
+      <section className="mt-6 flex max-w-240 flex-col rounded-lg bg-white px-4 py-6 md:mt-10 md:px-7 md:py-4.5 lg:mt-10 lg:py-8">
+        <Title as="h3" size="xl" weight="bold" className="md:typo-2xl-bold">
           초대받은 대시보드
         </Title>
 
@@ -172,18 +170,6 @@ function InvitedDashboardSection() {
                 </table>
               </div>
             </div>
-
-            {hasInvitedDashboards && (
-              <div className="mt-4 flex items-center justify-end gap-3">
-                <PageIndicator currentPage={1} totalPages={1} />
-                <NavigationButtons
-                  onPrev={() => undefined}
-                  onNext={() => undefined}
-                  isPrevDisabled={true}
-                  isNextDisabled={true}
-                />
-              </div>
-            )}
           </div>
         ) : (
           <div className="flex h-81.75 flex-col items-center justify-center gap-6 md:h-97.5">
