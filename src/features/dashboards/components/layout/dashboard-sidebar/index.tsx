@@ -1,7 +1,7 @@
 import type { SidebarProps } from '@/features/dashboards/components/layout/dashboard-sidebar/dashboardSidebar.types';
-import { getDashboardColorHex } from '@/features/dashboards/constants/dashboardColorMap.constants';
 import Logo from '@/shared/components/logo';
 import { ColorLabel } from '@/features/dashboards/components/color/color-label';
+import { getDashboardColorHex } from '@/features/dashboards/utils/dashboardColor';
 import { IcAddBox, IcBookmark } from '@/shared/assets';
 import { cn } from '@/shared/utils/cn';
 import NavigationButtons from '@/shared/components/page-indicator/navigation-buttons';
