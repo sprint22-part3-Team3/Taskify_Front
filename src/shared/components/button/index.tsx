@@ -79,11 +79,7 @@ function Button<T extends ElementType = 'button'>({
   const loadingSize = LOADING_SIZE[size ?? 'lg'];
 
   const componentProps = {
-    className: cn(
-      buttonStyle({ theme, size }),
-      shouldShowLoading && 'text-transparent',
-      className
-    ),
+    className: cn(buttonStyle({ theme, size }), className),
     ...(Component === 'button' ? { type } : {}),
     ...(Component === 'button' ? { disabled: isDisabled } : {}),
     ...(Component !== 'button' ? { 'aria-disabled': isDisabled } : {}),
@@ -94,11 +90,12 @@ function Button<T extends ElementType = 'button'>({
 
   return (
     <Component {...componentProps}>
-      {children}
-      {shouldShowLoading && (
-        <span className="absolute inset-0 flex items-center justify-center">
+      {shouldShowLoading ? (
+        <span className="inline-flex items-center justify-center">
           <Loading size={loadingSize} color="currentColor" />
         </span>
+      ) : (
+        children
       )}
     </Component>
   );
