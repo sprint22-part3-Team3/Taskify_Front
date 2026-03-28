@@ -1,10 +1,11 @@
 import { cva } from 'class-variance-authority';
 import { type ElementType } from 'react';
 import type { PolymorphicButtonProps } from '@/shared/components/button/button.types';
+import { Loading } from '@/shared/components/loading';
 import { cn } from '@/shared/utils/cn';
 
 const buttonStyle = cva(
-  `inline-flex items-center justify-center whitespace-nowrap rounded-lg border border-solid
+  `relative inline-flex items-center justify-center whitespace-nowrap rounded-lg border border-solid
   transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600/30
   cursor-pointer disabled:cursor-not-allowed`,
   {
@@ -53,7 +54,12 @@ const buttonStyle = cva(
  *
  */
 
-//TODO: 버른 로딩 상태 추가(로딩 스피너 vs 로딩 중 텍스트)
+const LOADING_SIZE = {
+  lg: 18,
+  md: 16,
+  sm: 14,
+  icon: 16,
+} as const;
 
 function Button<T extends ElementType = 'button'>({
   as,
@@ -62,20 +68,35 @@ function Button<T extends ElementType = 'button'>({
   size,
   type = 'button',
   disabled = false,
+  isLoading = false,
   className,
   onClick,
   ...props
 }: PolymorphicButtonProps<T>) {
   const Component = as || 'button';
+  const shouldShowLoading = isLoading && theme !== 'outlined';
+  const isDisabled = disabled || isLoading;
+  const loadingSize = LOADING_SIZE[size ?? 'lg'];
 
   const componentProps = {
     className: cn(buttonStyle({ theme, size }), className),
     ...(Component === 'button' ? { type } : {}),
-    ...(Component === 'button' ? { disabled } : {}),
+    ...(Component === 'button' ? { disabled: isDisabled } : {}),
+    ...(Component !== 'button' ? { 'aria-disabled': isDisabled } : {}),
+    'aria-busy': isLoading,
     onClick,
     ...props,
   };
-  return <Component {...componentProps}>{children}</Component>;
+
+  return (
+    <Component {...componentProps}>
+      {shouldShowLoading ? (
+        <Loading size={loadingSize} color="currentColor" />
+      ) : (
+        children
+      )}
+    </Component>
+  );
 }
 
 export { Button };

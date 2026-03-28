@@ -67,6 +67,7 @@ function LoginPage() {
           size="md"
           type="submit"
           disabled={isDisabled}
+          isLoading={isSubmitting}
           className="mt-4 mb-6 w-full"
         >
           로그인
