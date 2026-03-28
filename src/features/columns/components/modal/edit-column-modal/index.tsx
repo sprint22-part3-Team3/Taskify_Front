@@ -60,7 +60,10 @@ function EditColumnModal({
     });
   };
 
-  const handleBlur = async () => {
+  const handleBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
+    const relatedTarget = e.relatedTarget as HTMLElement;
+    if (relatedTarget?.getAttribute('aria-label') === '모달 닫기') return;
+
     const trimmed = columnTitle.trim();
 
     // 초기값과 같으면 중복 체크 불필요
