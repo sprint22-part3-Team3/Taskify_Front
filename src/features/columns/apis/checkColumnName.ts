@@ -1,13 +1,5 @@
-// features/column/apis/checkColumnName.ts
-
 import { get } from '@/shared/apis/fetchInstance';
-import type { Column } from '@/features/columns/types/column.types';
-
-type GetColumnsResponse = {
-  result: string;
-  data: Column[];
-};
-
+import type { GetColumnsResponse } from '@/features/columns/apis/columns.types';
 /**
  * 컬럼 목록을 조회해서 이름 중복 여부를 확인합니다.
  *
