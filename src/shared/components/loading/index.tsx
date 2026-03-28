@@ -36,10 +36,8 @@ export const Loading: React.FC<LoadingProps> = ({
       `}</style>
 
       <div
+        className="inline-flex items-center justify-center"
         style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
           gap: `${gap}px`,
           height: `${size}px`,
         }}
@@ -47,12 +45,11 @@ export const Loading: React.FC<LoadingProps> = ({
         {[0, 1, 2].map((i) => (
           <div
             key={i}
-            className="loading-dot"
+            className="loading-dot rounded-full"
             style={{
               width: `${dotSize}px`,
               height: `${dotSize}px`,
               backgroundColor: color,
-              borderRadius: '50%',
             }}
           />
         ))}
