@@ -52,7 +52,7 @@ export default function DashboardLayout() {
           <Header
             title={isMyDashboardPage ? '내 대시보드' : undefined}
             isOwner={!isMyDashboardPage}
-            isTitleVisible={isMyDashboardPage}
+            isTitleAlwaysVisible={isMyDashboardPage}
             isActionButtonsVisible={!isMyDashboardPage}
             isMemberProfilesVisible={!isMyDashboardPage}
             onManageClick={handleNavigateDashboardEdit}

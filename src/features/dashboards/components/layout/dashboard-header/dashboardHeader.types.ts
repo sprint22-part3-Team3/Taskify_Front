@@ -8,6 +8,7 @@ export type HeaderProps = {
   userName?: string;
   profileImage?: string;
   isTitleVisible?: boolean;
+  isTitleAlwaysVisible?: boolean;
   isActionButtonsVisible?: boolean;
   isMemberProfilesVisible?: boolean;
   onManageClick?: () => void;

@@ -43,6 +43,7 @@ export default function Header({
   userName = '배유철',
   profileImage,
   isTitleVisible = true,
+  isTitleAlwaysVisible = false,
   isActionButtonsVisible = true,
   isMemberProfilesVisible = true,
   onManageClick,
@@ -53,7 +54,13 @@ export default function Header({
     <header className="z-header flex h-15 min-w-0 items-center justify-between border-b border-gray-200 bg-white pl-4 md:h-17.5 md:px-10 lg:justify-between">
       {/* 제목 - 데스크탑에서만 표시 */}
       {isTitleVisible && (
-        <div className="hidden items-center gap-2 lg:flex">
+        <div
+          className={
+            isTitleAlwaysVisible
+              ? 'flex items-center gap-2'
+              : 'hidden items-center gap-2 lg:flex'
+          }
+        >
           <Title as="h2" size="xl" weight="bold">
             {title}
           </Title>
