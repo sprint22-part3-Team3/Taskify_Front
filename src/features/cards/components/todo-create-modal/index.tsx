@@ -1,4 +1,4 @@
-import type { FormEvent } from 'react';
+import type { SubmitEvent } from 'react';
 import ImageUploadBox from '@/shared/components/image-uploader';
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
@@ -44,7 +44,7 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
     runAfterModalClose(resetForm);
   };
 
-  const handleCreate = (event: FormEvent<HTMLFormElement>) => {
+  const handleCreate = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     handleClose();
   };
