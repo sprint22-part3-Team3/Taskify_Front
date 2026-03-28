@@ -5,7 +5,7 @@ import { Modal } from '@/shared/components/modal';
 import type { CreateColumnModalProps } from '@/features/columns/components/modal/create-column-modal/createColumnModal.types';
 
 import { createColumn } from '@/features/columns/apis/createColum';
-import { useColumnNameValidation } from '@/shared/hooks/useColumnNameValidation';
+import { useColumnNameValidation } from '@/features/columns/hooks/useColumnNameValidation';
 import { checkColumnNameDuplicate } from '@/features/columns/apis/checkColumnName';
 import { useParams } from 'react-router-dom';
 import { COLUMN_NAME_RULES } from '@/shared/utils/validators';
