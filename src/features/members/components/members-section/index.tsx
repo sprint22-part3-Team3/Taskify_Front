@@ -13,7 +13,7 @@ import type { Member } from '@/features/members/apis/members.types';
 const MEMBERS_SIZE = 4;
 
 export default function MembersSection() {
-  // URL에서 dashboardId 가져오기 (라우터가 :id로 등록되어 있으므로 id로 받음)
+  // URL에서 dashboardId 가져오기
   const { id: dashboardId } = useParams();
   const [members, setMembers] = useState<Member[]>([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -21,7 +21,18 @@ export default function MembersSection() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   // 구성원 삭제 멤버 선택 state
   const [selectedMemberId, setSelectedMemberId] = useState<number | null>(null);
-  const totalPages = Math.ceil(totalCount / MEMBERS_SIZE);
+  const totalPages = Math.max(1, Math.ceil(totalCount / MEMBERS_SIZE));
+
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setSelectedMemberId(null);
+  };
+
+  const handleConfirmDelete = () => {
+    // TODO: 구성원 삭제 API 호출
+    console.log('삭제할 멤버 ID:', selectedMemberId);
+    handleCloseDeleteModal();
+  };
 
   // 구성원 목록 API 호출
   useEffect(() => {
@@ -87,16 +98,8 @@ export default function MembersSection() {
       <DeleteModal
         className="w-xl"
         isOpen={isDeleteModalOpen}
-        onClose={() => {
-          setIsDeleteModalOpen(false);
-          setSelectedMemberId(null);
-        }}
-        onConfirm={() => {
-          // TODO: 구성원 삭제 API 호출 (나중에 구현)
-          console.log('삭제할 멤버 ID:', selectedMemberId);
-          setIsDeleteModalOpen(false);
-          setSelectedMemberId(null);
-        }}
+        onClose={handleCloseDeleteModal}
+        onConfirm={handleConfirmDelete}
         message={
           <>
             구성원을 <span className="text-error">삭제</span>하시겠습니까?
