@@ -45,11 +45,11 @@ export function useAuthFieldValidation({
     (includePasswordConfirm && !passwordConfirm) ||
     (includeAgreement && !isAgreementChecked);
 
-  if (event.target.value.length > NICKNAME_RULES.MAX_LENGTH) {
-    return;
-  }
-
   const handleChangeNickname = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value.length > NICKNAME_RULES.MAX_LENGTH) {
+      return;
+    }
+
     nicknameField.onChange(event);
   };
 
