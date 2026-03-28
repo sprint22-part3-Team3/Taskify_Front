@@ -1,5 +1,6 @@
 import Sidebar from '@/features/dashboards/components/layout/dashboard-sidebar';
 import Header from '@/features/dashboards/components/layout/dashboard-header/index';
+import { useSidebar } from '@/features/dashboards/hooks/useSidebar';
 import InviteModal from '@/pages/dashboard-edit/components/invitations-section/invite-modal';
 import { useModal } from '@/shared/hooks/useModal';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -21,6 +22,13 @@ export default function DashboardLayout() {
     openModal: handleOpenInviteModal,
     closeModal: handleCloseInviteModal,
   } = useModal();
+  const {
+    sidebarDashboards,
+    selectedDashboardId,
+    isLoadingSidebarDashboards,
+    sidebarDashboardsError,
+    handleDashboardClick,
+  } = useSidebar();
 
   const handleNavigateDashboardEdit = () => {
     if (!id) {
@@ -47,7 +55,13 @@ export default function DashboardLayout() {
   return (
     <>
       <div className="flex h-screen overflow-hidden bg-gray-50">
-        <Sidebar />
+        <Sidebar
+          dashboards={sidebarDashboards}
+          selectedId={selectedDashboardId}
+          isLoading={isLoadingSidebarDashboards}
+          errorMessage={sidebarDashboardsError}
+          onDashboardClick={handleDashboardClick}
+        />
         <div className="flex min-w-0 flex-1 flex-col">
           <Header
             title={isMyDashboardPage ? '내 대시보드' : undefined}
