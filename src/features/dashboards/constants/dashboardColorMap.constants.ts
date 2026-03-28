@@ -42,3 +42,22 @@ export const DASHBOARD_COLOR_HEX: Record<DashboardColorName, string> = {
   orange: '#fb8926',
   pink: '#fc7b8f',
 };
+
+/**
+ * API에서 받은 hex 값에 해당하는 대시보드 색상 이름을 조회합니다.
+ */
+export const getDashboardColorName = function (
+  colorHex: string
+): DashboardColorName | null {
+  const normalizedColorHex = colorHex.toLowerCase();
+
+  const matchedDashboardColorEntry = Object.entries(DASHBOARD_COLOR_HEX).find(
+    ([, dashboardColorHex]) => {
+      return dashboardColorHex.toLowerCase() === normalizedColorHex;
+    }
+  );
+
+  return (
+    (matchedDashboardColorEntry?.[0] as DashboardColorName | undefined) ?? null
+  );
+};
