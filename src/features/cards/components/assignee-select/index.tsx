@@ -20,12 +20,8 @@ const parseAssigneeQuery = (value: string) => {
   };
 };
 
-const isSameAssigneeQuery = (
-  query: string,
-  selectedAssigneeQuery: string,
-  selectedAssignee: AvatarUser | null
-) => {
-  return Boolean(selectedAssignee) && query === selectedAssigneeQuery;
+const isSameAssigneeQuery = (query: string, selectedAssigneeQuery: string) => {
+  return selectedAssigneeQuery !== '' && query === selectedAssigneeQuery;
 };
 
 function AssigneeSelect({
@@ -52,8 +48,7 @@ function AssigneeSelect({
   const { hasMentionTrigger, normalizedQuery } = parseAssigneeQuery(query);
   const hasSelectedAssigneeQuery = isSameAssigneeQuery(
     query,
-    selectedAssigneeQuery,
-    selectedAssignee
+    selectedAssigneeQuery
   );
   const shouldShowSelectedAssignee = hasSelectedAssigneeQuery && !isOpen;
   const filteredAssignees = useMemo(() => {
