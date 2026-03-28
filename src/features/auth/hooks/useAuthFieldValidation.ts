@@ -9,18 +9,18 @@ import {
 } from '@/shared/utils/validators';
 
 type UseAuthFieldValidationOptions = {
-  includeNickname?: boolean;
-  includePasswordConfirm?: boolean;
-  includeAgreement?: boolean;
+  isNicknameIncluded?: boolean;
+  isPasswordConfirmIncluded?: boolean;
+  isAgreementIncluded?: boolean;
   onEmailChange?: () => void;
   onPasswordChange?: () => void;
   onPasswordConfirmChange?: () => void;
 };
 
 export function useAuthFieldValidation({
-  includeNickname = false,
-  includePasswordConfirm = false,
-  includeAgreement = false,
+  isNicknameIncluded = false,
+  isPasswordConfirmIncluded = false,
+  isAgreementIncluded = false,
   onEmailChange,
   onPasswordChange,
   onPasswordConfirmChange,
@@ -32,7 +32,7 @@ export function useAuthFieldValidation({
   const [isAgreementChecked, setIsAgreementChecked] = useState(false);
 
   const passwordConfirmError =
-    includePasswordConfirm &&
+    isPasswordConfirmIncluded &&
     passwordConfirm &&
     passwordField.value.trim() !== passwordConfirm.trim()
       ? '비밀번호가 일치하지 않습니다.'
@@ -41,9 +41,9 @@ export function useAuthFieldValidation({
   const isSubmitDisabled =
     !emailField.value ||
     !passwordField.value ||
-    (includeNickname && !nicknameField.value) ||
-    (includePasswordConfirm && !passwordConfirm) ||
-    (includeAgreement && !isAgreementChecked);
+    (isNicknameIncluded && !nicknameField.value) ||
+    (isPasswordConfirmIncluded && !passwordConfirm) ||
+    (isAgreementIncluded && !isAgreementChecked);
 
   const handleChangeNickname = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.length > NICKNAME_RULES.MAX_LENGTH) {
@@ -78,7 +78,7 @@ export function useAuthFieldValidation({
     const validators = {
       email: () => emailField.trigger(),
       password: () => passwordField.trigger(),
-      ...(includeNickname
+      ...(isNicknameIncluded
         ? {
             nickname: () => nicknameField.trigger(),
           }
@@ -91,7 +91,7 @@ export function useAuthFieldValidation({
       return false;
     }
 
-    if (includePasswordConfirm) {
+    if (isPasswordConfirmIncluded) {
       return passwordField.value.trim() === passwordConfirm.trim();
     }
 

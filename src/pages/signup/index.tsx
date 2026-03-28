@@ -32,9 +32,9 @@ function SignupPage() {
     handleBlurPasswordConfirm,
     validateFields,
   } = useAuthFieldValidation({
-    includeNickname: true,
-    includePasswordConfirm: true,
-    includeAgreement: true,
+    isNicknameIncluded: true,
+    isPasswordConfirmIncluded: true,
+    isAgreementIncluded: true,
     onEmailChange: resetEmailApiError,
     onPasswordChange: resetSubmitError,
     onPasswordConfirmChange: resetSubmitError,
