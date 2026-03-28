@@ -12,6 +12,7 @@ import FieldWrapper from '@/features/cards/components/form-field/field-wrapper';
 import TagInput from '@/features/cards/components/tag-input';
 import { ASSIGNEE_OPTIONS } from '@/features/cards/components/todo-edit-modal/todoEditModal.mock';
 import { useTodoCreateModal } from '@/features/cards/hooks/useTodoCreateModal';
+import { runAfterModalClose } from '@/shared/utils/modal';
 
 /**
  * 할 일 생성 모달을 렌더링합니다.
@@ -39,8 +40,8 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
   const isSubmitDisabled = !title.trim() || !description.trim();
 
   const handleClose = () => {
-    resetForm();
     onClose();
+    runAfterModalClose(resetForm);
   };
 
   const handleCreate = (event: FormEvent<HTMLFormElement>) => {
