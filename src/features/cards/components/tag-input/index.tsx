@@ -19,9 +19,12 @@ function TagInput({
 }: TagInputProps) {
   const [inputValue, setInputValue] = useState('');
   const [error, setError] = useState('');
+  const [isFocused, setIsFocused] = useState(false);
+  const isMaxTagsReached = tags.length >= maxTags;
 
   const handleDeleteTag = (targetTag: string) => {
     setTags((prevTags) => prevTags.filter((tag) => tag !== targetTag));
+    setError('');
   };
 
   const handleAddTag = () => {
@@ -91,9 +94,15 @@ function TagInput({
 
         <input
           type="text"
-          placeholder={placeholder}
+          placeholder={
+            !isMaxTagsReached && (isFocused || tags.length === 0)
+              ? placeholder
+              : ''
+          }
           className="typo-md-regular md:typo-lg-regular min-w-0 flex-1 outline-0 placeholder:text-gray-300"
           value={inputValue}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
           onChange={(event) => {
             setInputValue(event.target.value);
             setError('');
