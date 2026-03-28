@@ -1,5 +1,7 @@
-import type { InvitationListResponse } from '@/features/dashboards/apis/dashboardApi.types';
-import type { InvitedDashboardItem } from '@/features/dashboards/types/myDashboard.types';
+import type {
+  InvitationListResponse,
+  InvitedDashboardItem,
+} from '@/features/invitations/types/invitation.types';
 import { get } from '@/shared/apis/fetchInstance';
 
 /**

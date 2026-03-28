@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useModal } from '@/shared/hooks/useModal';
 import { runAfterModalClose } from '@/shared/utils/modal';
-import { getInvitedDashboards } from '@/features/dashboards/apis/getInvitedDashboards';
-import { respondToInvitation } from '@/features/dashboards/apis/respondToInvitation';
-import type { InvitedDashboardItem } from '@/features/dashboards/types/myDashboard.types';
+import type { InvitedDashboardItem } from '@/features/invitations/types/invitation.types';
+import { getInvitedDashboards } from '@/features/invitations/apis/getInvitedDashboards';
+import { respondToInvitation } from '@/features/invitations/apis/respondToInvitation';
 import { DASHBOARD_ERROR_MESSAGE } from '@/features/dashboards/constants/dashboardErrorMessage.constants';
 import { getApiErrorMessage } from '@/features/dashboards/utils/getApiErrorMessage';
 

@@ -1,4 +1,4 @@
-import type { DashboardListResponse } from '@/features/dashboards/apis/dashboardApi.types';
+import type { DashboardListResponse } from '@/features/dashboards/apis/dashboard.types';
 import type { DashboardItem } from '@/features/dashboards/types/myDashboard.types';
 import { COLORS } from '@/shared/constants/color.constants';
 import { get } from '@/shared/apis/fetchInstance';
