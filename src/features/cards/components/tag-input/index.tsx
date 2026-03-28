@@ -76,26 +76,24 @@ function TagInput({
   return (
     <div className="flex flex-col gap-1">
       <div className="focus-within:border-primary-500 flex min-h-12.5 w-full flex-wrap items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2">
-        {tags
-          .filter((tag) => tag.trim() !== '')
-          .map((tag) => (
-            <Tag
-              key={tag}
-              color={getTagColor(tag)}
-              onClick={() => handleDeleteTag(tag)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter' || event.key === ' ') {
-                  event.preventDefault();
-                  handleDeleteTag(tag);
-                }
-              }}
-              aria-label={`${tag} 태그 삭제`}
-            >
-              {tag}
-            </Tag>
-          ))}
+        {tags.map((tag) => (
+          <Tag
+            key={tag}
+            color={getTagColor(tag)}
+            onClick={() => handleDeleteTag(tag)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                handleDeleteTag(tag);
+              }
+            }}
+            aria-label={`${tag} 태그 삭제`}
+          >
+            {tag}
+          </Tag>
+        ))}
 
         <input
           type="text"
