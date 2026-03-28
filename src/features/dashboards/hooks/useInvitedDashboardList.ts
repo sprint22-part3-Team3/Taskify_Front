@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useModal } from '@/shared/hooks/useModal';
-import { runAfterModalClose } from '@/shared/utils/modal';
 import type { InvitedDashboardItem } from '@/features/invitations/types/invitation.types';
 import { getInvitedDashboards } from '@/features/invitations/apis/getInvitedDashboards';
-import { respondToInvitation } from '@/features/invitations/apis/respondToInvitation';
 import { DASHBOARD_ERROR_MESSAGE } from '@/features/dashboards/constants/dashboardErrorMessage.constants';
 import { getApiErrorMessage } from '@/features/dashboards/utils/getApiErrorMessage';
 
@@ -17,14 +14,7 @@ import { getApiErrorMessage } from '@/features/dashboards/utils/getApiErrorMessa
  *   searchKeyword,
  *   isSearchingInvitedDashboards,
  *   invitedDashboardError,
- *   respondingInvitationId,
- *   selectedInvitedDashboard,
- *   isDeleteModalOpen,
  *   handleSearchKeywordChange,
- *   handleInvitationAccept,
- *   handleRejectInvite,
- *   handleCloseDeleteModalWithReset,
- *   handleConfirmRejectInvite,
  * } = useInvitedDashboardList();
  * ```
  */
@@ -36,28 +26,6 @@ export function useInvitedDashboardList() {
   const [isSearchingInvitedDashboards, setIsSearchingInvitedDashboards] =
     useState(false);
   const [invitedDashboardError, setInvitedDashboardError] = useState('');
-  const [respondingInvitationId, setRespondingInvitationId] = useState<
-    number | null
-  >(null);
-  const [selectedInvitedDashboard, setSelectedInvitedDashboard] =
-    useState<InvitedDashboardItem | null>(null);
-  const {
-    isOpen: isDeleteModalOpen,
-    openModal: openDeleteModal,
-    closeModal: closeDeleteModal,
-  } = useModal();
-
-  const handleRejectInvite = (invitedDashboardItem: InvitedDashboardItem) => {
-    setSelectedInvitedDashboard(invitedDashboardItem);
-    openDeleteModal();
-  };
-
-  const handleCloseDeleteModalWithReset = () => {
-    closeDeleteModal();
-    runAfterModalClose(() => {
-      setSelectedInvitedDashboard(null);
-    });
-  };
 
   const handleSearchKeywordChange = async (keyword: string) => {
     setSearchKeyword(keyword);
@@ -77,48 +45,6 @@ export function useInvitedDashboardList() {
     }
   };
 
-  const handleInvitationAccept = async (invitationId: number) => {
-    setRespondingInvitationId(invitationId);
-
-    try {
-      await respondToInvitation({
-        invitationId,
-        inviteAccepted: true,
-      });
-      setInvitedDashboardItems((previousInvitedDashboards) =>
-        previousInvitedDashboards.filter(
-          (invitedDashboardItem) => invitedDashboardItem.id !== invitationId
-        )
-      );
-    } finally {
-      setRespondingInvitationId(null);
-    }
-  };
-
-  const handleConfirmRejectInvite = async () => {
-    if (!selectedInvitedDashboard) {
-      return;
-    }
-
-    setRespondingInvitationId(selectedInvitedDashboard.id);
-
-    try {
-      await respondToInvitation({
-        invitationId: selectedInvitedDashboard.id,
-        inviteAccepted: false,
-      });
-      setInvitedDashboardItems((previousInvitedDashboards) =>
-        previousInvitedDashboards.filter(
-          (invitedDashboardItem) =>
-            invitedDashboardItem.id !== selectedInvitedDashboard.id
-        )
-      );
-      handleCloseDeleteModalWithReset();
-    } finally {
-      setRespondingInvitationId(null);
-    }
-  };
-
   useEffect(() => {
     void handleSearchKeywordChange('');
   }, []);
@@ -128,13 +54,6 @@ export function useInvitedDashboardList() {
     searchKeyword,
     isSearchingInvitedDashboards,
     invitedDashboardError,
-    respondingInvitationId,
-    selectedInvitedDashboard,
-    isDeleteModalOpen,
     handleSearchKeywordChange,
-    handleInvitationAccept,
-    handleRejectInvite,
-    handleCloseDeleteModalWithReset,
-    handleConfirmRejectInvite,
   };
 }

@@ -1,11 +1,8 @@
 import { IcMailOff } from '@/shared/assets/icons';
-import { Button } from '@/shared/components/button';
-import DeleteModal from '@/shared/components/modal/delete-modal';
 import { PageIndicator } from '@/shared/components/page-indicator';
 import NavigationButtons from '@/shared/components/page-indicator/navigation-buttons';
 import Title from '@/shared/components/title';
 import { useInvitedDashboardList } from '@/features/dashboards/hooks/useInvitedDashboardList';
-import InvitedDashboardItemRow from '@/pages/my-dashboard/components/invited-dashboard-item-row';
 import SearchInput from '@/pages/my-dashboard/components/search-input';
 
 /**
@@ -22,14 +19,7 @@ function InvitedDashboardSection() {
     searchKeyword,
     isSearchingInvitedDashboards,
     invitedDashboardError,
-    respondingInvitationId,
-    selectedInvitedDashboard,
-    isDeleteModalOpen,
     handleSearchKeywordChange,
-    handleInvitationAccept,
-    handleRejectInvite,
-    handleCloseDeleteModalWithReset,
-    handleConfirmRejectInvite,
   } = useInvitedDashboardList();
   const hasInvitedDashboards = invitedDashboardItems.length > 0;
   const shouldShowInvitedDashboardContent =
@@ -69,24 +59,8 @@ function InvitedDashboardSection() {
 
             <div className="mt-4 lg:overflow-x-auto">
               <div className="lg:min-w-170">
-                <div className="md:hidden">
-                  {invitedDashboardItems.map((invitedDashboardItem) => {
-                    return (
-                      <InvitedDashboardItemRow
-                        key={invitedDashboardItem.id}
-                        invitedDashboardItem={invitedDashboardItem}
-                        onAccept={handleInvitationAccept}
-                        onReject={handleRejectInvite}
-                        isResponding={
-                          respondingInvitationId === invitedDashboardItem.id
-                        }
-                      />
-                    );
-                  })}
-                </div>
-
                 <table
-                  className="hidden w-full table-fixed border-collapse md:table"
+                  className="w-full table-fixed border-collapse"
                   aria-label="초대받은 대시보드 목록"
                 >
                   <thead>
@@ -105,10 +79,8 @@ function InvitedDashboardSection() {
                       </th>
                       <th
                         scope="col"
-                        className="px-6 py-4 text-center font-normal"
-                      >
-                        수락 여부
-                      </th>
+                        className="px-6 py-4 text-left font-normal"
+                      />
                     </tr>
                   </thead>
                   <tbody>
@@ -124,40 +96,7 @@ function InvitedDashboardSection() {
                           <td className="typo-md-regular md:typo-lg-regular text-black-200 px-6 py-5.75">
                             {invitedDashboardItem.inviter}
                           </td>
-                          <td className="py-5.75">
-                            <div className="flex items-center justify-center gap-2">
-                              <Button
-                                theme="primary"
-                                size="sm"
-                                className="min-w-21"
-                                disabled={
-                                  respondingInvitationId ===
-                                  invitedDashboardItem.id
-                                }
-                                onClick={() =>
-                                  handleInvitationAccept(
-                                    invitedDashboardItem.id
-                                  )
-                                }
-                              >
-                                수락
-                              </Button>
-                              <Button
-                                theme="outlined"
-                                size="sm"
-                                className="text-primary-500 min-w-21"
-                                disabled={
-                                  respondingInvitationId ===
-                                  invitedDashboardItem.id
-                                }
-                                onClick={() =>
-                                  handleRejectInvite(invitedDashboardItem)
-                                }
-                              >
-                                거절
-                              </Button>
-                            </div>
-                          </td>
+                          <td className="py-5.75" />
                         </tr>
                       );
                     })}
@@ -187,22 +126,7 @@ function InvitedDashboardSection() {
           </div>
         )}
       </section>
-
-      <DeleteModal
-        isOpen={isDeleteModalOpen}
-        onClose={handleCloseDeleteModalWithReset}
-        onConfirm={handleConfirmRejectInvite}
-        className="max-w-142"
-        message={
-          <>
-            {selectedInvitedDashboard?.name ?? '초대받은 대시보드'}를{' '}
-            <span className="text-error">거절</span> 하시겠습니까?
-          </>
-        }
-        confirmText="거절"
-      />
     </>
   );
 }
-
 export default InvitedDashboardSection;
