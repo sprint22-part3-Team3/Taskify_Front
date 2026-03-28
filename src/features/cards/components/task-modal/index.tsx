@@ -9,6 +9,7 @@ import { TaskAssignee } from '@/features/cards/components/task-modal/task-assign
 import { TaskMenu } from '@/features/cards/components/task-modal/task-menu';
 import TodoEditModal from '@/features/cards/components/todo-edit-modal';
 import { useModal } from '@/shared/hooks/useModal';
+import { delCard } from '@/features/cards/apis/cards';
 
 function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -38,7 +39,8 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
     handleOpenDeleteModal();
   };
   const handleDeleteCard = () => {
-    // TODO: 카드 삭제 API 연동
+    delCard(id);
+    // TODO: 카드 리스트 재 렌더링 로직
     handleCloseDeleteModal();
     handleCloseModal();
   };
