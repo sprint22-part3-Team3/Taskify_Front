@@ -17,22 +17,6 @@ export const DASHBOARD_COLORS: DashboardColor[] = (
 ).map(([id, hex]) => ({ id, hex }));
 
 /**
- * 대시보드에서 사용할 색상 목록을 조회합니다.
- */
-export const getDashboardColors = function (): DashboardColor[] {
-  return DASHBOARD_COLORS;
-};
-
-/**
- * 선택된 대시보드 색상 이름에 해당하는 hex 값을 조회합니다.
- */
-export const getDashboardColorHex = function (
-  colorId: DashboardColorName
-): string {
-  return DASHBOARD_COLOR_MAP[colorId];
-};
-
-/**
  * API 연결용 hex 맵 추가
  */
 export const DASHBOARD_COLOR_HEX: Record<DashboardColorName, string> = {
@@ -42,19 +26,3 @@ export const DASHBOARD_COLOR_HEX: Record<DashboardColorName, string> = {
   orange: '#fb8926',
   pink: '#fc7b8f',
 };
-
-/**
- * API에서 받은 hex 값에 해당하는 대시보드 색상 이름을 조회합니다.
- */
-export const getDashboardColorName = (() => {
-  const hexToNameMap = Object.fromEntries(
-    Object.entries(DASHBOARD_COLOR_HEX).map(([dashboardColorName, hex]) => [
-      hex.toLowerCase(),
-      dashboardColorName,
-    ])
-  ) as Record<string, DashboardColorName>;
-
-  return (colorHex: string): DashboardColorName | null => {
-    return hexToNameMap[colorHex.toLowerCase()] ?? null;
-  };
-})();
