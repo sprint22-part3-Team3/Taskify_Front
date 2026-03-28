@@ -1,4 +1,4 @@
-import type { FormEvent } from 'react';
+import type { SubmitEvent } from 'react';
 import ImageUploadBox from '@/shared/components/image-uploader';
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
@@ -23,21 +23,21 @@ import { useTodoCreateModal } from '@/features/cards/hooks/useTodoCreateModal';
  */
 function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
   const {
+    maxTagCount,
     selectedAssignee,
     title,
     description,
     dueDate,
-    tagInput,
+    tags,
     setSelectedAssignee,
     setTitle,
     setDescription,
     setDueDate,
-    setTagInput,
-    handleTagKeyDown,
+    setTags,
   } = useTodoCreateModal();
   const isSubmitDisabled = !title.trim() || !description.trim();
 
-  const handleCreate = (event: FormEvent<HTMLFormElement>) => {
+  const handleCreate = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     onClose();
   };
@@ -94,11 +94,7 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
               <Label className="typo-md-regular md:typo-2lg-regular">
                 태그
               </Label>
-              <TagInput
-                value={tagInput}
-                onChange={(event) => setTagInput(event.target.value)}
-                onKeyDown={handleTagKeyDown}
-              />
+              <TagInput tags={tags} setTags={setTags} maxTags={maxTagCount} />
             </FieldWrapper>
 
             <FieldWrapper>
