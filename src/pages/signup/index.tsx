@@ -103,6 +103,7 @@ function SignupPage() {
           size="md"
           type="submit"
           disabled={isSubmitDisabled}
+          isLoading={isSubmitting}
           className="mt-4 mb-6 w-full"
         >
           가입하기
