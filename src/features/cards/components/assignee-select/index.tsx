@@ -20,6 +20,14 @@ const parseAssigneeQuery = (value: string) => {
   };
 };
 
+const isSameAssigneeQuery = (
+  query: string,
+  selectedAssigneeQuery: string,
+  selectedAssignee: AvatarUser | null
+) => {
+  return Boolean(selectedAssignee) && query === selectedAssigneeQuery;
+};
+
 function AssigneeSelect({
   label,
   selectedAssignee,
@@ -33,16 +41,25 @@ function AssigneeSelect({
   );
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const selectedAssigneeQuery = getAssigneeQuery(selectedAssignee);
 
   useEffect(() => {
-    setQuery(getAssigneeQuery(selectedAssignee));
-  }, [selectedAssignee]);
+    setQuery(selectedAssigneeQuery);
+  }, [selectedAssigneeQuery]);
 
   useOnClickOutside(containerRef, () => setIsOpen(false), isOpen);
 
   const { hasMentionTrigger, normalizedQuery } = parseAssigneeQuery(query);
+  const hasSelectedAssigneeQuery = isSameAssigneeQuery(
+    query,
+    selectedAssigneeQuery,
+    selectedAssignee
+  );
+  const shouldShowSelectedAssignee = hasSelectedAssigneeQuery && !isOpen;
   const filteredAssignees = useMemo(() => {
-    if (!normalizedQuery) return assigneeOptions;
+    if (!normalizedQuery) {
+      return assigneeOptions;
+    }
 
     return assigneeOptions.filter((assignee: AvatarUser) =>
       assignee.nickname.toLowerCase().includes(normalizedQuery)
@@ -51,6 +68,7 @@ function AssigneeSelect({
 
   const handleSelect = (assignee: AvatarUser) => {
     onSelect(assignee);
+    setQuery(getAssigneeQuery(assignee));
     setIsOpen(false);
   };
 
@@ -63,6 +81,16 @@ function AssigneeSelect({
     setIsOpen(hasNextMentionTrigger);
   };
 
+  const handleFocus = () => {
+    if (hasSelectedAssigneeQuery) {
+      setQuery('@');
+      setIsOpen(true);
+      return;
+    }
+
+    setIsOpen(hasMentionTrigger);
+  };
+
   return (
     <div className="flex w-full flex-col gap-2" ref={containerRef}>
       <Label
@@ -73,14 +101,29 @@ function AssigneeSelect({
       </Label>
 
       <div className="relative">
-        <IcSearch className="absolute top-1/2 left-4 w-5.5 -translate-y-1/2 text-gray-300 md:w-6" />
+        {!shouldShowSelectedAssignee && (
+          <IcSearch className="absolute top-1/2 left-4 w-5.5 -translate-y-1/2 text-gray-300 md:w-6" />
+        )}
+        {shouldShowSelectedAssignee && selectedAssignee && (
+          <div className="pointer-events-none absolute inset-y-0 left-4 flex items-center">
+            <UserProfile
+              user={selectedAssignee}
+              size="md"
+              nicknameClassName="typo-md-regular md:typo-lg-regular"
+              className="gap-2"
+            />
+          </div>
+        )}
         <InputField
           type="text"
           value={query}
           placeholder={placeholder}
-          onFocus={() => setIsOpen(hasMentionTrigger)}
+          onFocus={handleFocus}
           onChange={handleChangeQuery}
-          className="typo-md-regular md:typo-lg-regular focus:border-primary-500 text-black-200 h-12 bg-white py-0 pr-4 pl-11 md:pl-12"
+          className={cn(
+            'typo-md-regular md:typo-lg-regular focus:border-primary-500 text-black-200 h-12 bg-white py-0 pr-4 pl-11 md:pl-12',
+            shouldShowSelectedAssignee && 'text-transparent caret-transparent'
+          )}
         />
 
         {isOpen && (
