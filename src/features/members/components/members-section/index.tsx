@@ -6,11 +6,8 @@ import UserProfile from '@/shared/components/user-profile';
 import DeleteModal from '@/shared/components/modal/delete-modal';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getMembers } from '@/features/members/apis/members';
 import type { Member } from '@/features/members/apis/members.types';
-
-/** 한 페이지에 보여줄 구성원 수 */
-const MEMBERS_SIZE = 4;
+import { getMembers, MEMBERS_SIZE } from '@/features/members/apis/members';
 
 export default function MembersSection() {
   // URL에서 dashboardId 가져오기
@@ -22,6 +19,11 @@ export default function MembersSection() {
   // 구성원 삭제 멤버 선택 state
   const [selectedMemberId, setSelectedMemberId] = useState<number | null>(null);
   const totalPages = Math.max(1, Math.ceil(totalCount / MEMBERS_SIZE));
+
+  const handleOpenDeleteModal = (memberId: number) => {
+    setSelectedMemberId(memberId);
+    setIsDeleteModalOpen(true);
+  };
 
   const handleCloseDeleteModal = () => {
     setIsDeleteModalOpen(false);
@@ -49,7 +51,6 @@ export default function MembersSection() {
 
     fetchMembers(dashboardId);
   }, [dashboardId, currentPage]);
-  // dashboardId나 currentPage가 바뀔 때마다 다시 호출
 
   return (
     <section className="rounded-xl bg-white px-4 pt-5 pb-2 md:px-6 lg:px-7">
@@ -85,10 +86,7 @@ export default function MembersSection() {
               theme="danger"
               size="sm"
               className="px-3.5 md:px-7"
-              onClick={() => {
-                setSelectedMemberId(member.id);
-                setIsDeleteModalOpen(true);
-              }}
+              onClick={() => handleOpenDeleteModal(member.id)}
             >
               삭제
             </Button>

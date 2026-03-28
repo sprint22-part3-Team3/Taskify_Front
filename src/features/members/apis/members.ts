@@ -2,7 +2,7 @@ import { get } from '@/shared/apis/fetchInstance';
 import type { MembersResponse } from '@/features/members/apis/members.types';
 
 /** 한 페이지에 보여줄 구성원 수 */
-const MEMBERS_SIZE = 4;
+export const MEMBERS_SIZE = 4;
 
 /**
  * 대시보드 구성원 목록을 조회하는 함수
