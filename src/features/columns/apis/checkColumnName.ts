@@ -3,9 +3,6 @@
 import { get } from '@/shared/apis/fetchInstance';
 import type { Column } from '@/features/columns/types/column.types';
 
-// TODO: dashboardId URL 파라미터 또는 Context에서 가져오도록 수정 필요
-const TEMP_DASHBOARD_ID = 17586;
-
 type GetColumnsResponse = {
   result: string;
   data: Column[];
@@ -20,13 +17,16 @@ type GetColumnsResponse = {
  *
  * @example
  * ```ts
- * const isDuplicate = await checkColumnNameDuplicate('Todo');
+ * const isDuplicate = await checkColumnNameDuplicate('Todo', 17586);
  * // true → 이미 존재하는 컬럼
  * ```
  */
-export async function checkColumnNameDuplicate(name: string): Promise<boolean> {
+export async function checkColumnNameDuplicate(
+  name: string,
+  dashboardId: number
+): Promise<boolean> {
   const response = await get<GetColumnsResponse>(
-    `columns?dashboardId=${TEMP_DASHBOARD_ID}`
+    `columns?dashboardId=${dashboardId}`
   );
   return response?.data.some((column) => column.title === name) ?? false;
 }

@@ -11,7 +11,7 @@ import { deleteColumn } from '@/features/columns/apis/deleteColumn';
 import { updateColumn } from '@/features/columns/apis/updateColumn';
 import { checkColumnNameDuplicate } from '@/features/columns/apis/checkColumnName';
 import { COLUMN_NAME_RULES } from '@/shared/utils/validators/validators.constants';
-
+import { useParams } from 'react-router-dom';
 /**
  * 컬럼 이름을 수정하거나 삭제할 수 있는 모달입니다.
  *
@@ -30,6 +30,8 @@ function EditColumnModal({
   columnId,
   initialTitle,
 }: EditColumnModalProps) {
+  const { id } = useParams();
+  const dashboardId = Number(id);
   const [draftTitle, setDraftTitle] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -50,11 +52,11 @@ function EditColumnModal({
     isLoading;
 
   const handleClose = () => {
-    setDraftTitle(null);
-    setError('');
     onClose();
     runAfterModalClose(() => {
       handleCloseDeleteModal();
+      setDraftTitle(null);
+      setError('');
     });
   };
 
@@ -66,7 +68,7 @@ function EditColumnModal({
     if (!trimmed) return;
 
     try {
-      const isDuplicate = await checkColumnNameDuplicate(trimmed);
+      const isDuplicate = await checkColumnNameDuplicate(trimmed, dashboardId);
       if (isDuplicate) {
         setError('중복된 컬럼 이름입니다.');
       } else {
@@ -94,6 +96,15 @@ function EditColumnModal({
     event.preventDefault();
 
     if (isSubmitDisabled || error) return;
+
+    const isDuplicate = await checkColumnNameDuplicate(
+      columnTitle.trim(),
+      dashboardId
+    );
+    if (isDuplicate) {
+      setError('중복된 컬럼 이름입니다.');
+      return;
+    }
 
     setIsLoading(true);
 
@@ -138,7 +149,7 @@ function EditColumnModal({
                 삭제
               </Button>
               <Button theme="primary" type="submit" disabled={isSubmitDisabled}>
-                {isLoading ? '변경 중...' : '변경'}
+                변경
               </Button>
             </Modal.Footer>
           </form>

@@ -10,6 +10,8 @@ import { checkColumnNameDuplicate } from '@/features/columns/apis/checkColumnNam
 import { useParams } from 'react-router-dom';
 import { COLUMN_NAME_RULES } from '@/shared/utils/validators';
 
+import { runAfterModalClose } from '@/shared/utils/modal';
+
 /**
  * 새 컬럼 이름을 입력받는 생성 모달입니다.
  *
@@ -23,7 +25,7 @@ function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
   const { id } = useParams();
   const dashboardId = Number(id);
   const columnNameField = useColumnNameValidation({
-    checkFn: checkColumnNameDuplicate,
+    checkFn: (name) => checkColumnNameDuplicate(name, dashboardId),
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -31,17 +33,28 @@ function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
   const isCreateDisabled =
     !columnNameField.value.trim() ||
     columnNameField.value.length > COLUMN_NAME_RULES.MAX_LENGTH ||
+    !!columnNameField.error ||
     isLoading;
 
   const handleClose = () => {
-    columnNameField.reset();
     onClose();
+    runAfterModalClose(() => {
+      columnNameField.reset();
+    });
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (isCreateDisabled) return;
+
+    const isDuplicate = await checkColumnNameDuplicate(
+      columnNameField.value.trim(),
+      dashboardId
+    );
+    if (isDuplicate) {
+      return;
+    }
     if (columnNameField.error) return;
 
     setIsLoading(true);
