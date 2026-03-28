@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { UserMe } from '@/shared/types/userMe.types';
+import type { UserMe } from '@/features/users/apis/userMe.types';
 import { getCurrentUser } from '@/features/users/apis/getCurrentUser';
 import useAuthContext from '@/features/auth/hooks/useAuthContext';
 
