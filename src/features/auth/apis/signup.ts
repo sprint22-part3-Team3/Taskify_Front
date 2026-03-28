@@ -1,5 +1,5 @@
 import { post } from '@/shared/apis/fetchInstance';
-import type { SignupRequest } from '@/features/auth/types/auth.types';
+import type { SignupRequest } from '@/features/auth/apis/auth.types';
 
 export async function signup({
   email,
