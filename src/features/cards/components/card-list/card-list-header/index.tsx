@@ -4,7 +4,7 @@ import { IcSettings } from '@/shared/assets';
 import { useModal } from '@/shared/hooks/useModal';
 import Title from '@/shared/components/title';
 
-function CardListHeader({ title, cardCount }: CardListHeaderProps) {
+function CardListHeader({ title, id, cardCount }: CardListHeaderProps) {
   const {
     isOpen: isEditColumnModalOpen,
     openModal: handleOpenEditColumnModal,
@@ -42,6 +42,7 @@ function CardListHeader({ title, cardCount }: CardListHeaderProps) {
       </div>
       <EditColumnModal
         isOpen={isEditColumnModalOpen}
+        columnId={id}
         onClose={handleCloseEditColumnModal}
         initialTitle={title}
       />

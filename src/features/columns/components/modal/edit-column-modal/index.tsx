@@ -7,6 +7,11 @@ import { useModal } from '@/shared/hooks/useModal';
 import { runAfterModalClose } from '@/shared/utils/modal';
 import type { EditColumnModalProps } from '@/features/columns/components/modal/edit-column-modal/editColumnModal.types';
 
+import { deleteColumn } from '@/features/columns/apis/deleteColumn';
+import { updateColumn } from '@/features/columns/apis/updateColumn';
+import { checkColumnNameDuplicate } from '@/features/columns/apis/checkColumnName';
+import { COLUMN_NAME_RULES } from '@/shared/utils/validators/validators.constants';
+
 /**
  * 컬럼 이름을 수정하거나 삭제할 수 있는 모달입니다.
  *
@@ -22,39 +27,84 @@ import type { EditColumnModalProps } from '@/features/columns/components/modal/e
 function EditColumnModal({
   isOpen,
   onClose,
+  columnId,
   initialTitle,
 }: EditColumnModalProps) {
   const [draftTitle, setDraftTitle] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
   const {
     isOpen: isDeleteModalOpen,
     openModal: handleOpenDeleteModal,
     closeModal: handleCloseDeleteModal,
   } = useModal();
+
   const columnTitle = draftTitle ?? initialTitle;
-  const isSubmitDisabled = !columnTitle.trim();
+
+  const isSubmitDisabled =
+    !columnTitle.trim() ||
+    columnTitle.trim() === initialTitle.trim() ||
+    columnTitle.length > COLUMN_NAME_RULES.MAX_LENGTH ||
+    !!error ||
+    isLoading;
 
   const handleClose = () => {
     setDraftTitle(null);
+    setError('');
     onClose();
     runAfterModalClose(() => {
       handleCloseDeleteModal();
     });
   };
 
-  const handleDelete = () => {
-    // TODO: 컬럼 삭제 API 연동
-    handleClose();
+  const handleBlur = async () => {
+    const trimmed = columnTitle.trim();
+
+    // 초기값과 같으면 중복 체크 불필요
+    if (trimmed === initialTitle.trim()) return;
+    if (!trimmed) return;
+
+    try {
+      const isDuplicate = await checkColumnNameDuplicate(trimmed);
+      if (isDuplicate) {
+        setError('중복된 컬럼 이름입니다.');
+      } else {
+        setError('');
+      }
+    } catch {
+      setError('중복 확인 중 오류가 발생했습니다. 다시 시도해주세요.');
+    }
   };
 
-  const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
+  const handleDelete = async () => {
+    setIsLoading(true);
+
+    try {
+      await deleteColumn(columnId);
+      handleClose();
+    } catch {
+      setError('컬럼 삭제에 실패했습니다. 다시 시도해주세요.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (isSubmitDisabled) {
-      return;
-    }
+    if (isSubmitDisabled || error) return;
 
-    // TODO: 컬럼 수정 API 연동
-    handleClose();
+    setIsLoading(true);
+
+    try {
+      await updateColumn(columnId, { title: columnTitle.trim() });
+      handleClose();
+    } catch {
+      setError('컬럼 수정에 실패했습니다. 다시 시도해주세요.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -68,8 +118,14 @@ function EditColumnModal({
               <Input
                 label="이름"
                 value={columnTitle}
-                onChange={(event) => setDraftTitle(event.target.value)}
+                onChange={(event) => {
+                  setDraftTitle(event.target.value);
+                  setError('');
+                }}
+                onBlur={handleBlur}
                 labelClassName="typo-lg-medium md:typo-2lg-medium"
+                errorMessage={error}
+                maxLength={COLUMN_NAME_RULES.MAX_LENGTH}
               />
             </Modal.Main>
 
@@ -82,7 +138,7 @@ function EditColumnModal({
                 삭제
               </Button>
               <Button theme="primary" type="submit" disabled={isSubmitDisabled}>
-                변경
+                {isLoading ? '변경 중...' : '변경'}
               </Button>
             </Modal.Footer>
           </form>
