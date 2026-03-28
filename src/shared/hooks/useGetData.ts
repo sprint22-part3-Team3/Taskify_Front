@@ -33,27 +33,39 @@ export const useGetData = <T>({
   useEffect(() => {
     if (Number.isNaN(dependencyId)) return;
 
+    let isCancelled = false;
+
     const fetchData = async () => {
       setIsLoading(true);
       setErrorMessage(null);
 
       try {
         const res = await fetchFn();
-        setResult(res);
+        if (!isCancelled) {
+          setResult(res);
+        }
       } catch (err) {
-        if (err instanceof ApiError && err.status === 404) {
-          setErrorMessage(notFoundMessage);
-        } else if (err instanceof Error) {
-          setErrorMessage(err.message);
-        } else {
-          setErrorMessage('알 수 없는 에러가 발생했습니다.');
+        if (!isCancelled) {
+          if (err instanceof ApiError && err.status === 404) {
+            setErrorMessage(notFoundMessage);
+          } else if (err instanceof Error) {
+            setErrorMessage(err.message);
+          } else {
+            setErrorMessage('알 수 없는 에러가 발생했습니다.');
+          }
         }
       } finally {
-        setIsLoading(false);
+        if (!isCancelled) {
+          setIsLoading(false);
+        }
       }
     };
 
     fetchData();
+
+    return () => {
+      isCancelled = true;
+    };
   }, [dependencyId, fetchFn, notFoundMessage]);
 
   return { result, isLoading, errorMessage };
