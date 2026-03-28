@@ -64,7 +64,7 @@ function TagInput({
     }
 
     if (event.key === 'Backspace' && inputValue === '' && tags.length > 0) {
-      handleDeleteTag(tags[tags.length - 1] ?? '');
+      handleDeleteTag(tags[tags.length - 1]);
     }
   };
 
