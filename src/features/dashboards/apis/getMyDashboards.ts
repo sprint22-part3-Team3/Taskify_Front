@@ -1,5 +1,6 @@
 import type { DashboardListResponse } from '@/features/dashboards/apis/dashboards.types';
 import type { DashboardItem } from '@/features/dashboards/types/myDashboard.types';
+import { getDashboardColorName } from '@/features/dashboards/utils/dashboardColor';
 import { COLORS } from '@/shared/constants/color.constants';
 import { get } from '@/shared/apis/fetchInstance';
 
@@ -24,9 +25,7 @@ export async function getMyDashboards(
   return {
     dashboards:
       response?.dashboards.map((dashboard, dashboardIndex) => {
-        const matchedDashboardColor = dashboardColors.find(
-          (dashboardColor) => dashboardColor === dashboard.color
-        );
+        const matchedDashboardColor = getDashboardColorName(dashboard.color);
 
         return {
           id: dashboard.id,
