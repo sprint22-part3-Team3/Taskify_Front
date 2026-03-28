@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { UserContext } from '@/shared/context/user/userContext';
 import { getCurrentUser } from '@/features/users/apis/getCurrentUser';
 import type { ReactNode } from 'react';
 import type { UserMe } from '@/shared/types/userMe';
+import { AuthContext } from '@/shared/context/auth/authContext';
 
 type UserProviderProps = {
   children: ReactNode;
@@ -11,8 +12,16 @@ type UserProviderProps = {
 export function UserProvider({ children }: UserProviderProps) {
   const [userProfile, setUserProfile] = useState<UserMe | null>(null);
   const [userDataLoading, setUserDataLoading] = useState(true);
+  const authContext = useContext(AuthContext);
+  const isAuthenticated = Boolean(authContext?.isAuthenticated);
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      setUserDataLoading(false);
+      setUserProfile(null);
+      return;
+    }
+
     let canceled = false;
 
     const fetchUser = async () => {
@@ -38,7 +47,7 @@ export function UserProvider({ children }: UserProviderProps) {
     return () => {
       canceled = true;
     };
-  }, []);
+  }, [isAuthenticated]);
 
   const value = useMemo(
     () => ({
