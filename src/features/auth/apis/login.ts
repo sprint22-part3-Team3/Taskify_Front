@@ -2,7 +2,7 @@ import { post } from '@/shared/apis/fetchInstance';
 import type {
   LoginRequest,
   LoginResponse,
-} from '@/features/auth/types/auth.types';
+} from '@/features/auth/apis/auth.types';
 
 export async function login({
   email,
