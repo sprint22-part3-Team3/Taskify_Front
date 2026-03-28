@@ -1,18 +1,13 @@
-import { useState } from 'react';
 import AuthFooterLink from '@/features/auth/components/auth-footer-link';
 import AuthForm from '@/features/auth/components/auth-form';
 import AuthHeader from '@/features/auth/components/auth-header';
+import { useAuthFieldValidation } from '@/features/auth/hooks/useAuthFieldValidation';
 import { useSignup } from '@/features/auth/hooks/useSignup';
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
 import SignupAgreement from '@/pages/signup/components/signup-agreement';
 
 function SignupPage() {
-  const [nickname, setNickname] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
-  const [isAgreementChecked, setIsAgreementChecked] = useState(false);
   const {
     emailApiError,
     submitError,
@@ -21,32 +16,41 @@ function SignupPage() {
     resetSubmitError,
     handleSignup,
   } = useSignup();
-  const isSubmitDisabled =
-    isSubmitting ||
-    !nickname ||
-    !email ||
-    !password ||
-    !passwordConfirm ||
-    !isAgreementChecked;
-
-  const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
-    resetEmailApiError();
-  };
-
-  const handleChangePasswordConfirm = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setPasswordConfirm(event.target.value);
-    resetSubmitError();
-  };
+  const {
+    nicknameField,
+    emailField,
+    passwordField,
+    passwordConfirm,
+    isAgreementChecked,
+    isSubmitDisabled,
+    passwordConfirmError,
+    setIsAgreementChecked,
+    handleChangeNickname,
+    handleChangeEmail,
+    handleChangePassword,
+    handleChangePasswordConfirm,
+    handleBlurPasswordConfirm,
+    validateFields,
+  } = useAuthFieldValidation({
+    isNicknameIncluded: true,
+    isPasswordConfirmIncluded: true,
+    isAgreementIncluded: true,
+    onEmailChange: resetEmailApiError,
+    onPasswordChange: resetSubmitError,
+    onPasswordConfirmChange: resetSubmitError,
+  });
+  const isDisabled = isSubmitting || isSubmitDisabled;
 
   const handleSubmit = async () => {
+    if (!validateFields()) {
+      return;
+    }
+
     await handleSignup({
-      nickname,
-      email,
-      password,
-      passwordConfirm,
+      nickname: nicknameField.value.trim(),
+      email: emailField.value.trim(),
+      password: passwordField.value.trim(),
+      passwordConfirm: passwordConfirm.trim(),
       isAgreementChecked,
     });
   };
@@ -56,27 +60,32 @@ function SignupPage() {
       <AuthHeader message="첫 방문을 환영합니다!" className="mb-9 md:mb-7.5" />
       <AuthForm onSubmit={handleSubmit}>
         <Input
-          label="이름"
+          label="닉네임"
           type="text"
-          value={nickname}
-          onChange={(event) => setNickname(event.target.value)}
-          placeholder="이름을 입력해 주세요"
+          value={nicknameField.value}
+          onChange={handleChangeNickname}
+          onBlur={nicknameField.onBlur}
+          placeholder="닉네임을 입력해 주세요"
+          errorMessage={nicknameField.error}
         />
         <Input
           label="이메일"
           type="email"
-          value={email}
+          value={emailField.value}
           onChange={handleChangeEmail}
+          onBlur={emailField.onBlur}
           placeholder="이메일을 입력해 주세요"
-          errorMessage={emailApiError}
+          errorMessage={emailField.error || emailApiError}
         />
         <Input
           id="signup-password"
           label="비밀번호"
           type="password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
+          value={passwordField.value}
+          onChange={handleChangePassword}
+          onBlur={passwordField.onBlur}
           placeholder="비밀번호를 입력해 주세요"
+          errorMessage={passwordField.error}
         />
         <Input
           id="signup-password-confirm"
@@ -84,12 +93,9 @@ function SignupPage() {
           type="password"
           value={passwordConfirm}
           onChange={handleChangePasswordConfirm}
+          onBlur={handleBlurPasswordConfirm}
           placeholder="비밀번호를 다시 입력해 주세요"
-          errorMessage={
-            passwordConfirm && password !== passwordConfirm
-              ? '비밀번호가 일치하지 않습니다.'
-              : ''
-          }
+          errorMessage={passwordConfirmError}
         />
         <SignupAgreement
           isChecked={isAgreementChecked}
@@ -102,7 +108,7 @@ function SignupPage() {
           theme="primary"
           size="md"
           type="submit"
-          disabled={isSubmitDisabled}
+          disabled={isDisabled}
           className="mt-4 mb-6 w-full"
         >
           가입하기

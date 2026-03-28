@@ -2,7 +2,7 @@ import type { TaskModalProps } from '@/features/cards/components/task-modal/task
 import { useState } from 'react';
 import { Modal } from '@/shared/components/modal';
 import DeleteModal from '@/shared/components/modal/delete-modal';
-import { TaskMeta } from '@/features/columns/components/task-meta';
+import { TaskMeta } from '@/features/cards/components/task-modal/task-meta';
 import { TaskComments } from '@/features/comments/components/task-comments';
 import { TaskContent } from '@/features/cards/components/task-modal/task-content';
 import { TaskAssignee } from '@/features/cards/components/task-modal/task-assignee';
@@ -22,16 +22,7 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
     openModal: handleOpenDeleteModal,
     closeModal: handleCloseDeleteModal,
   } = useModal();
-  const {
-    id,
-    title,
-    description,
-    tags,
-    dueDate,
-    assignee,
-    imageUrl,
-    columnId,
-  } = card;
+  const { id, title, description, tags, dueDate, assignee, imageUrl } = card;
 
   const handleClickMenu = () => setIsMenuOpen((prev) => !prev);
   const handleCloseModal = () => {
@@ -77,7 +68,7 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
         <Modal.Main className="mb-0">
           <div className="flex flex-col-reverse gap-4 md:flex-row md:gap-3.25 lg:gap-10">
             <div className="flex grow flex-col gap-4">
-              <TaskMeta columnId={columnId} tags={tags} />
+              <TaskMeta tags={tags} />
               <TaskContent
                 description={description}
                 title={title}

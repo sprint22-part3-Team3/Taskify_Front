@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ApiError } from '@/shared/apis/apiError';
 import { login } from '@/features/auth/apis/login';
 import useAuthContext from '@/features/auth/hooks/useAuthContext';
-import type { LoginFormValues } from '@/features/auth/types/auth.types';
+import type { LoginFormValues } from '@/features/auth/apis/auth.types';
 
 const LOGIN_ERROR_MESSAGE = '로그인에 실패했습니다. 다시 시도해 주세요.';
 

@@ -8,9 +8,11 @@ import { get } from '@/shared/apis/fetchInstance';
  * GET 컬럼 목록 조회
  */
 export const getColumns = async ({ dashboardId }: getColumnsParams) => {
-  const res = await get<GetColumnsResponse>(
-    `columns?dashboardId=${dashboardId}`
-  );
+  const params = new URLSearchParams({
+    dashboardId: dashboardId.toString(),
+  });
+
+  const res = await get<GetColumnsResponse>(`columns?${params.toString()}`);
 
   return res;
 };
