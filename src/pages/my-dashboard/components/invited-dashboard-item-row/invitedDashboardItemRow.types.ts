@@ -1,5 +1,5 @@
 import type { ComponentProps } from 'react';
-import type { InvitedDashboardItem } from '@/features/invitations/apis/inviations.types';
+import type { InvitedDashboardItem } from '@/features/invitations/types/invitedDashboardItem.types';
 
 export type InvitedDashboardItemRowProps = ComponentProps<'div'> & {
   invitedDashboardItem: InvitedDashboardItem;

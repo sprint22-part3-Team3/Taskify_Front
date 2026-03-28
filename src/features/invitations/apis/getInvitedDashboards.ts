@@ -1,7 +1,5 @@
-import type {
-  InvitationListResponse,
-  InvitedDashboardItem,
-} from '@/features/invitations/apis/inviations.types';
+import type { InvitationListResponse } from '@/features/invitations/apis/inviations.types';
+import type { InvitedDashboardItem } from '@/features/invitations/types/invitedDashboardItem.types';
 import { get } from '@/shared/apis/fetchInstance';
 
 /**
