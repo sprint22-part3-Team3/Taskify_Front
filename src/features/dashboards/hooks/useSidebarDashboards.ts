@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { getMyDashboards } from '@/features/dashboards/apis/getMyDashboards';
 import { DASHBOARD_ERROR_MESSAGE } from '@/features/dashboards/constants/dashboardErrorMessage.constants';
 import type { SidebarDashboardItem } from '@/features/dashboards/components/layout/dashboard-sidebar/dashboardSidebar.types';
@@ -24,7 +24,7 @@ export function useSidebarDashboards() {
     string | null
   >(null);
 
-  const loadSidebarDashboards = async () => {
+  const loadSidebarDashboards = useCallback(async () => {
     setIsLoadingSidebarDashboards(true);
     setSidebarDashboardsError(null);
 
@@ -40,11 +40,11 @@ export function useSidebarDashboards() {
     } finally {
       setIsLoadingSidebarDashboards(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     void loadSidebarDashboards();
-  }, []);
+  }, [loadSidebarDashboards]);
 
   useEffect(() => {
     const handleDashboardListChange = (event: Event) => {
@@ -70,7 +70,7 @@ export function useSidebarDashboards() {
         handleDashboardListChange
       );
     };
-  }, []);
+  }, [loadSidebarDashboards]);
 
   return {
     sidebarDashboards,

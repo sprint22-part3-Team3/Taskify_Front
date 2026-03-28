@@ -22,24 +22,23 @@ export async function getMyDashboards(
   );
 
   return {
-    dashboards:
-      response?.dashboards
-        .map((dashboard, dashboardIndex) => {
-          const matchedDashboardColor = dashboardColors.find(
-            (dashboardColor) => dashboardColor === dashboard.color
-          );
+    dashboards: (response?.dashboards ?? [])
+      .map((dashboard, dashboardIndex) => {
+        const matchedDashboardColor = dashboardColors.find(
+          (dashboardColor) => dashboardColor === dashboard.color
+        );
 
-          return {
-            id: dashboard.id,
-            title: dashboard.title,
-            color:
-              matchedDashboardColor ??
-              dashboardColors[dashboardIndex % dashboardColors.length],
-            createdByMe: dashboard.createdByMe,
-          };
-        })
-        .sort((previousDashboard, nextDashboard) => {
-          return nextDashboard.id - previousDashboard.id;
-        }) ?? [],
+        return {
+          id: dashboard.id,
+          title: dashboard.title,
+          color:
+            matchedDashboardColor ??
+            dashboardColors[dashboardIndex % dashboardColors.length],
+          createdByMe: dashboard.createdByMe,
+        };
+      })
+      .sort((previousDashboard, nextDashboard) => {
+        return nextDashboard.id - previousDashboard.id;
+      }),
   };
 }

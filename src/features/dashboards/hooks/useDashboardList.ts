@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { createDashboard } from '@/features/dashboards/apis/createDashboard';
 import { getMyDashboards } from '@/features/dashboards/apis/getMyDashboards';
 import { DASHBOARD_ERROR_MESSAGE } from '@/features/dashboards/constants/dashboardErrorMessage.constants';
@@ -30,7 +30,7 @@ export function useDashboardList() {
   const [isCreatingDashboard, setIsCreatingDashboard] = useState(false);
   const [dashboardError, setDashboardError] = useState<string | null>(null);
 
-  const loadDashboardItems = async () => {
+  const loadDashboardItems = useCallback(async () => {
     setIsLoadingDashboards(true);
     setDashboardError(null);
 
@@ -45,11 +45,11 @@ export function useDashboardList() {
     } finally {
       setIsLoadingDashboards(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     void loadDashboardItems();
-  }, []);
+  }, [loadDashboardItems]);
 
   useEffect(() => {
     const handleDashboardListChange = (event: Event) => {
@@ -75,7 +75,7 @@ export function useDashboardList() {
         handleDashboardListChange
       );
     };
-  }, []);
+  }, [loadDashboardItems]);
 
   const handleCreateDashboard = async (
     dashboardTitle: string,
