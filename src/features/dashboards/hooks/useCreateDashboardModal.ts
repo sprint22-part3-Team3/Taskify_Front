@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import type { CreateDashboardModalProps } from '@/features/dashboards/components/create-dashboard-modal/createDashboardModal.types';
-import { getDashboardColors } from '@/features/dashboards/constants/dashboardColorMap.constants';
 import { DASHBOARD_ERROR_MESSAGE } from '@/features/dashboards/constants/dashboardErrorMessage.constants';
 import type { DashboardColorName } from '@/features/dashboards/types/dashboardColor.types';
+import { getDashboardColors } from '@/features/dashboards/utils/dashboardColor';
 import { getApiErrorMessage } from '@/features/dashboards/utils/getApiErrorMessage';
 
 const dashboardColors = getDashboardColors();

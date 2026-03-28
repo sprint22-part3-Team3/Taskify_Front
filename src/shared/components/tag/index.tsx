@@ -1,4 +1,4 @@
-import { getDashboardColorHex } from '@/features/dashboards/constants/dashboardColorMap.constants';
+import { getDashboardColorHex } from '@/features/dashboards/utils/dashboardColor';
 import {
   TAG_BACKGROUND_OPACITY_PERCENT,
   TAG_TEXT_DEFAULT_COLOR,

@@ -1,8 +1,9 @@
 import { IcMailOff } from '@/shared/assets/icons';
-import { PageIndicator } from '@/shared/components/page-indicator';
-import NavigationButtons from '@/shared/components/page-indicator/navigation-buttons';
+import { Button } from '@/shared/components/button';
+import DeleteModal from '@/shared/components/modal/delete-modal';
 import Title from '@/shared/components/title';
-import { useInvitedDashboardList } from '@/features/dashboards/hooks/useInvitedDashboardList';
+import { useInvitedDashboardList } from '@/features/invitations/hooks/useInvitedDashboardList';
+import InvitedDashboardItemRow from '@/pages/my-dashboard/components/invited-dashboard-item-row';
 import SearchInput from '@/pages/my-dashboard/components/search-input';
 
 /**
@@ -19,7 +20,15 @@ function InvitedDashboardSection() {
     searchKeyword,
     isSearchingInvitedDashboards,
     invitedDashboardError,
+    invitationResponseError,
+    respondingInvitationId,
+    selectedInvitedDashboard,
+    isDeleteModalOpen,
     handleSearchKeywordChange,
+    handleInvitationAccept,
+    handleRejectInvite,
+    handleCloseDeleteModalWithReset,
+    handleConfirmRejectInvite,
   } = useInvitedDashboardList();
   const hasInvitedDashboards = invitedDashboardItems.length > 0;
   const shouldShowInvitedDashboardContent =
@@ -29,8 +38,8 @@ function InvitedDashboardSection() {
 
   return (
     <>
-      <section className="mt-6 flex max-w-240 flex-col rounded-lg bg-white px-4 py-6 md:mt-4.5 md:px-7 md:py-4.5 lg:mt-8 lg:py-8">
-        <Title as="h3" className="md:typo-2xl-bold typo-xl-bold">
+      <section className="mt-6 flex max-w-240 flex-col rounded-lg bg-white px-4 py-6 md:mt-10 md:px-7 md:py-4.5 lg:mt-10 lg:py-8">
+        <Title as="h3" size="xl" weight="bold" className="md:typo-2xl-bold">
           초대받은 대시보드
         </Title>
 
@@ -57,10 +66,32 @@ function InvitedDashboardSection() {
               </p>
             )}
 
+            {invitationResponseError && (
+              <p className="typo-md-regular text-error mt-3">
+                {invitationResponseError}
+              </p>
+            )}
+
             <div className="mt-4 lg:overflow-x-auto">
               <div className="lg:min-w-170">
+                <div className="md:hidden">
+                  {invitedDashboardItems.map((invitedDashboardItem) => {
+                    return (
+                      <InvitedDashboardItemRow
+                        key={invitedDashboardItem.id}
+                        invitedDashboardItem={invitedDashboardItem}
+                        onAccept={handleInvitationAccept}
+                        onReject={handleRejectInvite}
+                        isResponding={
+                          respondingInvitationId === invitedDashboardItem.id
+                        }
+                      />
+                    );
+                  })}
+                </div>
+
                 <table
-                  className="w-full table-fixed border-collapse"
+                  className="hidden w-full table-fixed border-collapse md:table"
                   aria-label="초대받은 대시보드 목록"
                 >
                   <thead>
@@ -79,8 +110,10 @@ function InvitedDashboardSection() {
                       </th>
                       <th
                         scope="col"
-                        className="px-6 py-4 text-left font-normal"
-                      />
+                        className="px-6 py-4 text-center font-normal"
+                      >
+                        수락 여부
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -96,7 +129,40 @@ function InvitedDashboardSection() {
                           <td className="typo-md-regular md:typo-lg-regular text-black-200 px-6 py-5.75">
                             {invitedDashboardItem.inviter}
                           </td>
-                          <td className="py-5.75" />
+                          <td className="py-5.75">
+                            <div className="flex items-center justify-center gap-2">
+                              <Button
+                                theme="primary"
+                                size="sm"
+                                className="min-w-21"
+                                disabled={
+                                  respondingInvitationId ===
+                                  invitedDashboardItem.id
+                                }
+                                onClick={() =>
+                                  handleInvitationAccept(
+                                    invitedDashboardItem.id
+                                  )
+                                }
+                              >
+                                수락
+                              </Button>
+                              <Button
+                                theme="outlined"
+                                size="sm"
+                                className="text-primary-500 min-w-21"
+                                disabled={
+                                  respondingInvitationId ===
+                                  invitedDashboardItem.id
+                                }
+                                onClick={() =>
+                                  handleRejectInvite(invitedDashboardItem)
+                                }
+                              >
+                                거절
+                              </Button>
+                            </div>
+                          </td>
                         </tr>
                       );
                     })}
@@ -104,18 +170,6 @@ function InvitedDashboardSection() {
                 </table>
               </div>
             </div>
-
-            {hasInvitedDashboards && (
-              <div className="mt-4 flex items-center justify-end gap-3">
-                <PageIndicator currentPage={1} totalPages={1} />
-                <NavigationButtons
-                  onPrev={() => undefined}
-                  onNext={() => undefined}
-                  isPrevDisabled={true}
-                  isNextDisabled={true}
-                />
-              </div>
-            )}
           </div>
         ) : (
           <div className="flex h-81.75 flex-col items-center justify-center gap-6 md:h-97.5">
@@ -126,6 +180,20 @@ function InvitedDashboardSection() {
           </div>
         )}
       </section>
+
+      <DeleteModal
+        isOpen={isDeleteModalOpen}
+        onClose={handleCloseDeleteModalWithReset}
+        onConfirm={handleConfirmRejectInvite}
+        className="max-w-142"
+        message={
+          <>
+            {selectedInvitedDashboard?.name ?? '초대받은 대시보드'}를{' '}
+            <span className="text-error">거절</span> 하시겠습니까?
+          </>
+        }
+        confirmText="거절"
+      />
     </>
   );
 }

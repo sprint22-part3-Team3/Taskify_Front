@@ -2,8 +2,8 @@ import { Link } from 'react-router-dom';
 import { IcArrowRight } from '@/shared/assets/icons';
 import CreateDashboardModal from '@/features/dashboards/components/create-dashboard-modal';
 import { ColorLabel } from '@/features/dashboards/components/color/color-label';
-import { getDashboardColorHex } from '@/features/dashboards/constants/dashboardColorMap.constants';
 import { useDashboardList } from '@/features/dashboards/hooks/useDashboardList';
+import { getDashboardColorHex } from '@/features/dashboards/utils/dashboardColor';
 import { Button } from '@/shared/components/button';
 import { PageIndicator } from '@/shared/components/page-indicator';
 import AddDashboardButton from '@/pages/my-dashboard/components/add-dashboard-button';
@@ -73,7 +73,7 @@ function MyDashboardPage() {
         )}
 
         {dashboardItems.length > 0 && (
-          <div className="mt-4 flex items-center justify-end gap-3">
+          <div className="mt-4 flex items-center justify-end gap-3 md:mt-3">
             <PageIndicator currentPage={1} totalPages={1} />
             <NavigationButtons
               onPrev={() => undefined}

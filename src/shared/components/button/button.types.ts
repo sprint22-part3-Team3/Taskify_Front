@@ -16,6 +16,7 @@ type ButtonBaseProps = {
   children?: ReactNode;
   type?: ComponentProps<'button'>['type'];
   disabled?: boolean;
+  isLoading?: boolean;
   className?: string;
   onClick?: () => void;
 };

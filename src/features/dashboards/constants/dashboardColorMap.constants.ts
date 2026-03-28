@@ -17,22 +17,6 @@ export const DASHBOARD_COLORS: DashboardColor[] = (
 ).map(([id, hex]) => ({ id, hex }));
 
 /**
- * 대시보드에서 사용할 색상 목록을 조회합니다.
- */
-export const getDashboardColors = function (): DashboardColor[] {
-  return DASHBOARD_COLORS;
-};
-
-/**
- * 선택된 대시보드 색상 이름에 해당하는 hex 값을 조회합니다.
- */
-export const getDashboardColorHex = function (
-  colorId: DashboardColorName
-): string {
-  return DASHBOARD_COLOR_MAP[colorId];
-};
-
-/**
  * API 연결용 hex 맵 추가
  */
 export const DASHBOARD_COLOR_HEX: Record<DashboardColorName, string> = {
