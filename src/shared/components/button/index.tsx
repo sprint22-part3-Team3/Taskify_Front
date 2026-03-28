@@ -91,9 +91,7 @@ function Button<T extends ElementType = 'button'>({
   return (
     <Component {...componentProps}>
       {shouldShowLoading ? (
-        <span className="inline-flex items-center justify-center">
-          <Loading size={loadingSize} color="currentColor" />
-        </span>
+        <Loading size={loadingSize} color="currentColor" />
       ) : (
         children
       )}
