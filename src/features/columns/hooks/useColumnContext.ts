@@ -5,7 +5,7 @@ export const useColumnContext = () => {
   const context = useContext(ColumnContext);
   if (!context) {
     throw new Error(
-      'useColumnContext ColumnProvider 안에서만 사용할 수 있습니다.'
+      'useColumnContext는 ColumnProvider 안에서만 사용할 수 있습니다.'
     );
   }
   return context;
