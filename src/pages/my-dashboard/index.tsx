@@ -2,8 +2,8 @@ import { Link } from 'react-router-dom';
 import { IcArrowRight } from '@/shared/assets/icons';
 import CreateDashboardModal from '@/features/dashboards/components/create-dashboard-modal';
 import { ColorLabel } from '@/features/dashboards/components/color/color-label';
-import { getDashboardColorHex } from '@/features/dashboards/constants/dashboardColorMap.constants';
 import { useDashboardList } from '@/features/dashboards/hooks/useDashboardList';
+import { getDashboardColorHex } from '@/features/dashboards/utils/dashboardColor';
 import { Button } from '@/shared/components/button';
 import { PageIndicator } from '@/shared/components/page-indicator';
 import AddDashboardButton from '@/pages/my-dashboard/components/add-dashboard-button';
@@ -37,8 +37,6 @@ function MyDashboardPage() {
     <div className="mx-auto w-full px-4 pt-6 pb-10 md:px-10 md:pt-10">
       <section className="max-w-240">
         <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
-          <AddDashboardButton onClick={openCreateDashboardModal} />
-
           {dashboardItems.map((dashboardItem) => {
             return (
               <Button
@@ -60,6 +58,8 @@ function MyDashboardPage() {
               </Button>
             );
           })}
+
+          <AddDashboardButton onClick={openCreateDashboardModal} />
         </div>
 
         {isLoadingDashboards && (
