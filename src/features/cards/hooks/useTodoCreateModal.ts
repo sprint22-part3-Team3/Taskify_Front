@@ -18,6 +18,14 @@ export function useTodoCreateModal() {
     }
   };
 
+  const resetForm = () => {
+    setSelectedAssignee(null);
+    setTitle('');
+    setDescription('');
+    setDueDate('');
+    setTagInput('');
+  };
+
   return {
     selectedAssignee,
     title,
@@ -30,5 +38,6 @@ export function useTodoCreateModal() {
     setDueDate,
     setTagInput,
     handleTagKeyDown,
+    resetForm,
   };
 }
