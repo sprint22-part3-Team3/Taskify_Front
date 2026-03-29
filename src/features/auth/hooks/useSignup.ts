@@ -2,7 +2,7 @@ import { ApiError } from '@/shared/apis/apiError';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signup } from '@/features/auth/apis/signup';
-import type { SignupFormValues } from '@/features/auth/types/auth.types';
+import type { SignupFormValues } from '@/features/auth/apis/auth.types';
 
 const DUPLICATE_EMAIL_STATUS = 409;
 const SIGNUP_ERROR_MESSAGE = '회원가입에 실패했습니다. 다시 시도해 주세요.';

@@ -5,6 +5,7 @@ import AvatarGroup from '@/shared/components/avatar/avatar-group';
 import { Button } from '@/shared/components/button';
 import Title from '@/shared/components/title';
 import UserProfile from '@/shared/components/user-profile';
+import useUserContext from '@/shared/context/user/useUserContext';
 
 /**
  * 페이지 상단에 표시되는 공통 헤더 컴포넌트입니다.
@@ -42,20 +43,38 @@ export default function Header({
   totalMemberCount = 7,
   userName = '배유철',
   profileImage,
+  isTitleVisible = true,
+  isTitleAlwaysVisible = false,
   isActionButtonsVisible = true,
+  isMemberProfilesVisible = true,
   onManageClick,
   onInviteClick,
   onProfileClick,
 }: HeaderProps) {
+  const { userProfile } = useUserContext();
+  const displayedProfile = userProfile ?? {
+    id: 0,
+    nickname: userName,
+    profileImageUrl: profileImage ?? '',
+  };
+
   return (
     <header className="z-header flex h-15 min-w-0 items-center justify-between border-b border-gray-200 bg-white pl-4 md:h-17.5 md:px-10 lg:justify-between">
       {/* 제목 - 데스크탑에서만 표시 */}
-      <div className="hidden items-center gap-2 lg:flex">
-        <Title as="h2" size="xl" weight="bold">
-          {title}
-        </Title>
-        {isOwner && <IcBookmark className="ml-1" />}
-      </div>
+      {isTitleVisible && (
+        <div
+          className={
+            isTitleAlwaysVisible
+              ? 'flex items-center gap-2'
+              : 'hidden items-center gap-2 lg:flex'
+          }
+        >
+          <Title as="h2" size="xl" weight="bold">
+            {title}
+          </Title>
+          {isOwner && <IcBookmark className="ml-1" />}
+        </div>
+      )}
 
       <div className="ml-auto flex min-w-0 shrink items-center gap-1 md:gap-6">
         {isActionButtonsVisible && (
@@ -82,18 +101,24 @@ export default function Header({
         )}
 
         {/* 멤버 프로필 */}
-        <AvatarGroup
-          className="ml-2"
-          users={members.map((member) => ({
-            id: member.id,
-            avatar: (
-              <Avatar user={member} size="md">
-                {member.profileImageUrl ? <Avatar.Img /> : <Avatar.Fallback />}
-              </Avatar>
-            ),
-          }))}
-          totalCount={totalMemberCount}
-        />
+        {isMemberProfilesVisible && (
+          <AvatarGroup
+            className="ml-2"
+            users={members.map((member) => ({
+              id: member.id,
+              avatar: (
+                <Avatar user={member} size="md">
+                  {member.profileImageUrl ? (
+                    <Avatar.Img />
+                  ) : (
+                    <Avatar.Fallback />
+                  )}
+                </Avatar>
+              ),
+            }))}
+            totalCount={totalMemberCount}
+          />
+        )}
 
         {/* 유저 프로필 - 이름은 모바일에서 숨김 */}
         <button
@@ -103,9 +128,9 @@ export default function Header({
         >
           <UserProfile
             user={{
-              id: 0,
-              nickname: userName,
-              profileImageUrl: profileImage ?? '',
+              id: displayedProfile.id,
+              nickname: displayedProfile.nickname,
+              profileImageUrl: displayedProfile.profileImageUrl ?? '',
             }}
             size="lg"
             nicknameClassName="hidden md:block"

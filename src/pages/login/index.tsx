@@ -1,30 +1,36 @@
-import { useState } from 'react';
 import AuthFooterLink from '@/features/auth/components/auth-footer-link';
 import AuthForm from '@/features/auth/components/auth-form';
 import AuthHeader from '@/features/auth/components/auth-header';
+import { useAuthFieldValidation } from '@/features/auth/hooks/useAuthFieldValidation';
 import { useLogin } from '@/features/auth/hooks/useLogin';
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
 
 function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const { submitError, isSubmitting, resetSubmitError, handleLogin } =
     useLogin();
-  const isSubmitDisabled = isSubmitting || !email || !password;
+  const {
+    emailField,
+    passwordField,
+    isSubmitDisabled,
+    handleChangeEmail,
+    handleChangePassword,
+    validateFields,
+  } = useAuthFieldValidation({
+    onEmailChange: resetSubmitError,
+    onPasswordChange: resetSubmitError,
+  });
+  const isDisabled = isSubmitting || isSubmitDisabled;
 
   const handleSubmit = async () => {
-    await handleLogin({ email, password });
-  };
+    if (!validateFields()) {
+      return;
+    }
 
-  const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
-    resetSubmitError();
-  };
-
-  const handleChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
-    resetSubmitError();
+    await handleLogin({
+      email: emailField.value.trim(),
+      password: passwordField.value.trim(),
+    });
   };
 
   return (
@@ -37,17 +43,21 @@ function LoginPage() {
         <Input
           label="이메일"
           type="email"
-          value={email}
+          value={emailField.value}
           onChange={handleChangeEmail}
+          onBlur={emailField.onBlur}
           placeholder="이메일을 입력해 주세요"
+          errorMessage={emailField.error}
         />
         <Input
           id="login-password"
           label="비밀번호"
           type="password"
-          value={password}
+          value={passwordField.value}
           onChange={handleChangePassword}
+          onBlur={passwordField.onBlur}
           placeholder="비밀번호를 입력해 주세요"
+          errorMessage={passwordField.error}
         />
         {submitError && (
           <p className="typo-md-regular text-error">{submitError}</p>
@@ -56,7 +66,8 @@ function LoginPage() {
           theme="primary"
           size="md"
           type="submit"
-          disabled={isSubmitDisabled}
+          disabled={isDisabled}
+          isLoading={isSubmitting}
           className="mt-4 mb-6 w-full"
         >
           로그인

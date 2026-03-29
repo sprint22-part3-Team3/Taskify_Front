@@ -1,6 +1,7 @@
 import type { SidebarProps } from '@/features/dashboards/components/layout/dashboard-sidebar/dashboardSidebar.types';
 import Logo from '@/shared/components/logo';
 import { ColorLabel } from '@/features/dashboards/components/color/color-label';
+import { getDashboardColorHex } from '@/features/dashboards/utils/dashboardColor';
 import { IcAddBox, IcBookmark } from '@/shared/assets';
 import { cn } from '@/shared/utils/cn';
 import NavigationButtons from '@/shared/components/page-indicator/navigation-buttons';
@@ -24,21 +25,14 @@ import NavigationButtons from '@/shared/components/page-indicator/navigation-but
  * />
  * ```
  */
-// TODO: API 연동 후 제거
-const SAMPLE_DASHBOARDS = [
-  { id: 1, title: '비브리지', color: '#22c55e', isOwner: true },
-  { id: 2, title: '코드잇', color: '#a855f7', isOwner: true },
-  { id: 3, title: '3분기 계획', color: '#f97316', isOwner: false },
-  { id: 4, title: '회의록', color: '#3b82f6', isOwner: false },
-  { id: 5, title: '중요 문서함', color: '#ec4899', isOwner: false },
-];
-
 const handlePrevPage = () => undefined;
 const handleNextPage = () => undefined;
 
 export default function Sidebar({
-  dashboards = SAMPLE_DASHBOARDS, //TODO: API 연결할 때 SAMPLE_DASHBOARDS 제거
+  dashboards,
   selectedId,
+  isLoading = false,
+  errorMessage,
   onAddClick,
   onDashboardClick,
 }: SidebarProps) {
@@ -67,28 +61,40 @@ export default function Sidebar({
 
       {/* 대시보드 목록 */}
       <nav className="flex-1 overflow-y-auto px-2 md:px-1 lg:py-1">
-        {dashboards.map((item) => (
+        {dashboards.map((sidebarDashboardItem) => (
           <button
-            key={item.id}
-            onClick={() => onDashboardClick?.(item.id)}
+            key={sidebarDashboardItem.id}
+            onClick={() => onDashboardClick?.(sidebarDashboardItem.id)}
             className={cn(
-              'hover:bg-primary-500/8 flex w-full cursor-pointer items-center justify-center gap-1.5 py-5 text-left md:justify-start md:px-5 md:py-3',
-              selectedId === item.id && 'bg-primary-500/8'
+              'hover:bg-primary-500/8 flex w-full cursor-pointer items-center justify-center py-5 text-left md:justify-start md:px-5 md:py-3',
+              selectedId === sidebarDashboardItem.id && 'bg-primary-500/8'
             )}
           >
-            {/* colorLabel 적용 */}
-            <ColorLabel
-              color={item.color}
-              label={item.title}
-              className="min-w-0"
-              labelClassName="hidden truncate md:block md:typo-lg-medium lg:typo-2lg-medium"
-            />
-            {/* 북마크 아이콘 - 모바일에서 숨김 */}
-            {item.isOwner && (
-              <IcBookmark className="hidden h-4 w-4 shrink-0 md:block" />
-            )}
+            <div className="flex min-w-0 items-center gap-0 md:gap-2 lg:gap-2.5">
+              <ColorLabel
+                color={getDashboardColorHex(sidebarDashboardItem.color)}
+                label={sidebarDashboardItem.title}
+                className="min-w-0"
+                labelClassName="hidden truncate md:block md:typo-lg-medium lg:typo-2lg-medium"
+              />
+              {sidebarDashboardItem.createdByMe && (
+                <IcBookmark className="hidden h-4 w-4 shrink-0 md:block" />
+              )}
+            </div>
           </button>
         ))}
+
+        {isLoading && dashboards.length === 0 && (
+          <p className="typo-md-regular px-3 py-2 text-gray-400 md:px-5">
+            대시보드를 불러오는 중이에요.
+          </p>
+        )}
+
+        {errorMessage && dashboards.length === 0 && (
+          <p className="typo-md-regular text-error px-3 py-2 md:px-5">
+            {errorMessage}
+          </p>
+        )}
       </nav>
 
       {/* 하단 페이지네이션 */}
@@ -96,6 +102,8 @@ export default function Sidebar({
         <NavigationButtons
           onPrev={handlePrevPage}
           onNext={handleNextPage}
+          isPrevDisabled={true}
+          isNextDisabled={true}
           isHidingOnMobile={true}
         />
       </div>

@@ -1,6 +1,8 @@
 import Sidebar from '@/features/dashboards/components/layout/dashboard-sidebar';
 import Header from '@/features/dashboards/components/layout/dashboard-header/index';
-import InviteModal from '@/pages/dashboard-edit/components/invitations-section/invite-modal';
+import CreateDashboardModal from '@/features/dashboards/components/create-dashboard-modal';
+import { useSidebar } from '@/features/dashboards/hooks/useSidebar';
+import InviteModal from '@/features/invitations/components/invitations-section/invite-modal';
 import { useModal } from '@/shared/hooks/useModal';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 
@@ -21,13 +23,27 @@ export default function DashboardLayout() {
     openModal: handleOpenInviteModal,
     closeModal: handleCloseInviteModal,
   } = useModal();
+  const {
+    isOpen: isCreateDashboardModalOpen,
+    openModal: handleOpenCreateDashboardModal,
+    closeModal: handleCloseCreateDashboardModal,
+  } = useModal();
+  const {
+    sidebarDashboards,
+    selectedDashboardId,
+    isLoadingSidebarDashboards,
+    sidebarDashboardsError,
+    isCreatingDashboard,
+    handleDashboardClick,
+    handleCreateDashboard,
+  } = useSidebar();
 
   const handleNavigateDashboardEdit = () => {
     if (!id) {
       return;
     }
 
-    navigate(`/dashboard/:id/edit`);
+    navigate(`/dashboard/${id}/edit`);
   };
 
   const handleOpenDashboardInviteModal = () => {
@@ -43,14 +59,32 @@ export default function DashboardLayout() {
   };
 
   const isMyDashboardPage = location.pathname === '/mydashboard';
+  const isMyPage = location.pathname === '/mypage';
 
   return (
     <>
       <div className="flex h-screen overflow-hidden bg-gray-50">
-        <Sidebar />
+        <Sidebar
+          dashboards={sidebarDashboards}
+          selectedId={selectedDashboardId}
+          isLoading={isLoadingSidebarDashboards}
+          errorMessage={sidebarDashboardsError}
+          onAddClick={handleOpenCreateDashboardModal}
+          onDashboardClick={handleDashboardClick}
+        />
         <div className="flex min-w-0 flex-1 flex-col">
           <Header
-            isActionButtonsVisible={!isMyDashboardPage}
+            title={
+              isMyDashboardPage
+                ? '내 대시보드'
+                : isMyPage
+                  ? '계정관리'
+                  : undefined
+            }
+            isOwner={!isMyDashboardPage && !isMyPage}
+            isTitleAlwaysVisible={isMyDashboardPage || isMyPage}
+            isActionButtonsVisible={!isMyDashboardPage && !isMyPage}
+            isMemberProfilesVisible={!isMyDashboardPage && !isMyPage}
             onManageClick={handleNavigateDashboardEdit}
             onInviteClick={handleOpenDashboardInviteModal}
             onProfileClick={handleNavigateMyPage}
@@ -63,6 +97,12 @@ export default function DashboardLayout() {
       <InviteModal
         isOpen={isInviteModalOpen}
         onClose={handleCloseInviteModal}
+      />
+      <CreateDashboardModal
+        isOpen={isCreateDashboardModalOpen}
+        isCreating={isCreatingDashboard}
+        onClose={handleCloseCreateDashboardModal}
+        onCreate={handleCreateDashboard}
       />
     </>
   );
