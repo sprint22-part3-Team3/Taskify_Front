@@ -50,12 +50,6 @@ function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
 
     if (isCreateDisabled) return;
 
-    const isDuplicate = columns.some(
-      (column) => column.title === columnNameField.value.trim()
-    );
-    if (isDuplicate) return;
-    if (columnNameField.error) return;
-
     setIsLoading(true);
 
     try {
