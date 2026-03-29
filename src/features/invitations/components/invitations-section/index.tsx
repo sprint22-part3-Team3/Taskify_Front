@@ -4,7 +4,7 @@ import { PageIndicator } from '@/shared/components/page-indicator';
 import Title from '@/shared/components/title';
 import { useState } from 'react';
 import { MOCK_INVITATIONS } from '@/pages/dashboard-edit/mock';
-import InviteModal from '@/pages/dashboard-edit/components/invitations-section/invite-modal';
+import InviteModal from '@/features/invitations/components/invitations-section/invite-modal';
 import { useModal } from '@/shared/hooks/useModal';
 import { runAfterModalClose } from '@/shared/utils/modal';
 
