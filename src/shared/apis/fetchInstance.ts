@@ -8,7 +8,15 @@ const UNAUTHORIZED_STATUS = 401;
 
 type FetchRequestOptions = RequestInit & {
   auth?: boolean;
+  isFormData?: boolean;
 };
+
+type RequestConfig = {
+  endpoint: string;
+  method: RequestInit['method'];
+  body?: unknown;
+  query?: string;
+} & Omit<FetchRequestOptions, 'body'>;
 
 const buildRequestUrl = (endpoint: string, query = '') =>
   new URL(
@@ -16,57 +24,80 @@ const buildRequestUrl = (endpoint: string, query = '') =>
     ENV.API_BASE_URL
   ).toString();
 
-const request = <T>(
-  path: string,
-  method: RequestInit['method'],
-  options?: FetchRequestOptions,
-  body?: unknown
-) => {
-  return fetchInstance<T>(path, {
-    ...options,
-    method,
-    ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
-  });
+const requestBodyWithContentType = (
+  body: unknown,
+  isFormData: boolean
+): { body?: BodyInit; headers?: Record<string, string> } => {
+  if (body === undefined) {
+    return {};
+  }
+
+  if (isFormData) {
+    return { body: body as BodyInit };
+  }
+
+  return {
+    body: JSON.stringify(body),
+    headers: { 'Content-Type': JSON_CONTENT_TYPE },
+  };
 };
+
 /**
+ * API 요청/응답을 한 곳에서 처리하는 공통 helper 모듈입니다.
+ *
+ * GET/POST/PUT/DELETE는 일반 JSON 요청, postFormData는 multipart/form-data로 사용할 수 있고,
+ * 인증 헤더와 timeout 처리를 포함합니다.
+ *
  * @example
+ * ```tsx
  * import { get, post, del } from '@/shared/apis/fetchInstance';
+ *
  * GET
  *   const users = await get<User[]>('users');
+ *
  * POST
  *   const result = await post<Response>('login', { id, pw });
+ *
  * DELETE
  *   await del('users/123');
+ *
+ * FormData POST
+ * await postFormData<{ profileImageUrl: string }>('users/me/image', formData);
+ * ```
  */
 export async function fetchInstance<T>(
   endpoint: string,
   options: FetchRequestOptions = {},
-  query: string = ''
+  query: string = '',
+  body?: unknown
 ): Promise<T | null> {
   const url = buildRequestUrl(endpoint, query);
-  const { auth = true, ...requestOptions } = options;
+  const { auth = true, isFormData = false, ...requestOptions } = options;
   const accessToken = auth ? getAccessToken() : null;
   const defaultHeaders = {
-    'Content-Type': JSON_CONTENT_TYPE,
     ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
   };
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
 
-  //내부 timeout signal과 외부 options.signal을 함께 사용할 수 있도록 수정
   const signal = options.signal
     ? AbortSignal.any([controller.signal, options.signal])
     : controller.signal;
 
   try {
+    const { body: requestBody, headers: extraHeaders } =
+      requestBodyWithContentType(body, isFormData);
+
     const res = await fetch(url, {
       ...requestOptions,
       headers: {
         ...defaultHeaders,
+        ...extraHeaders,
         ...requestOptions.headers,
       },
       signal,
+      ...(requestBody !== undefined ? { body: requestBody } : {}),
     });
 
     const text = await res.text();
@@ -85,6 +116,7 @@ export async function fetchInstance<T>(
         data?.message || text || `API 요청 실패: ${res.status}`
       );
     }
+
     if (res.status === 204) {
       return null;
     }
@@ -95,27 +127,63 @@ export async function fetchInstance<T>(
   }
 }
 
-// HTTP 메서드별 편의 함수
-export function get<T>(path: string, options?: FetchRequestOptions) {
-  return request<T>(path, 'GET', options);
+const request = <T>({
+  endpoint,
+  method,
+  body,
+  query = '',
+  ...options
+}: RequestConfig) =>
+  fetchInstance<T>(endpoint, { ...options, method }, query, body);
+
+export function get<T>(endpoint: string, options?: FetchRequestOptions) {
+  return request<T>({ endpoint, method: 'GET', ...options });
 }
 
+/**
+ * POST 요청을 수행하는 헬퍼입니다.
+ *
+ * @example
+ * ```tsx
+ * await post('cards', { title: '새 카드' });
+ * ```
+ */
 export function post<T>(
-  path: string,
+  endpoint: string,
   body: unknown,
   options?: FetchRequestOptions
 ) {
-  return request<T>(path, 'POST', options, body);
+  return request<T>({ endpoint, method: 'POST', body, ...options });
 }
 
+/**
+ * PUT 요청을 수행하는 헬퍼입니다.
+ */
 export function put<T>(
-  path: string,
+  endpoint: string,
   body: unknown,
   options?: FetchRequestOptions
 ) {
-  return request<T>(path, 'PUT', options, body);
+  return request<T>({ endpoint, method: 'PUT', body, ...options });
 }
 
-export function del<T>(path: string, options?: FetchRequestOptions) {
-  return request<T>(path, 'DELETE', options);
+/**
+ * DELETE 요청을 수행하는 헬퍼입니다.
+ */
+export function del<T>(endpoint: string, options?: FetchRequestOptions) {
+  return request<T>({ endpoint, method: 'DELETE', ...options });
+}
+
+export function postFormData<T>(
+  endpoint: string,
+  formData: FormData,
+  options?: FetchRequestOptions
+) {
+  return request<T>({
+    endpoint,
+    method: 'POST',
+    body: formData,
+    isFormData: true,
+    ...options,
+  });
 }
