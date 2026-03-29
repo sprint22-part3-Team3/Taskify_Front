@@ -23,8 +23,8 @@ export async function getMyDashboards(
   );
 
   return {
-    dashboards:
-      response?.dashboards.map((dashboard, dashboardIndex) => {
+    dashboards: (response?.dashboards ?? [])
+      .map((dashboard, dashboardIndex) => {
         const matchedDashboardColor = getDashboardColorName(dashboard.color);
 
         return {
@@ -35,6 +35,9 @@ export async function getMyDashboards(
             dashboardColors[dashboardIndex % dashboardColors.length],
           createdByMe: dashboard.createdByMe,
         };
-      }) ?? [],
+      })
+      .sort((previousDashboard, nextDashboard) => {
+        return nextDashboard.id - previousDashboard.id;
+      }),
   };
 }

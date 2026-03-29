@@ -1,9 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { createDashboard } from '@/features/dashboards/apis/createDashboard';
 import { getMyDashboards } from '@/features/dashboards/apis/getMyDashboards';
 import { DASHBOARD_ERROR_MESSAGE } from '@/features/dashboards/constants/dashboardErrorMessage.constants';
 import type { DashboardColorName } from '@/features/dashboards/types/dashboardColor.types';
 import type { DashboardItem } from '@/features/dashboards/types/myDashboard.types';
+import {
+  DASHBOARD_EVENTS,
+  type DashboardListChangeDetail,
+  dispatchDashboardListChangeEvent,
+} from '@/features/dashboards/utils/dashboardEvents';
 import { getApiErrorMessage } from '@/features/dashboards/utils/getApiErrorMessage';
 
 /**
@@ -26,7 +31,7 @@ export function useDashboardList() {
   const [isCreatingDashboard, setIsCreatingDashboard] = useState(false);
   const [dashboardError, setDashboardError] = useState<string | null>(null);
 
-  const loadDashboardItems = async () => {
+  const loadDashboardItems = useCallback(async () => {
     setIsLoadingDashboards(true);
     setDashboardError(null);
 
@@ -41,11 +46,36 @@ export function useDashboardList() {
     } finally {
       setIsLoadingDashboards(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     void loadDashboardItems();
-  }, []);
+  }, [loadDashboardItems]);
+
+  useEffect(() => {
+    const handleDashboardListChange = (event: Event) => {
+      const dashboardListChangeEvent =
+        event as CustomEvent<DashboardListChangeDetail>;
+
+      if (dashboardListChangeEvent.detail.source === 'dashboard-list') {
+        return;
+      }
+
+      void loadDashboardItems();
+    };
+
+    window.addEventListener(
+      DASHBOARD_EVENTS.LIST_CHANGE,
+      handleDashboardListChange
+    );
+
+    return () => {
+      window.removeEventListener(
+        DASHBOARD_EVENTS.LIST_CHANGE,
+        handleDashboardListChange
+      );
+    };
+  }, [loadDashboardItems]);
 
   const handleCreateDashboard = async (
     dashboardTitle: string,
@@ -59,6 +89,7 @@ export function useDashboardList() {
         color: dashboardColor,
       });
       await loadDashboardItems();
+      dispatchDashboardListChangeEvent({ source: 'dashboard-list' });
     } finally {
       setIsCreatingDashboard(false);
     }
