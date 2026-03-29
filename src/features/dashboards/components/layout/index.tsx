@@ -2,7 +2,7 @@ import Sidebar from '@/features/dashboards/components/layout/dashboard-sidebar';
 import Header from '@/features/dashboards/components/layout/dashboard-header/index';
 import CreateDashboardModal from '@/features/dashboards/components/create-dashboard-modal';
 import { useSidebar } from '@/features/dashboards/hooks/useSidebar';
-import InviteModal from '@/pages/dashboard-edit/components/invitations-section/invite-modal';
+import InviteModal from '@/features/invitations/components/invitations-section/invite-modal';
 import { useModal } from '@/shared/hooks/useModal';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 
@@ -43,7 +43,7 @@ export default function DashboardLayout() {
       return;
     }
 
-    navigate(`/dashboard/:id/edit`);
+    navigate(`/dashboard/${id}/edit`);
   };
 
   const handleOpenDashboardInviteModal = () => {
@@ -59,6 +59,7 @@ export default function DashboardLayout() {
   };
 
   const isMyDashboardPage = location.pathname === '/mydashboard';
+  const isMyPage = location.pathname === '/mypage';
 
   return (
     <>
@@ -73,11 +74,17 @@ export default function DashboardLayout() {
         />
         <div className="flex min-w-0 flex-1 flex-col">
           <Header
-            title={isMyDashboardPage ? '내 대시보드' : undefined}
-            isOwner={!isMyDashboardPage}
-            isTitleAlwaysVisible={isMyDashboardPage}
-            isActionButtonsVisible={!isMyDashboardPage}
-            isMemberProfilesVisible={!isMyDashboardPage}
+            title={
+              isMyDashboardPage
+                ? '내 대시보드'
+                : isMyPage
+                  ? '계정관리'
+                  : undefined
+            }
+            isOwner={!isMyDashboardPage && !isMyPage}
+            isTitleAlwaysVisible={isMyDashboardPage || isMyPage}
+            isActionButtonsVisible={!isMyDashboardPage && !isMyPage}
+            isMemberProfilesVisible={!isMyDashboardPage && !isMyPage}
             onManageClick={handleNavigateDashboardEdit}
             onInviteClick={handleOpenDashboardInviteModal}
             onProfileClick={handleNavigateMyPage}
