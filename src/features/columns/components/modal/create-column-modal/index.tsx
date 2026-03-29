@@ -29,6 +29,7 @@ function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   const isCreateDisabled =
     !columnNameField.value.trim() ||
@@ -40,6 +41,7 @@ function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
     onClose();
     runAfterModalClose(() => {
       columnNameField.reset();
+      setSubmitError('');
     });
   };
 
@@ -63,7 +65,9 @@ function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
       });
       handleClose();
     } catch {
-      // 생성 실패는 서버 에러 → 중복 외 예외 처리
+      //TODO: 오류 처리
+      //400, 404 에러 가능성 낮아서 범용 에러 메시지 처리
+      setSubmitError('컬럼 생성에 실패했습니다. 다시 시도해주세요.');
     } finally {
       setIsLoading(false);
     }
@@ -86,7 +90,7 @@ function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
             }}
             placeholder="컬럼 이름을 입력해 주세요."
             labelClassName="typo-lg-medium md:typo-2lg-medium"
-            errorMessage={columnNameField.error}
+            errorMessage={columnNameField.error || submitError}
           />
         </Modal.Main>
 
