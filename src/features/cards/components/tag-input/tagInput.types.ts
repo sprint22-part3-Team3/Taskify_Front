@@ -1,6 +1,8 @@
-import type { ComponentProps } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 
-export type TagInputProps = Pick<
-  ComponentProps<'input'>,
-  'value' | 'onChange' | 'onKeyDown' | 'placeholder'
->;
+export type TagInputProps = {
+  tags: string[];
+  setTags: Dispatch<SetStateAction<string[]>>;
+  maxTags?: number;
+  placeholder?: string;
+};
