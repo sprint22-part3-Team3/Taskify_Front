@@ -29,7 +29,7 @@ function CardList({ column }: CardListProps) {
   return (
     <ColumnProvider column={column}>
       <CardRefetchProvider refetch={refetch}>
-        <CardListHeader title={title} cardCount={cardCount} />
+        <CardListHeader title={title} id={id} cardCount={cardCount} />
         <CardAdd />
         <ul className="flex flex-col gap-2.5 md:gap-4">
           {cards.map((cardItem) => (
