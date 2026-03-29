@@ -1,7 +1,37 @@
 import { useState } from 'react';
+import type { DashboardColorName } from '@/features/dashboards/types/dashboardColor.types';
 import { Tag } from '@/shared/components/tag';
-import { getTagColor } from '@/shared/utils/getTagColor';
+import { COLORS } from '@/shared/constants/color.constants';
 import type { TagInputProps } from '@/features/cards/components/tag-input/tagInput.types';
+
+const getRandomColor = (
+  availableColors: readonly DashboardColorName[]
+): DashboardColorName => {
+  const randomIndex = Math.floor(Math.random() * availableColors.length);
+
+  return availableColors[randomIndex];
+};
+
+const createTagColorMap = (
+  tags: string[]
+): Record<string, DashboardColorName> => {
+  const nextTagColors: Record<string, DashboardColorName> = {};
+  const usedColors = new Set<DashboardColorName>();
+
+  tags.forEach((tag) => {
+    const availableColors = COLORS.filter((color) => !usedColors.has(color));
+    const randomColor = getRandomColor(availableColors);
+
+    if (!randomColor) {
+      return;
+    }
+
+    nextTagColors[tag] = randomColor;
+    usedColors.add(randomColor);
+  });
+
+  return nextTagColors;
+};
 
 /**
  * 카드 생성 폼에서 사용하는 태그 입력 컴포넌트입니다.
@@ -20,10 +50,20 @@ function TagInput({
   const [inputValue, setInputValue] = useState('');
   const [error, setError] = useState('');
   const [isFocused, setIsFocused] = useState(false);
+  const [tagColors, setTagColors] = useState<
+    Record<string, DashboardColorName>
+  >(() => createTagColorMap(tags));
   const isMaxTagsReached = tags.length >= maxTags;
 
   const handleDeleteTag = (targetTag: string) => {
     setTags((prevTags) => prevTags.filter((tag) => tag !== targetTag));
+    setTagColors((prevTagColors) => {
+      const nextTagColors = { ...prevTagColors };
+
+      delete nextTagColors[targetTag];
+
+      return nextTagColors;
+    });
     setError('');
   };
 
@@ -48,6 +88,20 @@ function TagInput({
       return;
     }
 
+    setTagColors((prevTagColors) => {
+      const usedColors = new Set<DashboardColorName>(
+        tags
+          .map((tag) => prevTagColors[tag])
+          .filter((color): color is DashboardColorName => Boolean(color))
+      );
+      const availableColors = COLORS.filter((color) => !usedColors.has(color));
+      const randomColor = getRandomColor(availableColors);
+
+      return {
+        ...prevTagColors,
+        [nextTag]: randomColor,
+      };
+    });
     setTags((prevTags) => [...prevTags, nextTag]);
     setInputValue('');
     setError('');
@@ -79,7 +133,7 @@ function TagInput({
         {tags.map((tag) => (
           <Tag
             key={tag}
-            color={getTagColor(tag)}
+            color={tagColors[tag] ?? COLORS[0]}
             onClick={() => handleDeleteTag(tag)}
             role="button"
             tabIndex={0}
