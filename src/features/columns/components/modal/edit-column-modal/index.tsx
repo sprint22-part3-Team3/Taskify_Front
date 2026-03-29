@@ -1,18 +1,19 @@
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Button } from '@/shared/components/button';
 import DeleteModal from '@/shared/components/modal/delete-modal';
 import Input from '@/shared/components/input';
 import { Modal } from '@/shared/components/modal';
-import { useModal } from '@/shared/hooks/useModal';
 import { runAfterModalClose } from '@/shared/utils/modal';
+
 import type { EditColumnModalProps } from '@/features/columns/components/modal/edit-column-modal/editColumnModal.types';
+import { updateColumn, deleteColumn } from '@/features/columns/apis/columns';
 
-import { deleteColumn } from '@/features/columns/apis/deleteColumn';
-import { updateColumn } from '@/features/columns/apis/updateColumn';
 import { COLUMN_NAME_RULES } from '@/shared/utils/validators/validators.constants';
-import { useParams } from 'react-router-dom';
 
+import { useModal } from '@/shared/hooks/useModal';
 import { useColumnList } from '@/features/columns/hooks/useColumnList';
+
 /**
  * 컬럼 이름을 수정하거나 삭제할 수 있는 모달입니다.
  *
@@ -25,6 +26,7 @@ import { useColumnList } from '@/features/columns/hooks/useColumnList';
  * />
  * ```
  */
+
 function EditColumnModal({
   isOpen,
   onClose,

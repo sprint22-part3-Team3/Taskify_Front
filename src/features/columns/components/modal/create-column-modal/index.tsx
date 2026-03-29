@@ -3,12 +3,10 @@ import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
 import { Modal } from '@/shared/components/modal';
 import type { CreateColumnModalProps } from '@/features/columns/components/modal/create-column-modal/createColumnModal.types';
-
-import { createColumn } from '@/features/columns/apis/createColumn';
+import { createColumn } from '@/features/columns/apis/columns';
 import { useColumnNameValidation } from '@/features/columns/hooks/useColumnNameValidation';
 import { useParams } from 'react-router-dom';
 import { COLUMN_NAME_RULES } from '@/shared/utils/validators';
-
 import { runAfterModalClose } from '@/shared/utils/modal';
 
 /**
