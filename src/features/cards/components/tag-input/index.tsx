@@ -1,30 +1,45 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { DashboardColorName } from '@/features/dashboards/types/dashboardColor.types';
 import { Tag } from '@/shared/components/tag';
 import { COLORS } from '@/shared/constants/color.constants';
 import type { TagInputProps } from '@/features/cards/components/tag-input/tagInput.types';
 
+type TagColorMap = Record<string, DashboardColorName>;
+
+const normalizeTag = (tag: string) => tag.trim().toLowerCase();
+
 const getRandomColor = (
   availableColors: readonly DashboardColorName[]
-): DashboardColorName => {
+): DashboardColorName | undefined => {
+  if (availableColors.length === 0) {
+    return undefined;
+  }
+
   const randomIndex = Math.floor(Math.random() * availableColors.length);
 
   return availableColors[randomIndex];
 };
 
-const createTagColorMap = (
-  tags: string[]
-): Record<string, DashboardColorName> => {
-  const nextTagColors: Record<string, DashboardColorName> = {};
+const pickRandomTagColor = (
+  usedColors: ReadonlySet<DashboardColorName>
+): DashboardColorName | undefined => {
+  const availableColors = COLORS.filter((color) => !usedColors.has(color));
+  const colorPool = availableColors.length > 0 ? availableColors : COLORS;
+
+  return getRandomColor(colorPool);
+};
+
+const getUsedTagColors = (tagColors: TagColorMap) =>
+  new Set<DashboardColorName>(Object.values(tagColors));
+
+const createTagColorMap = (tags: string[]): TagColorMap => {
+  const nextTagColors: TagColorMap = {};
   const usedColors = new Set<DashboardColorName>();
 
   tags.forEach((tag) => {
-    const availableColors = COLORS.filter((color) => !usedColors.has(color));
-    const randomColor = getRandomColor(availableColors);
+    const randomColor = pickRandomTagColor(usedColors);
 
-    if (!randomColor) {
-      return;
-    }
+    if (!randomColor) return;
 
     nextTagColors[tag] = randomColor;
     usedColors.add(randomColor);
@@ -50,18 +65,27 @@ function TagInput({
   const [inputValue, setInputValue] = useState('');
   const [error, setError] = useState('');
   const [isFocused, setIsFocused] = useState(false);
-  const [tagColors, setTagColors] = useState<
-    Record<string, DashboardColorName>
-  >(() => createTagColorMap(tags));
+  const [tagColors, setTagColors] = useState<TagColorMap>(() =>
+    createTagColorMap(tags)
+  );
   const isMaxTagsReached = tags.length >= maxTags;
+  const shouldShowPlaceholder =
+    !isMaxTagsReached && (isFocused || tags.length === 0);
+
+  useEffect(() => {
+    if (import.meta.env.DEV && maxTags > COLORS.length) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        `TagInput: maxTags(${maxTags})가 사용 가능한 색상 수(${COLORS.length})를 초과합니다.`
+      );
+    }
+  }, [maxTags]);
 
   const handleDeleteTag = (targetTag: string) => {
     setTags((prevTags) => prevTags.filter((tag) => tag !== targetTag));
     setTagColors((prevTagColors) => {
       const nextTagColors = { ...prevTagColors };
-
       delete nextTagColors[targetTag];
-
       return nextTagColors;
     });
     setError('');
@@ -75,7 +99,7 @@ function TagInput({
     }
 
     const hasDuplicateTag = tags.some(
-      (tag) => tag.toLowerCase() === nextTag.toLowerCase()
+      (tag) => normalizeTag(tag) === normalizeTag(nextTag)
     );
 
     if (hasDuplicateTag) {
@@ -89,13 +113,12 @@ function TagInput({
     }
 
     setTagColors((prevTagColors) => {
-      const usedColors = new Set<DashboardColorName>(
-        tags
-          .map((tag) => prevTagColors[tag])
-          .filter((color): color is DashboardColorName => Boolean(color))
-      );
-      const availableColors = COLORS.filter((color) => !usedColors.has(color));
-      const randomColor = getRandomColor(availableColors);
+      const usedColors = getUsedTagColors(prevTagColors);
+      const randomColor = pickRandomTagColor(usedColors);
+
+      if (!randomColor) {
+        return prevTagColors;
+      }
 
       return {
         ...prevTagColors,
@@ -105,6 +128,18 @@ function TagInput({
     setTags((prevTags) => [...prevTags, nextTag]);
     setInputValue('');
     setError('');
+  };
+
+  const handleTagKeyDown = (
+    event: React.KeyboardEvent<HTMLSpanElement>,
+    tag: string
+  ) => {
+    if (event.key !== 'Enter' && event.key !== ' ') {
+      return;
+    }
+
+    event.preventDefault();
+    handleDeleteTag(tag);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -137,12 +172,7 @@ function TagInput({
             onClick={() => handleDeleteTag(tag)}
             role="button"
             tabIndex={0}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                handleDeleteTag(tag);
-              }
-            }}
+            onKeyDown={(event) => handleTagKeyDown(event, tag)}
             aria-label={`${tag} 태그 삭제`}
           >
             {tag}
@@ -151,11 +181,7 @@ function TagInput({
 
         <input
           type="text"
-          placeholder={
-            !isMaxTagsReached && (isFocused || tags.length === 0)
-              ? placeholder
-              : ''
-          }
+          placeholder={shouldShowPlaceholder ? placeholder : ''}
           className="typo-md-regular md:typo-lg-regular min-w-0 flex-1 outline-0 placeholder:text-gray-300"
           value={inputValue}
           onFocus={() => setIsFocused(true)}
