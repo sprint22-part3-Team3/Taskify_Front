@@ -1,8 +1,13 @@
 import CreateColumnModal from '@/features/columns/components/modal/create-column-modal';
 import { AddItemButton } from '@/shared/components/add-item-button';
 import { useModal } from '@/shared/hooks/useModal';
+import type { Column } from '@/features/columns/types/column.types';
 
-function ColumnAdd() {
+type ColumnAddProps = {
+  columns: Column[];
+};
+
+function ColumnAdd({ columns }: ColumnAddProps) {
   const {
     isOpen: isCreateColumnModalOpen,
     openModal: handleAddColumn,
@@ -17,6 +22,7 @@ function ColumnAdd() {
       <CreateColumnModal
         isOpen={isCreateColumnModalOpen}
         onClose={handleCloseCreateColumnModal}
+        columns={columns}
       />
     </>
   );

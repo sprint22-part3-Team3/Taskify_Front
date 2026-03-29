@@ -39,7 +39,7 @@ function ColumnList() {
       ))}
       <li className={cn(LIST_CLASS, 'lg:w-98.5')}>
         <div className="lg:pt-12.5">
-          <ColumnAdd />
+          <ColumnAdd columns={columns} />
         </div>
       </li>
     </ul>

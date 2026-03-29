@@ -6,7 +6,6 @@ import type { CreateColumnModalProps } from '@/features/columns/components/modal
 
 import { createColumn } from '@/features/columns/apis/createColumn';
 import { useColumnNameValidation } from '@/features/columns/hooks/useColumnNameValidation';
-import { checkColumnNameDuplicate } from '@/features/columns/apis/checkColumnName';
 import { useParams } from 'react-router-dom';
 import { COLUMN_NAME_RULES } from '@/shared/utils/validators';
 
@@ -21,11 +20,16 @@ import { runAfterModalClose } from '@/shared/utils/modal';
  * ```
  */
 
-function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
+function CreateColumnModal({
+  isOpen,
+  onClose,
+  columns,
+}: CreateColumnModalProps) {
   const { id } = useParams();
   const dashboardId = Number(id);
   const columnNameField = useColumnNameValidation({
-    checkFn: (name) => checkColumnNameDuplicate(name, dashboardId),
+    checkFn: (name) =>
+      Promise.resolve(columns.some((column) => column.title === name)),
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -48,13 +52,10 @@ function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
 
     if (isCreateDisabled) return;
 
-    const isDuplicate = await checkColumnNameDuplicate(
-      columnNameField.value.trim(),
-      dashboardId
+    const isDuplicate = columns.some(
+      (column) => column.title === columnNameField.value.trim()
     );
-    if (isDuplicate) {
-      return;
-    }
+    if (isDuplicate) return;
     if (columnNameField.error) return;
 
     setIsLoading(true);
