@@ -11,11 +11,11 @@ const NOT_FOUND_OR_FORBIDDEN_ERROR =
 export const useColumnList = (dashboardId: number) => {
   const fetchFn = useCallback(() => getColumns({ dashboardId }), [dashboardId]);
 
-  const { result, isLoading, errorMessage } = useGetData({
+  const { result, isLoading, errorMessage, refetch } = useGetData({
     fetchFn,
     dependencyId: dashboardId,
     notFoundMessage: NOT_FOUND_OR_FORBIDDEN_ERROR,
   });
 
-  return { columns: result?.data || [], isLoading, errorMessage };
+  return { columns: result?.data || [], isLoading, errorMessage, refetch };
 };
