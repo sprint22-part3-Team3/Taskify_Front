@@ -3,9 +3,19 @@ import Title from '@/shared/components/title';
 import { TaskCommentItem } from '@/features/comments/components/task-comments/task-comment-item';
 import { useCommentList } from '@/features/comments/hooks/useCommentList';
 import { TaskCommentInput } from '@/features/comments/components/task-comments/task-comment-input';
+import { postComment } from '@/features/comments/apis/comments';
+import { useParams } from 'react-router-dom';
+import { useState } from 'react';
 
-function TaskComments({ id }: TaskCommentsProps) {
-  const { comments, isLoading, errorMessage } = useCommentList(id);
+/**
+ * 할 일 카드의 댓글 목록을 렌더링하고 새 댓글을 작성하는 영역입니다.
+ * 내부적으로 댓글 목록 조회 및 생성 API 로직을 제어합니다.
+ */
+function TaskComments({ id: cardId, columnId }: TaskCommentsProps) {
+  const { id } = useParams();
+  const dashboardId = Number(id);
+  const { comments, isLoading, errorMessage, refetch } = useCommentList(cardId);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   // TODO : 로딩 화면 처리
   if (isLoading)
@@ -22,9 +32,16 @@ function TaskComments({ id }: TaskCommentsProps) {
       </div>
     );
 
-  const handleSubmitComment = (content: string) => {
-    // TODO: 댓글 작성 API 호출 로직 연결
-    console.log('제출된 댓글:', content);
+  const handleSubmitComment = async (content: string) => {
+    try {
+      setSubmitError(null);
+      await postComment({ content, cardId, columnId, dashboardId });
+      refetch();
+      return true;
+    } catch {
+      setSubmitError('댓글 작성에 실패했습니다. 다시 시도해주세요.');
+      return false;
+    }
   };
 
   return (
@@ -37,7 +54,7 @@ function TaskComments({ id }: TaskCommentsProps) {
       >
         댓글
       </Title>
-      <TaskCommentInput onSubmit={handleSubmitComment} />
+      <TaskCommentInput onSubmit={handleSubmitComment} error={submitError} />
       <ul className="flex flex-col gap-4">
         {comments.map((comment) => (
           <li key={comment.id} className="flex gap-2 md:gap-2.5">
