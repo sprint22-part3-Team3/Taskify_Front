@@ -19,7 +19,7 @@ import { usePagination } from '@/shared/hooks/usePagination';
  * ```
  */
 export function useSidebarDashboards() {
-  const PAGE_SIZE = 15;
+  const PAGE_SIZE = 10;
   const [sidebarDashboards, setSidebarDashboards] = useState<
     SidebarDashboardItem[]
   >([]);
