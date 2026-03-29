@@ -6,6 +6,7 @@ import type { DashboardColorName } from '@/features/dashboards/types/dashboardCo
 import type { DashboardItem } from '@/features/dashboards/types/myDashboard.types';
 import {
   DASHBOARD_EVENTS,
+  type DashboardListChangeDetail,
   dispatchDashboardListChangeEvent,
 } from '@/features/dashboards/utils/dashboardEvents';
 import { getApiErrorMessage } from '@/features/dashboards/utils/getApiErrorMessage';
@@ -53,9 +54,8 @@ export function useDashboardList() {
 
   useEffect(() => {
     const handleDashboardListChange = (event: Event) => {
-      const dashboardListChangeEvent = event as CustomEvent<{
-        source: 'dashboard-list' | 'sidebar';
-      }>;
+      const dashboardListChangeEvent =
+        event as CustomEvent<DashboardListChangeDetail>;
 
       if (dashboardListChangeEvent.detail.source === 'dashboard-list') {
         return;

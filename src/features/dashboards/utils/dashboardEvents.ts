@@ -2,7 +2,7 @@ const DASHBOARD_LIST_CHANGE_EVENT = 'dashboard-list-change';
 
 type DashboardListChangeSource = 'dashboard-list' | 'sidebar';
 
-type DashboardListChangeDetail = {
+export type DashboardListChangeDetail = {
   source: DashboardListChangeSource;
 };
 

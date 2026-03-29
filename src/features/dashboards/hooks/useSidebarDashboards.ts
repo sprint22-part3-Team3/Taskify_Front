@@ -2,7 +2,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { getMyDashboards } from '@/features/dashboards/apis/getMyDashboards';
 import { DASHBOARD_ERROR_MESSAGE } from '@/features/dashboards/constants/dashboardErrorMessage.constants';
 import type { SidebarDashboardItem } from '@/features/dashboards/components/layout/dashboard-sidebar/dashboardSidebar.types';
-import { DASHBOARD_EVENTS } from '@/features/dashboards/utils/dashboardEvents';
+import {
+  DASHBOARD_EVENTS,
+  type DashboardListChangeDetail,
+} from '@/features/dashboards/utils/dashboardEvents';
 import { getApiErrorMessage } from '@/features/dashboards/utils/getApiErrorMessage';
 
 /**
@@ -48,9 +51,8 @@ export function useSidebarDashboards() {
 
   useEffect(() => {
     const handleDashboardListChange = (event: Event) => {
-      const dashboardListChangeEvent = event as CustomEvent<{
-        source: 'dashboard-list' | 'sidebar';
-      }>;
+      const dashboardListChangeEvent =
+        event as CustomEvent<DashboardListChangeDetail>;
 
       if (dashboardListChangeEvent.detail.source === 'sidebar') {
         return;
