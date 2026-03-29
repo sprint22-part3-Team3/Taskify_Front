@@ -48,12 +48,17 @@ export default function NameSection() {
     if (!dashboardId) return;
 
     async function fetchDashboard(id: string) {
-      const data = await getDashboard(id);
+      try {
+        const data = await getDashboard(id);
 
-      if (data) {
-        setTitle(data.title);
-        setDashboardTitle(data.title);
-        setSelectedColor(hexToColorName(data.color));
+        if (data) {
+          setTitle(data.title);
+          setDashboardTitle(data.title);
+          setSelectedColor(hexToColorName(data.color));
+        }
+      } catch (error) {
+        console.error('대시보드 정보 로딩 실패:', error);
+        // TODO: 사용자에게 에러를 알리는 UI 처리 (예: 토스트 메시지)
       }
     }
 
@@ -71,19 +76,25 @@ export default function NameSection() {
     }
     setErrorMessage('');
     setIsSubmitting(true);
+    try {
+      const hexColor = DASHBOARD_COLOR_HEX[selectedColor];
+      const result = await updateDashboard(dashboardId, {
+        title,
+        color: hexColor,
+      });
 
-    const hexColor = DASHBOARD_COLOR_HEX[selectedColor];
-    const result = await updateDashboard(dashboardId, {
-      title,
-      color: hexColor,
-    });
-
-    if (result) {
-      setDashboardTitle(result.title);
-      alert('대시보드가 수정되었습니다.');
+      if (result) {
+        setDashboardTitle(result.title);
+        alert('대시보드가 수정되었습니다.');
+      } else {
+        alert('대시보드 수정에 실패했습니다. 다시 시도해주세요.');
+      }
+    } catch (error) {
+      console.error('대시보드 업데이트 실패:', error);
+      alert('오류가 발생하여 대시보드를 수정할 수 없습니다.');
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setIsSubmitting(false);
   };
 
   return (
