@@ -69,24 +69,15 @@ export default function DashboardLayout() {
     let isMounted = true;
 
     async function loadMembers(targetDashboardId: string) {
-      if (!isMounted) {
-        return;
-      }
-
       setMemberLoadError('');
       try {
         const data = await getMembers(targetDashboardId);
-        if (!isMounted) {
-          return;
-        }
-        if (!data) {
-          throw new Error('No member data');
-        }
-
-        setDashboardMembers(data.members);
-        setDashboardMemberCount(data.totalCount);
         if (isMounted) {
-          setMemberLoadError('');
+          if (!data) {
+            throw new Error('No member data');
+          }
+          setDashboardMembers(data.members);
+          setDashboardMemberCount(data.totalCount);
         }
       } catch {
         if (isMounted) {
