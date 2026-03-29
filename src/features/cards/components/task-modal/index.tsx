@@ -50,7 +50,7 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
   };
   const handleDeleteCard = async () => {
     try {
-      await delCard(123);
+      await delCard(id);
       handleCloseDeleteModal();
       handleCloseModal();
       setTimeout(() => {
