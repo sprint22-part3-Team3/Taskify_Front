@@ -180,10 +180,10 @@ export function postFormData<T>(
   options?: FetchRequestOptions
 ) {
   return request<T>({
+    ...options,
     endpoint,
     method: 'POST',
     body: formData,
     isFormData: true,
-    ...options,
   });
 }
