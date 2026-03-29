@@ -10,8 +10,11 @@ import { TaskMenu } from '@/features/cards/components/task-modal/task-menu';
 import TodoEditModal from '@/features/cards/components/todo-edit-modal';
 import { useModal } from '@/shared/hooks/useModal';
 import { delCard } from '@/features/cards/apis/cards';
+import { MODAL_CLOSE_DELAY } from '@/shared/constants/modal.constants';
+import { useCardRefetchContext } from '@/features/cards/hooks/useCardRefetchContext';
 
 function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
+  const { refetch } = useCardRefetchContext();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const {
     isOpen: isEditModalOpen,
@@ -38,11 +41,17 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
     setIsMenuOpen(false);
     handleOpenDeleteModal();
   };
-  const handleDeleteCard = () => {
-    delCard(id);
-    // TODO: 카드 리스트 재 렌더링 로직
-    handleCloseDeleteModal();
-    handleCloseModal();
+  const handleDeleteCard = async () => {
+    try {
+      await delCard(id);
+      handleCloseDeleteModal();
+      handleCloseModal();
+      setTimeout(() => {
+        refetch();
+      }, MODAL_CLOSE_DELAY);
+    } catch {
+      // TODO : 에러 처리
+    }
   };
 
   return (
