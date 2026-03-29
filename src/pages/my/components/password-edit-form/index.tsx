@@ -3,16 +3,61 @@ import Title from '@/shared/components/title';
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
 
+import { useValidation } from '@/shared/hooks/useValidation';
+import { validatePassword } from '@/shared/utils/validators';
+
+import { updatePassword } from '@/features/auth/apis/updatePassword';
+
+import { ApiError } from '@/shared/apis/apiError';
+
 export default function PasswordEditForm() {
-  const [password, setPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const newPasswordField = useValidation({ validateFn: validatePassword });
 
   const isPasswordMismatch =
-    confirmNewPassword.length > 0 && newPassword !== confirmNewPassword;
+    confirmPassword.length > 0 && newPasswordField.value !== confirmPassword;
+
+  const isSubmitDisabled =
+    !currentPassword.trim() ||
+    !newPasswordField.isValid ||
+    isPasswordMismatch ||
+    confirmPassword.length === 0 ||
+    isSubmitting;
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (isSubmitDisabled) return;
+
+    setIsSubmitting(true);
+    setErrorMessage('');
+
+    try {
+      await updatePassword({
+        password: currentPassword.trim(),
+        newPassword: newPasswordField.value,
+      });
+
+      // 성공 시 초기화
+      setCurrentPassword('');
+      newPasswordField.reset();
+      setConfirmPassword('');
+    } catch (error) {
+      if (error instanceof ApiError) {
+        setErrorMessage(error.message);
+      } else {
+        setErrorMessage('비밀번호 변경에 실패했습니다. 다시 시도해주세요.');
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <div className="mt-4 w-71 rounded-xl bg-white p-4 md:mt-7 md:w-137 md:p-6 lg:w-2xl">
         <Title
           as="h3"
@@ -27,8 +72,8 @@ export default function PasswordEditForm() {
             id="current-password"
             type="password"
             label="현재 비밀번호"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
             placeholder="비밀번호를 입력"
             labelClassName="text-md md:text-lg"
           />
@@ -36,8 +81,10 @@ export default function PasswordEditForm() {
             id="new-password"
             type="password"
             label="새 비밀번호"
-            value={newPassword}
-            onChange={(event) => setNewPassword(event.target.value)}
+            value={newPasswordField.value}
+            onChange={newPasswordField.onChange}
+            onBlur={newPasswordField.onBlur}
+            errorMessage={newPasswordField.error}
             placeholder="새 비밀번호를 입력"
             labelClassName="text-md mt-4 md:text-lg"
           />
@@ -45,18 +92,23 @@ export default function PasswordEditForm() {
             id="new-password-confirm"
             type="password"
             label="새 비밀번호 확인"
-            value={confirmNewPassword}
-            onChange={(event) => setConfirmNewPassword(event.target.value)}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             placeholder="새 비밀번호를 입력"
-            labelClassName="text-gray-200 text-md mt-4 block md:text-lg"
+            errorMessage={
+              isPasswordMismatch ? '비밀번호가 일치하지 않습니다.' : ''
+            }
+            labelClassName="text-md mt-4 md:text-lg"
           />
-
-          {isPasswordMismatch && (
-            <p className="text-error mt-1 text-sm">
-              비밀번호가 일치하지 않습니다.
-            </p>
+          {errorMessage && (
+            <p className="text-error mt-1 text-sm">{errorMessage}</p>
           )}
-          <Button theme="primary" type="submit" className="mt-6 h-13.5 w-full">
+          <Button
+            theme="primary"
+            type="submit"
+            className="mt-6 h-13.5 w-full"
+            disabled={isSubmitDisabled}
+          >
             변경
           </Button>
         </div>
