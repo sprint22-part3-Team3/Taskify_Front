@@ -26,7 +26,7 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
     openModal: handleOpenDeleteModal,
     closeModal: handleCloseDeleteModal,
   } = useModal();
-  const [deleteError, setDeleteError] = useState(false);
+  const [hasDeleteError, setHasDeleteError] = useState(false);
   const { id, title, description, tags, dueDate, assignee, imageUrl } = card;
 
   const handleClickMenu = () => setIsMenuOpen((prev) => !prev);
@@ -45,7 +45,7 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
   const handleDeleteCancel = () => {
     handleCloseDeleteModal();
     setTimeout(() => {
-      setDeleteError(false);
+      setHasDeleteError(false);
     }, MODAL_CLOSE_DELAY);
   };
   const handleDeleteCard = async () => {
@@ -57,7 +57,7 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
         refetch();
       }, MODAL_CLOSE_DELAY);
     } catch {
-      setDeleteError(true);
+      setHasDeleteError(true);
     }
   };
 
@@ -115,7 +115,7 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
         message={
           <>
             할 일 카드를 <span className="text-error">삭제</span>하시겠습니까?
-            {deleteError && (
+            {hasDeleteError && (
               <span className="typo-sm-medium text-error mt-1 block">
                 <span className="inline-block">카드 삭제에 실패했습니다.</span>
                 <span className="inline-block">
