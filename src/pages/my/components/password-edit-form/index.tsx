@@ -87,6 +87,9 @@ export default function PasswordEditForm() {
             errorMessage={newPasswordField.error}
             placeholder="새 비밀번호를 입력"
             labelClassName="text-md mt-4 md:text-lg"
+            className={
+              newPasswordField.error ? 'border-error focus:border-error' : ''
+            }
           />
           <Input
             id="new-password-confirm"
@@ -97,6 +100,9 @@ export default function PasswordEditForm() {
             placeholder="새 비밀번호를 입력"
             errorMessage={
               isPasswordMismatch ? '비밀번호가 일치하지 않습니다.' : ''
+            }
+            className={
+              isPasswordMismatch ? 'border-error focus:border-error' : ''
             }
             labelClassName="text-md mt-4 md:text-lg"
           />
