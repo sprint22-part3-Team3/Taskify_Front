@@ -139,7 +139,10 @@ export function useInvitedDashboardList() {
     void fetchInvitedDashboards('');
   }, [fetchInvitedDashboards]);
 
-  const debouncedKeyword = useDebounce(searchKeyword);
+  const debouncedKeyword = useDebounce(
+    searchKeyword,
+    searchKeyword === '' ? 0 : undefined
+  );
 
   useEffect(() => {
     void fetchInvitedDashboards(debouncedKeyword);
