@@ -9,9 +9,10 @@ import type { EditColumnModalProps } from '@/features/columns/components/modal/e
 
 import { deleteColumn } from '@/features/columns/apis/deleteColumn';
 import { updateColumn } from '@/features/columns/apis/updateColumn';
-import { checkColumnNameDuplicate } from '@/features/columns/apis/checkColumnName';
 import { COLUMN_NAME_RULES } from '@/shared/utils/validators/validators.constants';
 import { useParams } from 'react-router-dom';
+
+import { useColumnList } from '@/features/columns/hooks/useColumnList';
 /**
  * 컬럼 이름을 수정하거나 삭제할 수 있는 모달입니다.
  *
@@ -32,6 +33,7 @@ function EditColumnModal({
 }: EditColumnModalProps) {
   const { id } = useParams();
   const dashboardId = Number(id);
+  const { columns } = useColumnList(dashboardId);
   const [draftTitle, setDraftTitle] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -60,25 +62,20 @@ function EditColumnModal({
     });
   };
 
-  const handleBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const relatedTarget = e.relatedTarget as HTMLElement;
     if (relatedTarget?.getAttribute('aria-label') === '모달 닫기') return;
 
     const trimmed = columnTitle.trim();
 
-    // 초기값과 같으면 중복 체크 불필요
     if (trimmed === initialTitle.trim()) return;
     if (!trimmed) return;
 
-    try {
-      const isDuplicate = await checkColumnNameDuplicate(trimmed, dashboardId);
-      if (isDuplicate) {
-        setError('중복된 컬럼 이름입니다.');
-      } else {
-        setError('');
-      }
-    } catch {
-      setError('중복 확인 중 오류가 발생했습니다. 다시 시도해주세요.');
+    const isDuplicate = columns.some((column) => column.title === trimmed);
+    if (isDuplicate) {
+      setError('중복된 컬럼 이름입니다.');
+    } else {
+      setError('');
     }
   };
 
@@ -100,9 +97,8 @@ function EditColumnModal({
 
     if (isSubmitDisabled || error) return;
 
-    const isDuplicate = await checkColumnNameDuplicate(
-      columnTitle.trim(),
-      dashboardId
+    const isDuplicate = columns.some(
+      (column) => column.title === columnTitle.trim()
     );
     if (isDuplicate) {
       setError('중복된 컬럼 이름입니다.');
