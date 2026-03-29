@@ -4,10 +4,8 @@ import CreateDashboardModal from '@/features/dashboards/components/create-dashbo
 import { useSidebar } from '@/features/dashboards/hooks/useSidebar';
 import InviteModal from '@/features/invitations/components/invitations-section/invite-modal';
 import { useModal } from '@/shared/hooks/useModal';
-import type { Member } from '@/features/members/apis/members.types';
-import { getMembers } from '@/features/members/apis/members';
-import { useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useDashboardMembers } from '@/features/members/hooks/useDashboardMembers';
 
 /**
  * 대시보드 공통 레이아웃 컴포넌트입니다.
@@ -20,10 +18,12 @@ import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 export default function DashboardLayout() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { id } = useParams();
-  const [dashboardMembers, setDashboardMembers] = useState<Member[]>([]);
-  const [dashboardMemberCount, setDashboardMemberCount] = useState(0);
-  const [memberLoadError, setMemberLoadError] = useState('');
+  const { id } = useParams<{ id: string }>();
+  const {
+    members: dashboardMembers,
+    totalCount,
+    error: memberLoadError,
+  } = useDashboardMembers();
   const {
     isOpen: isInviteModalOpen,
     openModal: handleOpenInviteModal,
@@ -60,39 +60,6 @@ export default function DashboardLayout() {
     handleOpenInviteModal();
   };
 
-  useEffect(() => {
-    const dashboardId = id;
-    if (!dashboardId) {
-      return;
-    }
-
-    let isMounted = true;
-
-    async function loadMembers(targetDashboardId: string) {
-      setMemberLoadError('');
-      try {
-        const data = await getMembers(targetDashboardId);
-        if (isMounted) {
-          if (!data) {
-            throw new Error('No member data');
-          }
-          setDashboardMembers(data.members);
-          setDashboardMemberCount(data.totalCount);
-        }
-      } catch {
-        if (isMounted) {
-          setMemberLoadError('멤버를 불러오지 못했습니다.');
-        }
-      }
-    }
-
-    loadMembers(dashboardId);
-
-    return () => {
-      isMounted = false;
-    };
-  }, [id]);
-
   const handleNavigateMyPage = () => {
     navigate('/mypage');
   };
@@ -127,8 +94,8 @@ export default function DashboardLayout() {
             onManageClick={handleNavigateDashboardEdit}
             onInviteClick={handleOpenDashboardInviteModal}
             members={dashboardMembers}
-            totalMemberCount={dashboardMemberCount}
-            memberLoadError={memberLoadError}
+            totalMemberCount={totalCount}
+            memberLoadError={memberLoadError ?? ''}
             onProfileClick={handleNavigateMyPage}
           />
           <main className="flex-1 overflow-auto">
