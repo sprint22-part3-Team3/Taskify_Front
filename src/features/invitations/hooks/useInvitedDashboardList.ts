@@ -135,10 +135,6 @@ export function useInvitedDashboardList() {
     }
   };
 
-  useEffect(() => {
-    void fetchInvitedDashboards('');
-  }, [fetchInvitedDashboards]);
-
   const debouncedKeyword = useDebounce(
     searchKeyword,
     searchKeyword === '' ? 0 : undefined
