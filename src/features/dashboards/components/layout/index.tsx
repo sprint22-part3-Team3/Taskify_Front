@@ -27,7 +27,7 @@ export default function DashboardLayout() {
       return;
     }
 
-    navigate(`/dashboard/:id/edit`);
+    navigate(`/dashboard/${id}/edit`);
   };
 
   const handleOpenDashboardInviteModal = () => {
