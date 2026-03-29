@@ -43,6 +43,7 @@ export default function DashboardLayout() {
   };
 
   const isMyDashboardPage = location.pathname === '/mydashboard';
+  const isMyPage = location.pathname === '/mypage';
 
   return (
     <>
@@ -50,11 +51,17 @@ export default function DashboardLayout() {
         <Sidebar />
         <div className="flex min-w-0 flex-1 flex-col">
           <Header
-            title={isMyDashboardPage ? '내 대시보드' : undefined}
-            isOwner={!isMyDashboardPage}
-            isTitleAlwaysVisible={isMyDashboardPage}
-            isActionButtonsVisible={!isMyDashboardPage}
-            isMemberProfilesVisible={!isMyDashboardPage}
+            title={
+              isMyDashboardPage
+                ? '내 대시보드'
+                : isMyPage
+                  ? '계정관리'
+                  : undefined
+            }
+            isOwner={!isMyDashboardPage && !isMyPage}
+            isTitleAlwaysVisible={isMyDashboardPage || isMyPage}
+            isActionButtonsVisible={!isMyDashboardPage && !isMyPage}
+            isMemberProfilesVisible={!isMyDashboardPage && !isMyPage}
             onManageClick={handleNavigateDashboardEdit}
             onInviteClick={handleOpenDashboardInviteModal}
             onProfileClick={handleNavigateMyPage}
