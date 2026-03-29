@@ -7,8 +7,8 @@ import { createInvitation } from '@/features/invitations/apis/createInvitations'
 type InviteModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  dashboardId: string;
-  onInviteSuccess: () => void;
+  dashboardId?: string;
+  onInviteSuccess?: () => void;
 };
 
 /**
@@ -36,6 +36,8 @@ export default function InviteModal({
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!dashboardId) return;
+
     if (!inviteEmail.trim()) {
       setInviteError('이메일을 입력해 주세요.');
       return;
@@ -50,7 +52,7 @@ export default function InviteModal({
       await createInvitation(dashboardId, { email: inviteEmail });
 
       handleClose();
-      onInviteSuccess();
+      onInviteSuccess?.();
     } catch {
       setInviteError('초대에 실패했습니다. 이메일을 확인해 주세요.');
     } finally {
