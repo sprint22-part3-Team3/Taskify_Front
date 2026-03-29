@@ -10,6 +10,7 @@ import {
   dispatchDashboardListChangeEvent,
 } from '@/features/dashboards/utils/dashboardEvents';
 import { getApiErrorMessage } from '@/features/dashboards/utils/getApiErrorMessage';
+import { usePagination } from '@/shared/hooks/usePagination';
 
 /**
  * 내 대시보드 목록 조회와 생성 후 갱신 상태를 관리합니다.
@@ -26,27 +27,45 @@ import { getApiErrorMessage } from '@/features/dashboards/utils/getApiErrorMessa
  * ```
  */
 export function useDashboardList() {
+  const pageSize = 5;
   const [dashboardItems, setDashboardItems] = useState<DashboardItem[]>([]);
   const [isLoadingDashboards, setIsLoadingDashboards] = useState(true);
   const [isCreatingDashboard, setIsCreatingDashboard] = useState(false);
   const [dashboardError, setDashboardError] = useState<string | null>(null);
+  const {
+    currentPage,
+    totalPages,
+    syncTotalCount,
+    handlePrevPage,
+    handleNextPage,
+  } = usePagination();
 
   const loadDashboardItems = useCallback(async () => {
     setIsLoadingDashboards(true);
     setDashboardError(null);
 
     try {
-      const { dashboards } = await getMyDashboards();
+      const { dashboards, totalCount } = await getMyDashboards(
+        currentPage,
+        pageSize
+      );
+      const nextTotalPages = syncTotalCount(totalCount, pageSize);
+
+      if (currentPage > nextTotalPages) {
+        return;
+      }
+
       setDashboardItems(dashboards);
     } catch (error) {
       setDashboardError(
         getApiErrorMessage(error, DASHBOARD_ERROR_MESSAGE.loadDashboards)
       );
       setDashboardItems([]);
+      syncTotalCount(0, pageSize);
     } finally {
       setIsLoadingDashboards(false);
     }
-  }, []);
+  }, [currentPage, pageSize, syncTotalCount]);
 
   useEffect(() => {
     void loadDashboardItems();
@@ -97,9 +116,13 @@ export function useDashboardList() {
 
   return {
     dashboardItems,
+    currentPage,
+    totalPages,
     isLoadingDashboards,
     isCreatingDashboard,
     dashboardError,
     handleCreateDashboard,
+    handlePrevPage,
+    handleNextPage,
   };
 }
