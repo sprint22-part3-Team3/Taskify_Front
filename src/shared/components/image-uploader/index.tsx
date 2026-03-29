@@ -26,8 +26,10 @@ import { VARIANT_STYLE } from '@/shared/components/image-uploader/imageUploder.c
 
 export default function ImageUploadBox({
   variant = 'default',
+  initialImage,
+  onFileChange,
 }: ImageUploadBoxProps) {
-  const [image, setImage] = useState<string | null>(null);
+  const [image, setImage] = useState<string | null>(initialImage ?? null);
 
   // 이미지 선택
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +38,7 @@ export default function ImageUploadBox({
 
     const imageUrl = URL.createObjectURL(file);
     setImage(imageUrl);
-
+    onFileChange?.(file); // ✅ 부모에게 file 전달
     e.target.value = '';
   };
 
