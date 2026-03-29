@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import type { AvatarUser } from '@/shared/types/user.types';
 
+const MAX_TAG_COUNT = 5;
+
 export function useTodoCreateModal() {
   const [selectedAssignee, setSelectedAssignee] = useState<AvatarUser | null>(
     null
@@ -8,27 +10,28 @@ export function useTodoCreateModal() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
-  const [tagInput, setTagInput] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
 
-  const handleTagKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      // TODO: 태그 추가 로직
-      setTagInput('');
-    }
+  const resetForm = () => {
+    setSelectedAssignee(null);
+    setTitle('');
+    setDescription('');
+    setDueDate('');
+    setTags([]);
   };
 
   return {
+    maxTagCount: MAX_TAG_COUNT,
     selectedAssignee,
     title,
     description,
     dueDate,
-    tagInput,
+    tags,
     setSelectedAssignee,
     setTitle,
     setDescription,
     setDueDate,
-    setTagInput,
-    handleTagKeyDown,
+    setTags,
+    resetForm,
   };
 }

@@ -5,6 +5,7 @@ import AvatarGroup from '@/shared/components/avatar/avatar-group';
 import { Button } from '@/shared/components/button';
 import Title from '@/shared/components/title';
 import UserProfile from '@/shared/components/user-profile';
+import useUserContext from '@/shared/context/user/useUserContext';
 
 /**
  * 페이지 상단에 표시되는 공통 헤더 컴포넌트입니다.
@@ -50,6 +51,13 @@ export default function Header({
   onInviteClick,
   onProfileClick,
 }: HeaderProps) {
+  const { userProfile } = useUserContext();
+  const displayedProfile = userProfile ?? {
+    id: 0,
+    nickname: userName,
+    profileImageUrl: profileImage ?? '',
+  };
+
   return (
     <header className="z-header flex h-15 min-w-0 items-center justify-between border-b border-gray-200 bg-white pl-4 md:h-17.5 md:px-10 lg:justify-between">
       {/* 제목 - 데스크탑에서만 표시 */}
@@ -120,9 +128,9 @@ export default function Header({
         >
           <UserProfile
             user={{
-              id: 0,
-              nickname: userName,
-              profileImageUrl: profileImage ?? '',
+              id: displayedProfile.id,
+              nickname: displayedProfile.nickname,
+              profileImageUrl: displayedProfile.profileImageUrl ?? '',
             }}
             size="lg"
             nicknameClassName="hidden md:block"

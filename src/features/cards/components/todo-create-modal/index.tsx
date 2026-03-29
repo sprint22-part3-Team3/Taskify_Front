@@ -1,4 +1,4 @@
-import type { FormEvent } from 'react';
+import type { SubmitEvent } from 'react';
 import ImageUploadBox from '@/shared/components/image-uploader';
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
@@ -12,6 +12,7 @@ import FieldWrapper from '@/features/cards/components/form-field/field-wrapper';
 import TagInput from '@/features/cards/components/tag-input';
 import { ASSIGNEE_OPTIONS } from '@/features/cards/components/todo-edit-modal/todoEditModal.mock';
 import { useTodoCreateModal } from '@/features/cards/hooks/useTodoCreateModal';
+import { runAfterModalClose } from '@/shared/utils/modal';
 
 /**
  * 할 일 생성 모달을 렌더링합니다.
@@ -23,27 +24,33 @@ import { useTodoCreateModal } from '@/features/cards/hooks/useTodoCreateModal';
  */
 function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
   const {
+    maxTagCount,
     selectedAssignee,
     title,
     description,
     dueDate,
-    tagInput,
+    tags,
     setSelectedAssignee,
     setTitle,
     setDescription,
     setDueDate,
-    setTagInput,
-    handleTagKeyDown,
+    setTags,
+    resetForm,
   } = useTodoCreateModal();
   const isSubmitDisabled = !title.trim() || !description.trim();
 
-  const handleCreate = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleClose = () => {
     onClose();
+    runAfterModalClose(resetForm);
+  };
+
+  const handleCreate = (event: SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    handleClose();
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} className="md:w-146">
+    <Modal isOpen={isOpen} onClose={handleClose} className="md:w-146">
       <div className="flex min-h-0 flex-col">
         <Modal.Header title="할 일 생성" />
 
@@ -94,11 +101,7 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
               <Label className="typo-md-regular md:typo-2lg-regular">
                 태그
               </Label>
-              <TagInput
-                value={tagInput}
-                onChange={(event) => setTagInput(event.target.value)}
-                onKeyDown={handleTagKeyDown}
-              />
+              <TagInput tags={tags} setTags={setTags} maxTags={maxTagCount} />
             </FieldWrapper>
 
             <FieldWrapper>
@@ -110,7 +113,7 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
           </Modal.Main>
 
           <Modal.Footer className="shrink-0">
-            <Button theme="cancel" type="button" onClick={onClose}>
+            <Button theme="cancel" type="button" onClick={handleClose}>
               취소
             </Button>
             <Button theme="primary" type="submit" disabled={isSubmitDisabled}>

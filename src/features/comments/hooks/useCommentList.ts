@@ -11,11 +11,11 @@ const NOT_FOUND_OR_FORBIDDEN_ERROR =
 export const useCommentList = (cardId: number) => {
   const fetchFn = useCallback(() => getComments({ cardId }), [cardId]);
 
-  const { result, isLoading, errorMessage } = useGetData({
+  const { result, isLoading, errorMessage, refetch } = useGetData({
     fetchFn,
     dependencyId: cardId,
     notFoundMessage: NOT_FOUND_OR_FORBIDDEN_ERROR,
   });
 
-  return { comments: result?.comments || [], isLoading, errorMessage };
+  return { comments: result?.comments || [], isLoading, errorMessage, refetch };
 };
