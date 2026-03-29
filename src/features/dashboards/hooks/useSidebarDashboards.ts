@@ -19,7 +19,7 @@ import { usePagination } from '@/shared/hooks/usePagination';
  * ```
  */
 export function useSidebarDashboards() {
-  const pageSize = 15;
+  const PAGE_SIZE = 15;
   const [sidebarDashboards, setSidebarDashboards] = useState<
     SidebarDashboardItem[]
   >([]);
@@ -43,9 +43,9 @@ export function useSidebarDashboards() {
     try {
       const { dashboards, totalCount } = await getMyDashboards(
         currentPage,
-        pageSize
+        PAGE_SIZE
       );
-      const nextTotalPages = syncTotalCount(totalCount, pageSize);
+      const nextTotalPages = syncTotalCount(totalCount, PAGE_SIZE);
 
       if (currentPage > nextTotalPages) {
         return;
@@ -54,14 +54,14 @@ export function useSidebarDashboards() {
       setSidebarDashboards(dashboards);
     } catch (error) {
       setSidebarDashboards([]);
-      syncTotalCount(0, pageSize);
+      syncTotalCount(0, PAGE_SIZE);
       setSidebarDashboardsError(
         getApiErrorMessage(error, DASHBOARD_ERROR_MESSAGE.loadDashboards)
       );
     } finally {
       setIsLoadingSidebarDashboards(false);
     }
-  }, [currentPage, pageSize, syncTotalCount]);
+  }, [currentPage, PAGE_SIZE, syncTotalCount]);
 
   useEffect(() => {
     void loadSidebarDashboards();

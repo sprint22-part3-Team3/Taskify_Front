@@ -27,7 +27,7 @@ import { usePagination } from '@/shared/hooks/usePagination';
  * ```
  */
 export function useDashboardList() {
-  const pageSize = 5;
+  const PAGE_SIZE = 5;
   const [dashboardItems, setDashboardItems] = useState<DashboardItem[]>([]);
   const [isLoadingDashboards, setIsLoadingDashboards] = useState(true);
   const [isCreatingDashboard, setIsCreatingDashboard] = useState(false);
@@ -47,9 +47,9 @@ export function useDashboardList() {
     try {
       const { dashboards, totalCount } = await getMyDashboards(
         currentPage,
-        pageSize
+        PAGE_SIZE
       );
-      const nextTotalPages = syncTotalCount(totalCount, pageSize);
+      const nextTotalPages = syncTotalCount(totalCount, PAGE_SIZE);
 
       if (currentPage > nextTotalPages) {
         return;
@@ -61,11 +61,11 @@ export function useDashboardList() {
         getApiErrorMessage(error, DASHBOARD_ERROR_MESSAGE.loadDashboards)
       );
       setDashboardItems([]);
-      syncTotalCount(0, pageSize);
+      syncTotalCount(0, PAGE_SIZE);
     } finally {
       setIsLoadingDashboards(false);
     }
-  }, [currentPage, pageSize, syncTotalCount]);
+  }, [currentPage, PAGE_SIZE, syncTotalCount]);
 
   useEffect(() => {
     void loadDashboardItems();
