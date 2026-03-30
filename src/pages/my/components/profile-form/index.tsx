@@ -10,8 +10,11 @@ import { uploadProfileImage } from '@/features/users/apis/uploadProfileImage';
 import { UserContext } from '@/shared/context/user/userContext';
 
 export default function ProfileForm() {
-  const { userProfile: user, setUserProfile } = useContext(UserContext)!;
-
+  const userContext = useContext(UserContext);
+  if (!userContext) {
+    throw new Error('UserContext is not provided');
+  }
+  const { userProfile: user, setUserProfile } = userContext;
   const [nickname, setNickname] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
