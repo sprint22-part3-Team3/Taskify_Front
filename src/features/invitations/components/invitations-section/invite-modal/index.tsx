@@ -3,6 +3,7 @@ import Input from '@/shared/components/input';
 import { Modal } from '@/shared/components/modal';
 import { useState } from 'react';
 import { createInvitation } from '@/features/invitations/apis/createInvitations';
+import { validateEmail } from '@/shared/utils/validators/validateEmail';
 
 type InviteModalProps = {
   isOpen: boolean;
@@ -33,13 +34,14 @@ export default function InviteModal({
     onClose();
   };
 
-  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!dashboardId) return;
 
-    if (!inviteEmail.trim()) {
-      setInviteError('이메일을 입력해 주세요.');
+    const emailValidation = validateEmail(inviteEmail);
+    if (!emailValidation.isValid) {
+      setInviteError(emailValidation.message);
       return;
     }
 
@@ -82,7 +84,7 @@ export default function InviteModal({
             취소
           </Button>
           <Button type="submit" disabled={isSubmitting}>
-            생성
+            초대
           </Button>
         </Modal.Footer>
       </form>
