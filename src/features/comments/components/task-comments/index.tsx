@@ -4,16 +4,15 @@ import { TaskCommentItem } from '@/features/comments/components/task-comments/ta
 import { useCommentList } from '@/features/comments/hooks/useCommentList';
 import { TaskCommentInput } from '@/features/comments/components/task-comments/task-comment-input';
 import { postComment } from '@/features/comments/apis/comments';
-import { useParams } from 'react-router-dom';
 import { useState } from 'react';
+import { useDashboardId } from '@/shared/hooks/useDashboardId';
 
 /**
  * 할 일 카드의 댓글 목록을 렌더링하고 새 댓글을 작성하는 영역입니다.
  * 내부적으로 댓글 목록 조회 및 생성 API 로직을 제어합니다.
  */
 function TaskComments({ id: cardId, columnId }: TaskCommentsProps) {
-  const { id } = useParams();
-  const dashboardId = Number(id);
+  const dashboardId = useDashboardId();
   const { comments, isLoading, errorMessage, refetch } = useCommentList(cardId);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
