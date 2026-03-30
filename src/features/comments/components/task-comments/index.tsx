@@ -57,24 +57,25 @@ function TaskComments({ id: cardId, columnId }: TaskCommentsProps) {
 
   const handleDelete = (commentId: number) => {
     setDeleteTargetId(commentId);
+    setHasDeleteError(false);
     handleOpenDeleteModal();
   };
 
   const handleDeleteCancel = () => {
     handleCloseDeleteModal();
+    setDeleteTargetId(null);
     setTimeout(() => {
       setHasDeleteError(false);
-      setDeleteTargetId(null);
     }, MODAL_CLOSE_DELAY);
   };
 
   const handleDeleteComment = async () => {
     if (deleteTargetId === null) return;
-
     try {
       await delComment({ id: deleteTargetId });
       handleCloseDeleteModal();
       refetch();
+      setDeleteTargetId(null);
     } catch {
       setHasDeleteError(true);
     }
