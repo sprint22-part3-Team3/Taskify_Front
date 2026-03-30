@@ -3,6 +3,7 @@ import type { Card } from '@/features/cards/types/card.types';
 export type GetCardsParams = {
   columnId: number;
   size?: number;
+  cursorId?: number | null;
 };
 
 export type GetCardsResponse = {

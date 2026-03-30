@@ -10,11 +10,18 @@ import { del, get, post, postFormData, put } from '@/shared/apis/fetchInstance';
 /**
  * GET 카드 목록 조회
  */
-export const getCards = async ({ columnId, size = 10 }: GetCardsParams) => {
+export const getCards = async ({
+  columnId,
+  size = 10,
+  cursorId,
+}: GetCardsParams) => {
   const params = new URLSearchParams({
     size: size.toString(),
     columnId: columnId.toString(),
   });
+  if (cursorId) {
+    params.append('cursorId', cursorId.toString());
+  }
   const res = await get<GetCardsResponse>(`cards?${params.toString()}`);
 
   return res;
