@@ -9,8 +9,12 @@ import { TaskAssignee } from '@/features/cards/components/task-modal/task-assign
 import { TaskMenu } from '@/features/cards/components/task-modal/task-menu';
 import TodoEditModal from '@/features/cards/components/todo-edit-modal';
 import { useModal } from '@/shared/hooks/useModal';
+import { delCard } from '@/features/cards/apis/cards';
+import { MODAL_CLOSE_DELAY } from '@/shared/constants/modal.constants';
+import { useCardRefetchContext } from '@/features/cards/hooks/useCardRefetchContext';
 
 function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
+  const { refetch } = useCardRefetchContext();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const {
     isOpen: isEditModalOpen,
@@ -22,6 +26,7 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
     openModal: handleOpenDeleteModal,
     closeModal: handleCloseDeleteModal,
   } = useModal();
+  const [hasDeleteError, setHasDeleteError] = useState(false);
   const { id, title, description, tags, dueDate, assignee, imageUrl } = card;
 
   const handleClickMenu = () => setIsMenuOpen((prev) => !prev);
@@ -37,10 +42,23 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
     setIsMenuOpen(false);
     handleOpenDeleteModal();
   };
-  const handleDeleteCard = () => {
-    // TODO: 카드 삭제 API 연동
+  const handleDeleteCancel = () => {
     handleCloseDeleteModal();
-    handleCloseModal();
+    setTimeout(() => {
+      setHasDeleteError(false);
+    }, MODAL_CLOSE_DELAY);
+  };
+  const handleDeleteCard = async () => {
+    try {
+      await delCard(id);
+      handleCloseDeleteModal();
+      handleCloseModal();
+      setTimeout(() => {
+        refetch();
+      }, MODAL_CLOSE_DELAY);
+    } catch {
+      setHasDeleteError(true);
+    }
   };
 
   return (
@@ -91,12 +109,20 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
       />
       <DeleteModal
         isOpen={isDeleteModalOpen}
-        onClose={handleCloseDeleteModal}
+        onClose={handleDeleteCancel}
         onConfirm={handleDeleteCard}
         className="w-73.75 md:w-130"
         message={
           <>
-            <span className="text-error">할 일 카드</span>를 삭제하시겠습니까?
+            할 일 카드를 <span className="text-error">삭제</span>하시겠습니까?
+            {hasDeleteError && (
+              <span className="typo-sm-medium text-error mt-1 block">
+                <span className="inline-block">카드 삭제에 실패했습니다.</span>
+                <span className="inline-block">
+                  잠시 후 다시 시도해 주세요.
+                </span>
+              </span>
+            )}
           </>
         }
       />

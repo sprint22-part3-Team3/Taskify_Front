@@ -24,17 +24,17 @@ import { runAfterModalClose } from '@/shared/utils/modal';
  */
 function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
   const {
+    maxTagCount,
     selectedAssignee,
     title,
     description,
     dueDate,
-    tagInput,
+    tags,
     setSelectedAssignee,
     setTitle,
     setDescription,
     setDueDate,
-    setTagInput,
-    handleTagKeyDown,
+    setTags,
     resetForm,
   } = useTodoCreateModal();
   const isSubmitDisabled = !title.trim() || !description.trim();
@@ -101,11 +101,7 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
               <Label className="typo-md-regular md:typo-2lg-regular">
                 태그
               </Label>
-              <TagInput
-                value={tagInput}
-                onChange={(event) => setTagInput(event.target.value)}
-                onKeyDown={handleTagKeyDown}
-              />
+              <TagInput tags={tags} setTags={setTags} maxTags={maxTagCount} />
             </FieldWrapper>
 
             <FieldWrapper>
