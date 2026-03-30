@@ -115,7 +115,6 @@ export default function DashboardLayout() {
 
           return {
             ...previousDashboardInfo,
-            id,
             title: newTitle,
           };
         });
