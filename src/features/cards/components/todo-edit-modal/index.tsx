@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import type { SubmitEvent } from 'react';
 import { useParams } from 'react-router-dom';
 import ImageUploadBox from '@/shared/components/image-uploader';
@@ -17,6 +17,8 @@ import { useTodoEditModal } from '@/features/cards/hooks/useTodoEditModal';
 import { useAssigneeOptions } from '@/features/cards/hooks/useAssigneeOptions';
 import { useColumnList } from '@/features/columns/hooks/useColumnList';
 import { useTodoEditForm } from '@/features/cards/hooks/useTodoEditForm';
+import FieldError from '@/shared/components/field-error';
+import { createRequiredValidator } from '@/shared/utils/validators/validateRequired';
 
 /**
  * 할 일 수정 모달을 렌더링합니다.
@@ -68,6 +70,23 @@ function TodoEditModalContent({
     resetImageState,
   } = useTodoEditForm({ card });
 
+  const [titleError, setTitleError] = useState('');
+  const [descriptionError, setDescriptionError] = useState('');
+  const titleValidator = createRequiredValidator('제목을 입력해 주세요.');
+  const descriptionValidator = createRequiredValidator('설명을 입력해 주세요.');
+
+  const validateTitle = () => {
+    const result = titleValidator(title);
+    setTitleError(result.message);
+    return result.isValid;
+  };
+
+  const validateDescription = () => {
+    const result = descriptionValidator(description);
+    setDescriptionError(result.message);
+    return result.isValid;
+  };
+
   useEffect(() => {
     if (!isOpen) {
       return;
@@ -82,7 +101,12 @@ function TodoEditModalContent({
   const handleEdit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (isSubmitDisabled || isSubmitting) {
+    if (
+      isSubmitDisabled ||
+      isSubmitting ||
+      !validateTitle() ||
+      !validateDescription()
+    ) {
       return;
     }
 
@@ -140,7 +164,12 @@ function TodoEditModalContent({
               required
               labelClassName="typo-md-regular md:typo-2lg-regular"
               value={title}
-              onChange={(event) => setTitle(event.target.value)}
+              onChange={(event) => {
+                setTitle(event.target.value);
+                if (titleError) setTitleError('');
+              }}
+              onBlur={validateTitle}
+              errorMessage={titleError}
               className="typo-md-regular md:typo-lg-regular"
             />
             <FieldWrapper>
@@ -149,9 +178,14 @@ function TodoEditModalContent({
               </Label>
               <TextArea
                 value={description}
-                onChange={setDescription}
+                onChange={(value) => {
+                  setDescription(value);
+                  if (descriptionError) setDescriptionError('');
+                }}
+                onBlur={validateDescription}
                 className="typo-md-regular md:typo-lg-regular"
               />
+              {descriptionError && <FieldError>{descriptionError}</FieldError>}
             </FieldWrapper>
             <FieldWrapper>
               <Label className="typo-md-regular md:typo-2lg-regular">

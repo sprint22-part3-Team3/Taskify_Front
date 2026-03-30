@@ -1,4 +1,5 @@
 import type { SubmitEvent } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ImageUploadBox from '@/shared/components/image-uploader';
 import { Button } from '@/shared/components/button';
@@ -16,6 +17,8 @@ import { useTodoCreateModal } from '@/features/cards/hooks/useTodoCreateModal';
 import { useAssigneeOptions } from '@/features/cards/hooks/useAssigneeOptions';
 import { useTodoCreateForm } from '@/features/cards/hooks/useTodoCreateForm';
 import { runAfterModalClose } from '@/shared/utils/modal';
+import { createRequiredValidator } from '@/shared/utils/validators/validateRequired';
+import FieldError from '@/shared/components/field-error';
 
 /**
  * 할 일 생성 모달을 렌더링합니다.
@@ -61,7 +64,25 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
     columnId: column.id,
     teamId: column.teamId,
   });
+  const [titleError, setTitleError] = useState('');
+  const [descriptionError, setDescriptionError] = useState('');
   const isSubmitDisabled = !title.trim() || !description.trim();
+
+  const validateTitleField = createRequiredValidator('제목을 입력해 주세요.');
+  const validateDescriptionField =
+    createRequiredValidator('설명을 입력해 주세요.');
+
+  const validateTitle = () => {
+    const result = validateTitleField(title);
+    setTitleError(result.message);
+    return result.isValid;
+  };
+
+  const validateDescription = () => {
+    const result = validateDescriptionField(description);
+    setDescriptionError(result.message);
+    return result.isValid;
+  };
 
   const handleClose = () => {
     resetTodoCreateState();
@@ -72,7 +93,13 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
   const handleCreate = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (isSubmitDisabled || isSubmitting || isUploadingImage) {
+    if (
+      isSubmitDisabled ||
+      isSubmitting ||
+      isUploadingImage ||
+      !validateTitle() ||
+      !validateDescription()
+    ) {
       return;
     }
 
@@ -109,7 +136,14 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
               labelClassName="typo-md-regular md:typo-2lg-regular"
               placeholder="제목을 입력해 주세요"
               value={title}
-              onChange={(event) => setTitle(event.target.value)}
+              onChange={(event) => {
+                setTitle(event.target.value);
+                if (titleError) {
+                  setTitleError('');
+                }
+              }}
+              onBlur={validateTitle}
+              errorMessage={titleError}
               className="typo-md-regular md:typo-lg-regular"
             />
 
@@ -120,9 +154,14 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
               <TextArea
                 placeholder="설명을 입력해 주세요"
                 value={description}
-                onChange={setDescription}
+                onChange={(value) => {
+                  setDescription(value);
+                  if (descriptionError) setDescriptionError('');
+                }}
+                onBlur={validateDescription}
                 className="typo-md-regular md:typo-lg-regular"
               />
+              {descriptionError && <FieldError>{descriptionError}</FieldError>}
             </FieldWrapper>
 
             <FieldWrapper>
