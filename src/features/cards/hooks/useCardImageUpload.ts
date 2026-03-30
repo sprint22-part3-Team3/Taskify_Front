@@ -6,6 +6,10 @@ export type UseCardImageUploadOptions = {
   initialImageUrl?: string | null;
 };
 
+/**
+ * 카드 이미지 업로드를 처리하고 관련 상태를 관리하는 훅입니다.
+ * 이미지 업로드 상태, 성공/실패 처리, 상태 초기화 로직을 제공합니다.
+ */
 export function useCardImageUpload({
   teamId,
   initialImageUrl,
