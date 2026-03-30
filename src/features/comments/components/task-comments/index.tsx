@@ -10,6 +10,7 @@ import { COMMENT_MESSAGES } from '@/features/comments/constants/commentMessage.c
 import DeleteModal from '@/shared/components/modal/delete-modal';
 import { useModal } from '@/shared/hooks/useModal';
 import { MODAL_CLOSE_DELAY } from '@/shared/constants/modal.constants';
+import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
 
 /**
  * 할 일 카드의 댓글 목록을 렌더링하고 새 댓글을 작성하는 영역입니다.
@@ -17,7 +18,21 @@ import { MODAL_CLOSE_DELAY } from '@/shared/constants/modal.constants';
  */
 function TaskComments({ id: cardId, columnId }: TaskCommentsProps) {
   const dashboardId = useDashboardId();
-  const { comments, isLoading, errorMessage, refetch } = useCommentList(cardId);
+  const {
+    comments,
+    cursorId,
+    isLoading,
+    isAddLoading,
+    errorMessage,
+    addErrorMessage,
+    refetch,
+    loadMore,
+  } = useCommentList(cardId);
+  const { loadMoreRef } = useInfiniteScroll({
+    onLoadMore: loadMore,
+    hasCursorId: cursorId !== null,
+    isFetching: isAddLoading,
+  });
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const {
@@ -29,7 +44,7 @@ function TaskComments({ id: cardId, columnId }: TaskCommentsProps) {
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
 
   // TODO : 로딩 화면 처리
-  if (isLoading)
+  if (isLoading && comments.length === 0)
     return (
       <div className="flex items-center justify-center">
         <p>Loading...</p>
@@ -102,6 +117,15 @@ function TaskComments({ id: cardId, columnId }: TaskCommentsProps) {
           </li>
         ))}
       </ul>
+      <div className="mt-4 flex flex-col items-center justify-center gap-2">
+        {isAddLoading ? (
+          <p className="typo-sm-medium">Loading...</p>
+        ) : addErrorMessage ? (
+          <p className="typo-sm-medium text-error">{addErrorMessage}</p>
+        ) : (
+          <div ref={loadMoreRef} className="h-4 w-full" />
+        )}
+      </div>
       <DeleteModal
         isOpen={isDeleteModalOpen}
         onClose={handleDeleteCancel}
