@@ -1,4 +1,6 @@
+import { useMemo } from 'react';
 import type { SubmitEvent } from 'react';
+import { useParams } from 'react-router-dom';
 import ImageUploadBox from '@/shared/components/image-uploader';
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
@@ -10,8 +12,9 @@ import type { TodoCreateModalProps } from '@/features/cards/components/todo-crea
 import AssigneeSelect from '@/features/cards/components/assignee-select';
 import FieldWrapper from '@/features/cards/components/form-field/field-wrapper';
 import TagInput from '@/features/cards/components/tag-input';
-import { ASSIGNEE_OPTIONS } from '@/features/cards/components/todo-edit-modal/todoEditModal.mock';
 import { useTodoCreateModal } from '@/features/cards/hooks/useTodoCreateModal';
+import type { AvatarUser } from '@/shared/types/user.types';
+import { useDashboardMembers } from '@/features/members/hooks/useDashboardMembers';
 import { runAfterModalClose } from '@/shared/utils/modal';
 
 /**
@@ -37,6 +40,17 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
     setTags,
     resetForm,
   } = useTodoCreateModal();
+  const { id: routeDashboardId } = useParams();
+  const dashboardId = isOpen ? routeDashboardId : undefined;
+  const { members } = useDashboardMembers(dashboardId);
+  const assigneeOptions = useMemo<AvatarUser[]>(() => {
+    return members.map(({ id, nickname, profileImageUrl, userId }) => ({
+      id,
+      nickname,
+      profileImageUrl: profileImageUrl || null,
+      userId,
+    }));
+  }, [members]);
   const isSubmitDisabled = !title.trim() || !description.trim();
 
   const handleClose = () => {
@@ -59,7 +73,7 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
             <AssigneeSelect
               label="담당자"
               selectedAssignee={selectedAssignee}
-              assigneeOptions={ASSIGNEE_OPTIONS}
+              assigneeOptions={assigneeOptions}
               onSelect={setSelectedAssignee}
             />
 
