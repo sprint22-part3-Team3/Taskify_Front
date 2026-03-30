@@ -38,6 +38,8 @@ function AssigneeSelect({
   );
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [showManualInvalidMentionError, setShowManualInvalidMentionError] =
+    useState(false);
   const selectedAssigneeQuery = getAssigneeQuery(selectedAssignee);
 
   useEffect(() => {
@@ -67,6 +69,7 @@ function AssigneeSelect({
     onSelect(assignee);
     setQuery(getAssigneeQuery(assignee));
     setIsOpen(false);
+    setShowManualInvalidMentionError(false);
   };
 
   const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,10 +84,23 @@ function AssigneeSelect({
         onSelect(null);
       }
       setIsOpen(false);
+      setShowManualInvalidMentionError(false);
       return;
     }
 
+    if (showManualInvalidMentionError) {
+      setShowManualInvalidMentionError(false);
+    }
+
     setIsOpen(hasNextMentionTrigger);
+  };
+
+  const handleBlur = () => {
+    if (query.trim() && !shouldShowSelectedAssignee) {
+      setShowManualInvalidMentionError(true);
+      return;
+    }
+    setShowManualInvalidMentionError(false);
   };
 
   const handleFocus = () => {
@@ -98,10 +114,11 @@ function AssigneeSelect({
   };
 
   const shouldShowInvalidMentionError =
-    hasMentionTrigger &&
-    !!normalizedQuery &&
-    !shouldShowSelectedAssignee &&
-    !isOpen;
+    (hasMentionTrigger &&
+      !!normalizedQuery &&
+      !shouldShowSelectedAssignee &&
+      !isOpen) ||
+    showManualInvalidMentionError;
 
   return (
     <div className="flex w-full flex-col gap-2" ref={containerRef}>
@@ -132,6 +149,7 @@ function AssigneeSelect({
             value={query}
             placeholder={placeholder}
             onFocus={handleFocus}
+            onBlur={handleBlur}
             onChange={handleChangeQuery}
             className={cn(
               'typo-md-regular md:typo-lg-regular focus:border-primary-500 text-black-200 h-12 bg-white py-0 pr-4 pl-11 md:pl-12',
