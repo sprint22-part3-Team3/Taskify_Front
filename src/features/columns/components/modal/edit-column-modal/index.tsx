@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { Button } from '@/shared/components/button';
 import DeleteModal from '@/shared/components/modal/delete-modal';
 import Input from '@/shared/components/input';
@@ -12,7 +11,7 @@ import { updateColumn, deleteColumn } from '@/features/columns/apis/columns';
 import { COLUMN_NAME_RULES } from '@/shared/utils/validators/validators.constants';
 
 import { useModal } from '@/shared/hooks/useModal';
-import { useColumnList } from '@/features/columns/hooks/useColumnList';
+import { useColumnListContext } from '@/features/columns/hooks/useColumnListContext';
 
 /**
  * 컬럼 이름을 수정하거나 삭제할 수 있는 모달입니다.
@@ -33,9 +32,7 @@ function EditColumnModal({
   columnId,
   initialTitle,
 }: EditColumnModalProps) {
-  const { id } = useParams();
-  const dashboardId = Number(id);
-  const { columns } = useColumnList(dashboardId);
+  const columns = useColumnListContext();
   const [draftTitle, setDraftTitle] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');

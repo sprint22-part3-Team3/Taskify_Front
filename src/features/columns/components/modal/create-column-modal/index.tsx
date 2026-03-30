@@ -8,8 +8,7 @@ import { useColumnNameValidation } from '@/features/columns/hooks/useColumnNameV
 import { useParams } from 'react-router-dom';
 import { COLUMN_NAME_RULES } from '@/shared/utils/validators';
 import { runAfterModalClose } from '@/shared/utils/modal';
-import { useColumnList } from '@/features/columns/hooks/useColumnList';
-
+import { useColumnListContext } from '@/features/columns/hooks/useColumnListContext';
 /**
  * 새 컬럼 이름을 입력받는 생성 모달입니다.
  *
@@ -22,7 +21,7 @@ import { useColumnList } from '@/features/columns/hooks/useColumnList';
 function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
   const { id } = useParams();
   const dashboardId = Number(id);
-  const { columns } = useColumnList(dashboardId);
+  const columns = useColumnListContext();
   const columnNameField = useColumnNameValidation({
     checkFn: (name) =>
       Promise.resolve(columns.some((column) => column.title === name)),

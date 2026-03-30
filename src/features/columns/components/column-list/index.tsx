@@ -3,6 +3,7 @@ import { ColumnAdd } from '@/features/columns/components/column-list/column-add'
 import { useColumnList } from '@/features/columns/hooks/useColumnList';
 import { cn } from '@/shared/utils/cn';
 import { useParams } from 'react-router-dom';
+import { ColumnListProvider } from '@/features/columns/contexts/columnListProvider';
 
 const LIST_CLASS = cn(
   'shrink-0 px-3 pt-8 pb-6 md:px-5 md:py-5',
@@ -31,18 +32,20 @@ function ColumnList() {
     );
 
   return (
-    <ul className="flex flex-col divide-y divide-gray-100 lg:min-h-screen lg:flex-row lg:divide-x lg:divide-y-0">
-      {columns.map((column) => (
-        <li key={column.id} className={cn(LIST_CLASS, 'lg:w-88.5')}>
-          <CardList column={column} />
+    <ColumnListProvider columns={columns}>
+      <ul className="flex flex-col divide-y divide-gray-100 lg:min-h-screen lg:flex-row lg:divide-x lg:divide-y-0">
+        {columns.map((column) => (
+          <li key={column.id} className={cn(LIST_CLASS, 'lg:w-88.5')}>
+            <CardList column={column} />
+          </li>
+        ))}
+        <li className={cn(LIST_CLASS, 'lg:w-98.5')}>
+          <div className="lg:pt-12.5">
+            <ColumnAdd />
+          </div>
         </li>
-      ))}
-      <li className={cn(LIST_CLASS, 'lg:w-98.5')}>
-        <div className="lg:pt-12.5">
-          <ColumnAdd />
-        </div>
-      </li>
-    </ul>
+      </ul>
+    </ColumnListProvider>
   );
 }
 
