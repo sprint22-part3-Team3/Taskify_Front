@@ -9,4 +9,6 @@ export type DeleteModalProps = {
   renderInModal?: boolean;
   cancelText?: string;
   confirmText?: string;
+  isLoading?: boolean;
+  disabled?: boolean;
 };

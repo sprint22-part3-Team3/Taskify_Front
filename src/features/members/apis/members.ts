@@ -1,4 +1,4 @@
-import { get } from '@/shared/apis/fetchInstance';
+import { del, get } from '@/shared/apis/fetchInstance';
 import type { MembersResponse } from '@/features/members/apis/members.types';
 
 /** 구성원 목록 조회 시 기본 페이지 사이즈 */
@@ -20,5 +20,12 @@ export async function getMembers(
     size: size.toString(),
   });
 
-  return get<MembersResponse>(`members?${params.toString()}`);
+  return get<MembersResponse>(`/members?${params.toString()}`);
+}
+
+/**
+ * 대시보드 구성원을 삭제하는 함수
+ */
+export async function deleteMember(memberId: number): Promise<null> {
+  return del<null>(`/members/${memberId}`);
 }
