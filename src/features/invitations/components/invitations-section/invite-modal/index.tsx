@@ -4,13 +4,7 @@ import { Modal } from '@/shared/components/modal';
 import { useState } from 'react';
 import { createInvitation } from '@/features/invitations/apis/invitations';
 import { validateEmail } from '@/shared/utils/validators/validateEmail';
-
-type InviteModalProps = {
-  isOpen: boolean;
-  onClose: () => void;
-  dashboardId?: string;
-  onInviteSuccess?: () => void;
-};
+import type { InviteModalProps } from '@/features/invitations/apis/invitations.types';
 
 /**
  * 대시보드에 사용자를 초대하는 모달 컴포넌트입니다.

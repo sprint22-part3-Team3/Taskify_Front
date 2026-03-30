@@ -46,3 +46,11 @@ export type InvitationsResponse = {
 export type CreateInvitationRequest = {
   email: string;
 };
+
+/** 초대하기 모달 타입 정리 */
+export type InviteModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  dashboardId?: string;
+  onInviteSuccess?: () => void;
+};
