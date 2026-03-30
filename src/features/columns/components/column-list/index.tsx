@@ -1,8 +1,8 @@
 import { CardList } from '@/features/cards/components/card-list';
 import { ColumnAdd } from '@/features/columns/components/column-list/column-add';
 import { useColumnList } from '@/features/columns/hooks/useColumnList';
+import { useDashboardId } from '@/shared/hooks/useDashboardId';
 import { cn } from '@/shared/utils/cn';
-import { useParams } from 'react-router-dom';
 
 const LIST_CLASS = cn(
   'shrink-0 px-3 pt-8 pb-6 md:px-5 md:py-5',
@@ -11,8 +11,7 @@ const LIST_CLASS = cn(
 );
 
 function ColumnList() {
-  const { id } = useParams();
-  const dashboardId = Number(id);
+  const dashboardId = useDashboardId();
   const { columns, isLoading, errorMessage } = useColumnList(dashboardId);
 
   // TODO : 로딩 화면 처리
