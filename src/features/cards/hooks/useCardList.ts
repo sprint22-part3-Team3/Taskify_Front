@@ -1,6 +1,7 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { getCards } from '@/features/cards/apis/cards';
 import { useGetData } from '@/shared/hooks/useGetData';
+import { CARD_EVENTS } from '@/features/cards/utils/cardEvents';
 
 const NOT_FOUND_OR_FORBIDDEN_ERROR =
   '컬럼을 찾을 수 없거나 접근 권한이 없습니다';
@@ -16,6 +17,18 @@ export const useCardList = (columnId: number) => {
     dependencyId: columnId,
     notFoundMessage: NOT_FOUND_OR_FORBIDDEN_ERROR,
   });
+
+  useEffect(() => {
+    const handleCardListChange = () => {
+      refetch();
+    };
+
+    window.addEventListener(CARD_EVENTS.LIST_CHANGE, handleCardListChange);
+
+    return () => {
+      window.removeEventListener(CARD_EVENTS.LIST_CHANGE, handleCardListChange);
+    };
+  }, [refetch]);
 
   return {
     cards: result?.cards || [],

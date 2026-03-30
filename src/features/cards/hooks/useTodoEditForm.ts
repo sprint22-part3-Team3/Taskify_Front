@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import type { UpdateCardRequest } from '@/features/cards/apis/cards.types';
 import { updateCard } from '@/features/cards/apis/cards';
 import { useCardRefetchContext } from '@/features/cards/hooks/useCardRefetchContext';
+import { CARD_EVENTS } from '@/features/cards/utils/cardEvents';
 
 type UseTodoEditFormParams = {
   cardId: number;
@@ -20,6 +21,7 @@ export function useTodoEditForm({ cardId }: UseTodoEditFormParams) {
       try {
         await updateCard(cardId, payload);
         refetch();
+        window.dispatchEvent(new Event(CARD_EVENTS.LIST_CHANGE));
         return true;
       } catch (error) {
         const message =
