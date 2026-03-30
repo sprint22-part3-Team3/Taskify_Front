@@ -29,7 +29,7 @@ export default function DashboardLayout() {
     members: dashboardMembers,
     totalCount,
     errorMessage: memberLoadError,
-  } = useDashboardMembers();
+  } = useDashboardMembers(id);
   const {
     isOpen: isInviteModalOpen,
     openModal: handleOpenInviteModal,
