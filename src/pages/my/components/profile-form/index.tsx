@@ -8,6 +8,10 @@ import ImageUploadBox from '@/shared/components/image-uploader';
 import { updateUserMe } from '@/features/users/apis/updateUserMe';
 import { uploadProfileImage } from '@/features/users/apis/uploadProfileImage';
 import { UserContext } from '@/shared/context/user/userContext';
+import { NICKNAME_RULES } from '@/shared/utils/validators/validators.constants';
+
+import { useValidation } from '@/shared/hooks/useValidation';
+import { validateNickname } from '@/shared/utils/validators';
 
 export default function ProfileForm() {
   const userContext = useContext(UserContext);
@@ -15,7 +19,6 @@ export default function ProfileForm() {
     throw new Error('UserContext is not provided');
   }
   const { userProfile: user, setUserProfile } = userContext;
-  const [nickname, setNickname] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -23,10 +26,14 @@ export default function ProfileForm() {
     undefined
   );
 
+  const nicknameField = useValidation({ validateFn: validateNickname });
+
   const isSaveDisabled =
     isSubmitting ||
-    ((nickname.trim() === '' || nickname.trim() === user?.nickname) &&
-      !selectedFile);
+    ((nicknameField.value.trim() === '' ||
+      nicknameField.value.trim() === user?.nickname) &&
+      !selectedFile) ||
+    !!nicknameField.error;
 
   useEffect(() => {
     if (user?.profileImageUrl) {
@@ -50,13 +57,13 @@ export default function ProfileForm() {
       }
 
       const updated = await updateUserMe({
-        nickname: nickname.trim() || user.nickname,
+        nickname: nicknameField.value.trim() || user.nickname,
         profileImageUrl,
       });
 
       if (updated) setUserProfile(updated);
 
-      setNickname('');
+      nicknameField.reset();
       setSelectedFile(null);
     } catch {
       setErrorMessage('프로필 저장에 실패했습니다. 다시 시도해주세요.');
@@ -103,10 +110,13 @@ export default function ProfileForm() {
               label="닉네임"
               name="nickname"
               type="text"
-              value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
+              value={nicknameField.value}
+              onChange={nicknameField.onChange}
+              onBlur={nicknameField.onBlur}
+              errorMessage={nicknameField.error}
               placeholder={user?.nickname ?? '닉네임을 입력해주세요.'}
               labelClassName="text-md md:mt-0 md:text-lg"
+              maxLength={NICKNAME_RULES.MAX_LENGTH}
             />
             {errorMessage && (
               <p className="text-error mt-1 text-sm">{errorMessage}</p>
