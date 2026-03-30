@@ -24,12 +24,12 @@ import { getDashboard } from '@/features/dashboards/apis/getDashboard';
 export default function DashboardLayout() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { id } = useParams<{ id: string }>();
+  const { id: dashboardId } = useParams<{ id: string }>();
   const {
     members: dashboardMembers,
     totalCount,
     errorMessage: memberLoadError,
-  } = useDashboardMembers(id);
+  } = useDashboardMembers(dashboardId);
   const {
     isOpen: isInviteModalOpen,
     openModal: handleOpenInviteModal,
@@ -61,15 +61,15 @@ export default function DashboardLayout() {
   } | null>(null);
 
   const handleNavigateDashboardEdit = () => {
-    if (!id) {
+    if (!dashboardId) {
       return;
     }
 
-    navigate(`/dashboard/${id}/edit`);
+    navigate(`/dashboard/${dashboardId}/edit`);
   };
 
   const handleOpenDashboardInviteModal = () => {
-    if (!id) {
+    if (!dashboardId) {
       return;
     }
 
@@ -86,7 +86,7 @@ export default function DashboardLayout() {
 
   // Layout에서 id가 바뀔 때마다 직접 대시보드 정보 조회
   useEffect(() => {
-    if (!id || isMyDashboardPage || isMyPage) return;
+    if (!dashboardId || isMyDashboardPage || isMyPage) return;
 
     async function fetchTitle(dashboardId: string) {
       const data = await getDashboard(dashboardId);
@@ -99,8 +99,8 @@ export default function DashboardLayout() {
       }
     }
 
-    fetchTitle(id);
-  }, [id, isMyDashboardPage, isMyPage]);
+    fetchTitle(dashboardId);
+  }, [dashboardId, isMyDashboardPage, isMyPage]);
 
   // 대시보드 제목 변경 이벤트 수신
   useEffect(() => {
@@ -108,7 +108,7 @@ export default function DashboardLayout() {
       const { title: newTitle } = (
         event as CustomEvent<DashboardTitleChangeDetail>
       ).detail;
-      if (id) {
+      if (dashboardId) {
         setDashboardInfo((previousDashboardInfo) => {
           if (!previousDashboardInfo) {
             return previousDashboardInfo;
@@ -130,7 +130,7 @@ export default function DashboardLayout() {
         handleTitleChange
       );
     };
-  }, [id]);
+  }, [dashboardId]);
 
   return (
     <>
@@ -156,7 +156,7 @@ export default function DashboardLayout() {
                 ? '내 대시보드'
                 : isMyPage
                   ? '계정관리'
-                  : dashboardInfo?.id === id
+                  : dashboardInfo?.id === dashboardId
                     ? dashboardInfo?.title
                     : ''
             }
