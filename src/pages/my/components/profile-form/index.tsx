@@ -1,23 +1,23 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 
 import Title from '@/shared/components/title';
 import Input from '@/shared/components/input';
 import { Button } from '@/shared/components/button';
 import ImageUploadBox from '@/shared/components/image-uploader';
 
-import { useCurrentUser } from '@/features/users/hooks/useCurrentUser';
 import { updateUserMe } from '@/features/users/apis/updateUserMe';
 import { uploadProfileImage } from '@/features/users/apis/uploadProfileImage';
+import { UserContext } from '@/shared/context/user/userContext';
 
 export default function ProfileForm() {
-  const { user, isLoading } = useCurrentUser();
+  const { userProfile: user, setUserProfile } = useContext(UserContext)!;
+
   const [nickname, setNickname] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   const isSaveDisabled =
-    isLoading ||
     isSubmitting ||
     ((nickname.trim() === '' || nickname.trim() === user?.nickname) &&
       !selectedFile);
@@ -32,16 +32,21 @@ export default function ProfileForm() {
     try {
       let profileImageUrl = user.profileImageUrl;
 
-      // 이미지가 변경된 경우 먼저 업로드
       if (selectedFile) {
         const res = await uploadProfileImage(selectedFile);
         profileImageUrl = res?.profileImageUrl ?? profileImageUrl;
       }
 
-      await updateUserMe({
+      const updated = await updateUserMe({
         nickname: nickname.trim() || user.nickname,
         profileImageUrl,
       });
+
+      // ✅ 전역 유저 상태 업데이트 → 헤더 닉네임/이미지 자동 반영
+      if (updated) setUserProfile(updated);
+
+      setNickname('');
+      setSelectedFile(null);
     } catch {
       setErrorMessage('프로필 저장에 실패했습니다. 다시 시도해주세요.');
     } finally {
@@ -62,6 +67,7 @@ export default function ProfileForm() {
 
         <div className="w-full md:flex md:justify-between">
           <ImageUploadBox
+            key={user?.profileImageUrl}
             initialImage={user?.profileImageUrl}
             onFileChange={setSelectedFile}
           />
