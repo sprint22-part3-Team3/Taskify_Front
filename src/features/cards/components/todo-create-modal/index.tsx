@@ -1,4 +1,5 @@
 import type { SubmitEvent } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ImageUploadBox from '@/shared/components/image-uploader';
 import { Button } from '@/shared/components/button';
@@ -16,6 +17,7 @@ import { useTodoCreateModal } from '@/features/cards/hooks/useTodoCreateModal';
 import { useAssigneeOptions } from '@/features/cards/hooks/useAssigneeOptions';
 import { useTodoCreateForm } from '@/features/cards/hooks/useTodoCreateForm';
 import { runAfterModalClose } from '@/shared/utils/modal';
+import { createRequiredValidator } from '@/shared/utils/validators/validateRequired';
 
 /**
  * 할 일 생성 모달을 렌더링합니다.
@@ -25,6 +27,10 @@ import { runAfterModalClose } from '@/shared/utils/modal';
  * <TodoCreateModal isOpen={isOpen} onClose={handleClose} />
  * ```
  */
+const validateTitleField = createRequiredValidator('제목을 입력해 주세요.');
+const validateDescriptionField =
+  createRequiredValidator('설명을 입력해 주세요.');
+
 function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
   const {
     maxTagCount,
@@ -61,7 +67,21 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
     columnId: column.id,
     teamId: column.teamId,
   });
+  const [titleError, setTitleError] = useState('');
+  const [descriptionError, setDescriptionError] = useState('');
   const isSubmitDisabled = !title.trim() || !description.trim();
+
+  const validateTitle = () => {
+    const result = validateTitleField(title);
+    setTitleError(result.message);
+    return result.isValid;
+  };
+
+  const validateDescription = () => {
+    const result = validateDescriptionField(description);
+    setDescriptionError(result.message);
+    return result.isValid;
+  };
 
   const handleClose = () => {
     resetTodoCreateState();
@@ -69,10 +89,20 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
     runAfterModalClose(resetForm);
   };
 
+  const hasFormErrors = Boolean(
+    titleError || descriptionError || imageUploadError
+  );
+  const shouldDisableSubmitButton =
+    isSubmitDisabled || isSubmitting || isUploadingImage || hasFormErrors;
+
   const handleCreate = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (isSubmitDisabled || isSubmitting || isUploadingImage) {
+    if (
+      shouldDisableSubmitButton ||
+      !validateTitle() ||
+      !validateDescription()
+    ) {
       return;
     }
 
@@ -109,7 +139,14 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
               labelClassName="typo-md-regular md:typo-2lg-regular"
               placeholder="제목을 입력해 주세요"
               value={title}
-              onChange={(event) => setTitle(event.target.value)}
+              onChange={(event) => {
+                setTitle(event.target.value);
+                if (titleError) {
+                  setTitleError('');
+                }
+              }}
+              onBlur={validateTitle}
+              errorMessage={titleError}
               className="typo-md-regular md:typo-lg-regular"
             />
 
@@ -120,7 +157,12 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
               <TextArea
                 placeholder="설명을 입력해 주세요"
                 value={description}
-                onChange={setDescription}
+                onChange={(value) => {
+                  setDescription(value);
+                  if (descriptionError) setDescriptionError('');
+                }}
+                onBlur={validateDescription}
+                error={descriptionError}
                 className="typo-md-regular md:typo-lg-regular"
               />
             </FieldWrapper>
@@ -154,12 +196,12 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
                 onFileSelect={(file) => handleImageSelect(file, column.id)}
               />
               {imageUploadError && (
-                <p className="typo-xs-regular text-error mt-1">
+                <p className="typo-md-regular text-error mt-1">
                   {imageUploadError}
                 </p>
               )}
               {isUploadingImage && (
-                <p className="typo-xs-regular mt-1 text-gray-500">
+                <p className="typo-md-regular mt-1 text-gray-500">
                   이미지 업로드 중입니다...
                 </p>
               )}
@@ -168,7 +210,7 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
 
           <Modal.Footer className="shrink-0">
             {submissionError && (
-              <p className="typo-sm-regular text-error mr-4">
+              <p className="typo-md-regular text-error mr-4">
                 {submissionError}
               </p>
             )}
@@ -178,7 +220,7 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
             <Button
               theme="primary"
               type="submit"
-              disabled={isSubmitDisabled || isSubmitting || isUploadingImage}
+              disabled={shouldDisableSubmitButton}
               isLoading={isSubmitting}
             >
               생성
