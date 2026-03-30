@@ -54,7 +54,6 @@ export default function ProfileForm() {
         profileImageUrl,
       });
 
-      // ✅ 전역 유저 상태 업데이트 → 헤더 닉네임/이미지 자동 반영
       if (updated) setUserProfile(updated);
 
       setNickname('');
