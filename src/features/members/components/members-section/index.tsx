@@ -35,6 +35,7 @@ export default function MembersSection() {
   const handleCloseDeleteModal = () => {
     setIsDeleteModalOpen(false);
     setSelectedMemberId(null);
+    setIsDeleting(false);
   };
 
   const handleConfirmDelete = async () => {
@@ -42,23 +43,26 @@ export default function MembersSection() {
 
     setIsDeleting(true);
 
-    await deleteMember(selectedMemberId);
+    try {
+      await deleteMember(selectedMemberId);
 
-    const isLastItemOnPage = members.length === 1;
-    const shouldGoBack = isLastItemOnPage && currentPage > 1;
+      const isLastItemOnPage = members.length === 1;
+      const shouldGoBack = isLastItemOnPage && currentPage > 1;
 
-    if (shouldGoBack) {
-      setCurrentPage(currentPage - 1);
-    } else {
-      const data = await getMembers(dashboardId, currentPage);
-      if (data) {
-        setMembers(data.members);
-        syncTotalCount(data.totalCount, MEMBERS_SIZE);
+      if (shouldGoBack) {
+        setCurrentPage((prev) => Math.max(prev - 1, 1));
+      } else {
+        const data = await getMembers(dashboardId, currentPage);
+        if (data) {
+          setMembers(data.members);
+          syncTotalCount(data.totalCount, MEMBERS_SIZE);
+        }
       }
-    }
 
-    setIsDeleting(false);
-    handleCloseDeleteModal();
+      handleCloseDeleteModal();
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   // 구성원 목록 API 호출
@@ -129,8 +133,10 @@ export default function MembersSection() {
         isOpen={isDeleteModalOpen}
         onClose={handleCloseDeleteModal}
         onConfirm={handleConfirmDelete}
-        isLoading={isDeleting}
-        disabled={isDeleting}
+        confirmButtonProps={{
+          isLoading: isDeleting,
+          disabled: isDeleting,
+        }}
         message={
           <>
             구성원을 <span className="text-error">삭제</span>하시겠습니까?
