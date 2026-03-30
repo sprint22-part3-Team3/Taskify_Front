@@ -6,7 +6,7 @@ import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
 import Label from '@/shared/components/input/label';
 import { Modal } from '@/shared/components/modal';
-import { Tag } from '@/shared/components/tag';
+import TagInput from '@/features/cards/components/tag-input';
 import TextArea from '@/shared/components/text-area';
 import DateInputField from '@/shared/components/date-input';
 import AssigneeSelect from '@/features/cards/components/assignee-select';
@@ -26,7 +26,12 @@ import { useTodoEditForm } from '@/features/cards/hooks/useTodoEditForm';
  * <TodoEditModal isOpen={isOpen} onClose={handleClose} />
  * ```
  */
-function TodoEditModal({ isOpen, onClose, card }: TodoEditModalProps) {
+function TodoEditModalContent({
+  isOpen,
+  onClose,
+  card,
+  dashboardId,
+}: TodoEditModalProps & { dashboardId: number }) {
   const {
     selectedColumnId,
     isDropdownOpen,
@@ -34,21 +39,19 @@ function TodoEditModal({ isOpen, onClose, card }: TodoEditModalProps) {
     description,
     dueDate,
     selectedAssignee,
+    tags,
+    maxTagCount,
     setTitle,
     setDescription,
     setDueDate,
     setSelectedAssignee,
+    setTags,
     handleSelectStatus,
     toggleDropdown,
     resetForm,
   } = useTodoEditModal(card);
 
   const { assigneeOptions } = useAssigneeOptions(isOpen);
-  const { id: rawDashboardId } = useParams<{ id: string }>();
-  const parsedDashboardId = rawDashboardId ? parseInt(rawDashboardId, 10) : NaN;
-  const dashboardId = Number.isNaN(parsedDashboardId)
-    ? undefined
-    : parsedDashboardId;
   const {
     columns,
     isLoading: isColumnsLoading,
@@ -81,7 +84,7 @@ function TodoEditModal({ isOpen, onClose, card }: TodoEditModalProps) {
       title: title.trim(),
       description: description.trim(),
       dueDate: dueDate || undefined,
-      tags: card.tags.length > 0 ? card.tags : undefined,
+      tags: tags.length > 0 ? tags : undefined,
       imageUrl: card.imageUrl ?? undefined,
     };
 
@@ -157,10 +160,7 @@ function TodoEditModal({ isOpen, onClose, card }: TodoEditModalProps) {
               <Label className="typo-md-regular md:typo-2lg-regular">
                 태그
               </Label>
-              <div className="flex min-h-12.5 items-center gap-2 rounded-lg border border-gray-200 px-4 py-2">
-                <Tag color="purple">프로젝트</Tag>
-                <Tag color="yellow">일반</Tag>
-              </div>
+              <TagInput tags={tags} setTags={setTags} maxTags={maxTagCount} />
             </FieldWrapper>
             <FieldWrapper>
               <Label className="typo-md-regular md:typo-2lg-regular">
@@ -191,6 +191,17 @@ function TodoEditModal({ isOpen, onClose, card }: TodoEditModalProps) {
       </div>
     </Modal>
   );
+}
+
+function TodoEditModal(props: TodoEditModalProps) {
+  const { id: rawDashboardId } = useParams<{ id: string }>();
+  const parsedDashboardId = rawDashboardId ? parseInt(rawDashboardId, 10) : NaN;
+
+  if (Number.isNaN(parsedDashboardId)) {
+    return null;
+  }
+
+  return <TodoEditModalContent {...props} dashboardId={parsedDashboardId} />;
 }
 
 export default TodoEditModal;
