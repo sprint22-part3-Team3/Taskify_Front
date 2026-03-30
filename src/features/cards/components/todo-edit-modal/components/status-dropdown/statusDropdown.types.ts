@@ -1,8 +1,10 @@
-import type { StatusOption } from '@/features/cards/components/todo-edit-modal/todoEditModal.mock';
+import type { Column } from '@/features/columns/types/column.types';
 
 export type StatusDropdownProps = {
-  status: StatusOption;
+  columns: Column[];
+  selectedColumnId: number;
   isOpen: boolean;
   onToggle: () => void;
-  onSelect: (status: StatusOption) => void;
+  onSelect: (columnId: number) => void;
+  isLoading: boolean;
 };
