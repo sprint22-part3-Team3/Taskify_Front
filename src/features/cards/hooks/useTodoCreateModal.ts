@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import type { AvatarUser } from '@/shared/types/user.types';
-
-const MAX_TAG_COUNT = 5;
+import { MAX_TAG_COUNT } from '@/features/cards/constants/tag.constants';
 
 export function useTodoCreateModal() {
   const [selectedAssignee, setSelectedAssignee] = useState<AvatarUser | null>(

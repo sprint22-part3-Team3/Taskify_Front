@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import { INITIAL_FORM_VALUES } from '@/features/cards/components/todo-edit-modal/todoEditModal.mock';
 import type { Card } from '@/features/cards/types/card.types';
 import type { AvatarUser } from '@/shared/types/user.types';
+import { MAX_TAG_COUNT } from '@/features/cards/constants/tag.constants';
 
 export function useTodoEditModal(card: Card) {
   const [selectedColumnId, setSelectedColumnId] = useState(card.columnId);
@@ -16,6 +17,7 @@ export function useTodoEditModal(card: Card) {
   const [selectedAssignee, setSelectedAssignee] = useState<AvatarUser | null>(
     card.assignee ?? null
   );
+  const [tags, setTags] = useState<string[]>(card.tags ?? []);
 
   const handleSelectStatus = (columnId: number) => {
     setSelectedColumnId(columnId);
@@ -30,6 +32,7 @@ export function useTodoEditModal(card: Card) {
     setDescription(nextCard.description || INITIAL_FORM_VALUES.description);
     setDueDate(nextCard.dueDate ?? INITIAL_FORM_VALUES.dueDate);
     setSelectedAssignee(nextCard.assignee ?? null);
+    setTags(nextCard.tags ?? []);
   }, []);
 
   return {
@@ -39,6 +42,8 @@ export function useTodoEditModal(card: Card) {
     description,
     dueDate,
     selectedAssignee,
+    tags,
+    setTags,
     setTitle,
     setDescription,
     setDueDate,
@@ -46,5 +51,6 @@ export function useTodoEditModal(card: Card) {
     handleSelectStatus,
     toggleDropdown,
     resetForm,
+    maxTagCount: MAX_TAG_COUNT,
   };
 }

@@ -1,9 +1,10 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useEffect } from 'react';
 import { getCards } from '@/features/cards/apis/cards';
 import { useGetData } from '@/shared/hooks/useGetData';
 import { useGetMoreData } from '@/shared/hooks/useGetMoreData';
 import type { Card } from '@/features/cards/types/card.types';
 import type { GetCardsResponse } from '@/features/cards/apis/cards.types';
+import { CARD_EVENTS } from '@/features/cards/utils/cardEvents';
 
 const NOT_FOUND_OR_FORBIDDEN_ERROR =
   '컬럼을 찾을 수 없거나 접근 권한이 없습니다';
@@ -19,6 +20,27 @@ export const useCardList = (columnId: number) => {
     dependencyId: columnId,
     notFoundMessage: NOT_FOUND_OR_FORBIDDEN_ERROR,
   });
+
+  useEffect(() => {
+    const handleCardListChange = (event: Event) => {
+      if (event instanceof CustomEvent && event.detail) {
+        const { newColumnId, originalColumnId } = event.detail;
+
+        if (columnId === newColumnId || columnId === originalColumnId) {
+          refetch();
+        }
+        return;
+      }
+
+      refetch();
+    };
+
+    window.addEventListener(CARD_EVENTS.LIST_CHANGE, handleCardListChange);
+
+    return () => {
+      window.removeEventListener(CARD_EVENTS.LIST_CHANGE, handleCardListChange);
+    };
+  }, [columnId, refetch]);
 
   const {
     additionalData: additionalCards,
