@@ -40,8 +40,8 @@ function TaskCommentItem({ comment, refetch, onDelete }: TaskCommentItemProps) {
 
   const handleEditSave = async () => {
     if (!editContent.trim()) return;
+    setEditError(null);
     try {
-      setEditError(null);
       await putComment({ id, content: editContent });
       setIsEditing(false);
       refetch();
