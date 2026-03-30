@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { INITIAL_FORM_VALUES } from '@/features/cards/components/todo-edit-modal/todoEditModal.mock';
 import type { Card } from '@/features/cards/types/card.types';
 import type { AvatarUser } from '@/shared/types/user.types';
@@ -23,14 +23,14 @@ export function useTodoEditModal(card: Card) {
   };
 
   const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
-  const resetForm = (nextCard: Card) => {
+  const resetForm = useCallback((nextCard: Card) => {
     setSelectedColumnId(nextCard.columnId);
     setIsDropdownOpen(false);
     setTitle(nextCard.title || INITIAL_FORM_VALUES.title);
     setDescription(nextCard.description || INITIAL_FORM_VALUES.description);
     setDueDate(nextCard.dueDate ?? INITIAL_FORM_VALUES.dueDate);
     setSelectedAssignee(nextCard.assignee ?? null);
-  };
+  }, []);
 
   return {
     selectedColumnId,

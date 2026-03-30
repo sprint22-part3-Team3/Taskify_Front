@@ -56,7 +56,7 @@ function StatusDropdown({
         type="button"
         onClick={onToggle}
         className="typo-lg-regular focus:border-primary-500 text-black-200 flex h-12 w-full items-center justify-between rounded-lg border border-gray-200 bg-white px-4 outline-0"
-        disabled={isLoading}
+        aria-busy={isLoading}
       >
         <StatusBadge label={buttonLabel} />
         <IcArrowBottom
