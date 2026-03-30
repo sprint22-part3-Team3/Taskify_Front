@@ -34,20 +34,21 @@ export default function MembersSection() {
 
     await deleteMember(selectedMemberId);
 
-    // 삭제 후 목록 다시 불러오기
-    const data = await getMembers(dashboardId, currentPage);
+    // 현재 페이지의 마지막 항목이면 이전 페이지로
+    const isLastItemOnPage = members.length === 1;
+    const shouldGoBack = isLastItemOnPage && currentPage > 1;
 
-    if (data) {
-      setMembers(data.members);
-      setTotalCount(data.totalCount);
-
-      if (data.members.length === 0 && currentPage > 1) {
-        setCurrentPage((prev) => prev - 1);
+    if (shouldGoBack) {
+      setCurrentPage((prev) => prev - 1);
+    } else {
+      const data = await getMembers(dashboardId, currentPage);
+      if (data) {
+        setMembers(data.members);
+        setTotalCount(data.totalCount);
       }
     }
 
-    setIsDeleteModalOpen(false);
-    setSelectedMemberId(null);
+    handleCloseDeleteModal();
   };
 
   // 구성원 목록 API 호출
