@@ -1,5 +1,5 @@
 import { ApiError } from '@/shared/apis/apiError';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 type UseGetMoreDataProps<TItem, TResponse> = {
   initialResult: { cursorId?: number | null } | null | undefined;
@@ -22,17 +22,20 @@ export const useGetMoreData = <
   const [additionalData, setAdditionalData] = useState<TItem[]>([]);
   const [isAddLoading, setIsAddLoading] = useState(false);
   const [addErrorMessage, setAddErrorMessage] = useState<string | null>(null);
+  const loading = useRef(false);
 
   useEffect(() => {
     setCursorId(initialResult?.cursorId ?? null);
     setAdditionalData([]);
     setAddErrorMessage(null);
+    loading.current = false;
   }, [initialResult]);
 
   const loadMore = useCallback(async () => {
-    if (cursorId === null || isAddLoading) return;
+    if (cursorId === null || loading.current) return;
 
     try {
+      loading.current = true;
       setIsAddLoading(true);
       const data = await fetchMoreFn(cursorId);
 
@@ -47,9 +50,10 @@ export const useGetMoreData = <
         setAddErrorMessage('알 수 없는 에러가 발생했습니다.');
       }
     } finally {
+      loading.current = false;
       setIsAddLoading(false);
     }
-  }, [cursorId, fetchMoreFn, extractData, isAddLoading]);
+  }, [cursorId, fetchMoreFn, extractData]);
 
   return {
     additionalData,
