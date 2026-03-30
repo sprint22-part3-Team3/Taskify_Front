@@ -159,7 +159,11 @@ export default function DashboardLayout() {
                     ? dashboardInfo?.title
                     : ''
             }
-            isOwner={dashboardInfo?.createdByMe ?? false}
+            isOwner={
+              !isMyDashboardPage &&
+              !isMyPage &&
+              (dashboardInfo?.createdByMe ?? false)
+            }
             isTitleAlwaysVisible={isMyDashboardPage || isMyPage}
             isActionButtonsVisible={!isMyDashboardPage && !isMyPage}
             isMemberProfilesVisible={!isMyDashboardPage && !isMyPage}
