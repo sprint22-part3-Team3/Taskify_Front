@@ -30,8 +30,8 @@ function DeleteModal({
   renderInModal = true,
   cancelText = '취소',
   confirmText = '삭제',
-  isLoading = false,
-  disabled = false,
+  confirmButtonProps,
+  cancelButtonProps,
 }: DeleteModalProps) {
   const content = (
     <>
@@ -40,15 +40,19 @@ function DeleteModal({
       </p>
 
       <div className="flex gap-2 *:flex-1 *:px-0">
-        <Button theme="cancel" type="button" onClick={onClose}>
+        <Button
+          theme="cancel"
+          type="button"
+          onClick={onClose}
+          {...cancelButtonProps}
+        >
           {cancelText}
         </Button>
         <Button
           theme="primary"
           type="button"
           onClick={onConfirm}
-          isLoading={isLoading}
-          disabled={disabled}
+          {...confirmButtonProps}
         >
           {confirmText}
         </Button>

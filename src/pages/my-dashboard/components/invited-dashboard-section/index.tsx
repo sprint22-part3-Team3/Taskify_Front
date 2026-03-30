@@ -35,6 +35,10 @@ function InvitedDashboardSection() {
     hasInvitedDashboards ||
     Boolean(searchKeyword) ||
     Boolean(invitedDashboardError);
+  const isResponding = Boolean(
+    selectedInvitedDashboard &&
+    respondingInvitationId === selectedInvitedDashboard.id
+  );
 
   return (
     <>
@@ -186,6 +190,10 @@ function InvitedDashboardSection() {
         onClose={handleCloseDeleteModalWithReset}
         onConfirm={handleConfirmRejectInvite}
         className="max-w-142"
+        confirmButtonProps={{
+          isLoading: isResponding,
+          disabled: isResponding,
+        }}
         message={
           <>
             {selectedInvitedDashboard?.name ?? '초대받은 대시보드'}를{' '}

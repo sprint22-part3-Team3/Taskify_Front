@@ -27,6 +27,7 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
     closeModal: handleCloseDeleteModal,
   } = useModal();
   const [hasDeleteError, setHasDeleteError] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const {
     id,
     title,
@@ -58,6 +59,8 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
     }, MODAL_CLOSE_DELAY);
   };
   const handleDeleteCard = async () => {
+    setIsDeleting(true);
+
     try {
       await delCard(id);
       handleCloseDeleteModal();
@@ -67,6 +70,8 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
       }, MODAL_CLOSE_DELAY);
     } catch {
       setHasDeleteError(true);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -121,6 +126,10 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
         onClose={handleDeleteCancel}
         onConfirm={handleDeleteCard}
         className="w-73.75 md:w-130"
+        confirmButtonProps={{
+          isLoading: isDeleting,
+          disabled: isDeleting,
+        }}
         message={
           <>
             할 일 카드를 <span className="text-error">삭제</span>하시겠습니까?

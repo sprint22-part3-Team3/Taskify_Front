@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { ButtonProps } from '@/shared/components/button/button.types';
 
 export type DeleteModalProps = {
   message: ReactNode;
@@ -9,6 +10,9 @@ export type DeleteModalProps = {
   renderInModal?: boolean;
   cancelText?: string;
   confirmText?: string;
-  isLoading?: boolean;
-  disabled?: boolean;
+  confirmButtonProps?: Pick<
+    ButtonProps,
+    'disabled' | 'isLoading' | 'className'
+  >;
+  cancelButtonProps?: Pick<ButtonProps, 'disabled' | 'className'>;
 };
