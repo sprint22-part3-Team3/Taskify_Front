@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getCurrentUser } from '@/features/users/apis/getCurrentUser';
+import { getCurrentUser } from '@/features/users/apis/users';
 import type { UserMe } from '@/features/users/apis/userMe.types';
 
 export function useCurrentUser() {
