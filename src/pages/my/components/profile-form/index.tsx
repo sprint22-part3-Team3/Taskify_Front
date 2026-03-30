@@ -116,6 +116,7 @@ export default function ProfileForm() {
               type="submit"
               className="mt-6 h-13.5 w-full"
               disabled={isSaveDisabled}
+              isLoading={isSubmitting}
             >
               저장
             </Button>
