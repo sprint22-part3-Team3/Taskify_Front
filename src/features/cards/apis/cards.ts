@@ -4,7 +4,7 @@ import type {
   GetCardsResponse,
 } from '@/features/cards/apis/cards.types';
 import type { Card } from '@/features/cards/types/card.types';
-import { del, get, post } from '@/shared/apis/fetchInstance';
+import { del, get, post, postFormData } from '@/shared/apis/fetchInstance';
 
 /**
  * GET 카드 목록 조회
@@ -38,4 +38,23 @@ export const createCard = async (body: CreateCardRequest) => {
  */
 export const delCard = async (id: number) => {
   await del(`cards/${id}`);
+};
+
+/**
+ * POST 카드 이미지 업로드
+ */
+export const uploadCardImage = async (
+  params: {
+    teamId: string;
+    columnId: number;
+  },
+  file: File
+) => {
+  const formData = new FormData();
+  formData.append('image', file);
+
+  return postFormData<{ imageUrl: string }>(
+    `/columns/${params.columnId}/card-image`,
+    formData
+  );
 };

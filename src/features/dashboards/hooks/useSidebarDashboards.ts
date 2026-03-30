@@ -92,6 +92,21 @@ export function useSidebarDashboards() {
     };
   }, [loadSidebarDashboards]);
 
+  useEffect(() => {
+    const handleTitleChange = () => {
+      void loadSidebarDashboards();
+    };
+
+    window.addEventListener(DASHBOARD_EVENTS.TITLE_CHANGE, handleTitleChange);
+
+    return () => {
+      window.removeEventListener(
+        DASHBOARD_EVENTS.TITLE_CHANGE,
+        handleTitleChange
+      );
+    };
+  }, [loadSidebarDashboards]);
+
   return {
     sidebarDashboards,
     currentPage,

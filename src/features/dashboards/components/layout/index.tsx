@@ -6,6 +6,12 @@ import InviteModal from '@/features/invitations/components/invitations-section/i
 import { useModal } from '@/shared/hooks/useModal';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useDashboardMembers } from '@/features/members/hooks/useDashboardMembers';
+import { useEffect, useState } from 'react';
+import {
+  DASHBOARD_EVENTS,
+  type DashboardTitleChangeDetail,
+} from '@/features/dashboards/utils/dashboardEvents';
+import { getDashboard } from '@/features/dashboards/apis/getDashboard';
 
 /**
  * 대시보드 공통 레이아웃 컴포넌트입니다.
@@ -48,6 +54,12 @@ export default function DashboardLayout() {
     handleNextPage,
   } = useSidebar();
 
+  const [dashboardInfo, setDashboardInfo] = useState<{
+    id: string;
+    title: string;
+    createdByMe: boolean;
+  } | null>(null);
+
   const handleNavigateDashboardEdit = () => {
     if (!id) {
       return;
@@ -70,6 +82,54 @@ export default function DashboardLayout() {
 
   const isMyDashboardPage = location.pathname === '/mydashboard';
   const isMyPage = location.pathname === '/mypage';
+
+  // Layout에서 id가 바뀔 때마다 직접 대시보드 정보 조회
+  useEffect(() => {
+    if (!id || isMyDashboardPage || isMyPage) return;
+
+    async function fetchTitle(dashboardId: string) {
+      const data = await getDashboard(dashboardId);
+      if (data) {
+        setDashboardInfo({
+          id: dashboardId,
+          title: data.title,
+          createdByMe: data.createdByMe,
+        });
+      }
+    }
+
+    fetchTitle(id);
+  }, [id, isMyDashboardPage, isMyPage]);
+
+  // 대시보드 제목 변경 이벤트 수신
+  useEffect(() => {
+    const handleTitleChange = (event: Event) => {
+      const { title: newTitle } = (
+        event as CustomEvent<DashboardTitleChangeDetail>
+      ).detail;
+      if (id) {
+        setDashboardInfo((previousDashboardInfo) => {
+          if (!previousDashboardInfo) {
+            return previousDashboardInfo;
+          }
+
+          return {
+            ...previousDashboardInfo,
+            title: newTitle,
+          };
+        });
+      }
+    };
+
+    window.addEventListener(DASHBOARD_EVENTS.TITLE_CHANGE, handleTitleChange);
+
+    return () => {
+      window.removeEventListener(
+        DASHBOARD_EVENTS.TITLE_CHANGE,
+        handleTitleChange
+      );
+    };
+  }, [id]);
 
   return (
     <>
@@ -95,9 +155,11 @@ export default function DashboardLayout() {
                 ? '내 대시보드'
                 : isMyPage
                   ? '계정관리'
-                  : undefined
+                  : dashboardInfo?.id === id
+                    ? dashboardInfo?.title
+                    : ''
             }
-            isOwner={!isMyDashboardPage && !isMyPage}
+            isOwner={dashboardInfo?.createdByMe ?? false}
             isTitleAlwaysVisible={isMyDashboardPage || isMyPage}
             isActionButtonsVisible={!isMyDashboardPage && !isMyPage}
             isMemberProfilesVisible={!isMyDashboardPage && !isMyPage}
