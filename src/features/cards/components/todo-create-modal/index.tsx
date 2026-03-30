@@ -17,6 +17,7 @@ import { createCard } from '@/features/cards/apis/cards';
 import type { CreateCardRequest } from '@/features/cards/apis/cards.types';
 import { useTodoCreateModal } from '@/features/cards/hooks/useTodoCreateModal';
 import { useAssigneeOptions } from '@/features/cards/hooks/useAssigneeOptions';
+import { useCardRefetchContext } from '@/features/cards/hooks/useCardRefetchContext';
 import { runAfterModalClose } from '@/shared/utils/modal';
 
 /**
@@ -50,6 +51,8 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
   const [submissionError, setSubmissionError] = useState<string | null>(null);
   const isSubmitDisabled = !title.trim() || !description.trim();
 
+  const { refetch } = useCardRefetchContext();
+
   const handleClose = () => {
     setSubmissionError(null);
     onClose();
@@ -82,6 +85,7 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
 
     try {
       await createCard(payload);
+      refetch();
       handleClose();
     } catch (error) {
       const message =
