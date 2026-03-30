@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getDashboard } from '@/features/dashboards/apis/getDashboard';
 import { updateDashboard } from '@/features/dashboards/apis/updateDashboard';
+import { dispatchDashboardTitleChangeEvent } from '@/features/dashboards/utils/dashboardEvents';
 
 /**
  * hex 코드를 DashboardColorName으로 변환하는 함수
@@ -32,7 +33,10 @@ function hexToColorName(hex: string): DashboardColorName {
  */
 export default function NameSection() {
   const { id: dashboardId } = useParams();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [loadError, setLoadError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
   // 대시보드 제목 (input에 표시할 값)
@@ -55,10 +59,10 @@ export default function NameSection() {
           setTitle(data.title);
           setDashboardTitle(data.title);
           setSelectedColor(hexToColorName(data.color));
+          dispatchDashboardTitleChangeEvent({ title: data.title });
         }
-      } catch (error) {
-        console.error('대시보드 정보 로딩 실패:', error);
-        // TODO: 사용자에게 에러를 알리는 UI 처리 (예: 토스트 메시지)
+      } catch {
+        setLoadError('대시보드 정보를 불러오지 못했습니다.');
       }
     }
 
@@ -75,6 +79,7 @@ export default function NameSection() {
       return;
     }
     setErrorMessage('');
+    setSubmitError('');
     setIsSubmitting(true);
     try {
       const hexColor = DASHBOARD_COLOR_HEX[selectedColor];
@@ -85,13 +90,10 @@ export default function NameSection() {
 
       if (result) {
         setDashboardTitle(result.title);
-        alert('대시보드가 수정되었습니다.');
-      } else {
-        alert('대시보드 수정에 실패했습니다. 다시 시도해주세요.');
+        dispatchDashboardTitleChangeEvent({ title: result.title });
       }
-    } catch (error) {
-      console.error('대시보드 업데이트 실패:', error);
-      alert('오류가 발생하여 대시보드를 수정할 수 없습니다.');
+    } catch {
+      setSubmitError('오류가 발생하여 대시보드를 수정할 수 없습니다.');
     } finally {
       setIsSubmitting(false);
     }
@@ -104,6 +106,9 @@ export default function NameSection() {
           {dashboardTitle}
         </Title>
       </div>
+      {loadError && (
+        <p className="typo-md-regular text-error mb-4">{loadError}</p>
+      )}
       <form onSubmit={handleSubmit}>
         <Input
           label="대시보드 이름"
@@ -112,7 +117,7 @@ export default function NameSection() {
           value={title}
           onChange={(e) => {
             setTitle(e.target.value);
-            if (errorMessage) setErrorMessage(''); // 입력 시작하면 에러 메시지 제거
+            if (errorMessage) setErrorMessage('');
           }}
           errorMessage={errorMessage}
           containerClassName="mb-4"
@@ -124,8 +129,15 @@ export default function NameSection() {
           onChange={setSelectedColor}
           className="mb-8"
         />
-
-        <Button type="submit" className="w-full" disabled={isSubmitting}>
+        {submitError && (
+          <p className="typo-md-regular text-error mb-4">{submitError}</p>
+        )}
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={isSubmitting}
+          isLoading={isSubmitting}
+        >
           변경
         </Button>
       </form>
