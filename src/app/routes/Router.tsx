@@ -9,6 +9,7 @@ import LoginPage from '@/pages/login';
 import MainPage from '@/pages/main';
 import MyDashboardPage from '@/pages/my-dashboard';
 import MyPage from '@/pages/my';
+import NotFoundPage from '@/pages/not-found';
 import SignupPage from '@/pages/signup';
 
 function Router() {
@@ -30,6 +31,7 @@ function Router() {
             <Route path="/mypage" element={<MyPage />} />
           </Route>
         </Route>
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );
