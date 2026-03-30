@@ -7,7 +7,11 @@ import DeleteModal from '@/shared/components/modal/delete-modal';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import type { Member } from '@/features/members/apis/members.types';
-import { getMembers, MEMBERS_SIZE } from '@/features/members/apis/members';
+import {
+  deleteMember,
+  getMembers,
+  MEMBERS_SIZE,
+} from '@/features/members/apis/members';
 
 export default function MembersSection() {
   // URL에서 dashboardId 가져오기
@@ -20,20 +24,30 @@ export default function MembersSection() {
   const [selectedMemberId, setSelectedMemberId] = useState<number | null>(null);
   const totalPages = Math.max(1, Math.ceil(totalCount / MEMBERS_SIZE));
 
-  const handleOpenDeleteModal = (memberId: number) => {
-    setSelectedMemberId(memberId);
-    setIsDeleteModalOpen(true);
-  };
-
   const handleCloseDeleteModal = () => {
     setIsDeleteModalOpen(false);
     setSelectedMemberId(null);
   };
 
-  const handleConfirmDelete = () => {
-    // TODO: 구성원 삭제 API 호출
-    console.log('삭제할 멤버 ID:', selectedMemberId);
-    handleCloseDeleteModal();
+  const handleConfirmDelete = async () => {
+    if (!selectedMemberId || !dashboardId) return;
+
+    await deleteMember(selectedMemberId);
+
+    // 삭제 후 목록 다시 불러오기
+    const data = await getMembers(dashboardId, currentPage);
+
+    if (data) {
+      setMembers(data.members);
+      setTotalCount(data.totalCount);
+
+      if (data.members.length === 0 && currentPage > 1) {
+        setCurrentPage((prev) => prev - 1);
+      }
+    }
+
+    setIsDeleteModalOpen(false);
+    setSelectedMemberId(null);
   };
 
   // 구성원 목록 API 호출
@@ -82,15 +96,20 @@ export default function MembersSection() {
               user={member}
               className="typo-lg-regular md:typo-lg-regular"
             />
-            <Button
-              type="button"
-              theme="danger"
-              size="sm"
-              className="px-3.5 md:px-7"
-              onClick={() => handleOpenDeleteModal(member.id)}
-            >
-              삭제
-            </Button>
+            {!member.isOwner && (
+              <Button
+                type="button"
+                theme="danger"
+                size="sm"
+                className="px-3.5 md:px-7"
+                onClick={() => {
+                  setSelectedMemberId(member.id);
+                  setIsDeleteModalOpen(true);
+                }}
+              >
+                삭제
+              </Button>
+            )}
           </li>
         ))}
       </ul>
