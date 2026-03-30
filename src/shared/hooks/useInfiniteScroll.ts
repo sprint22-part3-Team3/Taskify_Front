@@ -8,6 +8,24 @@ type UseInfiniteScrollProps = {
 
 /**
  * IntersectionObserver를 활용한 무한 스크롤 공통 훅
+ *
+ * @example
+ * ```tsx
+ * const { loadMoreRef } = useInfiniteScroll({
+ *   onLoadMore: loadMore,
+ *   hasCursorId: cursorId !== null,
+ *   isFetching: isAddLoading,
+ * });
+ *
+ * return (
+ *   <div>
+ *     <ul>
+ *       {items.map(item => <li key={item.id}>{item.name}</li>)}
+ *     </ul>
+ *     {!addErrorMessage && <div ref={loadMoreRef} />}
+ *   </div>
+ * );
+ * ```
  */
 export const useInfiniteScroll = ({
   onLoadMore,
