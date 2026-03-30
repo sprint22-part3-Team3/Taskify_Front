@@ -13,7 +13,7 @@ export function useAssigneeOptions(isOpen: boolean) {
 
   const assigneeOptions = useMemo<AvatarUser[]>(() => {
     return members.map(({ id, nickname, profileImageUrl, userId }) => ({
-      id,
+      id: userId ?? id,
       nickname,
       profileImageUrl: profileImageUrl || null,
       userId,
