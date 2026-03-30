@@ -21,7 +21,7 @@ import { useColumnListContext } from '@/features/columns/hooks/useColumnListCont
 function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
   const { id } = useParams();
   const dashboardId = Number(id);
-  const columns = useColumnListContext();
+  const { columns, refetch } = useColumnListContext();
   const columnNameField = useColumnNameValidation({
     checkFn: (name) =>
       Promise.resolve(columns.some((column) => column.title === name)),
@@ -63,6 +63,7 @@ function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
         title: columnNameField.value.trim(),
         dashboardId: dashboardId,
       });
+      refetch();
       handleClose();
     } catch {
       //TODO: 오류 처리
