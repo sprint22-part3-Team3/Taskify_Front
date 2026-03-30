@@ -33,12 +33,17 @@ export const useInfiniteScroll = ({
   isFetching,
 }: UseInfiniteScrollProps) => {
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
+  const stableOnLoadMore = useRef(onLoadMore);
+
+  useEffect(() => {
+    stableOnLoadMore.current = onLoadMore;
+  }, [onLoadMore]);
 
   useEffect(() => {
     const handleObserver = (entries: IntersectionObserverEntry[]) => {
       const target = entries[0];
       if (target.isIntersecting && hasCursorId && !isFetching) {
-        onLoadMore();
+        stableOnLoadMore.current();
       }
     };
 
@@ -58,7 +63,7 @@ export const useInfiniteScroll = ({
         observer.unobserve(currentRef);
       }
     };
-  }, [onLoadMore, hasCursorId, isFetching]);
+  }, [hasCursorId, isFetching]);
 
   return { loadMoreRef };
 };
