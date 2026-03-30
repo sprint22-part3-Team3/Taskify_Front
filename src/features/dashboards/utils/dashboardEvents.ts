@@ -1,6 +1,6 @@
 const DASHBOARD_LIST_CHANGE_EVENT = 'dashboard-list-change';
 
-type DashboardListChangeSource = 'dashboard-list' | 'sidebar';
+type DashboardListChangeSource = 'dashboard-list' | 'sidebar' | 'invitation';
 
 export type DashboardListChangeDetail = {
   source: DashboardListChangeSource;

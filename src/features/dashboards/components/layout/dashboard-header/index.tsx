@@ -27,20 +27,11 @@ import useUserContext from '@/shared/context/user/useUserContext';
  * />
  * ```
  */
-// TODO: API 연동 후 제거
-const SAMPLE_MEMBERS = [
-  { id: 1, nickname: '유철', profileImageUrl: '' },
-  { id: 2, nickname: '채연', profileImageUrl: '' },
-  { id: 3, nickname: '경호', profileImageUrl: '' },
-  { id: 4, nickname: '지민', profileImageUrl: '' },
-  { id: 5, nickname: '수진', profileImageUrl: '' },
-];
-
 export default function Header({
   title = '비브리지', //TODO: API 연결할 때 SAMPLE_DASHBOARDS 제거
   isOwner = true,
-  members = SAMPLE_MEMBERS,
-  totalMemberCount = 7,
+  members = [],
+  totalMemberCount = 0,
   userName = '배유철',
   profileImage,
   isTitleVisible = true,
@@ -50,6 +41,7 @@ export default function Header({
   onManageClick,
   onInviteClick,
   onProfileClick,
+  memberLoadError = '',
 }: HeaderProps) {
   const { userProfile } = useUserContext();
   const displayedProfile = userProfile ?? {
@@ -102,22 +94,29 @@ export default function Header({
 
         {/* 멤버 프로필 */}
         {isMemberProfilesVisible && (
-          <AvatarGroup
-            className="ml-2"
-            users={members.map((member) => ({
-              id: member.id,
-              avatar: (
-                <Avatar user={member} size="md">
-                  {member.profileImageUrl ? (
-                    <Avatar.Img />
-                  ) : (
-                    <Avatar.Fallback />
-                  )}
-                </Avatar>
-              ),
-            }))}
-            totalCount={totalMemberCount}
-          />
+          <div className="flex flex-col">
+            {members.length > 0 && (
+              <AvatarGroup
+                className="ml-2"
+                users={members.map((member) => ({
+                  id: member.id,
+                  avatar: (
+                    <Avatar user={member} size="md">
+                      {member.profileImageUrl ? (
+                        <Avatar.Img />
+                      ) : (
+                        <Avatar.Fallback />
+                      )}
+                    </Avatar>
+                  ),
+                }))}
+                totalCount={totalMemberCount}
+              />
+            )}
+            {memberLoadError && (
+              <p className="text-error mt-1 ml-2 text-xs">{memberLoadError}</p>
+            )}
+          </div>
         )}
 
         {/* 유저 프로필 - 이름은 모바일에서 숨김 */}

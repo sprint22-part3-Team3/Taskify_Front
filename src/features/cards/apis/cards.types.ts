@@ -10,3 +10,14 @@ export type GetCardsResponse = {
   totalCount: number;
   cards: Card[];
 };
+
+export type CreateCardRequest = {
+  dashboardId: number;
+  columnId: number;
+  title: string;
+  description: string;
+  assigneeUserId?: number;
+  dueDate?: string;
+  tags?: string[];
+  imageUrl?: string | null;
+};
