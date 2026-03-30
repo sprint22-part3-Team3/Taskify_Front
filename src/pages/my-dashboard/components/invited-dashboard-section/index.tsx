@@ -35,6 +35,10 @@ function InvitedDashboardSection() {
     hasInvitedDashboards ||
     Boolean(searchKeyword) ||
     Boolean(invitedDashboardError);
+  const isResponding = Boolean(
+    selectedInvitedDashboard &&
+    respondingInvitationId === selectedInvitedDashboard.id
+  );
 
   return (
     <>
@@ -187,14 +191,8 @@ function InvitedDashboardSection() {
         onConfirm={handleConfirmRejectInvite}
         className="max-w-142"
         confirmButtonProps={{
-          isLoading: Boolean(
-            selectedInvitedDashboard &&
-            respondingInvitationId === selectedInvitedDashboard.id
-          ),
-          disabled: Boolean(
-            selectedInvitedDashboard &&
-            respondingInvitationId === selectedInvitedDashboard.id
-          ),
+          isLoading: isResponding,
+          disabled: isResponding,
         }}
         message={
           <>
