@@ -10,12 +10,22 @@ import { cn } from '@/shared/utils/cn';
  */
 function TaskCommentInput({ onSubmit, error }: TaskCommentInputProps) {
   const [content, setContent] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!content.trim()) return;
-    const success = await onSubmit(content);
-    if (success) setContent('');
+    if (!content.trim() || isSaving) return;
+
+    setIsSaving(true);
+
+    try {
+      const success = await onSubmit(content);
+      if (success) {
+        setContent('');
+      }
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -35,7 +45,8 @@ function TaskCommentInput({ onSubmit, error }: TaskCommentInputProps) {
           'typo-xs-medium absolute right-3 h-7 md:h-8',
           error ? 'bottom-10' : 'bottom-3'
         )}
-        disabled={!content.trim()}
+        disabled={!content.trim() || isSaving}
+        isLoading={isSaving}
       >
         입력
       </Button>

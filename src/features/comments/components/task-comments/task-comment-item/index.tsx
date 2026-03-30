@@ -27,6 +27,7 @@ function TaskCommentItem({ comment, refetch, onDelete }: TaskCommentItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(content);
   const [editError, setEditError] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -39,14 +40,19 @@ function TaskCommentItem({ comment, refetch, onDelete }: TaskCommentItemProps) {
   };
 
   const handleEditSave = async () => {
-    if (!editContent.trim()) return;
+    if (!editContent.trim() || isSaving) return;
+
+    setIsSaving(true);
     setEditError(null);
+
     try {
       await putComment({ id, content: editContent });
-      setIsEditing(false);
       refetch();
+      setIsEditing(false);
     } catch {
       setEditError(COMMENT_MESSAGES.ERROR.UPDATE);
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -80,7 +86,8 @@ function TaskCommentItem({ comment, refetch, onDelete }: TaskCommentItemProps) {
                 size="sm"
                 theme="primary"
                 onClick={handleEditSave}
-                disabled={!editContent.trim()}
+                disabled={!editContent.trim() || isSaving}
+                isLoading={isSaving}
               >
                 저장
               </Button>
