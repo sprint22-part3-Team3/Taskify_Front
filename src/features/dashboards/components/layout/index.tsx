@@ -183,6 +183,7 @@ export default function DashboardLayout() {
       <InviteModal
         isOpen={isInviteModalOpen}
         onClose={handleCloseInviteModal}
+        dashboardId={dashboardId ?? ''}
       />
       <CreateDashboardModal
         isOpen={isCreateDashboardModalOpen}
