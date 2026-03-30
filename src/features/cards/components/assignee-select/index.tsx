@@ -88,6 +88,12 @@ function AssigneeSelect({
     setIsOpen(hasMentionTrigger);
   };
 
+  const shouldShowInvalidMentionError =
+    hasMentionTrigger &&
+    !!normalizedQuery &&
+    !shouldShowSelectedAssignee &&
+    !isOpen;
+
   return (
     <div className="flex w-full flex-col gap-2" ref={containerRef}>
       <Label
@@ -98,30 +104,32 @@ function AssigneeSelect({
       </Label>
 
       <div className="relative">
-        {!shouldShowSelectedAssignee && (
-          <IcSearch className="absolute top-1/2 left-4 w-5.5 -translate-y-1/2 text-gray-300 md:w-6" />
-        )}
-        {shouldShowSelectedAssignee && selectedAssignee && (
-          <div className="pointer-events-none absolute inset-y-0 left-4 flex items-center">
-            <UserProfile
-              user={selectedAssignee}
-              size="md"
-              nicknameClassName="typo-md-regular md:typo-lg-regular"
-              className="gap-2"
-            />
-          </div>
-        )}
-        <InputField
-          type="text"
-          value={query}
-          placeholder={placeholder}
-          onFocus={handleFocus}
-          onChange={handleChangeQuery}
-          className={cn(
-            'typo-md-regular md:typo-lg-regular focus:border-primary-500 text-black-200 h-12 bg-white py-0 pr-4 pl-11 md:pl-12',
-            shouldShowSelectedAssignee && 'text-transparent caret-transparent'
+        <div className="relative">
+          {!shouldShowSelectedAssignee && (
+            <IcSearch className="absolute top-1/2 left-4 w-5.5 -translate-y-1/2 text-gray-300 md:w-6" />
           )}
-        />
+          {shouldShowSelectedAssignee && selectedAssignee && (
+            <div className="pointer-events-none absolute inset-y-0 left-4 flex items-center">
+              <UserProfile
+                user={selectedAssignee}
+                size="md"
+                nicknameClassName="typo-md-regular md:typo-lg-regular"
+                className="gap-2"
+              />
+            </div>
+          )}
+          <InputField
+            type="text"
+            value={query}
+            placeholder={placeholder}
+            onFocus={handleFocus}
+            onChange={handleChangeQuery}
+            className={cn(
+              'typo-md-regular md:typo-lg-regular focus:border-primary-500 text-black-200 h-12 bg-white py-0 pr-4 pl-11 md:pl-12',
+              shouldShowSelectedAssignee && 'text-transparent caret-transparent'
+            )}
+          />
+        </div>
 
         {isOpen && (
           <div className="absolute z-50 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
@@ -154,6 +162,11 @@ function AssigneeSelect({
           </div>
         )}
       </div>
+      {shouldShowInvalidMentionError && (
+        <p className="typo-xs-regular text-error mt-1">
+          드롭다운에서 멤버를 선택해 주세요.
+        </p>
+      )}
     </div>
   );
 }
