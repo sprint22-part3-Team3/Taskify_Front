@@ -90,13 +90,17 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
     runAfterModalClose(resetForm);
   };
 
+  const hasFormErrors = Boolean(
+    titleError || descriptionError || imageUploadError
+  );
+  const shouldDisableSubmitButton =
+    isSubmitDisabled || isSubmitting || isUploadingImage || hasFormErrors;
+
   const handleCreate = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (
-      isSubmitDisabled ||
-      isSubmitting ||
-      isUploadingImage ||
+      shouldDisableSubmitButton ||
       !validateTitle() ||
       !validateDescription()
     ) {
@@ -217,7 +221,7 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
             <Button
               theme="primary"
               type="submit"
-              disabled={isSubmitDisabled || isSubmitting || isUploadingImage}
+              disabled={shouldDisableSubmitButton}
               isLoading={isSubmitting}
             >
               생성

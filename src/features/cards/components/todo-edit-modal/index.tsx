@@ -118,16 +118,16 @@ function TodoEditModalContent({
 
   const isSubmitDisabled =
     !normalizedTitle || !normalizedDescription || !hasChanges;
+  const hasFormErrors = Boolean(
+    titleError || descriptionError || imageUploadError
+  );
+  const shouldDisableEditButton =
+    isSubmitDisabled || isSubmitting || isUploadingImage || hasFormErrors;
 
   const handleEdit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (
-      isSubmitDisabled ||
-      isSubmitting ||
-      !validateTitle() ||
-      !validateDescription()
-    ) {
+    if (shouldDisableEditButton || !validateTitle() || !validateDescription()) {
       return;
     }
 
@@ -260,7 +260,7 @@ function TodoEditModalContent({
             <Button
               theme="primary"
               type="submit"
-              disabled={isSubmitDisabled || isSubmitting || isUploadingImage}
+              disabled={shouldDisableEditButton}
               isLoading={isSubmitting}
             >
               수정
