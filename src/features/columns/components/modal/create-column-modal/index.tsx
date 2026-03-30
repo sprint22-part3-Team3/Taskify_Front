@@ -70,7 +70,6 @@ function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
       setSubmitError('컬럼 생성에 실패했습니다. 다시 시도해주세요.');
     } finally {
       setIsLoading(false);
-      console.log(isLoading);
     }
   };
 
