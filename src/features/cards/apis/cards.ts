@@ -33,6 +33,9 @@ export const delCard = async (id: number) => {
   await del(`cards/${id}`);
 };
 
+/**
+ * POST 카드 이미지 업로드
+ */
 export const uploadCardImage = async (
   params: {
     teamId: string;
