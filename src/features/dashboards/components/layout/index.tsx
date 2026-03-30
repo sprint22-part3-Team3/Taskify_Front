@@ -82,6 +82,7 @@ export default function DashboardLayout() {
 
   const isMyDashboardPage = location.pathname === '/mydashboard';
   const isMyPage = location.pathname === '/mypage';
+  const isSpecificDashboardPage = !isMyDashboardPage && !isMyPage;
 
   // Layout에서 id가 바뀔 때마다 직접 대시보드 정보 조회
   useEffect(() => {
@@ -160,13 +161,11 @@ export default function DashboardLayout() {
                     : ''
             }
             isOwner={
-              !isMyDashboardPage &&
-              !isMyPage &&
-              (dashboardInfo?.createdByMe ?? false)
+              isSpecificDashboardPage && (dashboardInfo?.createdByMe ?? false)
             }
-            isTitleAlwaysVisible={isMyDashboardPage || isMyPage}
-            isActionButtonsVisible={!isMyDashboardPage && !isMyPage}
-            isMemberProfilesVisible={!isMyDashboardPage && !isMyPage}
+            isTitleAlwaysVisible={!isSpecificDashboardPage}
+            isActionButtonsVisible={isSpecificDashboardPage}
+            isMemberProfilesVisible={isSpecificDashboardPage}
             onManageClick={handleNavigateDashboardEdit}
             onInviteClick={handleOpenDashboardInviteModal}
             members={dashboardMembers}
