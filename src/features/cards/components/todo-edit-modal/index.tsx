@@ -9,11 +9,11 @@ import { Tag } from '@/shared/components/tag';
 import TextArea from '@/shared/components/text-area';
 import DateInputField from '@/shared/components/date-input';
 import AssigneeSelect from '@/features/cards/components/assignee-select';
-import { ASSIGNEE_OPTIONS } from '@/features/cards/components/todo-edit-modal/todoEditModal.mock';
 import type { TodoEditModalProps } from '@/features/cards/components/todo-edit-modal/todoEditModal.types';
 import FieldWrapper from '@/features/cards/components/form-field/field-wrapper';
 import StatusDropdown from '@/features/cards/components/todo-edit-modal/components/status-dropdown/statusDropdown';
 import { useTodoEditModal } from '@/features/cards/hooks/useTodoEditModal';
+import { useAssigneeOptions } from '@/features/cards/hooks/useAssigneeOptions';
 
 /**
  * 할 일 수정 모달을 렌더링합니다.
@@ -39,6 +39,8 @@ function TodoEditModal({ isOpen, onClose, card }: TodoEditModalProps) {
     toggleDropdown,
     resetForm,
   } = useTodoEditModal(card);
+
+  const { assigneeOptions } = useAssigneeOptions(isOpen);
 
   useEffect(() => {
     if (!isOpen) {
@@ -76,7 +78,7 @@ function TodoEditModal({ isOpen, onClose, card }: TodoEditModalProps) {
               <AssigneeSelect
                 label="담당자"
                 selectedAssignee={selectedAssignee}
-                assigneeOptions={ASSIGNEE_OPTIONS}
+                assigneeOptions={assigneeOptions}
                 onSelect={setSelectedAssignee}
               />
             </div>
