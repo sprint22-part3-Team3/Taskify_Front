@@ -12,11 +12,18 @@ import { del, get, post, put } from '@/shared/apis/fetchInstance';
 /**
  * GET 댓글 목록 조회
  */
-export const getComments = async ({ cardId, size = 10 }: GetCommentsParams) => {
+export const getComments = async ({
+  cardId,
+  size = 10,
+  cursorId,
+}: GetCommentsParams) => {
   const params = new URLSearchParams({
     size: size.toString(),
     cardId: cardId.toString(),
   });
+  if (cursorId) {
+    params.append('cursorId', cursorId.toString());
+  }
   const res = await get<GetCommentsResponse>(`comments?${params.toString()}`);
 
   return res;

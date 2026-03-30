@@ -3,6 +3,7 @@ import type { Card } from '@/features/cards/types/card.types';
 export type GetCardsParams = {
   columnId: number;
   size?: number;
+  cursorId?: number | null;
 };
 
 export type GetCardsResponse = {
@@ -17,6 +18,16 @@ export type CreateCardRequest = {
   title: string;
   description: string;
   assigneeUserId?: number;
+  dueDate?: string;
+  tags?: string[];
+  imageUrl?: string | null;
+};
+
+export type UpdateCardRequest = {
+  columnId: number;
+  assigneeUserId?: number;
+  title: string;
+  description: string;
   dueDate?: string;
   tags?: string[];
   imageUrl?: string | null;
