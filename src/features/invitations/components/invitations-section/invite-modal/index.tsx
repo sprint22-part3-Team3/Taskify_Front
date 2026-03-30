@@ -77,7 +77,11 @@ export default function InviteModal({
           <Button type="button" theme="cancel" onClick={handleClose}>
             취소
           </Button>
-          <Button type="submit" disabled={isSubmitting}>
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            isLoading={isSubmitting}
+          >
             초대
           </Button>
         </Modal.Footer>
