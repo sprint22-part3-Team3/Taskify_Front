@@ -10,8 +10,8 @@ import { runAfterModalClose } from '@/shared/utils/modal';
 import {
   getInvitations,
   INVITATIONS_SIZE,
-} from '@/features/invitations/apis/getInvitations';
-import type { Invitation } from '@/features/invitations/apis/getInvitations.types';
+} from '@/features/invitations/apis/invitations';
+import type { Invitation } from '@/features/invitations/apis/invitations.types';
 
 /**
  * 대시보드 초대 내역을 표시하는 섹션 컴포넌트입니다.

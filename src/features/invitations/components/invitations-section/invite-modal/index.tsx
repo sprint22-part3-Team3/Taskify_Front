@@ -2,7 +2,7 @@ import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
 import { Modal } from '@/shared/components/modal';
 import { useState } from 'react';
-import { createInvitation } from '@/features/invitations/apis/createInvitations';
+import { createInvitation } from '@/features/invitations/apis/invitations';
 import { validateEmail } from '@/shared/utils/validators/validateEmail';
 
 type InviteModalProps = {
