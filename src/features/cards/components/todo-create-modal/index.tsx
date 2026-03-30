@@ -18,7 +18,6 @@ import { useAssigneeOptions } from '@/features/cards/hooks/useAssigneeOptions';
 import { useTodoCreateForm } from '@/features/cards/hooks/useTodoCreateForm';
 import { runAfterModalClose } from '@/shared/utils/modal';
 import { createRequiredValidator } from '@/shared/utils/validators/validateRequired';
-import FieldError from '@/shared/components/field-error';
 
 /**
  * 할 일 생성 모달을 렌더링합니다.
@@ -163,9 +162,9 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
                   if (descriptionError) setDescriptionError('');
                 }}
                 onBlur={validateDescription}
+                error={descriptionError}
                 className="typo-md-regular md:typo-lg-regular"
               />
-              {descriptionError && <FieldError>{descriptionError}</FieldError>}
             </FieldWrapper>
 
             <FieldWrapper>

@@ -17,7 +17,6 @@ import { useTodoEditModal } from '@/features/cards/hooks/useTodoEditModal';
 import { useAssigneeOptions } from '@/features/cards/hooks/useAssigneeOptions';
 import { useColumnList } from '@/features/columns/hooks/useColumnList';
 import { useTodoEditForm } from '@/features/cards/hooks/useTodoEditForm';
-import FieldError from '@/shared/components/field-error';
 import { createRequiredValidator } from '@/shared/utils/validators/validateRequired';
 
 /**
@@ -204,9 +203,9 @@ function TodoEditModalContent({
                   if (descriptionError) setDescriptionError('');
                 }}
                 onBlur={validateDescription}
+                error={descriptionError}
                 className="typo-md-regular md:typo-lg-regular"
               />
-              {descriptionError && <FieldError>{descriptionError}</FieldError>}
             </FieldWrapper>
             <FieldWrapper>
               <Label className="typo-md-regular md:typo-2lg-regular">
