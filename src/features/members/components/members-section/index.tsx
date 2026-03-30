@@ -12,17 +12,25 @@ import {
   getMembers,
   MEMBERS_SIZE,
 } from '@/features/members/apis/members';
+import { usePagination } from '@/shared/hooks/usePagination';
 
 export default function MembersSection() {
   // URL에서 dashboardId 가져오기
   const { id: dashboardId } = useParams();
   const [members, setMembers] = useState<Member[]>([]);
-  const [totalCount, setTotalCount] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
+  const {
+    currentPage,
+    totalPages,
+    setCurrentPage,
+    syncTotalCount,
+    handlePrevPage,
+    handleNextPage,
+  } = usePagination();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   // 구성원 삭제 멤버 선택 state
   const [selectedMemberId, setSelectedMemberId] = useState<number | null>(null);
-  const totalPages = Math.max(1, Math.ceil(totalCount / MEMBERS_SIZE));
+
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleCloseDeleteModal = () => {
     setIsDeleteModalOpen(false);
@@ -32,22 +40,24 @@ export default function MembersSection() {
   const handleConfirmDelete = async () => {
     if (!selectedMemberId || !dashboardId) return;
 
+    setIsDeleting(true);
+
     await deleteMember(selectedMemberId);
 
-    // 현재 페이지의 마지막 항목이면 이전 페이지로
     const isLastItemOnPage = members.length === 1;
     const shouldGoBack = isLastItemOnPage && currentPage > 1;
 
     if (shouldGoBack) {
-      setCurrentPage((prev) => prev - 1);
+      setCurrentPage(currentPage - 1);
     } else {
       const data = await getMembers(dashboardId, currentPage);
       if (data) {
         setMembers(data.members);
-        setTotalCount(data.totalCount);
+        syncTotalCount(data.totalCount, MEMBERS_SIZE);
       }
     }
 
+    setIsDeleting(false);
     handleCloseDeleteModal();
   };
 
@@ -61,12 +71,12 @@ export default function MembersSection() {
 
       if (data) {
         setMembers(data.members);
-        setTotalCount(data.totalCount);
+        syncTotalCount(data.totalCount, MEMBERS_SIZE);
       }
     }
 
     fetchMembers(currentDashboardId);
-  }, [dashboardId, currentPage]);
+  }, [dashboardId, currentPage, syncTotalCount]);
 
   return (
     <section className="rounded-xl bg-white px-4 pt-5 pb-2 md:px-6 lg:px-7">
@@ -77,8 +87,8 @@ export default function MembersSection() {
         <div className="flex items-center gap-3">
           <PageIndicator currentPage={currentPage} totalPages={totalPages} />
           <NavigationButtons
-            onPrev={() => setCurrentPage((prev) => prev - 1)}
-            onNext={() => setCurrentPage((prev) => prev + 1)}
+            onPrev={handlePrevPage}
+            onNext={handleNextPage}
             isPrevDisabled={currentPage === 1}
             isNextDisabled={currentPage >= totalPages}
           />
@@ -119,6 +129,8 @@ export default function MembersSection() {
         isOpen={isDeleteModalOpen}
         onClose={handleCloseDeleteModal}
         onConfirm={handleConfirmDelete}
+        isLoading={isDeleting}
+        disabled={isDeleting}
         message={
           <>
             구성원을 <span className="text-error">삭제</span>하시겠습니까?

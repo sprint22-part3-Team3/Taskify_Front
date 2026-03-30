@@ -30,6 +30,8 @@ function DeleteModal({
   renderInModal = true,
   cancelText = '취소',
   confirmText = '삭제',
+  isLoading = false,
+  disabled = false,
 }: DeleteModalProps) {
   const content = (
     <>
@@ -41,7 +43,13 @@ function DeleteModal({
         <Button theme="cancel" type="button" onClick={onClose}>
           {cancelText}
         </Button>
-        <Button theme="primary" type="button" onClick={onConfirm}>
+        <Button
+          theme="primary"
+          type="button"
+          onClick={onConfirm}
+          isLoading={isLoading}
+          disabled={disabled}
+        >
           {confirmText}
         </Button>
       </div>
