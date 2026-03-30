@@ -1,5 +1,5 @@
 import { Button } from '@/shared/components/button';
-import { LogoM } from '@/shared/assets';
+import NotFoundLogo from '@/shared/assets/logos/logo-not-found.svg?react';
 import { Link } from 'react-router-dom';
 
 function NotFoundPage() {
@@ -11,7 +11,7 @@ function NotFoundPage() {
 
       <section className="relative z-10 flex w-full max-w-3xl flex-col items-center px-8 py-12 text-center md:px-12 md:py-16">
         <Link to="/" className="mb-8" aria-label="홈으로 이동">
-          <LogoM className="h-auto w-27.75 -translate-x-4.5 [&_defs]:hidden [&_path:first-of-type]:fill-white [&_path:nth-of-type(n+2)]:hidden" />
+          <NotFoundLogo className="h-auto w-19.5 text-white" />
         </Link>
         <p className="typo-md-semibold rounded-full border border-white/25 bg-white/10 px-4 py-2 text-white/90">
           Page Not Found
