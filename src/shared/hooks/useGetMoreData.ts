@@ -22,9 +22,12 @@ export const useGetMoreData = <
   const [additionalData, setAdditionalData] = useState<TItem[]>([]);
   const [isAddLoading, setIsAddLoading] = useState(false);
   const [addErrorMessage, setAddErrorMessage] = useState<string | null>(null);
+
   const loading = useRef(false);
+  const requestToken = useRef(0);
 
   useEffect(() => {
+    requestToken.current += 1;
     setCursorId(initialResult?.cursorId ?? null);
     setAdditionalData([]);
     setAddErrorMessage(null);
@@ -34,24 +37,32 @@ export const useGetMoreData = <
   const loadMore = useCallback(async () => {
     if (cursorId === null || loading.current) return;
 
+    loading.current = true;
+    setIsAddLoading(true);
+    const currentToken = requestToken.current;
+
     try {
-      loading.current = true;
-      setIsAddLoading(true);
       const data = await fetchMoreFn(cursorId);
 
-      setAdditionalData((prev) => [...prev, ...extractData(data)]);
-      setCursorId(data.cursorId ?? null);
+      if (currentToken === requestToken.current) {
+        setAdditionalData((prev) => [...prev, ...extractData(data)]);
+        setCursorId(data.cursorId ?? null);
+      }
     } catch (err) {
-      if (err instanceof ApiError && err.status === 404) {
-        setAddErrorMessage('추가 데이터를 찾을 수 없습니다.');
-      } else if (err instanceof Error) {
-        setAddErrorMessage(err.message);
-      } else {
-        setAddErrorMessage('알 수 없는 에러가 발생했습니다.');
+      if (currentToken === requestToken.current) {
+        if (err instanceof ApiError && err.status === 404) {
+          setAddErrorMessage('추가 데이터를 찾을 수 없습니다.');
+        } else if (err instanceof Error) {
+          setAddErrorMessage(err.message);
+        } else {
+          setAddErrorMessage('알 수 없는 에러가 발생했습니다.');
+        }
       }
     } finally {
-      loading.current = false;
-      setIsAddLoading(false);
+      if (currentToken === requestToken.current) {
+        loading.current = false;
+        setIsAddLoading(false);
+      }
     }
   }, [cursorId, fetchMoreFn, extractData]);
 
