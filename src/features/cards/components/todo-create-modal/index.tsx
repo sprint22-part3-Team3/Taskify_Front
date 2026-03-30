@@ -13,7 +13,7 @@ import AssigneeSelect from '@/features/cards/components/assignee-select';
 import FieldWrapper from '@/features/cards/components/form-field/field-wrapper';
 import TagInput from '@/features/cards/components/tag-input';
 import { useColumnContext } from '@/features/columns/hooks/useColumnContext';
-import { createCard } from '@/features/cards/apis/cards';
+import { createCard, uploadCardImage } from '@/features/cards/apis/cards';
 import type { CreateCardRequest } from '@/features/cards/apis/cards.types';
 import { useTodoCreateModal } from '@/features/cards/hooks/useTodoCreateModal';
 import { useAssigneeOptions } from '@/features/cards/hooks/useAssigneeOptions';
@@ -49,14 +49,47 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
   const { assigneeOptions } = useAssigneeOptions(isOpen);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [imageUploadError, setImageUploadError] = useState<string | null>(null);
   const isSubmitDisabled = !title.trim() || !description.trim();
 
   const { refetch } = useCardRefetchContext();
 
   const handleClose = () => {
     setSubmissionError(null);
+    setImageUploadError(null);
+    setImageUrl(null);
+    setIsUploadingImage(false);
     onClose();
     runAfterModalClose(resetForm);
+  };
+
+  const handleImageSelect = async (file: File) => {
+    if (!dashboardId) {
+      setImageUploadError('대시보드를 찾을 수 없습니다.');
+      return;
+    }
+
+    setIsUploadingImage(true);
+    setImageUploadError(null);
+
+    try {
+      const response = await uploadCardImage(
+        { teamId: column.teamId, columnId: column.id },
+        file
+      );
+      setImageUrl(response?.imageUrl ?? null);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : '이미지 업로드에 실패했습니다. 다시 시도해 주세요.';
+      setImageUploadError(errorMessage);
+      setImageUrl(null);
+    } finally {
+      setIsUploadingImage(false);
+    }
   };
 
   const handleCreate = async (event: SubmitEvent<HTMLFormElement>) => {
@@ -77,7 +110,7 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
       assigneeUserId: selectedAssignee?.id,
       dueDate: dueDate || undefined,
       tags: tags.length > 0 ? tags : undefined,
-      imageUrl: undefined,
+      imageUrl: imageUrl || undefined,
     };
 
     setIsSubmitting(true);
@@ -157,7 +190,21 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
               <Label className="typo-md-regular md:typo-2lg-regular">
                 이미지
               </Label>
-              <ImageUploadBox variant="modal" />
+              <ImageUploadBox
+                variant="modal"
+                imageUrl={imageUrl}
+                onFileSelect={handleImageSelect}
+              />
+              {imageUploadError && (
+                <p className="typo-xs-regular text-error mt-1">
+                  {imageUploadError}
+                </p>
+              )}
+              {isUploadingImage && (
+                <p className="typo-xs-regular mt-1 text-gray-500">
+                  이미지 업로드 중입니다...
+                </p>
+              )}
             </FieldWrapper>
           </Modal.Main>
 
@@ -173,7 +220,7 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
             <Button
               theme="primary"
               type="submit"
-              disabled={isSubmitDisabled || isSubmitting}
+              disabled={isSubmitDisabled || isSubmitting || isUploadingImage}
               isLoading={isSubmitting}
             >
               생성
