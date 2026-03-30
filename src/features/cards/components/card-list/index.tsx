@@ -55,8 +55,9 @@ function CardList({ column }: CardListProps) {
           ))}
         </ul>
         <div className="mt-4 flex flex-col items-center justify-center gap-2">
-          {isAddLoading && <p className="typo-sm-medium">Loading...</p>}
-          {addErrorMessage ? (
+          {isAddLoading ? (
+            <p className="typo-sm-medium">Loading...</p>
+          ) : addErrorMessage ? (
             <p className="typo-sm-medium text-error">{addErrorMessage}</p>
           ) : (
             <div ref={loadMoreRef} className="h-4 w-full" />
