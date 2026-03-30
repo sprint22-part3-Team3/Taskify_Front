@@ -5,17 +5,33 @@ import { useModal } from '@/shared/hooks/useModal';
 import NameSection from '@/features/dashboards/components/name-section';
 import MembersSection from '@/features/members/components/members-section';
 import InvitationsSection from '@/features/invitations/components/invitations-section';
+import { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { deleteDashboard } from '@/features/dashboards/apis/deleteDashboard';
 
 export default function DashboardEditPage() {
+  const { id: dashboardId } = useParams();
+  const navigate = useNavigate();
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const {
     isOpen: isDeleteModalOpen,
     openModal: handleOpenDeleteModal,
     closeModal: handleCloseDeleteModal,
   } = useModal();
 
-  const handleDeleteDashboard = () => {
-    // TODO: 대시보드 삭제 API 연동
-    handleCloseDeleteModal();
+  const handleDeleteDashboard = async () => {
+    if (!dashboardId) return;
+
+    setIsDeleting(true);
+
+    try {
+      await deleteDashboard(dashboardId);
+      navigate('/mydashboard');
+    } catch {
+      alert('대시보드 삭제에 실패했습니다.');
+      setIsDeleting(false);
+    }
   };
 
   return (
@@ -40,6 +56,10 @@ export default function DashboardEditPage() {
         isOpen={isDeleteModalOpen}
         onClose={handleCloseDeleteModal}
         onConfirm={handleDeleteDashboard}
+        confirmButtonProps={{
+          isLoading: isDeleting,
+          disabled: isDeleting,
+        }}
         className="max-w-142"
         message={
           <>
