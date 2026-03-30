@@ -38,10 +38,11 @@ export default function MembersSection() {
 
   // 구성원 목록 API 호출
   useEffect(() => {
-    if (!dashboardId) return;
+    const currentDashboardId = dashboardId;
+    if (!currentDashboardId) return;
 
-    async function fetchMembers(id: string) {
-      const data = await getMembers(id, currentPage);
+    async function fetchMembers(targetDashboardId: string) {
+      const data = await getMembers(targetDashboardId, currentPage);
 
       if (data) {
         setMembers(data.members);
@@ -49,7 +50,7 @@ export default function MembersSection() {
       }
     }
 
-    fetchMembers(dashboardId);
+    fetchMembers(currentDashboardId);
   }, [dashboardId, currentPage]);
 
   return (

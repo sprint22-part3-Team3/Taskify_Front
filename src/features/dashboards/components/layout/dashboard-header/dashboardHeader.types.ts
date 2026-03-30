@@ -14,4 +14,5 @@ export type HeaderProps = {
   onManageClick?: () => void;
   onInviteClick?: () => void;
   onProfileClick?: () => void;
+  memberLoadError?: string;
 };
