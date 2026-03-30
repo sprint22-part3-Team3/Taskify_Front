@@ -1,6 +1,5 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import type { SubmitEvent } from 'react';
-import { useParams } from 'react-router-dom';
 import ImageUploadBox from '@/shared/components/image-uploader';
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
@@ -11,11 +10,10 @@ import TextArea from '@/shared/components/text-area';
 import DateInputField from '@/shared/components/date-input';
 import AssigneeSelect from '@/features/cards/components/assignee-select';
 import type { TodoEditModalProps } from '@/features/cards/components/todo-edit-modal/todoEditModal.types';
-import type { AvatarUser } from '@/shared/types/user.types';
 import FieldWrapper from '@/features/cards/components/form-field/field-wrapper';
 import StatusDropdown from '@/features/cards/components/todo-edit-modal/components/status-dropdown/statusDropdown';
 import { useTodoEditModal } from '@/features/cards/hooks/useTodoEditModal';
-import { useDashboardMembers } from '@/features/members/hooks/useDashboardMembers';
+import { useAssigneeOptions } from '@/features/cards/hooks/useAssigneeOptions';
 
 /**
  * 할 일 수정 모달을 렌더링합니다.
@@ -42,17 +40,7 @@ function TodoEditModal({ isOpen, onClose, card }: TodoEditModalProps) {
     resetForm,
   } = useTodoEditModal(card);
 
-  const { id: routeDashboardId } = useParams();
-  const dashboardId = isOpen ? routeDashboardId : undefined;
-  const { members } = useDashboardMembers(dashboardId);
-  const assigneeOptions = useMemo<AvatarUser[]>(() => {
-    return members.map(({ id, nickname, profileImageUrl, userId }) => ({
-      id,
-      nickname,
-      profileImageUrl: profileImageUrl || null,
-      userId,
-    }));
-  }, [members]);
+  const { assigneeOptions } = useAssigneeOptions(isOpen);
 
   useEffect(() => {
     if (!isOpen) {
