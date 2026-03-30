@@ -6,7 +6,7 @@ import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
 import Label from '@/shared/components/input/label';
 import { Modal } from '@/shared/components/modal';
-import { Tag } from '@/shared/components/tag';
+import TagInput from '@/features/cards/components/tag-input';
 import TextArea from '@/shared/components/text-area';
 import DateInputField from '@/shared/components/date-input';
 import AssigneeSelect from '@/features/cards/components/assignee-select';
@@ -15,7 +15,8 @@ import FieldWrapper from '@/features/cards/components/form-field/field-wrapper';
 import StatusDropdown from '@/features/cards/components/todo-edit-modal/components/status-dropdown/statusDropdown';
 import { useTodoEditModal } from '@/features/cards/hooks/useTodoEditModal';
 import { useAssigneeOptions } from '@/features/cards/hooks/useAssigneeOptions';
-import { useDashboardColumns } from '@/features/columns/hooks/useDashboardColumns';
+import { useColumnList } from '@/features/columns/hooks/useColumnList';
+import { useTodoEditForm } from '@/features/cards/hooks/useTodoEditForm';
 
 /**
  * 할 일 수정 모달을 렌더링합니다.
@@ -25,7 +26,12 @@ import { useDashboardColumns } from '@/features/columns/hooks/useDashboardColumn
  * <TodoEditModal isOpen={isOpen} onClose={handleClose} />
  * ```
  */
-function TodoEditModal({ isOpen, onClose, card }: TodoEditModalProps) {
+function TodoEditModalContent({
+  isOpen,
+  onClose,
+  card,
+  dashboardId,
+}: TodoEditModalProps & { dashboardId: number }) {
   const {
     selectedColumnId,
     isDropdownOpen,
@@ -33,26 +39,27 @@ function TodoEditModal({ isOpen, onClose, card }: TodoEditModalProps) {
     description,
     dueDate,
     selectedAssignee,
+    tags,
+    maxTagCount,
     setTitle,
     setDescription,
     setDueDate,
     setSelectedAssignee,
+    setTags,
     handleSelectStatus,
     toggleDropdown,
     resetForm,
   } = useTodoEditModal(card);
 
   const { assigneeOptions } = useAssigneeOptions(isOpen);
-  const { id: rawDashboardId } = useParams<{ id: string }>();
-  const parsedDashboardId = rawDashboardId ? parseInt(rawDashboardId, 10) : NaN;
-  const dashboardId = Number.isNaN(parsedDashboardId)
-    ? undefined
-    : parsedDashboardId;
   const {
     columns,
     isLoading: isColumnsLoading,
     errorMessage: columnsError,
-  } = useDashboardColumns(dashboardId, isOpen);
+  } = useColumnList(dashboardId);
+  const { isSubmitting, submissionError, handleUpdateCard } = useTodoEditForm({
+    cardId: card.id,
+  });
 
   useEffect(() => {
     if (!isOpen) {
@@ -64,9 +71,27 @@ function TodoEditModal({ isOpen, onClose, card }: TodoEditModalProps) {
 
   const isSubmitDisabled = !title.trim() || !description.trim();
 
-  const handleEdit = (event: SubmitEvent<HTMLFormElement>) => {
+  const handleEdit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onClose();
+
+    if (isSubmitDisabled || isSubmitting) {
+      return;
+    }
+
+    const payload = {
+      columnId: selectedColumnId,
+      assigneeUserId: selectedAssignee?.id ?? undefined,
+      title: title.trim(),
+      description: description.trim(),
+      dueDate: dueDate || undefined,
+      tags: tags.length > 0 ? tags : undefined,
+      imageUrl: card.imageUrl ?? undefined,
+    };
+
+    const isUpdated = await handleUpdateCard(payload, card.columnId);
+    if (isUpdated) {
+      onClose();
+    }
   };
 
   return (
@@ -135,10 +160,7 @@ function TodoEditModal({ isOpen, onClose, card }: TodoEditModalProps) {
               <Label className="typo-md-regular md:typo-2lg-regular">
                 태그
               </Label>
-              <div className="flex min-h-12.5 items-center gap-2 rounded-lg border border-gray-200 px-4 py-2">
-                <Tag color="purple">프로젝트</Tag>
-                <Tag color="yellow">일반</Tag>
-              </div>
+              <TagInput tags={tags} setTags={setTags} maxTags={maxTagCount} />
             </FieldWrapper>
             <FieldWrapper>
               <Label className="typo-md-regular md:typo-2lg-regular">
@@ -148,10 +170,20 @@ function TodoEditModal({ isOpen, onClose, card }: TodoEditModalProps) {
             </FieldWrapper>
           </Modal.Main>
           <Modal.Footer className="shrink-0">
+            {submissionError && (
+              <p className="typo-sm-regular text-error mr-4">
+                {submissionError}
+              </p>
+            )}
             <Button theme="cancel" type="button" onClick={onClose}>
               취소
             </Button>
-            <Button theme="primary" type="submit" disabled={isSubmitDisabled}>
+            <Button
+              theme="primary"
+              type="submit"
+              disabled={isSubmitDisabled || isSubmitting}
+              isLoading={isSubmitting}
+            >
               수정
             </Button>
           </Modal.Footer>
@@ -159,6 +191,17 @@ function TodoEditModal({ isOpen, onClose, card }: TodoEditModalProps) {
       </div>
     </Modal>
   );
+}
+
+function TodoEditModal(props: TodoEditModalProps) {
+  const { id: rawDashboardId } = useParams<{ id: string }>();
+  const parsedDashboardId = rawDashboardId ? parseInt(rawDashboardId, 10) : NaN;
+
+  if (Number.isNaN(parsedDashboardId)) {
+    return null;
+  }
+
+  return <TodoEditModalContent {...props} dashboardId={parsedDashboardId} />;
 }
 
 export default TodoEditModal;
