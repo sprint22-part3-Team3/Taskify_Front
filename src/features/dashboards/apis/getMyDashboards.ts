@@ -16,6 +16,7 @@ export async function getMyDashboards(
   page = 1,
   size = 5
 ): Promise<{
+  totalCount: number;
   dashboards: DashboardItem[];
 }> {
   const response = await get<DashboardListResponse>(
@@ -23,21 +24,17 @@ export async function getMyDashboards(
   );
 
   return {
-    dashboards: (response?.dashboards ?? [])
-      .map((dashboard, dashboardIndex) => {
-        const matchedDashboardColor = getDashboardColorName(dashboard.color);
+    totalCount: response?.totalCount ?? 0,
+    dashboards: (response?.dashboards ?? []).map((dashboard) => {
+      const matchedDashboardColor = getDashboardColorName(dashboard.color);
 
-        return {
-          id: dashboard.id,
-          title: dashboard.title,
-          color:
-            matchedDashboardColor ??
-            dashboardColors[dashboardIndex % dashboardColors.length],
-          createdByMe: dashboard.createdByMe,
-        };
-      })
-      .sort((previousDashboard, nextDashboard) => {
-        return nextDashboard.id - previousDashboard.id;
-      }),
+      return {
+        id: dashboard.id,
+        title: dashboard.title,
+        colorHex: dashboard.color,
+        color: matchedDashboardColor ?? dashboardColors[0],
+        createdByMe: dashboard.createdByMe,
+      };
+    }),
   };
 }

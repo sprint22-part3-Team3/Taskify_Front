@@ -24,9 +24,13 @@ export function useSidebar() {
   const { id } = useParams();
   const {
     sidebarDashboards,
+    currentPage,
+    totalPages,
     isLoadingSidebarDashboards,
     sidebarDashboardsError,
     loadSidebarDashboards,
+    handlePrevPage,
+    handleNextPage,
   } = useSidebarDashboards();
   const [isCreatingDashboard, setIsCreatingDashboard] = useState(false);
 
@@ -56,11 +60,15 @@ export function useSidebar() {
 
   return {
     sidebarDashboards,
+    currentPage,
+    totalPages,
     selectedDashboardId,
     isLoadingSidebarDashboards,
     sidebarDashboardsError,
     isCreatingDashboard,
     handleDashboardClick,
     handleCreateDashboard,
+    handlePrevPage,
+    handleNextPage,
   };
 }
