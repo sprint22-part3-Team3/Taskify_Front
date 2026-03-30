@@ -5,6 +5,7 @@ import type { DashboardListResponse } from '@/features/dashboards/apis/dashboard
 // GET
 export type GetCommentsParams = Pick<Comment, 'cardId'> & {
   size?: number;
+  cursorId?: number | null;
 };
 
 export type GetCommentsResponse = {

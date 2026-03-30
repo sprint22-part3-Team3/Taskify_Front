@@ -56,6 +56,7 @@ function CardList({ column }: CardListProps) {
         </ul>
         <div className="mt-4 flex flex-col items-center justify-center gap-2">
           {isAddLoading ? (
+            // TODO : 로딩 화면 처리
             <p className="typo-sm-medium">Loading...</p>
           ) : addErrorMessage ? (
             <p className="typo-sm-medium text-error">{addErrorMessage}</p>
