@@ -163,7 +163,7 @@ function AssigneeSelect({
         )}
       </div>
       {shouldShowInvalidMentionError && (
-        <p className="typo-xs-regular text-error mt-1">
+        <p className="typo-md-regular text-error mt-1">
           드롭다운에서 멤버를 선택해 주세요.
         </p>
       )}
