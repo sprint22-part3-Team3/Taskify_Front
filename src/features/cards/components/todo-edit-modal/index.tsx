@@ -237,12 +237,12 @@ function TodoEditModalContent({
                 }
               />
               {imageUploadError && (
-                <p className="typo-xs-regular text-error mt-1">
+                <p className="typo-md-regular text-error mt-1">
                   {imageUploadError}
                 </p>
               )}
               {isUploadingImage && (
-                <p className="typo-xs-regular mt-1 text-gray-500">
+                <p className="typo-md-regular mt-1 text-gray-500">
                   이미지 업로드 중입니다...
                 </p>
               )}
@@ -250,7 +250,7 @@ function TodoEditModalContent({
           </Modal.Main>
           <Modal.Footer className="shrink-0">
             {submissionError && (
-              <p className="typo-sm-regular text-error mr-4">
+              <p className="typo-md-regular text-error mr-4">
                 {submissionError}
               </p>
             )}
