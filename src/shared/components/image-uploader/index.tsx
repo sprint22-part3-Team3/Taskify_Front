@@ -78,7 +78,7 @@ export default function ImageUploadBox({
       {previewImage && (
         <img
           src={previewImage}
-          alt="preview"
+          alt="업로드 이미지 미리보기"
           className="h-full w-full object-cover"
         />
       )}
