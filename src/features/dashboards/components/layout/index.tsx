@@ -164,7 +164,9 @@ export default function DashboardLayout() {
               isSpecificDashboardPage && (dashboardInfo?.createdByMe ?? false)
             }
             isTitleAlwaysVisible={!isSpecificDashboardPage}
-            isActionButtonsVisible={isSpecificDashboardPage}
+            isActionButtonsVisible={
+              isSpecificDashboardPage && (dashboardInfo?.createdByMe ?? false)
+            }
             isMemberProfilesVisible={isSpecificDashboardPage}
             onManageClick={handleNavigateDashboardEdit}
             onInviteClick={handleOpenDashboardInviteModal}

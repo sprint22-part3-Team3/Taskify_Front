@@ -2,16 +2,51 @@ import { Button } from '@/shared/components/button';
 import DeleteModal from '@/shared/components/modal/delete-modal';
 import { PageIndicator } from '@/shared/components/page-indicator';
 import Title from '@/shared/components/title';
-import { useState } from 'react';
-import { MOCK_INVITATIONS } from '@/pages/dashboard-edit/mock';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import InviteModal from '@/features/invitations/components/invitations-section/invite-modal';
 import { useModal } from '@/shared/hooks/useModal';
 import { runAfterModalClose } from '@/shared/utils/modal';
+import {
+  getInvitations,
+  INVITATIONS_SIZE,
+} from '@/features/invitations/apis/invitations';
+import type { Invitation } from '@/features/invitations/apis/invitations.types';
+import { usePagination } from '@/shared/hooks/usePagination';
 
+/**
+ * 대시보드 초대 내역을 표시하는 섹션 컴포넌트입니다.
+ *
+ * API를 통해 초대 목록을 조회하고, 페이지네이션과 초대/취소 기능을 제공합니다.
+ */
 export default function InvitationsSection() {
+  const { id: dashboardId } = useParams();
+
+  // 초대 내역 데이터
+  const [invitations, setInvitations] = useState<Invitation[]>([]);
+  const {
+    currentPage,
+    totalPages,
+    syncTotalCount,
+    handlePrevPage,
+    handleNextPage,
+  } = usePagination();
+
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  // 초대 성공 후 리패칭
+  const handleInviteSuccess = () => {
+    setRefreshKey((prev) => prev + 1);
+  };
+
+  // 취소할 초대 정보
+  const [selectedInvitationId, setSelectedInvitationId] = useState<
+    number | null
+  >(null);
   const [selectedInvitationEmail, setSelectedInvitationEmail] = useState<
     string | null
   >(null);
+
   const {
     isOpen: isInviteModalOpen,
     openModal: handleOpenInviteModal,
@@ -23,21 +58,42 @@ export default function InvitationsSection() {
     closeModal: handleCloseDeleteModal,
   } = useModal();
 
-  const handleCancelInvitation = (email: string) => {
-    setSelectedInvitationEmail(email);
+  // 초대 내역 목록 불러오기
+  useEffect(() => {
+    if (!dashboardId) return;
+
+    async function fetchInvitations(id: string) {
+      const data = await getInvitations(id, currentPage);
+
+      if (data) {
+        setInvitations(data.invitations);
+        syncTotalCount(data.totalCount, INVITATIONS_SIZE);
+      }
+    }
+
+    fetchInvitations(dashboardId);
+  }, [dashboardId, currentPage, refreshKey, syncTotalCount]);
+
+  // 초대 취소 버튼 클릭
+  const handleCancelInvitation = (invitation: Invitation) => {
+    setSelectedInvitationId(invitation.id);
+    setSelectedInvitationEmail(invitation.invitee.email);
     handleOpenDeleteModal();
   };
-  const handleResetSelectedInvitationEmail = () => {
-    setSelectedInvitationEmail(null);
-  };
+
+  // 취소 모달 닫기
   const handleCloseDeleteInvitationModal = () => {
     handleCloseDeleteModal();
     runAfterModalClose(() => {
-      handleResetSelectedInvitationEmail();
+      setSelectedInvitationId(null);
+      setSelectedInvitationEmail(null);
     });
   };
+
+  // 초대 취소 확인
   const handleConfirmCancelInvitation = () => {
-    // TODO: 초대 취소 API 연동
+    // TODO: 초대 취소 API 연동 (DELETE)
+    console.log('취소할 초대 ID:', selectedInvitationId);
     handleCloseDeleteInvitationModal();
   };
 
@@ -49,12 +105,12 @@ export default function InvitationsSection() {
         </Title>
         <div className="flex items-center gap-3">
           <PageIndicator
-            currentPage={1}
-            totalPages={1}
-            onPrev={() => {}}
-            onNext={() => {}}
-            isPrevDisabled={true} // TODO: 페이지네이션 로직 구현
-            isNextDisabled={true}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPrev={handlePrevPage}
+            onNext={handleNextPage}
+            isPrevDisabled={currentPage === 1}
+            isNextDisabled={currentPage >= totalPages}
           />
           <Button
             type="button"
@@ -80,28 +136,38 @@ export default function InvitationsSection() {
       </div>
 
       <ul>
-        {MOCK_INVITATIONS.map((email) => (
-          <li
-            key={email}
-            className="flex items-center justify-between border-b border-gray-100 py-4 last:border-b-0"
-          >
-            <span className="text-black-200 text-sm">{email}</span>
-            <Button
-              type="button"
-              theme="secondary"
-              size="sm"
-              className="px-3.5 md:px-7"
-              onClick={() => handleCancelInvitation(email)}
-            >
-              취소
-            </Button>
+        {invitations.length === 0 ? (
+          <li className="py-6 text-center text-sm text-gray-400">
+            초대 내역이 없습니다.
           </li>
-        ))}
+        ) : (
+          invitations.map((invitation) => (
+            <li
+              key={invitation.id}
+              className="flex items-center justify-between border-b border-gray-100 py-4 last:border-b-0"
+            >
+              <span className="text-black-200 text-sm">
+                {invitation.invitee.email}
+              </span>
+              <Button
+                type="button"
+                theme="secondary"
+                size="sm"
+                className="px-3.5 md:px-7"
+                onClick={() => handleCancelInvitation(invitation)}
+              >
+                취소
+              </Button>
+            </li>
+          ))
+        )}
       </ul>
 
       <InviteModal
         isOpen={isInviteModalOpen}
         onClose={handleCloseInviteModal}
+        dashboardId={dashboardId ?? ''}
+        onInviteSuccess={handleInviteSuccess}
       />
 
       <DeleteModal
