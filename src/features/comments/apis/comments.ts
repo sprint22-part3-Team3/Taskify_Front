@@ -1,10 +1,13 @@
 import type {
+  DelCommentParams,
   GetCommentsParams,
   GetCommentsResponse,
   PostCommentParams,
   PostCommentResponse,
+  PutCommentParams,
+  PutCommentResponse,
 } from '@/features/comments/apis/comments.types';
-import { get, post } from '@/shared/apis/fetchInstance';
+import { del, get, post, put } from '@/shared/apis/fetchInstance';
 
 /**
  * GET 댓글 목록 조회
@@ -36,4 +39,22 @@ export const postComment = async ({
   });
 
   return res;
+};
+
+/**
+ * PUT 댓글 수정
+ */
+export const putComment = async ({ id, content }: PutCommentParams) => {
+  const res = await put<PutCommentResponse>(`comments/${id}`, {
+    content,
+  });
+
+  return res;
+};
+
+/**
+ * DELETE 댓글 삭제
+ */
+export const delComment = async ({ id }: DelCommentParams) => {
+  await del(`comments/${id}`);
 };
