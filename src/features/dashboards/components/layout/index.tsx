@@ -30,12 +30,16 @@ export default function DashboardLayout() {
   } = useModal();
   const {
     sidebarDashboards,
+    currentPage,
+    totalPages,
     selectedDashboardId,
     isLoadingSidebarDashboards,
     sidebarDashboardsError,
     isCreatingDashboard,
     handleDashboardClick,
     handleCreateDashboard,
+    handlePrevPage,
+    handleNextPage,
   } = useSidebar();
 
   const handleNavigateDashboardEdit = () => {
@@ -69,8 +73,14 @@ export default function DashboardLayout() {
           selectedId={selectedDashboardId}
           isLoading={isLoadingSidebarDashboards}
           errorMessage={sidebarDashboardsError}
+          isPrevDisabled={currentPage === 1 || isLoadingSidebarDashboards}
+          isNextDisabled={
+            currentPage === totalPages || isLoadingSidebarDashboards
+          }
           onAddClick={handleOpenCreateDashboardModal}
           onDashboardClick={handleDashboardClick}
+          onPrevPage={handlePrevPage}
+          onNextPage={handleNextPage}
         />
         <div className="flex min-w-0 flex-1 flex-col">
           <Header
