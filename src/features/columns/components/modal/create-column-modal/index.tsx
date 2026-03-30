@@ -44,7 +44,7 @@ function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
     });
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (isCreateDisabled) return;
