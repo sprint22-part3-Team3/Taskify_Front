@@ -3,6 +3,7 @@ import { useOnClickOutside } from '@/shared/hooks/useOnClickOutside';
 import { IcArrowBottom, IcCheck } from '@/shared/assets/icons';
 import { StatusBadge } from '@/shared/components/status-badge';
 import type { StatusDropdownProps } from '@/features/cards/components/todo-edit-modal/components/status-dropdown/statusDropdown.types';
+import { STATUS_DROPDOWN_TEXT } from '@/features/cards/components/todo-edit-modal/components/status-dropdown/statusDropdown.constants';
 import { cn } from '@/shared/utils/cn';
 
 /**
@@ -44,11 +45,7 @@ function StatusDropdown({
   const selectedColumn = columns.find(
     (column) => column.id === selectedColumnId
   );
-  const buttonLabel = selectedColumn
-    ? selectedColumn.title
-    : isLoading
-      ? '컬럼 불러오는 중...'
-      : '상태를 선택해 주세요';
+  const buttonLabel = selectedColumn?.title ?? '';
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -71,12 +68,7 @@ function StatusDropdown({
         <ul className="absolute z-50 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
           {isLoading && (
             <li className="typo-lg-regular flex h-12 items-center px-4 text-gray-500">
-              컬럼을 불러오는 중입니다...
-            </li>
-          )}
-          {!isLoading && columns.length === 0 && (
-            <li className="typo-lg-regular flex h-12 items-center px-4 text-gray-500">
-              컬럼이 없습니다.
+              {STATUS_DROPDOWN_TEXT.LOADING}
             </li>
           )}
           {!isLoading &&
