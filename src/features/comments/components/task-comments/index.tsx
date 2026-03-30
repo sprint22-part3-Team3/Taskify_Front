@@ -73,9 +73,8 @@ function TaskComments({ id: cardId, columnId }: TaskCommentsProps) {
     if (deleteTargetId === null) return;
     try {
       await delComment({ id: deleteTargetId });
-      handleCloseDeleteModal();
       refetch();
-      setDeleteTargetId(null);
+      handleDeleteCancel();
     } catch {
       setHasDeleteError(true);
     }
