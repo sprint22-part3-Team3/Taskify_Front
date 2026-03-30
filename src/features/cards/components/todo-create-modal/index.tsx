@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import type { SubmitEvent } from 'react';
 import { useParams } from 'react-router-dom';
 import ImageUploadBox from '@/shared/components/image-uploader';
@@ -13,11 +12,9 @@ import AssigneeSelect from '@/features/cards/components/assignee-select';
 import FieldWrapper from '@/features/cards/components/form-field/field-wrapper';
 import TagInput from '@/features/cards/components/tag-input';
 import { useColumnContext } from '@/features/columns/hooks/useColumnContext';
-import { createCard } from '@/features/cards/apis/cards';
-import type { CreateCardRequest } from '@/features/cards/apis/cards.types';
 import { useTodoCreateModal } from '@/features/cards/hooks/useTodoCreateModal';
 import { useAssigneeOptions } from '@/features/cards/hooks/useAssigneeOptions';
-import { useCardRefetchContext } from '@/features/cards/hooks/useCardRefetchContext';
+import { useTodoCreateForm } from '@/features/cards/hooks/useTodoCreateForm';
 import { runAfterModalClose } from '@/shared/utils/modal';
 
 /**
@@ -47,14 +44,24 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
   const { id: rawDashboardId } = useParams<{ id: string }>();
   const dashboardId = rawDashboardId ? Number(rawDashboardId) : undefined;
   const { assigneeOptions } = useAssigneeOptions(isOpen);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const {
+    imageUrl,
+    isUploadingImage,
+    imageUploadError,
+    isSubmitting,
+    submissionError,
+    handleImageSelect,
+    handleCreateTodo,
+    resetTodoCreateState,
+  } = useTodoCreateForm({
+    dashboardId,
+    columnId: column.id,
+    teamId: column.teamId,
+  });
   const isSubmitDisabled = !title.trim() || !description.trim();
 
-  const { refetch } = useCardRefetchContext();
-
   const handleClose = () => {
-    setSubmissionError(null);
+    resetTodoCreateState();
     onClose();
     runAfterModalClose(resetForm);
   };
@@ -62,39 +69,20 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
   const handleCreate = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (isSubmitDisabled || isSubmitting || !dashboardId) {
-      if (!dashboardId) {
-        setSubmissionError('대시보드를 찾을 수 없습니다.');
-      }
+    if (isSubmitDisabled || isSubmitting || isUploadingImage) {
       return;
     }
 
-    const payload: CreateCardRequest = {
-      dashboardId,
-      columnId: column.id,
+    const wasCreated = await handleCreateTodo({
       title: title.trim(),
       description: description.trim(),
-      assigneeUserId: selectedAssignee?.id,
+      assigneeUserId: selectedAssignee?.id ?? undefined,
       dueDate: dueDate || undefined,
       tags: tags.length > 0 ? tags : undefined,
-      imageUrl: undefined,
-    };
+    });
 
-    setIsSubmitting(true);
-    setSubmissionError(null);
-
-    try {
-      await createCard(payload);
-      refetch();
+    if (wasCreated) {
       handleClose();
-    } catch (error) {
-      const message =
-        error instanceof Error
-          ? error.message
-          : '할 일 생성에 실패했습니다. 다시 시도해 주세요.';
-      setSubmissionError(message);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -157,7 +145,21 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
               <Label className="typo-md-regular md:typo-2lg-regular">
                 이미지
               </Label>
-              <ImageUploadBox variant="modal" />
+              <ImageUploadBox
+                variant="modal"
+                imageUrl={imageUrl}
+                onFileSelect={handleImageSelect}
+              />
+              {imageUploadError && (
+                <p className="typo-xs-regular text-error mt-1">
+                  {imageUploadError}
+                </p>
+              )}
+              {isUploadingImage && (
+                <p className="typo-xs-regular mt-1 text-gray-500">
+                  이미지 업로드 중입니다...
+                </p>
+              )}
             </FieldWrapper>
           </Modal.Main>
 
@@ -173,7 +175,7 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
             <Button
               theme="primary"
               type="submit"
-              disabled={isSubmitDisabled || isSubmitting}
+              disabled={isSubmitDisabled || isSubmitting || isUploadingImage}
               isLoading={isSubmitting}
             >
               생성
