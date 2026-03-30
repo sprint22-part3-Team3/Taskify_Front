@@ -34,7 +34,7 @@ export default function ProfileForm() {
     }
   }, [user?.profileImageUrl]);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isSaveDisabled || !user) return;
 
