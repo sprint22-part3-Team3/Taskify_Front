@@ -96,7 +96,28 @@ function TodoEditModalContent({
     resetImageState();
   }, [card, isOpen, resetForm, resetImageState]);
 
-  const isSubmitDisabled = !title.trim() || !description.trim();
+  const normalizedTitle = title.trim();
+  const normalizedDescription = description.trim();
+  const initialTitle = card.title?.trim() ?? '';
+  const initialDescription = card.description?.trim() ?? '';
+  const initialDueDate = card.dueDate ?? '';
+  const initialAssigneeId = card.assignee?.id ?? null;
+  const initialTags = card.tags ?? [];
+
+  const tagsChanged =
+    initialTags.length !== tags.length ||
+    initialTags.some((tag, index) => tag !== tags[index]);
+  const hasChanges =
+    selectedColumnId !== card.columnId ||
+    normalizedTitle !== initialTitle ||
+    normalizedDescription !== initialDescription ||
+    dueDate !== initialDueDate ||
+    (selectedAssignee?.id ?? null) !== initialAssigneeId ||
+    tagsChanged ||
+    imageUrl !== card.imageUrl;
+
+  const isSubmitDisabled =
+    !normalizedTitle || !normalizedDescription || !hasChanges;
 
   const handleEdit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
