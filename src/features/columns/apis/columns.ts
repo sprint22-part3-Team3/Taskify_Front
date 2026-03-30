@@ -1,10 +1,10 @@
 import type {
   getColumnsParams,
   GetColumnsResponse,
-  Column,
   CreateColumnRequest,
   UpdateColumnRequest,
 } from '@/features/columns/apis/columns.types';
+import type { Column } from '@/features/columns/types/cloumns.types';
 import { get, post, del, put } from '@/shared/apis/fetchInstance';
 
 /**
