@@ -1,7 +1,6 @@
 import type { SidebarProps } from '@/features/dashboards/components/layout/dashboard-sidebar/dashboardSidebar.types';
 import Logo from '@/shared/components/logo';
 import { ColorLabel } from '@/features/dashboards/components/color/color-label';
-import { getDashboardColorHex } from '@/features/dashboards/utils/dashboardColor';
 import { IcAddBox, IcBookmark } from '@/shared/assets';
 import { cn } from '@/shared/utils/cn';
 import NavigationButtons from '@/shared/components/page-indicator/navigation-buttons';
@@ -17,7 +16,13 @@ import NavigationButtons from '@/shared/components/page-indicator/navigation-but
  * ```tsx
  * <Sidebar
  *   dashboards={[
- *     { id: 1, title: '비브리지', color: '#22c55e', isOwner: true },
+ *     {
+ *       id: 1,
+ *       title: '비브리지',
+ *       color: 'green',
+ *       colorHex: 'var(--color-green)',
+ *       createdByMe: true,
+ *     },
  *   ]}
  *   selectedId={1}
  *   onAddClick={() => console.log('추가')}
@@ -25,16 +30,17 @@ import NavigationButtons from '@/shared/components/page-indicator/navigation-but
  * />
  * ```
  */
-const handlePrevPage = () => undefined;
-const handleNextPage = () => undefined;
-
 export default function Sidebar({
   dashboards,
   selectedId,
   isLoading = false,
   errorMessage,
+  isPrevDisabled = true,
+  isNextDisabled = true,
   onAddClick,
   onDashboardClick,
+  onPrevPage,
+  onNextPage,
 }: SidebarProps) {
   return (
     <aside className="flex h-screen w-17 shrink-0 flex-col bg-white md:w-40 lg:w-75">
@@ -72,7 +78,7 @@ export default function Sidebar({
           >
             <div className="flex min-w-0 items-center gap-0 md:gap-2 lg:gap-2.5">
               <ColorLabel
-                color={getDashboardColorHex(sidebarDashboardItem.color)}
+                color={sidebarDashboardItem.colorHex}
                 label={sidebarDashboardItem.title}
                 className="min-w-0"
                 labelClassName="hidden truncate md:block md:typo-lg-medium lg:typo-2lg-medium"
@@ -100,10 +106,10 @@ export default function Sidebar({
       {/* 하단 페이지네이션 */}
       <div className="px-3 py-3">
         <NavigationButtons
-          onPrev={handlePrevPage}
-          onNext={handleNextPage}
-          isPrevDisabled={true}
-          isNextDisabled={true}
+          onPrev={onPrevPage ?? (() => undefined)}
+          onNext={onNextPage ?? (() => undefined)}
+          isPrevDisabled={isPrevDisabled}
+          isNextDisabled={isNextDisabled}
           isHidingOnMobile={true}
         />
       </div>
