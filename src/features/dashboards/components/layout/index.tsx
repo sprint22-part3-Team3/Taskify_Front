@@ -57,6 +57,7 @@ export default function DashboardLayout() {
   const [dashboardInfo, setDashboardInfo] = useState<{
     id: string;
     title: string;
+    createdByMe: boolean;
   } | null>(null);
 
   const handleNavigateDashboardEdit = () => {
@@ -89,7 +90,11 @@ export default function DashboardLayout() {
     async function fetchTitle(dashboardId: string) {
       const data = await getDashboard(dashboardId);
       if (data) {
-        setDashboardInfo({ id: dashboardId, title: data.title });
+        setDashboardInfo({
+          id: dashboardId,
+          title: data.title,
+          createdByMe: data.createdByMe,
+        });
       }
     }
 
@@ -103,7 +108,16 @@ export default function DashboardLayout() {
         event as CustomEvent<DashboardTitleChangeDetail>
       ).detail;
       if (id) {
-        setDashboardInfo({ id, title: newTitle });
+        setDashboardInfo((previousDashboardInfo) => {
+          if (!previousDashboardInfo) {
+            return previousDashboardInfo;
+          }
+
+          return {
+            ...previousDashboardInfo,
+            title: newTitle,
+          };
+        });
       }
     };
 
@@ -145,7 +159,7 @@ export default function DashboardLayout() {
                     ? dashboardInfo?.title
                     : ''
             }
-            isOwner={!isMyDashboardPage && !isMyPage}
+            isOwner={dashboardInfo?.createdByMe ?? false}
             isTitleAlwaysVisible={isMyDashboardPage || isMyPage}
             isActionButtonsVisible={!isMyDashboardPage && !isMyPage}
             isMemberProfilesVisible={!isMyDashboardPage && !isMyPage}
