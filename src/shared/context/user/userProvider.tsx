@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { UserContext } from '@/shared/context/user/userContext';
 import type { ReactNode } from 'react';
-import { useUserProfile } from '@/shared/hooks/user/useUserProfile';
+import { useUserProfile } from '@/shared/hooks/useUserProfile';
 
 type UserProviderProps = {
   children: ReactNode;
