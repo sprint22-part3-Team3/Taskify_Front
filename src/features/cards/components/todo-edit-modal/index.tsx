@@ -44,7 +44,10 @@ function TodoEditModal({ isOpen, onClose, card }: TodoEditModalProps) {
 
   const { assigneeOptions } = useAssigneeOptions(isOpen);
   const { id: rawDashboardId } = useParams<{ id: string }>();
-  const dashboardId = rawDashboardId ? Number(rawDashboardId) : undefined;
+  const parsedDashboardId = rawDashboardId ? parseInt(rawDashboardId, 10) : NaN;
+  const dashboardId = Number.isNaN(parsedDashboardId)
+    ? undefined
+    : parsedDashboardId;
   const {
     columns,
     isLoading: isColumnsLoading,
