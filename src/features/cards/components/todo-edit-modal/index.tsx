@@ -57,9 +57,16 @@ function TodoEditModalContent({
     isLoading: isColumnsLoading,
     errorMessage: columnsError,
   } = useColumnList(dashboardId);
-  const { isSubmitting, submissionError, handleUpdateCard } = useTodoEditForm({
-    cardId: card.id,
-  });
+  const {
+    isSubmitting,
+    submissionError,
+    handleUpdateCard,
+    imageUrl,
+    isUploadingImage,
+    imageUploadError,
+    handleImageSelect,
+    resetImageState,
+  } = useTodoEditForm({ card });
 
   useEffect(() => {
     if (!isOpen) {
@@ -67,7 +74,8 @@ function TodoEditModalContent({
     }
 
     resetForm(card);
-  }, [card, isOpen, resetForm]);
+    resetImageState();
+  }, [card, isOpen, resetForm, resetImageState]);
 
   const isSubmitDisabled = !title.trim() || !description.trim();
 
@@ -85,7 +93,7 @@ function TodoEditModalContent({
       description: description.trim(),
       dueDate: dueDate || undefined,
       tags: tags.length > 0 ? tags : undefined,
-      imageUrl: card.imageUrl ?? undefined,
+      imageUrl: imageUrl ?? undefined,
     };
 
     const isUpdated = await handleUpdateCard(payload, card.columnId);
@@ -166,7 +174,23 @@ function TodoEditModalContent({
               <Label className="typo-md-regular md:typo-2lg-regular">
                 이미지
               </Label>
-              <ImageUploadBox variant="modal" />
+              <ImageUploadBox
+                variant="modal"
+                imageUrl={imageUrl ?? undefined}
+                onFileSelect={(file) =>
+                  handleImageSelect(file, selectedColumnId)
+                }
+              />
+              {imageUploadError && (
+                <p className="typo-xs-regular text-error mt-1">
+                  {imageUploadError}
+                </p>
+              )}
+              {isUploadingImage && (
+                <p className="typo-xs-regular mt-1 text-gray-500">
+                  이미지 업로드 중입니다...
+                </p>
+              )}
             </FieldWrapper>
           </Modal.Main>
           <Modal.Footer className="shrink-0">
@@ -181,7 +205,7 @@ function TodoEditModalContent({
             <Button
               theme="primary"
               type="submit"
-              disabled={isSubmitDisabled || isSubmitting}
+              disabled={isSubmitDisabled || isSubmitting || isUploadingImage}
               isLoading={isSubmitting}
             >
               수정
