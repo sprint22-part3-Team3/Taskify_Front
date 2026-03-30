@@ -108,10 +108,6 @@ export function useTodoCreateForm({
     setSubmissionError(null);
   }, []);
 
-  const resetSubmissionError = useCallback(() => {
-    setSubmissionError(null);
-  }, []);
-
   return {
     imageUrl,
     isUploadingImage,
@@ -121,6 +117,5 @@ export function useTodoCreateForm({
     handleImageSelect,
     handleCreateTodo,
     resetTodoCreateState,
-    resetSubmissionError,
   };
 }
