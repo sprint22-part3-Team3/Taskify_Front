@@ -49,8 +49,6 @@ function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
 
     if (isCreateDisabled) return;
 
-    setIsLoading(true);
-
     const isDuplicate = columns.some(
       (column) => column.title === columnNameField.value.trim()
     );
@@ -58,6 +56,7 @@ function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
       columnNameField.onBlur(); // 에러 메시지 표시
       return;
     }
+    setIsLoading(true);
     try {
       await createColumn({
         title: columnNameField.value.trim(),
@@ -71,6 +70,7 @@ function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
       setSubmitError('컬럼 생성에 실패했습니다. 다시 시도해주세요.');
     } finally {
       setIsLoading(false);
+      console.log(isLoading);
     }
   };
 
