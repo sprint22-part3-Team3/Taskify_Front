@@ -1,5 +1,5 @@
 import { ApiError } from '@/shared/apis/apiError';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 type UseGetDataProps<T> = {
   fetchFn: () => Promise<T>;
@@ -14,7 +14,7 @@ type UseGetDataProps<T> = {
  * ```ts
  * const fetchFn = useCallback(() => getCards({ columnId }), [columnId]);
  *
- * const { result, isLoading, errorMessage, refetch } = useGetData({
+ * const { result, isLoading, isFetching, errorMessage, refetch } = useGetData({
  *   fetchFn,
  *   dependencyId: columnId,
  *   notFoundMessage: '컬럼을 찾을 수 없거나 접근 권한이 없습니다',
@@ -28,10 +28,16 @@ export const useGetData = <T>({
 }: UseGetDataProps<T>) => {
   const [result, setResult] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [refetchKey, setRefetchKey] = useState(0);
 
+  const isInitialLoad = useRef(true);
   const refetch = useCallback(() => setRefetchKey((prev) => prev + 1), []);
+
+  useEffect(() => {
+    isInitialLoad.current = true;
+  }, [dependencyId]);
 
   useEffect(() => {
     if (Number.isNaN(dependencyId)) return;
@@ -39,7 +45,10 @@ export const useGetData = <T>({
     let isCancelled = false;
 
     const fetchData = async () => {
-      setIsLoading(true);
+      if (isInitialLoad.current) {
+        setIsLoading(true);
+      }
+      setIsFetching(true);
       setErrorMessage(null);
 
       try {
@@ -59,7 +68,9 @@ export const useGetData = <T>({
         }
       } finally {
         if (!isCancelled) {
+          isInitialLoad.current = false;
           setIsLoading(false);
+          setIsFetching(false);
         }
       }
     };
@@ -71,5 +82,5 @@ export const useGetData = <T>({
     };
   }, [dependencyId, fetchFn, notFoundMessage, refetchKey]);
 
-  return { result, isLoading, errorMessage, refetch };
+  return { result, isLoading, isFetching, errorMessage, refetch };
 };

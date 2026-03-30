@@ -23,31 +23,40 @@ import { VARIANT_STYLE } from '@/shared/components/image-uploader/imageUploder.c
  * ```
  
  */
-
 export default function ImageUploadBox({
   variant = 'default',
+  imageUrl,
+  onFileSelect,
 }: ImageUploadBoxProps) {
-  const [image, setImage] = useState<string | null>(null);
+  const [objectUrl, setObjectUrl] = useState<string | null>(null);
 
   // 이미지 선택
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const imageUrl = URL.createObjectURL(file);
-    setImage(imageUrl);
+    const nextObjectUrl = URL.createObjectURL(file);
+    setObjectUrl((previous) => {
+      if (previous) {
+        URL.revokeObjectURL(previous);
+      }
+      return nextObjectUrl;
+    });
 
     e.target.value = '';
+    onFileSelect?.(file);
   };
 
   useEffect(() => {
     // cleanup: 이전 image URL 제거
     return () => {
-      if (image) {
-        URL.revokeObjectURL(image);
+      if (objectUrl) {
+        URL.revokeObjectURL(objectUrl);
       }
     };
-  }, [image]);
+  }, [objectUrl]);
+
+  const previewImage = imageUrl ?? objectUrl;
 
   return (
     <label
@@ -63,11 +72,15 @@ export default function ImageUploadBox({
       />
 
       {/* 이미지 없을 때 */}
-      {!image && <IcAdd className={VARIANT_STYLE[variant].icon} />}
+      {!previewImage && <IcAdd className={VARIANT_STYLE[variant].icon} />}
 
       {/* 이미지 있을 때 */}
-      {image && (
-        <img src={image} alt="preview" className="h-full w-full object-cover" />
+      {previewImage && (
+        <img
+          src={previewImage}
+          alt="업로드 이미지 미리보기"
+          className="h-full w-full object-cover"
+        />
       )}
     </label>
   );

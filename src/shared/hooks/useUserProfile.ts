@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { UserMe } from '@/features/users/apis/userMe.types';
-import { getCurrentUser } from '@/features/users/apis/getCurrentUser';
+import { getCurrentUser } from '@/features/users/apis/users';
 import useAuthContext from '@/features/auth/hooks/useAuthContext';
 
 export function useUserProfile() {

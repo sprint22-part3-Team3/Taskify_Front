@@ -8,6 +8,7 @@ import { getApiErrorMessage } from '@/features/dashboards/utils/getApiErrorMessa
 import { useModal } from '@/shared/hooks/useModal';
 import { runAfterModalClose } from '@/shared/utils/modal';
 import { useDebounce } from '@/shared/hooks/useDebounce';
+import { dispatchDashboardListChangeEvent } from '@/features/dashboards/utils/dashboardEvents';
 
 /**
  * 초대받은 대시보드 섹션의 검색과 초대 응답 상태를 관리합니다.
@@ -98,11 +99,18 @@ export function useInvitedDashboardList() {
         invitationId,
         inviteAccepted,
       });
-      setInvitedDashboardItems((previousInvitedDashboards) =>
-        previousInvitedDashboards.filter(
-          (invitedDashboardItem) => invitedDashboardItem.id !== invitationId
-        )
-      );
+
+      if (inviteAccepted) {
+        await fetchInvitedDashboards(searchKeyword);
+        dispatchDashboardListChangeEvent({ source: 'invitation' });
+      } else {
+        setInvitedDashboardItems((previousInvitedDashboards) =>
+          previousInvitedDashboards.filter(
+            (invitedDashboardItem) => invitedDashboardItem.id !== invitationId
+          )
+        );
+      }
+
       return true;
     } catch (error) {
       if (error instanceof ApiError && error.message) {

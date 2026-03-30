@@ -6,6 +6,7 @@ import UserProfile from '@/shared/components/user-profile';
 import { useOnClickOutside } from '@/shared/hooks/useOnClickOutside';
 import type { AvatarUser } from '@/shared/types/user.types';
 import { cn } from '@/shared/utils/cn';
+import { useDebounce } from '@/shared/hooks/useDebounce';
 import type { AssigneeSelectProps } from '@/features/cards/components/assignee-select/assigneeSelect.types';
 
 const getAssigneeQuery = (selectedAssignee: AvatarUser | null): string =>
@@ -51,15 +52,16 @@ function AssigneeSelect({
     selectedAssigneeQuery
   );
   const shouldShowSelectedAssignee = hasSelectedAssigneeQuery && !isOpen;
+  const debouncedNormalizedQuery = useDebounce(normalizedQuery);
   const filteredAssignees = useMemo(() => {
-    if (!normalizedQuery) {
+    if (!debouncedNormalizedQuery) {
       return assigneeOptions;
     }
 
     return assigneeOptions.filter((assignee: AvatarUser) =>
-      assignee.nickname.toLowerCase().includes(normalizedQuery)
+      assignee.nickname.toLowerCase().includes(debouncedNormalizedQuery)
     );
-  }, [assigneeOptions, normalizedQuery]);
+  }, [assigneeOptions, debouncedNormalizedQuery]);
 
   const handleSelect = (assignee: AvatarUser) => {
     onSelect(assignee);
