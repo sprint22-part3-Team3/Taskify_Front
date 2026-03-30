@@ -6,6 +6,7 @@ import { TaskCommentInput } from '@/features/comments/components/task-comments/t
 import { postComment } from '@/features/comments/apis/comments';
 import { useState } from 'react';
 import { useDashboardId } from '@/shared/hooks/useDashboardId';
+import { COMMENT_MESSAGES } from '@/features/comments/constants/commentMessage.constants';
 
 /**
  * 할 일 카드의 댓글 목록을 렌더링하고 새 댓글을 작성하는 영역입니다.
@@ -38,7 +39,7 @@ function TaskComments({ id: cardId, columnId }: TaskCommentsProps) {
       refetch();
       return true;
     } catch {
-      setSubmitError('댓글 작성에 실패했습니다. 다시 시도해주세요.');
+      setSubmitError(COMMENT_MESSAGES.ERROR.SUBMIT);
       return false;
     }
   };
