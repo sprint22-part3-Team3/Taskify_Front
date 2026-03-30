@@ -19,7 +19,16 @@ export const useCardList = (columnId: number) => {
   });
 
   useEffect(() => {
-    const handleCardListChange = () => {
+    const handleCardListChange = (event: Event) => {
+      if (event instanceof CustomEvent && event.detail) {
+        const { newColumnId, originalColumnId } = event.detail;
+
+        if (columnId === newColumnId || columnId === originalColumnId) {
+          refetch();
+        }
+        return;
+      }
+
       refetch();
     };
 
@@ -28,7 +37,7 @@ export const useCardList = (columnId: number) => {
     return () => {
       window.removeEventListener(CARD_EVENTS.LIST_CHANGE, handleCardListChange);
     };
-  }, [refetch]);
+  }, [columnId, refetch]);
 
   return {
     cards: result?.cards || [],

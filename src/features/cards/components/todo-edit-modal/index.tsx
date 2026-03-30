@@ -88,7 +88,7 @@ function TodoEditModalContent({
       imageUrl: card.imageUrl ?? undefined,
     };
 
-    const isUpdated = await handleUpdateCard(payload);
+    const isUpdated = await handleUpdateCard(payload, card.columnId);
     if (isUpdated) {
       onClose();
     }

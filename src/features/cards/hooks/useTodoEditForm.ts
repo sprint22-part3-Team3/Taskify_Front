@@ -14,14 +14,21 @@ export function useTodoEditForm({ cardId }: UseTodoEditFormParams) {
   const [submissionError, setSubmissionError] = useState<string | null>(null);
 
   const handleUpdateCard = useCallback(
-    async (payload: UpdateCardRequest) => {
+    async (payload: UpdateCardRequest, originalColumnId: number) => {
       setIsSubmitting(true);
       setSubmissionError(null);
 
       try {
         await updateCard(cardId, payload);
         refetch();
-        window.dispatchEvent(new Event(CARD_EVENTS.LIST_CHANGE));
+        window.dispatchEvent(
+          new CustomEvent(CARD_EVENTS.LIST_CHANGE, {
+            detail: {
+              newColumnId: payload.columnId,
+              originalColumnId,
+            },
+          })
+        );
         return true;
       } catch (error) {
         const message =
