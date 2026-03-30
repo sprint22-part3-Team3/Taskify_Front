@@ -186,6 +186,16 @@ function InvitedDashboardSection() {
         onClose={handleCloseDeleteModalWithReset}
         onConfirm={handleConfirmRejectInvite}
         className="max-w-142"
+        confirmButtonProps={{
+          isLoading: Boolean(
+            selectedInvitedDashboard &&
+            respondingInvitationId === selectedInvitedDashboard.id
+          ),
+          disabled: Boolean(
+            selectedInvitedDashboard &&
+            respondingInvitationId === selectedInvitedDashboard.id
+          ),
+        }}
         message={
           <>
             {selectedInvitedDashboard?.name ?? '초대받은 대시보드'}를{' '}
