@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { uploadCardImage } from '@/features/cards/apis/cards';
 
 export type UseCardImageUploadOptions = {
@@ -55,12 +55,6 @@ export function useCardImageUpload({
     },
     [initialImageUrl]
   );
-
-  useEffect(() => {
-    setImageUrl(initialImageUrl ?? null);
-    setImageUploadError(null);
-    setIsUploadingImage(false);
-  }, [initialImageUrl]);
 
   return {
     imageUrl,
