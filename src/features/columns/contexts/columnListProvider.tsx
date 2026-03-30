@@ -1,6 +1,6 @@
 // ColumnListProvider
 import type { ReactNode } from 'react';
-import type { Column } from '@/features/columns/types/cloumn.types';
+import type { Column } from '@/features/columns/types/column.types';
 import { useMemo } from 'react';
 import { ColumnListContext } from '@/features/columns/contexts/columnListContext';
 
