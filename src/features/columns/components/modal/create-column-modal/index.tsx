@@ -51,6 +51,13 @@ function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
 
     setIsLoading(true);
 
+    const isDuplicate = columns.some(
+      (column) => column.title === columnNameField.value.trim()
+    );
+    if (isDuplicate) {
+      columnNameField.onBlur(); // 에러 메시지 표시
+      return;
+    }
     try {
       await createColumn({
         title: columnNameField.value.trim(),
