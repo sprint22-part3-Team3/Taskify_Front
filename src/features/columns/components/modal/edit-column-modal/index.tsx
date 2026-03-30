@@ -161,7 +161,7 @@ function EditColumnModal({
           onConfirm={handleDelete}
           message={
             <>
-              컬럼을 모두 <span className="text-error">삭제</span> 하시겠습니까?
+              컬럼을 <span className="text-error">삭제</span> 하시겠습니까?
             </>
           }
         />
