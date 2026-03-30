@@ -1,10 +1,10 @@
 import type {
   ChangeEvent,
   ImageUploadBoxProps,
-} from '@/shared/components/image-uploader/imageUploder.types';
+} from '@/shared/components/image-uploader/imageUploader.types';
 import { useState, useEffect } from 'react';
 import { IcAdd } from '@/shared/assets/icons';
-import { VARIANT_STYLE } from '@/shared/components/image-uploader/imageUploder.constants';
+import { VARIANT_STYLE } from '@/shared/components/image-uploader/imageUploader.constants';
 
 /**
  * 이미지 업로드 박스 컴포넌트
