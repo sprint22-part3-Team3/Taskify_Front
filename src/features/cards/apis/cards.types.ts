@@ -21,3 +21,13 @@ export type CreateCardRequest = {
   tags?: string[];
   imageUrl?: string | null;
 };
+
+export type UpdateCardRequest = {
+  columnId: number;
+  assigneeUserId?: number;
+  title: string;
+  description: string;
+  dueDate?: string;
+  tags?: string[];
+  imageUrl?: string | null;
+};

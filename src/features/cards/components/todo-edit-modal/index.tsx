@@ -15,7 +15,8 @@ import FieldWrapper from '@/features/cards/components/form-field/field-wrapper';
 import StatusDropdown from '@/features/cards/components/todo-edit-modal/components/status-dropdown/statusDropdown';
 import { useTodoEditModal } from '@/features/cards/hooks/useTodoEditModal';
 import { useAssigneeOptions } from '@/features/cards/hooks/useAssigneeOptions';
-import { useDashboardColumns } from '@/features/columns/hooks/useDashboardColumns';
+import { useColumnList } from '@/features/columns/hooks/useColumnList';
+import { useTodoEditForm } from '@/features/cards/hooks/useTodoEditForm';
 
 /**
  * 할 일 수정 모달을 렌더링합니다.
@@ -52,7 +53,10 @@ function TodoEditModal({ isOpen, onClose, card }: TodoEditModalProps) {
     columns,
     isLoading: isColumnsLoading,
     errorMessage: columnsError,
-  } = useDashboardColumns(dashboardId, isOpen);
+  } = useColumnList(dashboardId);
+  const { isSubmitting, submissionError, handleUpdateCard } = useTodoEditForm({
+    cardId: card.id,
+  });
 
   useEffect(() => {
     if (!isOpen) {
@@ -64,9 +68,27 @@ function TodoEditModal({ isOpen, onClose, card }: TodoEditModalProps) {
 
   const isSubmitDisabled = !title.trim() || !description.trim();
 
-  const handleEdit = (event: SubmitEvent<HTMLFormElement>) => {
+  const handleEdit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onClose();
+
+    if (isSubmitDisabled || isSubmitting) {
+      return;
+    }
+
+    const payload = {
+      columnId: selectedColumnId,
+      assigneeUserId: selectedAssignee?.id ?? undefined,
+      title: title.trim(),
+      description: description.trim(),
+      dueDate: dueDate || undefined,
+      tags: card.tags.length > 0 ? card.tags : undefined,
+      imageUrl: card.imageUrl ?? undefined,
+    };
+
+    const isUpdated = await handleUpdateCard(payload);
+    if (isUpdated) {
+      onClose();
+    }
   };
 
   return (
@@ -148,10 +170,20 @@ function TodoEditModal({ isOpen, onClose, card }: TodoEditModalProps) {
             </FieldWrapper>
           </Modal.Main>
           <Modal.Footer className="shrink-0">
+            {submissionError && (
+              <p className="typo-sm-regular text-error mr-4">
+                {submissionError}
+              </p>
+            )}
             <Button theme="cancel" type="button" onClick={onClose}>
               취소
             </Button>
-            <Button theme="primary" type="submit" disabled={isSubmitDisabled}>
+            <Button
+              theme="primary"
+              type="submit"
+              disabled={isSubmitDisabled || isSubmitting}
+              isLoading={isSubmitting}
+            >
               수정
             </Button>
           </Modal.Footer>

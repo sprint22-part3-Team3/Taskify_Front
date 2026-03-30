@@ -2,9 +2,10 @@ import type {
   CreateCardRequest,
   GetCardsParams,
   GetCardsResponse,
+  UpdateCardRequest,
 } from '@/features/cards/apis/cards.types';
 import type { Card } from '@/features/cards/types/card.types';
-import { del, get, post, postFormData } from '@/shared/apis/fetchInstance';
+import { del, get, post, postFormData, put } from '@/shared/apis/fetchInstance';
 
 /**
  * GET 카드 목록 조회
@@ -24,6 +25,13 @@ export const getCards = async ({ columnId, size = 10 }: GetCardsParams) => {
  */
 export const createCard = async (body: CreateCardRequest) => {
   return post<Card>('cards', body);
+};
+
+/**
+ * PUT 카드 수정
+ */
+export const updateCard = async (cardId: number, body: UpdateCardRequest) => {
+  return put<Card>(`cards/${cardId}`, body);
 };
 
 /**
