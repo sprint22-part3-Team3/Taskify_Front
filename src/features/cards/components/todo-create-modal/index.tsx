@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import type { SubmitEvent } from 'react';
+import { useParams } from 'react-router-dom';
 import ImageUploadBox from '@/shared/components/image-uploader';
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
@@ -10,8 +12,12 @@ import type { TodoCreateModalProps } from '@/features/cards/components/todo-crea
 import AssigneeSelect from '@/features/cards/components/assignee-select';
 import FieldWrapper from '@/features/cards/components/form-field/field-wrapper';
 import TagInput from '@/features/cards/components/tag-input';
+import { useColumnContext } from '@/features/columns/hooks/useColumnContext';
+import { createCard } from '@/features/cards/apis/cards';
+import type { CreateCardRequest } from '@/features/cards/apis/cards.types';
 import { useTodoCreateModal } from '@/features/cards/hooks/useTodoCreateModal';
 import { useAssigneeOptions } from '@/features/cards/hooks/useAssigneeOptions';
+import { useCardRefetchContext } from '@/features/cards/hooks/useCardRefetchContext';
 import { runAfterModalClose } from '@/shared/utils/modal';
 
 /**
@@ -37,17 +43,59 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
     setTags,
     resetForm,
   } = useTodoCreateModal();
+  const column = useColumnContext();
+  const { id: rawDashboardId } = useParams<{ id: string }>();
+  const dashboardId = rawDashboardId ? Number(rawDashboardId) : undefined;
   const { assigneeOptions } = useAssigneeOptions(isOpen);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
   const isSubmitDisabled = !title.trim() || !description.trim();
 
+  const { refetch } = useCardRefetchContext();
+
   const handleClose = () => {
+    setSubmissionError(null);
     onClose();
     runAfterModalClose(resetForm);
   };
 
-  const handleCreate = (event: SubmitEvent<HTMLFormElement>) => {
+  const handleCreate = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
-    handleClose();
+
+    if (isSubmitDisabled || isSubmitting || !dashboardId) {
+      if (!dashboardId) {
+        setSubmissionError('대시보드를 찾을 수 없습니다.');
+      }
+      return;
+    }
+
+    const payload: CreateCardRequest = {
+      dashboardId,
+      columnId: column.id,
+      title: title.trim(),
+      description: description.trim(),
+      assigneeUserId: selectedAssignee?.id,
+      dueDate: dueDate || undefined,
+      tags: tags.length > 0 ? tags : undefined,
+      imageUrl: undefined,
+    };
+
+    setIsSubmitting(true);
+    setSubmissionError(null);
+
+    try {
+      await createCard(payload);
+      refetch();
+      handleClose();
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : '할 일 생성에 실패했습니다. 다시 시도해 주세요.';
+      setSubmissionError(message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -114,10 +162,20 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
           </Modal.Main>
 
           <Modal.Footer className="shrink-0">
+            {submissionError && (
+              <p className="typo-sm-regular text-error mr-4">
+                {submissionError}
+              </p>
+            )}
             <Button theme="cancel" type="button" onClick={handleClose}>
               취소
             </Button>
-            <Button theme="primary" type="submit" disabled={isSubmitDisabled}>
+            <Button
+              theme="primary"
+              type="submit"
+              disabled={isSubmitDisabled || isSubmitting}
+              isLoading={isSubmitting}
+            >
               생성
             </Button>
           </Modal.Footer>
