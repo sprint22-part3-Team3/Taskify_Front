@@ -27,6 +27,9 @@ import { createRequiredValidator } from '@/shared/utils/validators/validateRequi
  * <TodoEditModal isOpen={isOpen} onClose={handleClose} />
  * ```
  */
+const titleValidator = createRequiredValidator('제목을 입력해 주세요.');
+const descriptionValidator = createRequiredValidator('설명을 입력해 주세요.');
+
 function TodoEditModalContent({
   isOpen,
   onClose,
@@ -71,8 +74,6 @@ function TodoEditModalContent({
 
   const [titleError, setTitleError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
-  const titleValidator = createRequiredValidator('제목을 입력해 주세요.');
-  const descriptionValidator = createRequiredValidator('설명을 입력해 주세요.');
 
   const validateTitle = () => {
     const result = titleValidator(title);
