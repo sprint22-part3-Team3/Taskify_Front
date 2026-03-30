@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { getCards } from '@/features/cards/apis/cards';
 import { useGetData } from '@/shared/hooks/useGetData';
 import { useGetMoreData } from '@/shared/hooks/useGetMoreData';
@@ -39,8 +39,13 @@ export const useCardList = (columnId: number) => {
     extractData: useCallback((res: GetCardsResponse) => res.cards, []),
   });
 
+  const cards = useMemo(
+    () => [...(result?.cards ?? []), ...additionalCards],
+    [result?.cards, additionalCards]
+  );
+
   return {
-    cards: [...(result?.cards ?? []), ...additionalCards],
+    cards,
     cardCount: result?.totalCount ?? 0,
     cursorId,
     isLoading,
