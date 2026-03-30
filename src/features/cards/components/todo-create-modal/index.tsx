@@ -28,6 +28,10 @@ import FieldError from '@/shared/components/field-error';
  * <TodoCreateModal isOpen={isOpen} onClose={handleClose} />
  * ```
  */
+const validateTitleField = createRequiredValidator('제목을 입력해 주세요.');
+const validateDescriptionField =
+  createRequiredValidator('설명을 입력해 주세요.');
+
 function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
   const {
     maxTagCount,
@@ -67,10 +71,6 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
   const [titleError, setTitleError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
   const isSubmitDisabled = !title.trim() || !description.trim();
-
-  const validateTitleField = createRequiredValidator('제목을 입력해 주세요.');
-  const validateDescriptionField =
-    createRequiredValidator('설명을 입력해 주세요.');
 
   const validateTitle = () => {
     const result = validateTitleField(title);
