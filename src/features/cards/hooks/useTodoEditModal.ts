@@ -1,13 +1,10 @@
 import { useState } from 'react';
 import { INITIAL_FORM_VALUES } from '@/features/cards/components/todo-edit-modal/todoEditModal.mock';
-import type { StatusOption } from '@/features/cards/components/todo-edit-modal/todoEditModal.mock';
 import type { Card } from '@/features/cards/types/card.types';
 import type { AvatarUser } from '@/shared/types/user.types';
 
 export function useTodoEditModal(card: Card) {
-  const [status, setStatus] = useState<StatusOption>(
-    INITIAL_FORM_VALUES.status
-  );
+  const [selectedColumnId, setSelectedColumnId] = useState(card.columnId);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [title, setTitle] = useState(card.title || INITIAL_FORM_VALUES.title);
   const [description, setDescription] = useState(
@@ -20,14 +17,14 @@ export function useTodoEditModal(card: Card) {
     card.assignee ?? null
   );
 
-  const handleSelectStatus = (statusOption: StatusOption) => {
-    setStatus(statusOption);
+  const handleSelectStatus = (columnId: number) => {
+    setSelectedColumnId(columnId);
     setIsDropdownOpen(false);
   };
 
   const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
   const resetForm = (nextCard: Card) => {
-    setStatus(INITIAL_FORM_VALUES.status);
+    setSelectedColumnId(nextCard.columnId);
     setIsDropdownOpen(false);
     setTitle(nextCard.title || INITIAL_FORM_VALUES.title);
     setDescription(nextCard.description || INITIAL_FORM_VALUES.description);
@@ -36,7 +33,7 @@ export function useTodoEditModal(card: Card) {
   };
 
   return {
-    status,
+    selectedColumnId,
     isDropdownOpen,
     title,
     description,

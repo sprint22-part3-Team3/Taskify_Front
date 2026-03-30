@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import type { SubmitEvent } from 'react';
+import { useParams } from 'react-router-dom';
 import ImageUploadBox from '@/shared/components/image-uploader';
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
@@ -14,6 +15,7 @@ import FieldWrapper from '@/features/cards/components/form-field/field-wrapper';
 import StatusDropdown from '@/features/cards/components/todo-edit-modal/components/status-dropdown/statusDropdown';
 import { useTodoEditModal } from '@/features/cards/hooks/useTodoEditModal';
 import { useAssigneeOptions } from '@/features/cards/hooks/useAssigneeOptions';
+import { useDashboardColumns } from '@/features/columns/hooks/useDashboardColumns';
 
 /**
  * 할 일 수정 모달을 렌더링합니다.
@@ -25,7 +27,7 @@ import { useAssigneeOptions } from '@/features/cards/hooks/useAssigneeOptions';
  */
 function TodoEditModal({ isOpen, onClose, card }: TodoEditModalProps) {
   const {
-    status,
+    selectedColumnId,
     isDropdownOpen,
     title,
     description,
@@ -41,6 +43,13 @@ function TodoEditModal({ isOpen, onClose, card }: TodoEditModalProps) {
   } = useTodoEditModal(card);
 
   const { assigneeOptions } = useAssigneeOptions(isOpen);
+  const { id: rawDashboardId } = useParams<{ id: string }>();
+  const dashboardId = rawDashboardId ? Number(rawDashboardId) : undefined;
+  const {
+    columns,
+    isLoading: isColumnsLoading,
+    errorMessage: columnsError,
+  } = useDashboardColumns(dashboardId, isOpen);
 
   useEffect(() => {
     if (!isOpen) {
@@ -69,11 +78,18 @@ function TodoEditModal({ isOpen, onClose, card }: TodoEditModalProps) {
                   상태
                 </Label>
                 <StatusDropdown
-                  status={status}
+                  columns={columns}
+                  selectedColumnId={selectedColumnId}
                   isOpen={isDropdownOpen}
                   onToggle={toggleDropdown}
                   onSelect={handleSelectStatus}
+                  isLoading={isColumnsLoading}
                 />
+                {columnsError && (
+                  <p className="typo-xs-regular text-error mt-1">
+                    {columnsError}
+                  </p>
+                )}
               </FieldWrapper>
               <AssigneeSelect
                 label="담당자"
