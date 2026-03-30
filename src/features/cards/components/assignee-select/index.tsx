@@ -75,6 +75,15 @@ function AssigneeSelect({
       parseAssigneeQuery(nextQuery);
 
     setQuery(nextQuery);
+
+    if (!nextQuery.trim()) {
+      if (selectedAssignee) {
+        onSelect(null);
+      }
+      setIsOpen(false);
+      return;
+    }
+
     setIsOpen(hasNextMentionTrigger);
   };
 

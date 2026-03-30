@@ -4,7 +4,7 @@ export type AssigneeSelectProps = {
   label: string;
   selectedAssignee: AvatarUser | null;
   assigneeOptions: AvatarUser[];
-  onSelect: (user: AvatarUser) => void;
+  onSelect: (user: AvatarUser | null) => void;
   required?: boolean;
   placeholder?: string;
 };
