@@ -1,14 +1,21 @@
 import type { TaskCommentsProps } from '@/features/comments/components/task-comments/taskComments.types';
-import { Button } from '@/shared/components/button';
-import TextArea from '@/shared/components/text-area';
 import Title from '@/shared/components/title';
-import { useState } from 'react';
 import { TaskCommentItem } from '@/features/comments/components/task-comments/task-comment-item';
 import { useCommentList } from '@/features/comments/hooks/useCommentList';
+import { TaskCommentInput } from '@/features/comments/components/task-comments/task-comment-input';
+import { postComment } from '@/features/comments/apis/comments';
+import { useState } from 'react';
+import { useDashboardId } from '@/shared/hooks/useDashboardId';
+import { COMMENT_MESSAGES } from '@/features/comments/constants/commentMessage.constants';
 
-function TaskComments({ id }: TaskCommentsProps) {
-  const [content, setContent] = useState('');
-  const { comments, isLoading, errorMessage } = useCommentList(id);
+/**
+ * 할 일 카드의 댓글 목록을 렌더링하고 새 댓글을 작성하는 영역입니다.
+ * 내부적으로 댓글 목록 조회 및 생성 API 로직을 제어합니다.
+ */
+function TaskComments({ id: cardId, columnId }: TaskCommentsProps) {
+  const dashboardId = useDashboardId();
+  const { comments, isLoading, errorMessage, refetch } = useCommentList(cardId);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   // TODO : 로딩 화면 처리
   if (isLoading)
@@ -25,6 +32,18 @@ function TaskComments({ id }: TaskCommentsProps) {
       </div>
     );
 
+  const handleSubmitComment = async (content: string) => {
+    try {
+      setSubmitError(null);
+      await postComment({ content, cardId, columnId, dashboardId });
+      refetch();
+      return true;
+    } catch {
+      setSubmitError(COMMENT_MESSAGES.ERROR.SUBMIT);
+      return false;
+    }
+  };
+
   return (
     <section>
       <Title
@@ -35,21 +54,7 @@ function TaskComments({ id }: TaskCommentsProps) {
       >
         댓글
       </Title>
-      <div className="relative mb-4 md:mb-6">
-        <TextArea
-          value={content}
-          onChange={setContent}
-          placeholder="댓글 작성하기"
-          className="typo-md-regular placeholder:typo-md-regular h-17.5 md:h-27.5"
-        />
-        <Button
-          theme="secondary"
-          size="sm"
-          className="typo-xs-medium absolute right-3 bottom-3 h-7 md:h-8"
-        >
-          입력
-        </Button>
-      </div>
+      <TaskCommentInput onSubmit={handleSubmitComment} error={submitError} />
       <ul className="flex flex-col gap-4">
         {comments.map((comment) => (
           <li key={comment.id} className="flex gap-2 md:gap-2.5">

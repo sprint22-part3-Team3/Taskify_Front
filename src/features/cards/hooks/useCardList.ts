@@ -11,7 +11,7 @@ const NOT_FOUND_OR_FORBIDDEN_ERROR =
 export const useCardList = (columnId: number) => {
   const fetchFn = useCallback(() => getCards({ columnId }), [columnId]);
 
-  const { result, isLoading, errorMessage } = useGetData({
+  const { result, isLoading, errorMessage, refetch } = useGetData({
     fetchFn,
     dependencyId: columnId,
     notFoundMessage: NOT_FOUND_OR_FORBIDDEN_ERROR,
@@ -22,5 +22,6 @@ export const useCardList = (columnId: number) => {
     cardCount: result?.totalCount || 0,
     isLoading,
     errorMessage,
+    refetch,
   };
 };

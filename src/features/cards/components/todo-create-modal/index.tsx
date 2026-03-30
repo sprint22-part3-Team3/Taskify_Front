@@ -10,8 +10,8 @@ import type { TodoCreateModalProps } from '@/features/cards/components/todo-crea
 import AssigneeSelect from '@/features/cards/components/assignee-select';
 import FieldWrapper from '@/features/cards/components/form-field/field-wrapper';
 import TagInput from '@/features/cards/components/tag-input';
-import { ASSIGNEE_OPTIONS } from '@/features/cards/components/todo-edit-modal/todoEditModal.mock';
 import { useTodoCreateModal } from '@/features/cards/hooks/useTodoCreateModal';
+import { useAssigneeOptions } from '@/features/cards/hooks/useAssigneeOptions';
 import { runAfterModalClose } from '@/shared/utils/modal';
 
 /**
@@ -24,19 +24,20 @@ import { runAfterModalClose } from '@/shared/utils/modal';
  */
 function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
   const {
+    maxTagCount,
     selectedAssignee,
     title,
     description,
     dueDate,
-    tagInput,
+    tags,
     setSelectedAssignee,
     setTitle,
     setDescription,
     setDueDate,
-    setTagInput,
-    handleTagKeyDown,
+    setTags,
     resetForm,
   } = useTodoCreateModal();
+  const { assigneeOptions } = useAssigneeOptions(isOpen);
   const isSubmitDisabled = !title.trim() || !description.trim();
 
   const handleClose = () => {
@@ -59,7 +60,7 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
             <AssigneeSelect
               label="담당자"
               selectedAssignee={selectedAssignee}
-              assigneeOptions={ASSIGNEE_OPTIONS}
+              assigneeOptions={assigneeOptions}
               onSelect={setSelectedAssignee}
             />
 
@@ -101,11 +102,7 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
               <Label className="typo-md-regular md:typo-2lg-regular">
                 태그
               </Label>
-              <TagInput
-                value={tagInput}
-                onChange={(event) => setTagInput(event.target.value)}
-                onKeyDown={handleTagKeyDown}
-              />
+              <TagInput tags={tags} setTags={setTags} maxTags={maxTagCount} />
             </FieldWrapper>
 
             <FieldWrapper>

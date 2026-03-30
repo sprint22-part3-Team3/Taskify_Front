@@ -5,6 +5,7 @@ import { useSidebar } from '@/features/dashboards/hooks/useSidebar';
 import InviteModal from '@/features/invitations/components/invitations-section/invite-modal';
 import { useModal } from '@/shared/hooks/useModal';
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useDashboardMembers } from '@/features/members/hooks/useDashboardMembers';
 
 /**
  * 대시보드 공통 레이아웃 컴포넌트입니다.
@@ -17,7 +18,12 @@ import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 export default function DashboardLayout() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
+  const {
+    members: dashboardMembers,
+    totalCount,
+    errorMessage: memberLoadError,
+  } = useDashboardMembers();
   const {
     isOpen: isInviteModalOpen,
     openModal: handleOpenInviteModal,
@@ -30,12 +36,16 @@ export default function DashboardLayout() {
   } = useModal();
   const {
     sidebarDashboards,
+    currentPage,
+    totalPages,
     selectedDashboardId,
     isLoadingSidebarDashboards,
     sidebarDashboardsError,
     isCreatingDashboard,
     handleDashboardClick,
     handleCreateDashboard,
+    handlePrevPage,
+    handleNextPage,
   } = useSidebar();
 
   const handleNavigateDashboardEdit = () => {
@@ -69,8 +79,14 @@ export default function DashboardLayout() {
           selectedId={selectedDashboardId}
           isLoading={isLoadingSidebarDashboards}
           errorMessage={sidebarDashboardsError}
+          isPrevDisabled={currentPage === 1 || isLoadingSidebarDashboards}
+          isNextDisabled={
+            currentPage === totalPages || isLoadingSidebarDashboards
+          }
           onAddClick={handleOpenCreateDashboardModal}
           onDashboardClick={handleDashboardClick}
+          onPrevPage={handlePrevPage}
+          onNextPage={handleNextPage}
         />
         <div className="flex min-w-0 flex-1 flex-col">
           <Header
@@ -87,6 +103,9 @@ export default function DashboardLayout() {
             isMemberProfilesVisible={!isMyDashboardPage && !isMyPage}
             onManageClick={handleNavigateDashboardEdit}
             onInviteClick={handleOpenDashboardInviteModal}
+            members={dashboardMembers}
+            totalMemberCount={totalCount}
+            memberLoadError={memberLoadError ?? ''}
             onProfileClick={handleNavigateMyPage}
           />
           <main className="flex-1 overflow-auto">
