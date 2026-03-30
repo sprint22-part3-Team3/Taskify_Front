@@ -35,7 +35,6 @@ export default function MembersSection() {
   const handleCloseDeleteModal = () => {
     setIsDeleteModalOpen(false);
     setSelectedMemberId(null);
-    setIsDeleting(false);
   };
 
   const handleConfirmDelete = async () => {
