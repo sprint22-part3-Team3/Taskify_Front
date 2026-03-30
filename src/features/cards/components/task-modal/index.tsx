@@ -27,7 +27,16 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
     closeModal: handleCloseDeleteModal,
   } = useModal();
   const [hasDeleteError, setHasDeleteError] = useState(false);
-  const { id, title, description, tags, dueDate, assignee, imageUrl } = card;
+  const {
+    id,
+    title,
+    description,
+    tags,
+    dueDate,
+    assignee,
+    imageUrl,
+    columnId,
+  } = card;
 
   const handleClickMenu = () => setIsMenuOpen((prev) => !prev);
   const handleCloseModal = () => {
@@ -92,7 +101,7 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
                 title={title}
                 imageUrl={imageUrl}
               />
-              <TaskComments id={id} />
+              <TaskComments id={id} columnId={columnId} />
             </div>
             {(assignee || dueDate) && (
               <aside className="w-full shrink-0 md:w-[30%]">

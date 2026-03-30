@@ -7,6 +7,7 @@ import {
   type DashboardListChangeDetail,
 } from '@/features/dashboards/utils/dashboardEvents';
 import { getApiErrorMessage } from '@/features/dashboards/utils/getApiErrorMessage';
+import { usePagination } from '@/shared/hooks/usePagination';
 
 /**
  * 사이드바에 표시할 대시보드 목록 조회 상태를 관리합니다.
@@ -18,6 +19,7 @@ import { getApiErrorMessage } from '@/features/dashboards/utils/getApiErrorMessa
  * ```
  */
 export function useSidebarDashboards() {
+  const PAGE_SIZE = 10;
   const [sidebarDashboards, setSidebarDashboards] = useState<
     SidebarDashboardItem[]
   >([]);
@@ -26,24 +28,40 @@ export function useSidebarDashboards() {
   const [sidebarDashboardsError, setSidebarDashboardsError] = useState<
     string | null
   >(null);
+  const {
+    currentPage,
+    totalPages,
+    syncTotalCount,
+    handlePrevPage,
+    handleNextPage,
+  } = usePagination();
 
   const loadSidebarDashboards = useCallback(async () => {
     setIsLoadingSidebarDashboards(true);
     setSidebarDashboardsError(null);
 
     try {
-      const { dashboards } = await getMyDashboards();
+      const { dashboards, totalCount } = await getMyDashboards(
+        currentPage,
+        PAGE_SIZE
+      );
+      const nextTotalPages = syncTotalCount(totalCount, PAGE_SIZE);
+
+      if (currentPage > nextTotalPages) {
+        return;
+      }
 
       setSidebarDashboards(dashboards);
     } catch (error) {
       setSidebarDashboards([]);
+      syncTotalCount(0, PAGE_SIZE);
       setSidebarDashboardsError(
         getApiErrorMessage(error, DASHBOARD_ERROR_MESSAGE.loadDashboards)
       );
     } finally {
       setIsLoadingSidebarDashboards(false);
     }
-  }, []);
+  }, [currentPage, PAGE_SIZE, syncTotalCount]);
 
   useEffect(() => {
     void loadSidebarDashboards();
@@ -74,10 +92,29 @@ export function useSidebarDashboards() {
     };
   }, [loadSidebarDashboards]);
 
+  useEffect(() => {
+    const handleTitleChange = () => {
+      void loadSidebarDashboards();
+    };
+
+    window.addEventListener(DASHBOARD_EVENTS.TITLE_CHANGE, handleTitleChange);
+
+    return () => {
+      window.removeEventListener(
+        DASHBOARD_EVENTS.TITLE_CHANGE,
+        handleTitleChange
+      );
+    };
+  }, [loadSidebarDashboards]);
+
   return {
     sidebarDashboards,
+    currentPage,
+    totalPages,
     isLoadingSidebarDashboards,
     sidebarDashboardsError,
     loadSidebarDashboards,
+    handlePrevPage,
+    handleNextPage,
   };
 }

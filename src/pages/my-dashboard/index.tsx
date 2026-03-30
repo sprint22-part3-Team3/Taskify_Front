@@ -3,7 +3,6 @@ import { IcArrowRight } from '@/shared/assets/icons';
 import CreateDashboardModal from '@/features/dashboards/components/create-dashboard-modal';
 import { ColorLabel } from '@/features/dashboards/components/color/color-label';
 import { useDashboardList } from '@/features/dashboards/hooks/useDashboardList';
-import { getDashboardColorHex } from '@/features/dashboards/utils/dashboardColor';
 import { Button } from '@/shared/components/button';
 import { PageIndicator } from '@/shared/components/page-indicator';
 import AddDashboardButton from '@/pages/my-dashboard/components/add-dashboard-button';
@@ -27,10 +26,14 @@ function MyDashboardPage() {
   } = useModal();
   const {
     dashboardItems,
+    currentPage,
+    totalPages,
     isLoadingDashboards,
     isCreatingDashboard,
     dashboardError,
     handleCreateDashboard,
+    handlePrevPage,
+    handleNextPage,
   } = useDashboardList();
 
   return (
@@ -49,7 +52,7 @@ function MyDashboardPage() {
               >
                 <div className="flex items-center gap-2">
                   <ColorLabel
-                    color={getDashboardColorHex(dashboardItem.color)}
+                    color={dashboardItem.colorHex}
                     label={dashboardItem.title}
                     labelClassName="typo-md-semibold md:typo-lg-semibold text-black-200"
                   />
@@ -74,12 +77,12 @@ function MyDashboardPage() {
 
         {dashboardItems.length > 0 && (
           <div className="mt-4 flex items-center justify-end gap-3 md:mt-3">
-            <PageIndicator currentPage={1} totalPages={1} />
+            <PageIndicator currentPage={currentPage} totalPages={totalPages} />
             <NavigationButtons
-              onPrev={() => undefined}
-              onNext={() => undefined}
-              isPrevDisabled={true}
-              isNextDisabled={true}
+              onPrev={handlePrevPage}
+              onNext={handleNextPage}
+              isPrevDisabled={currentPage === 1 || isLoadingDashboards}
+              isNextDisabled={currentPage === totalPages || isLoadingDashboards}
             />
           </div>
         )}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { InvitedDashboardItem } from '@/features/invitations/types/invitedDashboardItem.types';
 import { getInvitedDashboards } from '@/features/invitations/apis/getInvitedDashboards';
 import { respondToInvitation } from '@/features/invitations/apis/respondToInvitation';
@@ -7,6 +7,8 @@ import { DASHBOARD_ERROR_MESSAGE } from '@/features/dashboards/constants/dashboa
 import { getApiErrorMessage } from '@/features/dashboards/utils/getApiErrorMessage';
 import { useModal } from '@/shared/hooks/useModal';
 import { runAfterModalClose } from '@/shared/utils/modal';
+import { useDebounce } from '@/shared/hooks/useDebounce';
+import { dispatchDashboardListChangeEvent } from '@/features/dashboards/utils/dashboardEvents';
 
 /**
  * 초대받은 대시보드 섹션의 검색과 초대 응답 상태를 관리합니다.
@@ -61,8 +63,7 @@ export function useInvitedDashboardList() {
     });
   };
 
-  const handleSearchKeywordChange = async (keyword: string) => {
-    setSearchKeyword(keyword);
+  const fetchInvitedDashboards = useCallback(async (keyword: string) => {
     setIsSearchingInvitedDashboards(true);
     setInvitedDashboardError('');
     setInvitationResponseError('');
@@ -78,6 +79,12 @@ export function useInvitedDashboardList() {
     } finally {
       setIsSearchingInvitedDashboards(false);
     }
+  }, []);
+
+  const handleSearchKeywordChange = (keyword: string) => {
+    setSearchKeyword(keyword);
+    setInvitedDashboardError('');
+    setInvitationResponseError('');
   };
 
   const handleInvitationResponse = async (
@@ -92,11 +99,18 @@ export function useInvitedDashboardList() {
         invitationId,
         inviteAccepted,
       });
-      setInvitedDashboardItems((previousInvitedDashboards) =>
-        previousInvitedDashboards.filter(
-          (invitedDashboardItem) => invitedDashboardItem.id !== invitationId
-        )
-      );
+
+      if (inviteAccepted) {
+        await fetchInvitedDashboards(searchKeyword);
+        dispatchDashboardListChangeEvent({ source: 'invitation' });
+      } else {
+        setInvitedDashboardItems((previousInvitedDashboards) =>
+          previousInvitedDashboards.filter(
+            (invitedDashboardItem) => invitedDashboardItem.id !== invitationId
+          )
+        );
+      }
+
       return true;
     } catch (error) {
       if (error instanceof ApiError && error.message) {
@@ -129,9 +143,14 @@ export function useInvitedDashboardList() {
     }
   };
 
+  const debouncedKeyword = useDebounce(
+    searchKeyword,
+    searchKeyword === '' ? 0 : undefined
+  );
+
   useEffect(() => {
-    void handleSearchKeywordChange('');
-  }, []);
+    void fetchInvitedDashboards(debouncedKeyword);
+  }, [debouncedKeyword, fetchInvitedDashboards]);
 
   return {
     invitedDashboardItems,

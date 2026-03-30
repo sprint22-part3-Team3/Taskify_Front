@@ -1,4 +1,5 @@
 import type { SubmitEvent } from 'react';
+import { useParams } from 'react-router-dom';
 import ImageUploadBox from '@/shared/components/image-uploader';
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
@@ -10,8 +11,10 @@ import type { TodoCreateModalProps } from '@/features/cards/components/todo-crea
 import AssigneeSelect from '@/features/cards/components/assignee-select';
 import FieldWrapper from '@/features/cards/components/form-field/field-wrapper';
 import TagInput from '@/features/cards/components/tag-input';
-import { ASSIGNEE_OPTIONS } from '@/features/cards/components/todo-edit-modal/todoEditModal.mock';
+import { useColumnContext } from '@/features/columns/hooks/useColumnContext';
 import { useTodoCreateModal } from '@/features/cards/hooks/useTodoCreateModal';
+import { useAssigneeOptions } from '@/features/cards/hooks/useAssigneeOptions';
+import { useTodoCreateForm } from '@/features/cards/hooks/useTodoCreateForm';
 import { runAfterModalClose } from '@/shared/utils/modal';
 
 /**
@@ -37,16 +40,50 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
     setTags,
     resetForm,
   } = useTodoCreateModal();
+  const column = useColumnContext();
+  const { id: rawDashboardId } = useParams<{ id: string }>();
+  const dashboardId = rawDashboardId ? Number(rawDashboardId) : undefined;
+  const { assigneeOptions } = useAssigneeOptions(isOpen);
+  const {
+    imageUrl,
+    isUploadingImage,
+    imageUploadError,
+    isSubmitting,
+    submissionError,
+    handleImageSelect,
+    handleCreateTodo,
+    resetTodoCreateState,
+  } = useTodoCreateForm({
+    dashboardId,
+    columnId: column.id,
+    teamId: column.teamId,
+  });
   const isSubmitDisabled = !title.trim() || !description.trim();
 
   const handleClose = () => {
+    resetTodoCreateState();
     onClose();
     runAfterModalClose(resetForm);
   };
 
-  const handleCreate = (event: SubmitEvent<HTMLFormElement>) => {
+  const handleCreate = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
-    handleClose();
+
+    if (isSubmitDisabled || isSubmitting || isUploadingImage) {
+      return;
+    }
+
+    const wasCreated = await handleCreateTodo({
+      title: title.trim(),
+      description: description.trim(),
+      assigneeUserId: selectedAssignee?.id ?? undefined,
+      dueDate: dueDate || undefined,
+      tags: tags.length > 0 ? tags : undefined,
+    });
+
+    if (wasCreated) {
+      handleClose();
+    }
   };
 
   return (
@@ -59,7 +96,7 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
             <AssigneeSelect
               label="담당자"
               selectedAssignee={selectedAssignee}
-              assigneeOptions={ASSIGNEE_OPTIONS}
+              assigneeOptions={assigneeOptions}
               onSelect={setSelectedAssignee}
             />
 
@@ -108,15 +145,39 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
               <Label className="typo-md-regular md:typo-2lg-regular">
                 이미지
               </Label>
-              <ImageUploadBox variant="modal" />
+              <ImageUploadBox
+                variant="modal"
+                imageUrl={imageUrl}
+                onFileSelect={handleImageSelect}
+              />
+              {imageUploadError && (
+                <p className="typo-xs-regular text-error mt-1">
+                  {imageUploadError}
+                </p>
+              )}
+              {isUploadingImage && (
+                <p className="typo-xs-regular mt-1 text-gray-500">
+                  이미지 업로드 중입니다...
+                </p>
+              )}
             </FieldWrapper>
           </Modal.Main>
 
           <Modal.Footer className="shrink-0">
+            {submissionError && (
+              <p className="typo-sm-regular text-error mr-4">
+                {submissionError}
+              </p>
+            )}
             <Button theme="cancel" type="button" onClick={handleClose}>
               취소
             </Button>
-            <Button theme="primary" type="submit" disabled={isSubmitDisabled}>
+            <Button
+              theme="primary"
+              type="submit"
+              disabled={isSubmitDisabled || isSubmitting || isUploadingImage}
+              isLoading={isSubmitting}
+            >
               생성
             </Button>
           </Modal.Footer>

@@ -1,8 +1,5 @@
 import { useState } from 'react';
-import {
-  INITIAL_FORM_VALUES,
-  MOCK_ASSIGNEE,
-} from '@/features/cards/components/todo-edit-modal/todoEditModal.mock';
+import { INITIAL_FORM_VALUES } from '@/features/cards/components/todo-edit-modal/todoEditModal.mock';
 import type { StatusOption } from '@/features/cards/components/todo-edit-modal/todoEditModal.mock';
 import type { Card } from '@/features/cards/types/card.types';
 import type { AvatarUser } from '@/shared/types/user.types';
@@ -20,7 +17,7 @@ export function useTodoEditModal(card: Card) {
     card.dueDate ?? INITIAL_FORM_VALUES.dueDate
   );
   const [selectedAssignee, setSelectedAssignee] = useState<AvatarUser | null>(
-    card.assignee ?? MOCK_ASSIGNEE
+    card.assignee ?? null
   );
 
   const handleSelectStatus = (statusOption: StatusOption) => {
@@ -35,7 +32,7 @@ export function useTodoEditModal(card: Card) {
     setTitle(nextCard.title || INITIAL_FORM_VALUES.title);
     setDescription(nextCard.description || INITIAL_FORM_VALUES.description);
     setDueDate(nextCard.dueDate ?? INITIAL_FORM_VALUES.dueDate);
-    setSelectedAssignee(nextCard.assignee ?? MOCK_ASSIGNEE);
+    setSelectedAssignee(nextCard.assignee ?? null);
   };
 
   return {
