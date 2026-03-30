@@ -5,4 +5,4 @@ import type {
 } from '@/features/users/apis/userMe.types';
 
 export const updateUserMe = (body: UpdateUserMeRequest) =>
-  put<UserMe>('users/me', body);
+  put<UserMe>('/users/me', body);
