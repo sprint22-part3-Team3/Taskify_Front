@@ -42,7 +42,10 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
   } = useTodoCreateModal();
   const column = useColumnContext();
   const { id: rawDashboardId } = useParams<{ id: string }>();
-  const dashboardId = rawDashboardId ? Number(rawDashboardId) : undefined;
+  const parsedDashboardId = rawDashboardId ? parseInt(rawDashboardId, 10) : NaN;
+  const dashboardId = !Number.isNaN(parsedDashboardId)
+    ? parsedDashboardId
+    : undefined;
   const { assigneeOptions } = useAssigneeOptions(isOpen);
   const {
     imageUrl,
@@ -147,8 +150,8 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
               </Label>
               <ImageUploadBox
                 variant="modal"
-                imageUrl={imageUrl}
-                onFileSelect={handleImageSelect}
+                imageUrl={imageUrl ?? undefined}
+                onFileSelect={(file) => handleImageSelect(file, column.id)}
               />
               {imageUploadError && (
                 <p className="typo-xs-regular text-error mt-1">

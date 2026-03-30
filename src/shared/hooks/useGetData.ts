@@ -40,7 +40,12 @@ export const useGetData = <T>({
   }, [dependencyId]);
 
   useEffect(() => {
-    if (Number.isNaN(dependencyId)) return;
+    if (Number.isNaN(dependencyId)) {
+      setIsLoading(false);
+      setIsFetching(false);
+      setErrorMessage(null);
+      return;
+    }
 
     let isCancelled = false;
 

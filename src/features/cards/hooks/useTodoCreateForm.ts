@@ -1,7 +1,8 @@
 import { useCallback, useState } from 'react';
 import type { CreateCardRequest } from '@/features/cards/apis/cards.types';
-import { createCard, uploadCardImage } from '@/features/cards/apis/cards';
+import { createCard } from '@/features/cards/apis/cards';
 import { useCardRefetchContext } from '@/features/cards/hooks/useCardRefetchContext';
+import { useCardImageUpload } from '@/features/cards/hooks/useCardImageUpload';
 
 type UseTodoCreateFormParams = {
   dashboardId?: number;
@@ -23,38 +24,15 @@ export function useTodoCreateForm({
   teamId,
 }: UseTodoCreateFormParams) {
   const { refetch } = useCardRefetchContext();
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [isUploadingImage, setIsUploadingImage] = useState(false);
-  const [imageUploadError, setImageUploadError] = useState<string | null>(null);
+  const {
+    imageUrl,
+    isUploadingImage,
+    imageUploadError,
+    handleImageSelect,
+    resetImageState,
+  } = useCardImageUpload({ teamId, initialImageUrl: null });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState<string | null>(null);
-
-  const handleImageSelect = useCallback(
-    async (file: File) => {
-      if (!dashboardId) {
-        setImageUploadError('대시보드를 찾을 수 없습니다.');
-        return;
-      }
-
-      setIsUploadingImage(true);
-      setImageUploadError(null);
-
-      try {
-        const response = await uploadCardImage({ teamId, columnId }, file);
-        setImageUrl(response?.imageUrl ?? null);
-      } catch (error) {
-        const errorMessage =
-          error instanceof Error
-            ? error.message
-            : '이미지 업로드에 실패했습니다. 다시 시도해 주세요.';
-        setImageUploadError(errorMessage);
-        setImageUrl(null);
-      } finally {
-        setIsUploadingImage(false);
-      }
-    },
-    [columnId, dashboardId, teamId]
-  );
 
   const handleCreateTodo = useCallback(
     async ({
@@ -102,11 +80,9 @@ export function useTodoCreateForm({
   );
 
   const resetTodoCreateState = useCallback(() => {
-    setImageUrl(null);
-    setImageUploadError(null);
-    setIsUploadingImage(false);
+    resetImageState();
     setSubmissionError(null);
-  }, []);
+  }, [resetImageState]);
 
   return {
     imageUrl,
