@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { Column } from '@/features/columns/types/column.types';
+import type { Column } from '@/features/columns/types/cloumns.types';
 import { useMemo } from 'react';
 import { ColumnContext } from '@/features/columns/contexts/columnContext';
 

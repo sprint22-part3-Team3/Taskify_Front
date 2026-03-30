@@ -1,3 +1,5 @@
+import type { Column } from '@/features/columns/types/cloumns.types';
+
 export type getColumnsParams = {
   dashboardId: number;
 };
@@ -5,14 +7,6 @@ export type getColumnsParams = {
 export type GetColumnsResponse = {
   result: string;
   data: Column[];
-};
-
-export type Column = {
-  id: number;
-  title: string;
-  teamId: string;
-  createdAt: string;
-  updatedAt: string;
 };
 
 export type CreateColumnRequest = {
