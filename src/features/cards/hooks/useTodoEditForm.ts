@@ -1,17 +1,30 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { UpdateCardRequest } from '@/features/cards/apis/cards.types';
 import { updateCard } from '@/features/cards/apis/cards';
 import { useCardRefetchContext } from '@/features/cards/hooks/useCardRefetchContext';
 import { CARD_EVENTS } from '@/features/cards/utils/cardEvents';
+import type { Card } from '@/features/cards/types/card.types';
+import { useCardImageUpload } from '@/features/cards/hooks/useCardImageUpload';
 
 type UseTodoEditFormParams = {
-  cardId: number;
+  card: Card;
 };
 
-export function useTodoEditForm({ cardId }: UseTodoEditFormParams) {
+export function useTodoEditForm({ card }: UseTodoEditFormParams) {
   const { refetch } = useCardRefetchContext();
+  const cardId = card.id;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const {
+    imageUrl,
+    isUploadingImage,
+    imageUploadError,
+    handleImageSelect,
+    resetImageState,
+  } = useCardImageUpload({
+    teamId: card.teamId,
+    initialImageUrl: card.imageUrl,
+  });
 
   const handleUpdateCard = useCallback(
     async (payload: UpdateCardRequest, originalColumnId: number) => {
@@ -44,5 +57,19 @@ export function useTodoEditForm({ cardId }: UseTodoEditFormParams) {
     [cardId, refetch]
   );
 
-  return { isSubmitting, submissionError, handleUpdateCard };
+  useEffect(() => {
+    resetImageState(card.imageUrl);
+    setSubmissionError(null);
+  }, [card.id, card.imageUrl, resetImageState]);
+
+  return {
+    isSubmitting,
+    submissionError,
+    handleUpdateCard,
+    imageUrl,
+    isUploadingImage,
+    imageUploadError,
+    handleImageSelect,
+    resetImageState,
+  };
 }
