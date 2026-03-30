@@ -150,8 +150,8 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
               </Label>
               <ImageUploadBox
                 variant="modal"
-                imageUrl={imageUrl}
-                onFileSelect={handleImageSelect}
+                imageUrl={imageUrl ?? undefined}
+                onFileSelect={(file) => handleImageSelect(file, column.id)}
               />
               {imageUploadError && (
                 <p className="typo-xs-regular text-error mt-1">
