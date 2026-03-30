@@ -1,8 +1,5 @@
 import { postFormData } from '@/shared/apis/fetchInstance';
-
-type UploadProfileImageResponse = {
-  profileImageUrl: string;
-};
+import type { UploadProfileImageResponse } from '@/features/users/apis/userMe.types';
 
 export const uploadProfileImage = (file: File) => {
   const formData = new FormData();
