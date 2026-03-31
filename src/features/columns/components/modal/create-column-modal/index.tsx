@@ -103,7 +103,12 @@ function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
           >
             취소
           </Button>
-          <Button theme="primary" type="submit" disabled={isCreateDisabled}>
+          <Button
+            theme="primary"
+            type="submit"
+            disabled={isCreateDisabled}
+            isLoading={isLoading}
+          >
             생성
           </Button>
         </Modal.Footer>

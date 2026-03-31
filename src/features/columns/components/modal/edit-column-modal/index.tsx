@@ -80,7 +80,6 @@ function EditColumnModal({
 
   const handleDelete = async () => {
     setIsLoading(true);
-
     try {
       await deleteColumn(columnId);
       refetch();
@@ -148,7 +147,12 @@ function EditColumnModal({
               >
                 삭제
               </Button>
-              <Button theme="primary" type="submit" disabled={isSubmitDisabled}>
+              <Button
+                theme="primary"
+                type="submit"
+                disabled={isSubmitDisabled}
+                isLoading={isLoading}
+              >
                 변경
               </Button>
             </Modal.Footer>
@@ -161,6 +165,10 @@ function EditColumnModal({
           renderInModal={false}
           onClose={handleClose}
           onConfirm={handleDelete}
+          confirmButtonProps={{
+            isLoading: isLoading,
+            disabled: isLoading,
+          }}
           message={
             <>
               컬럼을 <span className="text-error">삭제</span> 하시겠습니까?
