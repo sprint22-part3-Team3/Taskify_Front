@@ -20,6 +20,18 @@ const LOADING_SIZES = {
   part: 16,
 } as const;
 
+/**
+ * 로딩 상태를 표시하는 공통 컴포넌트입니다.
+ *
+ * @example
+ * ```tsx
+ * // 영역 전체를 차지하는 기본 로딩 (variant="full")
+ * <LoadingFallback />
+ *
+ * // 무한 스크롤 하단 등 좁은 영역의 로딩 (variant="part")
+ * <LoadingFallback variant="part" />
+ * ```
+ */
 export function LoadingFallback({
   variant = 'full',
   className,
