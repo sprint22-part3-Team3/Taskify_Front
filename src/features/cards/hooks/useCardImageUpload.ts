@@ -21,7 +21,12 @@ export function useCardImageUpload({
   const [imageUploadError, setImageUploadError] = useState<string | null>(null);
 
   const handleImageSelect = useCallback(
-    async (file: File, columnId: number) => {
+    async (file: File | null, columnId: number) => {
+      if (file === null) {
+        // ✅ 삭제 처리
+        setImageUrl(null);
+        return;
+      }
       if (!teamId) {
         setImageUploadError('팀 정보를 찾을 수 없습니다.');
         return;

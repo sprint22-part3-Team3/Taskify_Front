@@ -29,10 +29,13 @@ export default function ProfileForm() {
     validateFn: validateNickname,
     initialValue: user?.nickname ?? '', // 추가
   });
+  const isImageRemoved = !previewImageUrl && !!user?.profileImageUrl;
 
   const isSaveDisabled =
     isSubmitting ||
-    (nicknameField.value.trim() === user?.nickname && !selectedFile) ||
+    (nicknameField.value.trim() === user?.nickname &&
+      !selectedFile &&
+      !isImageRemoved) ||
     !!nicknameField.error;
 
   useEffect(() => {
@@ -52,11 +55,13 @@ export default function ProfileForm() {
     setErrorMessage('');
 
     try {
-      let profileImageUrl = user.profileImageUrl;
+      let profileImageUrl: string | null = user.profileImageUrl ?? null;
 
       if (selectedFile) {
         const res = await uploadProfileImage(selectedFile);
         profileImageUrl = res?.profileImageUrl ?? profileImageUrl;
+      } else if (isImageRemoved) {
+        profileImageUrl = null; // ✅ 이미지 삭제 시 null 전달
       }
 
       const updated = await updateUserMe({
@@ -85,7 +90,12 @@ export default function ProfileForm() {
   };
 
   const handleFileSelect = (file: File | null) => {
-    if (!file) return;
+    if (!file) {
+      // ✅ 삭제 시 처리
+      setSelectedFile(null);
+      setPreviewImageUrl(undefined);
+      return;
+    }
     setSelectedFile(file);
     setPreviewImageUrl(undefined);
   };
