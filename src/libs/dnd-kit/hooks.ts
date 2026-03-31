@@ -8,6 +8,8 @@ import type {
   SensorDescriptor,
 } from './types';
 
+const DRAG_THRESHOLD = 3;
+
 export function useDraggable({
   id,
   data,
@@ -45,7 +47,7 @@ export function useDraggable({
         const deltaX = moveEvent.clientX - startX;
         const deltaY = moveEvent.clientY - startY;
         const distance = Math.hypot(deltaX, deltaY);
-        if (distance >= 3) {
+        if (distance >= DRAG_THRESHOLD) {
           hasStartedDrag = true;
           target?.releasePointerCapture(pointerId);
           window.removeEventListener('pointermove', moveHandler);
