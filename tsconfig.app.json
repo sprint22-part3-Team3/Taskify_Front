@@ -11,7 +11,9 @@
     /* Bundler mode */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@dnd-kit/core": ["src/shared/libs/dnd-kit"],
+      "@dnd-kit/utilities": ["src/shared/libs/dnd-kit/utilities"]
     },
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,

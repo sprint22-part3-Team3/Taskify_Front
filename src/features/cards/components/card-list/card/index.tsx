@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import type { CardProps } from '@/features/cards/components/card-list/card/card.types';
 import { TaskModal } from '@/features/cards/components/task-modal';
 import { IcCalendar } from '@/shared/assets/icons';
@@ -6,13 +7,46 @@ import { Tag } from '@/shared/components/tag';
 import Title from '@/shared/components/title';
 import { useModal } from '@/shared/hooks/useModal';
 import { getTagColor } from '@/shared/utils/getTagColor';
+import { useDraggable } from '@/shared/libs/dnd-kit';
+import { cn } from '@/shared/utils/cn';
 
 function Card({ card }: CardProps) {
   const { isOpen, openModal, closeModal } = useModal();
+  const preventModalOnClickRef = useRef(false);
+  const dragBlockAnimationRef = useRef<number | null>(null);
+
+  const draggableId = card ? `card-${card.id}` : 'card-placeholder';
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id: draggableId,
+    data: card,
+  });
+
+  useEffect(() => {
+    if (isDragging) {
+      preventModalOnClickRef.current = true;
+      if (dragBlockAnimationRef.current) {
+        window.cancelAnimationFrame(dragBlockAnimationRef.current);
+      }
+      return;
+    }
+
+    if (preventModalOnClickRef.current) {
+      dragBlockAnimationRef.current = window.requestAnimationFrame(() => {
+        preventModalOnClickRef.current = false;
+      });
+    }
+
+    return () => {
+      if (dragBlockAnimationRef.current) {
+        window.cancelAnimationFrame(dragBlockAnimationRef.current);
+      }
+    };
+  }, [isDragging]);
 
   if (!card) {
     return null;
   }
+
   const { imageUrl, title, tags, dueDate, assignee } = card;
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -25,11 +59,21 @@ function Card({ card }: CardProps) {
   return (
     <>
       <article
+        ref={setNodeRef}
+        {...listeners}
+        {...attributes}
         role="button"
         tabIndex={0}
         onKeyDown={handleKeyDown}
-        onClick={openModal}
-        className="cursor-pointer rounded-md border border-gray-200 bg-white px-3 py-3 md:px-5 md:py-5 lg:py-4"
+        onClick={() => {
+          if (!preventModalOnClickRef.current) {
+            openModal();
+          }
+        }}
+        className={cn(
+          'cursor-pointer rounded-md border border-gray-200 bg-white px-3 py-3 md:px-5 md:py-5 lg:py-4',
+          isDragging && 'opacity-70 shadow-lg'
+        )}
       >
         <div className="md:flex md:items-center md:gap-5 lg:block">
           {imageUrl && (
