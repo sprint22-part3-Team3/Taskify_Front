@@ -49,6 +49,7 @@ export function useInvitedDashboardList() {
   const [isAddLoading, setIsAddLoading] = useState(false);
   const [addErrorMessage, setAddErrorMessage] = useState<string | null>(null);
   const loading = useRef(false);
+  const searchAbortController = useRef<AbortController | null>(null);
 
   const {
     isOpen: isDeleteModalOpen,
@@ -74,6 +75,11 @@ export function useInvitedDashboardList() {
   );
 
   const fetchInvitedDashboards = useCallback(async (keyword: string) => {
+    searchAbortController.current?.abort();
+
+    const abortController = new AbortController();
+    searchAbortController.current = abortController;
+
     setIsSearchingInvitedDashboards(true);
     setInvitedDashboardError('');
     setInvitationResponseError('');
@@ -82,16 +88,30 @@ export function useInvitedDashboardList() {
 
     try {
       const { invitations, cursorId: nextCursorId } =
-        await getInvitedDashboards(keyword);
+        await getInvitedDashboards(keyword, {
+          signal: abortController.signal,
+        });
+
+      if (abortController.signal.aborted) {
+        return;
+      }
+
       setInvitedDashboardItems(invitations);
       setCursorId(nextCursorId);
     } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        return;
+      }
+
       setInvitedDashboardError(
         getApiErrorMessage(error, DASHBOARD_ERROR_MESSAGE.loadInvitedDashboards)
       );
       setInvitedDashboardItems([]);
     } finally {
-      setIsSearchingInvitedDashboards(false);
+      if (searchAbortController.current === abortController) {
+        searchAbortController.current = null;
+        setIsSearchingInvitedDashboards(false);
+      }
     }
   }, []);
 
@@ -189,6 +209,12 @@ export function useInvitedDashboardList() {
   useEffect(() => {
     void fetchInvitedDashboards(debouncedKeyword);
   }, [debouncedKeyword, fetchInvitedDashboards]);
+
+  useEffect(() => {
+    return () => {
+      searchAbortController.current?.abort();
+    };
+  }, []);
 
   return {
     invitedDashboardItems,

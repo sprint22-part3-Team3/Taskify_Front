@@ -31,6 +31,7 @@ export function useSidebarDashboards() {
   const {
     currentPage,
     totalPages,
+    setCurrentPage,
     syncTotalCount,
     handlePrevPage,
     handleNextPage,
@@ -65,7 +66,7 @@ export function useSidebarDashboards() {
 
   useEffect(() => {
     void loadSidebarDashboards();
-  }, [loadSidebarDashboards]);
+  }, [currentPage, loadSidebarDashboards, setCurrentPage]);
 
   useEffect(() => {
     const handleDashboardListChange = (event: Event) => {
@@ -73,6 +74,11 @@ export function useSidebarDashboards() {
         event as CustomEvent<DashboardListChangeDetail>;
 
       if (dashboardListChangeEvent.detail.source === 'sidebar') {
+        return;
+      }
+
+      if (currentPage !== 1) {
+        setCurrentPage(1);
         return;
       }
 
@@ -90,7 +96,7 @@ export function useSidebarDashboards() {
         handleDashboardListChange
       );
     };
-  }, [loadSidebarDashboards]);
+  }, [currentPage, loadSidebarDashboards, setCurrentPage]);
 
   useEffect(() => {
     const handleTitleChange = () => {
@@ -111,6 +117,7 @@ export function useSidebarDashboards() {
     sidebarDashboards,
     currentPage,
     totalPages,
+    setCurrentPage,
     isLoadingSidebarDashboards,
     sidebarDashboardsError,
     loadSidebarDashboards,
