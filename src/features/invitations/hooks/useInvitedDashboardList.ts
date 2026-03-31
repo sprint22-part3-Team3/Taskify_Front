@@ -49,6 +49,7 @@ export function useInvitedDashboardList() {
   const [isAddLoading, setIsAddLoading] = useState(false);
   const [addErrorMessage, setAddErrorMessage] = useState<string | null>(null);
   const loading = useRef(false);
+  const searchAbortController = useRef<AbortController | null>(null);
 
   const {
     isOpen: isDeleteModalOpen,
@@ -74,6 +75,11 @@ export function useInvitedDashboardList() {
   );
 
   const fetchInvitedDashboards = useCallback(async (keyword: string) => {
+    searchAbortController.current?.abort();
+
+    const abortController = new AbortController();
+    searchAbortController.current = abortController;
+
     setIsSearchingInvitedDashboards(true);
     setInvitedDashboardError('');
     setInvitationResponseError('');
@@ -82,21 +88,41 @@ export function useInvitedDashboardList() {
 
     try {
       const { invitations, cursorId: nextCursorId } =
-        await getInvitedDashboards(keyword);
+        await getInvitedDashboards(keyword, {
+          signal: abortController.signal,
+        });
+
+      if (abortController.signal.aborted) {
+        return;
+      }
+
       setInvitedDashboardItems(invitations);
       setCursorId(nextCursorId);
     } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        return;
+      }
+
       setInvitedDashboardError(
         getApiErrorMessage(error, DASHBOARD_ERROR_MESSAGE.loadInvitedDashboards)
       );
       setInvitedDashboardItems([]);
     } finally {
-      setIsSearchingInvitedDashboards(false);
+      if (searchAbortController.current === abortController) {
+        setIsSearchingInvitedDashboards(false);
+      }
     }
   }, []);
 
   const loadMore = useCallback(async () => {
     if (cursorId === null || loading.current) return;
+
+    const abortController =
+      searchAbortController.current ?? new AbortController();
+
+    if (!searchAbortController.current) {
+      searchAbortController.current = abortController;
+    }
 
     loading.current = true;
     setIsAddLoading(true);
@@ -105,12 +131,23 @@ export function useInvitedDashboardList() {
     try {
       const { invitations, cursorId: nextCursor } = await getInvitedDashboards(
         debouncedKeyword,
-        undefined,
+        {
+          signal: abortController.signal,
+        },
         cursorId
       );
+
+      if (abortController.signal.aborted) {
+        return;
+      }
+
       setInvitedDashboardItems((prev) => [...prev, ...invitations]);
       setCursorId(nextCursor);
     } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        return;
+      }
+
       if (error instanceof ApiError && error.status === 404) {
         setAddErrorMessage('추가 데이터를 찾을 수 없습니다.');
       } else if (error instanceof Error) {
@@ -189,6 +226,12 @@ export function useInvitedDashboardList() {
   useEffect(() => {
     void fetchInvitedDashboards(debouncedKeyword);
   }, [debouncedKeyword, fetchInvitedDashboards]);
+
+  useEffect(() => {
+    return () => {
+      searchAbortController.current?.abort();
+    };
+  }, []);
 
   return {
     invitedDashboardItems,
