@@ -3,6 +3,7 @@ import Input from '@/shared/components/input';
 import { Modal } from '@/shared/components/modal';
 import type { InviteModalProps } from '@/features/invitations/apis/invitations.types';
 import { dispatchInvitationListChangeEvent } from '@/features/dashboards/utils/dashboardEvents';
+import { runAfterModalClose } from '@/shared/utils/modal';
 import { useInviteModalForm } from '@/features/invitations/hooks/useInviteModalForm';
 
 /**
@@ -26,8 +27,8 @@ export default function InviteModal({
   } = useInviteModalForm({ dashboardId, isOpen });
 
   const handleClose = () => {
-    resetForm();
     onClose();
+    runAfterModalClose(resetForm);
   };
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
