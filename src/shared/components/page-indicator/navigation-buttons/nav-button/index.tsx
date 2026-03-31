@@ -6,6 +6,7 @@ export default function NavigationButton({
   direction,
   disabled,
   onClick,
+  size = 'default',
 }: NavigationButtonProps) {
   const isPrev = direction === 'prev';
 
@@ -17,9 +18,12 @@ export default function NavigationButton({
       disabled={disabled}
       aria-label={ariaLabel}
       className={cn(
-        'flex h-9 w-9 items-center justify-center border border-gray-200 bg-white md:h-10 md:w-10',
+        'flex shrink-0 items-center justify-center border border-gray-200 bg-white',
+        size === 'compact'
+          ? 'h-7 w-7 md:h-10 md:w-10'
+          : 'h-9 w-9 md:h-10 md:w-10',
         isPrev ? 'rounded-l' : '-ml-px rounded-r',
-        disabled ? 'cursor-not-allowed' : 'hover:bg-gray-50'
+        disabled ? 'cursor-not-allowed' : 'cursor-pointer hover:bg-gray-50'
       )}
     >
       {isPrev ? (
