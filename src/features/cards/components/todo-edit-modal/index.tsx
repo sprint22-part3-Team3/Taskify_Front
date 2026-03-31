@@ -137,7 +137,7 @@ function TodoEditModalContent({
       title: title.trim(),
       description: description.trim(),
       dueDate: dueDate || null,
-      tags: tags.length > 0 ? tags : undefined,
+      tags,
       imageUrl,
     };
 
