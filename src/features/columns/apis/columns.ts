@@ -15,7 +15,7 @@ export const getColumns = async ({ dashboardId }: getColumnsParams) => {
     dashboardId: dashboardId.toString(),
   });
 
-  const res = await get<GetColumnsResponse>(`columns?${params.toString()}`);
+  const res = await get<GetColumnsResponse>(`/columns?${params.toString()}`);
 
   return res;
 };
@@ -35,7 +35,7 @@ export const getColumns = async ({ dashboardId }: getColumnsParams) => {
 export async function createColumn(
   body: CreateColumnRequest
 ): Promise<Column | null> {
-  return post<Column>('columns', body);
+  return post<Column>('/columns', body);
 }
 
 /**
@@ -53,7 +53,7 @@ export async function createColumn(
  * ```
  */
 export async function deleteColumn(columnId: number): Promise<null> {
-  return del<null>(`columns/${columnId}`);
+  return del<null>(`/columns/${columnId}`);
 }
 
 /**
@@ -72,5 +72,5 @@ export async function updateColumn(
   columnId: number,
   body: UpdateColumnRequest
 ): Promise<Column | null> {
-  return put<Column>(`columns/${columnId}`, body);
+  return put<Column>(`/columns/${columnId}`, body);
 }

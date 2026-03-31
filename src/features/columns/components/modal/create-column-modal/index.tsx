@@ -21,7 +21,7 @@ import { useColumnListContext } from '@/features/columns/hooks/useColumnListCont
 function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
   const { id } = useParams();
   const dashboardId = Number(id);
-  const columns = useColumnListContext();
+  const { columns, refetch } = useColumnListContext();
   const columnNameField = useColumnNameValidation({
     checkFn: (name) =>
       Promise.resolve(columns.some((column) => column.title === name)),
@@ -44,18 +44,25 @@ function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
     });
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (isCreateDisabled) return;
 
+    const isDuplicate = columns.some(
+      (column) => column.title === columnNameField.value.trim()
+    );
+    if (isDuplicate) {
+      columnNameField.onBlur(); // 에러 메시지 표시
+      return;
+    }
     setIsLoading(true);
-
     try {
       await createColumn({
         title: columnNameField.value.trim(),
         dashboardId: dashboardId,
       });
+      refetch();
       handleClose();
     } catch {
       //TODO: 오류 처리

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import type { SubmitEvent } from 'react';
 import { useParams } from 'react-router-dom';
 import ImageUploadBox from '@/shared/components/image-uploader';
@@ -17,6 +17,7 @@ import { useTodoEditModal } from '@/features/cards/hooks/useTodoEditModal';
 import { useAssigneeOptions } from '@/features/cards/hooks/useAssigneeOptions';
 import { useColumnList } from '@/features/columns/hooks/useColumnList';
 import { useTodoEditForm } from '@/features/cards/hooks/useTodoEditForm';
+import { createRequiredValidator } from '@/shared/utils/validators/validateRequired';
 
 /**
  * 할 일 수정 모달을 렌더링합니다.
@@ -26,6 +27,9 @@ import { useTodoEditForm } from '@/features/cards/hooks/useTodoEditForm';
  * <TodoEditModal isOpen={isOpen} onClose={handleClose} />
  * ```
  */
+const titleValidator = createRequiredValidator('제목을 입력해 주세요.');
+const descriptionValidator = createRequiredValidator('설명을 입력해 주세요.');
+
 function TodoEditModalContent({
   isOpen,
   onClose,
@@ -68,6 +72,21 @@ function TodoEditModalContent({
     resetImageState,
   } = useTodoEditForm({ card });
 
+  const [titleError, setTitleError] = useState('');
+  const [descriptionError, setDescriptionError] = useState('');
+
+  const validateTitle = () => {
+    const result = titleValidator(title);
+    setTitleError(result.message);
+    return result.isValid;
+  };
+
+  const validateDescription = () => {
+    const result = descriptionValidator(description);
+    setDescriptionError(result.message);
+    return result.isValid;
+  };
+
   useEffect(() => {
     if (!isOpen) {
       return;
@@ -77,12 +96,38 @@ function TodoEditModalContent({
     resetImageState();
   }, [card, isOpen, resetForm, resetImageState]);
 
-  const isSubmitDisabled = !title.trim() || !description.trim();
+  const normalizedTitle = title.trim();
+  const normalizedDescription = description.trim();
+  const initialTitle = card.title?.trim() ?? '';
+  const initialDescription = card.description?.trim() ?? '';
+  const initialDueDate = card.dueDate ?? '';
+  const initialAssigneeId = card.assignee?.id ?? null;
+  const initialTags = card.tags ?? [];
+
+  const tagsChanged =
+    initialTags.length !== tags.length ||
+    initialTags.some((tag, index) => tag !== tags[index]);
+  const hasChanges =
+    selectedColumnId !== card.columnId ||
+    normalizedTitle !== initialTitle ||
+    normalizedDescription !== initialDescription ||
+    dueDate !== initialDueDate ||
+    (selectedAssignee?.id ?? null) !== initialAssigneeId ||
+    tagsChanged ||
+    imageUrl !== card.imageUrl;
+
+  const isSubmitDisabled =
+    !normalizedTitle || !normalizedDescription || !hasChanges;
+  const hasFormErrors = Boolean(
+    titleError || descriptionError || imageUploadError
+  );
+  const shouldDisableEditButton =
+    isSubmitDisabled || isSubmitting || isUploadingImage || hasFormErrors;
 
   const handleEdit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (isSubmitDisabled || isSubmitting) {
+    if (shouldDisableEditButton || !validateTitle() || !validateDescription()) {
       return;
     }
 
@@ -140,7 +185,12 @@ function TodoEditModalContent({
               required
               labelClassName="typo-md-regular md:typo-2lg-regular"
               value={title}
-              onChange={(event) => setTitle(event.target.value)}
+              onChange={(event) => {
+                setTitle(event.target.value);
+                if (titleError) setTitleError('');
+              }}
+              onBlur={validateTitle}
+              errorMessage={titleError}
               className="typo-md-regular md:typo-lg-regular"
             />
             <FieldWrapper>
@@ -149,7 +199,12 @@ function TodoEditModalContent({
               </Label>
               <TextArea
                 value={description}
-                onChange={setDescription}
+                onChange={(value) => {
+                  setDescription(value);
+                  if (descriptionError) setDescriptionError('');
+                }}
+                onBlur={validateDescription}
+                error={descriptionError}
                 className="typo-md-regular md:typo-lg-regular"
               />
             </FieldWrapper>
@@ -182,12 +237,12 @@ function TodoEditModalContent({
                 }
               />
               {imageUploadError && (
-                <p className="typo-xs-regular text-error mt-1">
+                <p className="typo-md-regular text-error mt-1">
                   {imageUploadError}
                 </p>
               )}
               {isUploadingImage && (
-                <p className="typo-xs-regular mt-1 text-gray-500">
+                <p className="typo-md-regular mt-1 text-gray-500">
                   이미지 업로드 중입니다...
                 </p>
               )}
@@ -195,7 +250,7 @@ function TodoEditModalContent({
           </Modal.Main>
           <Modal.Footer className="shrink-0">
             {submissionError && (
-              <p className="typo-sm-regular text-error mr-4">
+              <p className="typo-md-regular text-error mr-4">
                 {submissionError}
               </p>
             )}
@@ -205,7 +260,7 @@ function TodoEditModalContent({
             <Button
               theme="primary"
               type="submit"
-              disabled={isSubmitDisabled || isSubmitting || isUploadingImage}
+              disabled={shouldDisableEditButton}
               isLoading={isSubmitting}
             >
               수정

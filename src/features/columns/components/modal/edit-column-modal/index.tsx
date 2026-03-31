@@ -32,7 +32,7 @@ function EditColumnModal({
   columnId,
   initialTitle,
 }: EditColumnModalProps) {
-  const columns = useColumnListContext();
+  const { columns, refetch } = useColumnListContext();
   const [draftTitle, setDraftTitle] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -83,6 +83,7 @@ function EditColumnModal({
 
     try {
       await deleteColumn(columnId);
+      refetch();
       handleClose();
     } catch {
       setError('컬럼 삭제에 실패했습니다. 다시 시도해주세요.');
@@ -108,6 +109,7 @@ function EditColumnModal({
 
     try {
       await updateColumn(columnId, { title: columnTitle.trim() });
+      refetch();
       handleClose();
     } catch {
       setError('컬럼 수정에 실패했습니다. 다시 시도해주세요.');
@@ -161,7 +163,7 @@ function EditColumnModal({
           onConfirm={handleDelete}
           message={
             <>
-              컬럼을 모두 <span className="text-error">삭제</span> 하시겠습니까?
+              컬럼을 <span className="text-error">삭제</span> 하시겠습니까?
             </>
           }
         />

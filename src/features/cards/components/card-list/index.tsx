@@ -6,6 +6,9 @@ import { useCardList } from '@/features/cards/hooks/useCardList';
 import { ColumnProvider } from '@/features/columns/contexts/columnProvider';
 import { CardRefetchProvider } from '@/features/cards/contexts/cardRefetchProvider';
 import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
+import { LoadingFallback } from '@/shared/components/loading/loading-fallback';
+import { ErrorFallback } from '@/shared/components/error/error-fallback';
+import { InfiniteScrollIndicator } from '@/shared/components/infinite-scroll-indicator';
 
 function CardList({ column }: CardListProps) {
   const { id, title } = column;
@@ -27,19 +30,13 @@ function CardList({ column }: CardListProps) {
     isFetching: isAddLoading,
   });
 
-  // TODO : 로딩 화면 처리
-  if (isLoading && cards.length === 0)
-    return (
-      <div className="flex items-center justify-center">
-        <p>Loading...</p>
-      </div>
-    );
-  // TODO : 에러 화면 처리
+  if (isLoading && cards.length === 0) {
+    return <LoadingFallback variant="full" />;
+  }
+
   if (errorMessage)
     return (
-      <div className="flex items-center justify-center">
-        <p>⚠️ {errorMessage}</p>
-      </div>
+      <ErrorFallback message={errorMessage} onRetry={refetch} variant="part" />
     );
 
   return (
@@ -54,16 +51,13 @@ function CardList({ column }: CardListProps) {
             </li>
           ))}
         </ul>
-        <div className="mt-4 flex flex-col items-center justify-center gap-2">
-          {isAddLoading ? (
-            // TODO : 로딩 화면 처리
-            <p className="typo-sm-medium">Loading...</p>
-          ) : addErrorMessage ? (
-            <p className="typo-sm-medium text-error">{addErrorMessage}</p>
-          ) : (
-            <div ref={loadMoreRef} className="h-4 w-full" />
-          )}
-        </div>
+        <InfiniteScrollIndicator
+          isAddLoading={isAddLoading}
+          addErrorMessage={addErrorMessage}
+          hasMore={cursorId !== null}
+          loadMoreRef={loadMoreRef}
+          onRetry={loadMore}
+        />
       </CardRefetchProvider>
     </ColumnProvider>
   );
