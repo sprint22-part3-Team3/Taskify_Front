@@ -61,7 +61,7 @@ export default function ProfileForm() {
         const res = await uploadProfileImage(selectedFile);
         profileImageUrl = res?.profileImageUrl ?? profileImageUrl;
       } else if (isImageRemoved) {
-        profileImageUrl = null; // ✅ 이미지 삭제 시 null 전달
+        profileImageUrl = null;
       }
 
       const updated = await updateUserMe({
@@ -82,16 +82,14 @@ export default function ProfileForm() {
 
   const handleNicknameBlur = () => {
     if (nicknameField.value.trim() === '') {
-      nicknameField.setValue(user?.nickname ?? ''); // 빈값이면 초기값 복원
-      // 초기값으로 유효성 검사
+      nicknameField.setValue(user?.nickname ?? '');
     } else {
-      nicknameField.onBlur(); // 입력값으로 유효성 검사
+      nicknameField.onBlur();
     }
   };
 
   const handleFileSelect = (file: File | null) => {
     if (!file) {
-      // ✅ 삭제 시 처리
       setSelectedFile(null);
       setPreviewImageUrl(undefined);
       return;

@@ -23,7 +23,6 @@ export function useCardImageUpload({
   const handleImageSelect = useCallback(
     async (file: File | null, columnId: number) => {
       if (file === null) {
-        // ✅ 삭제 처리
         setImageUrl(null);
         return;
       }
