@@ -20,7 +20,7 @@ import {
   useSensors,
   type DragEndEvent,
   type UniqueIdentifier,
-} from '@dnd-kit/core';
+} from '@/shared/libs/dnd-kit';
 
 const LIST_CLASS = cn(
   'shrink-0 px-3 pt-8 pb-6 md:px-5 md:py-5',

@@ -1,12 +1,12 @@
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import type { PointerEvent as ReactPointerEvent } from 'react';
-import { DndInternalContext } from './context';
+import { DndInternalContext } from './dndKitContext';
 import type {
   UniqueIdentifier,
   DragEndEvent,
   DragStartEvent,
   SensorDescriptor,
-} from './types';
+} from './dndKit.types';
 
 const DRAG_THRESHOLD = 3;
 

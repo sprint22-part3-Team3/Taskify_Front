@@ -6,7 +6,7 @@ import type {
   DroppableEntry,
   StartDragParams,
   UniqueIdentifier,
-} from './types';
+} from './dndKit.types';
 
 const DEFAULT_STATE: DragState = {
   activeId: null,

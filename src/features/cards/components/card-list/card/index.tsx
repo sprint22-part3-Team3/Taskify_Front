@@ -7,7 +7,7 @@ import { Tag } from '@/shared/components/tag';
 import Title from '@/shared/components/title';
 import { useModal } from '@/shared/hooks/useModal';
 import { getTagColor } from '@/shared/utils/getTagColor';
-import { useDraggable } from '@dnd-kit/core';
+import { useDraggable } from '@/shared/libs/dnd-kit';
 import { cn } from '@/shared/utils/cn';
 
 function Card({ card }: CardProps) {
