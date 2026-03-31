@@ -2,6 +2,7 @@ export type NavigationButtonProps = {
   direction: 'prev' | 'next';
   disabled?: boolean;
   onClick?: () => void;
+  size?: 'default' | 'compact';
 };
 
 export type NavigationButtonsProps = {
@@ -10,4 +11,5 @@ export type NavigationButtonsProps = {
   isPrevDisabled?: boolean;
   isNextDisabled?: boolean;
   isHidingOnMobile?: boolean;
+  size?: 'default' | 'compact';
 };

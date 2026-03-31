@@ -45,14 +45,16 @@ export default function NavigationButtons({
   isPrevDisabled = false,
   isNextDisabled = false,
   isHidingOnMobile = false,
+  size = 'default',
 }: NavigationButtonsProps) {
   return (
-    <div className={cn('flex', isHidingOnMobile && 'hidden sm:flex')}>
+    <div className={cn('flex shrink-0', isHidingOnMobile && 'hidden sm:flex')}>
       {/* 이전 버튼 */}
       <NavigationButton
         direction="prev"
         disabled={isPrevDisabled}
         onClick={onPrev}
+        size={size}
       />
 
       {/* 다음 버튼 */}
@@ -60,6 +62,7 @@ export default function NavigationButtons({
         direction="next"
         disabled={isNextDisabled}
         onClick={onNext}
+        size={size}
       />
     </div>
   );
