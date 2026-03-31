@@ -3,7 +3,7 @@ import {
   createInvitation,
   getInvitations,
   INVITATIONS_SIZE,
-} from '@/features/dashboards/apis/invitations';
+} from '@/features/invitations/apis/invitations';
 import { validateEmail } from '@/shared/utils/validators/validateEmail';
 import { ApiError } from '@/shared/apis/apiError';
 

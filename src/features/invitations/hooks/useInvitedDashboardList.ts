@@ -3,7 +3,7 @@ import type { InvitedDashboardItem } from '@/features/invitations/types/invitedD
 import {
   getInvitedDashboards,
   respondToInvitation,
-} from '@/features/dashboards/apis/invitations';
+} from '@/features/invitations/apis/invitations';
 import { ApiError } from '@/shared/apis/apiError';
 import { DASHBOARD_ERROR_MESSAGE } from '@/features/dashboards/constants/dashboardErrorMessage.constants';
 import { getApiErrorMessage } from '@/features/dashboards/utils/getApiErrorMessage';
