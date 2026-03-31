@@ -10,6 +10,7 @@ import type { ValidationResult } from '@/shared/utils/validators';
  */
 type UseValidationOptions = {
   validateFn: (value: string) => ValidationResult;
+  initialValue?: string;
 };
 
 /**
@@ -31,6 +32,7 @@ type UseValidationReturn = {
   onBlur: () => void;
   trigger: () => ValidationResult;
   reset: () => void;
+  setValue: (value: string) => void;
 };
 
 /**
@@ -68,10 +70,15 @@ type UseValidationReturn = {
  */
 export function useValidation({
   validateFn,
+  initialValue = '',
 }: UseValidationOptions): UseValidationReturn {
-  const [value, setValue] = useState<string>('');
+  const [value, setValue] = useState<string>(initialValue);
   const [error, setError] = useState<string>('');
-  const [isValid, setIsValid] = useState<boolean>(false);
+  const [isValid, setIsValid] = useState<boolean>(() => {
+    // 추가: initialValue가 있으면 초기 유효성 검사
+    if (!initialValue) return false;
+    return validateFn(initialValue).isValid;
+  });
 
   const validate = useCallback(
     (val: string) => {
@@ -110,5 +117,22 @@ export function useValidation({
     setIsValid(false);
   };
 
-  return { value, error, isValid, onChange, onBlur, trigger, reset };
+  const setValueExternal = useCallback(
+    (val: string) => {
+      setValue(val);
+      if (val) validate(val);
+    },
+    [validate]
+  );
+
+  return {
+    value,
+    error,
+    isValid,
+    onChange,
+    onBlur,
+    trigger,
+    reset,
+    setValue: setValueExternal,
+  };
 }

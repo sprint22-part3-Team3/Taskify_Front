@@ -26,20 +26,24 @@ export default function ProfileForm() {
     undefined
   );
 
-  const nicknameField = useValidation({ validateFn: validateNickname });
+  const nicknameField = useValidation({
+    validateFn: validateNickname,
+    initialValue: user?.nickname ?? '', // 추가
+  });
 
   const isSaveDisabled =
     isSubmitting ||
-    ((nicknameField.value.trim() === '' ||
-      nicknameField.value.trim() === user?.nickname) &&
-      !selectedFile) ||
+    (nicknameField.value.trim() === user?.nickname && !selectedFile) ||
     !!nicknameField.error;
 
   useEffect(() => {
     if (user?.profileImageUrl) {
       setPreviewImageUrl(user.profileImageUrl);
     }
-  }, [user?.profileImageUrl]);
+    if (user?.nickname) {
+      nicknameField.setValue(user.nickname);
+    }
+  }, [user?.profileImageUrl, user?.nickname]);
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -63,12 +67,21 @@ export default function ProfileForm() {
 
       if (updated) setUserProfile(updated);
 
-      nicknameField.reset();
+      nicknameField.setValue(updated?.nickname ?? user.nickname);
       setSelectedFile(null);
     } catch {
       setErrorMessage('프로필 저장에 실패했습니다. 다시 시도해주세요.');
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleNicknameBlur = () => {
+    if (nicknameField.value.trim() === '') {
+      nicknameField.setValue(user?.nickname ?? ''); // 빈값이면 초기값 복원
+      // 초기값으로 유효성 검사
+    } else {
+      nicknameField.onBlur(); // 입력값으로 유효성 검사
     }
   };
 
@@ -112,7 +125,7 @@ export default function ProfileForm() {
               type="text"
               value={nicknameField.value}
               onChange={nicknameField.onChange}
-              onBlur={nicknameField.onBlur}
+              onBlur={handleNicknameBlur}
               errorMessage={nicknameField.error}
               placeholder={user?.nickname ?? '닉네임을 입력해주세요.'}
               labelClassName="text-md md:mt-0 md:text-lg"
