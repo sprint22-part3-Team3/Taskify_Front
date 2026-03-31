@@ -9,7 +9,7 @@ function PasswordToggleButton({
     <button
       type="button"
       onClick={onClick}
-      className="absolute top-1/2 right-4 -translate-y-1/2 text-gray-300"
+      className="absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer text-gray-300"
       aria-label={isPasswordVisible ? '비밀번호 숨기기' : '비밀번호 보기'}
     >
       {isPasswordVisible ? (

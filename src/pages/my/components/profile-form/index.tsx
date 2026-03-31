@@ -116,7 +116,7 @@ export default function ProfileForm() {
               value={user?.email ?? ''}
               readOnly
               labelClassName="text-md md:mt-0 md:text-lg"
-              className="mb-4 bg-gray-50 text-gray-300 focus:border-gray-200"
+              className="mb-4 cursor-default bg-gray-50 text-gray-300 focus:border-gray-200"
             />
 
             <Input
