@@ -8,6 +8,7 @@ import InvitationsSection from '@/features/invitations/components/invitations-se
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { deleteDashboard } from '@/features/dashboards/apis/deleteDashboard';
+import { dispatchDashboardListChangeEvent } from '@/features/dashboards/utils/dashboardEvents';
 
 export default function DashboardEditPage() {
   const { id: dashboardId } = useParams();
@@ -27,6 +28,7 @@ export default function DashboardEditPage() {
 
     try {
       await deleteDashboard(dashboardId);
+      dispatchDashboardListChangeEvent({ source: 'dashboard-list' });
       navigate('/mydashboard');
     } catch {
       alert('대시보드 삭제에 실패했습니다.');
