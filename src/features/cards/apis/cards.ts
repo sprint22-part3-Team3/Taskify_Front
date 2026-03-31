@@ -22,7 +22,7 @@ export const getCards = async ({
   if (cursorId !== null && cursorId !== undefined) {
     params.append('cursorId', cursorId.toString());
   }
-  const res = await get<GetCardsResponse>(`cards?${params.toString()}`);
+  const res = await get<GetCardsResponse>(`/cards?${params.toString()}`);
 
   return res;
 };
@@ -31,21 +31,21 @@ export const getCards = async ({
  * POST 카드 생성
  */
 export const createCard = async (body: CreateCardRequest) => {
-  return post<Card>('cards', body);
+  return post<Card>('/cards', body);
 };
 
 /**
  * PUT 카드 수정
  */
 export const updateCard = async (cardId: number, body: UpdateCardRequest) => {
-  return put<Card>(`cards/${cardId}`, body);
+  return put<Card>(`/cards/${cardId}`, body);
 };
 
 /**
  * DELETE 카드 삭제
  */
 export const delCard = async (id: number) => {
-  await del(`cards/${id}`);
+  await del(`/cards/${id}`);
 };
 
 /**
