@@ -5,6 +5,7 @@ import Title from '@/shared/components/title';
 import { useInvitedDashboardList } from '@/features/invitations/hooks/useInvitedDashboardList';
 import InvitedDashboardItemRow from '@/pages/my-dashboard/components/invited-dashboard-item-row';
 import SearchInput from '@/pages/my-dashboard/components/search-input';
+import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
 
 /**
  * 초대받은 대시보드 목록과 검색, 수락/거절 UI를 렌더링합니다.
@@ -29,6 +30,10 @@ function InvitedDashboardSection() {
     handleRejectInvite,
     handleCloseDeleteModalWithReset,
     handleConfirmRejectInvite,
+    cursorId,
+    isAddLoading,
+    loadMore,
+    addErrorMessage,
   } = useInvitedDashboardList();
   const hasInvitedDashboards = invitedDashboardItems.length > 0;
   const shouldShowInvitedDashboardContent =
@@ -39,6 +44,11 @@ function InvitedDashboardSection() {
     selectedInvitedDashboard &&
     respondingInvitationId === selectedInvitedDashboard.id
   );
+  const { loadMoreRef } = useInfiniteScroll({
+    onLoadMore: loadMore,
+    hasCursorId: cursorId !== null,
+    isFetching: isAddLoading,
+  });
 
   return (
     <>
@@ -172,6 +182,20 @@ function InvitedDashboardSection() {
                     })}
                   </tbody>
                 </table>
+                <div className="mt-4 flex flex-col items-center justify-center gap-2">
+                  {isAddLoading ? (
+                    // TODO: 로딩 화면 처리
+                    <p className="typo-sm-medium">Loading...</p>
+                  ) : addErrorMessage ? (
+                    <p className="typo-sm-medium text-error">
+                      {addErrorMessage}
+                    </p>
+                  ) : (
+                    cursorId !== null && (
+                      <div ref={loadMoreRef} className="h-4 w-full" />
+                    )
+                  )}
+                </div>
               </div>
             </div>
           </div>
