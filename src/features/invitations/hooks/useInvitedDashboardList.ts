@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { InvitedDashboardItem } from '@/features/invitations/types/invitedDashboardItem.types';
 import { getInvitedDashboards } from '@/features/invitations/apis/getInvitedDashboards';
 import { respondToInvitation } from '@/features/invitations/apis/respondToInvitation';
@@ -45,6 +45,11 @@ export function useInvitedDashboardList() {
   >(null);
   const [selectedInvitedDashboard, setSelectedInvitedDashboard] =
     useState<InvitedDashboardItem | null>(null);
+  const [cursorId, setCursorId] = useState<number | null>(null);
+  const [isAddLoading, setIsAddLoading] = useState(false);
+  const [addErrorMessage, setAddErrorMessage] = useState<string | null>(null);
+  const loading = useRef(false);
+
   const {
     isOpen: isDeleteModalOpen,
     openModal: openDeleteModal,
@@ -67,10 +72,14 @@ export function useInvitedDashboardList() {
     setIsSearchingInvitedDashboards(true);
     setInvitedDashboardError('');
     setInvitationResponseError('');
+    setAddErrorMessage(null);
+    setCursorId(null);
 
     try {
-      const { invitations } = await getInvitedDashboards(keyword);
+      const { invitations, cursorId: nextCursorId } =
+        await getInvitedDashboards(keyword);
       setInvitedDashboardItems(invitations);
+      setCursorId(nextCursorId);
     } catch (error) {
       setInvitedDashboardError(
         getApiErrorMessage(error, DASHBOARD_ERROR_MESSAGE.loadInvitedDashboards)
@@ -80,6 +89,35 @@ export function useInvitedDashboardList() {
       setIsSearchingInvitedDashboards(false);
     }
   }, []);
+
+  const loadMore = useCallback(async () => {
+    if (cursorId === null || loading.current) return;
+
+    loading.current = true;
+    setIsAddLoading(true);
+    setAddErrorMessage(null);
+
+    try {
+      const { invitations, cursorId: nextCursor } = await getInvitedDashboards(
+        searchKeyword,
+        undefined,
+        cursorId
+      );
+      setInvitedDashboardItems((prev) => [...prev, ...invitations]);
+      setCursorId(nextCursor);
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) {
+        setAddErrorMessage('추가 데이터를 찾을 수 없습니다.');
+      } else if (error instanceof Error) {
+        setAddErrorMessage(error.message);
+      } else {
+        setAddErrorMessage('알 수 없는 에러가 발생했습니다.');
+      }
+    } finally {
+      loading.current = false;
+      setIsAddLoading(false);
+    }
+  }, [cursorId, searchKeyword]);
 
   const handleSearchKeywordChange = (keyword: string) => {
     setSearchKeyword(keyword);
@@ -166,5 +204,9 @@ export function useInvitedDashboardList() {
     handleRejectInvite,
     handleCloseDeleteModalWithReset,
     handleConfirmRejectInvite,
+    cursorId,
+    isAddLoading,
+    loadMore,
+    addErrorMessage,
   };
 }

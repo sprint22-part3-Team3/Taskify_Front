@@ -10,13 +10,18 @@ import { get } from '@/shared/apis/fetchInstance';
  */
 export async function getInvitedDashboards(
   title = '',
-  options?: RequestInit
-): Promise<{ invitations: InvitedDashboardItem[] }> {
+  options?: RequestInit,
+  cursorId?: number | null
+): Promise<{ invitations: InvitedDashboardItem[]; cursorId: number | null }> {
   const searchParams = new URLSearchParams();
   const trimmedTitle = title.trim();
 
   if (trimmedTitle) {
     searchParams.set('title', trimmedTitle);
+  }
+
+  if (cursorId) {
+    searchParams.set('cursorId', cursorId.toString());
   }
 
   const query = searchParams.toString() ? `?${searchParams.toString()}` : '';
@@ -32,5 +37,6 @@ export async function getInvitedDashboards(
         name: invitation.dashboard.title,
         inviter: invitation.inviter.nickname,
       })) ?? [],
+    cursorId: response?.cursorId ?? null,
   };
 }
