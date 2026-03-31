@@ -3,7 +3,7 @@ import type {
   ImageUploadBoxProps,
 } from '@/shared/components/image-uploader/imageUploader.types';
 import { useState, useEffect } from 'react';
-import { IcAdd } from '@/shared/assets/icons';
+import { IcAdd, IcClose } from '@/shared/assets/icons';
 import { VARIANT_STYLE } from '@/shared/components/image-uploader/imageUploader.constants';
 
 /**
@@ -58,6 +58,15 @@ export default function ImageUploadBox({
 
   const previewImage = imageUrl ?? objectUrl;
 
+  const handleRemove = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (objectUrl) {
+      URL.revokeObjectURL(objectUrl);
+    }
+    setObjectUrl(null);
+    onFileSelect?.(null);
+  };
+
   return (
     <label
       aria-label="이미지 업로드"
@@ -76,11 +85,19 @@ export default function ImageUploadBox({
 
       {/* 이미지 있을 때 */}
       {previewImage && (
-        <img
-          src={previewImage}
-          alt="업로드 이미지 미리보기"
-          className="h-full w-full object-cover"
-        />
+        <div className="relative h-full w-full">
+          <img
+            src={previewImage}
+            alt="업로드 이미지 미리보기"
+            className="h-full w-full object-cover"
+          />
+          <div
+            className="absolute top-1 right-1 cursor-pointer"
+            onClick={handleRemove}
+          >
+            <IcClose className="text-gray-300" />
+          </div>
+        </div>
       )}
     </label>
   );

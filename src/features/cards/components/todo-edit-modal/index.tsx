@@ -138,7 +138,7 @@ function TodoEditModalContent({
       description: description.trim(),
       dueDate: dueDate || undefined,
       tags: tags.length > 0 ? tags : undefined,
-      imageUrl: imageUrl ?? undefined,
+      imageUrl: imageUrl === null ? null : imageUrl,
     };
 
     const isUpdated = await handleUpdateCard(payload, card.columnId);
