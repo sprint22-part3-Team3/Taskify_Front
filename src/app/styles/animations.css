@@ -1,0 +1,79 @@
+@theme {
+  --animate-fade-in: fade-in 0.3s ease-out forwards;
+  --animate-fade-out: fade-out 0.3s ease-in forwards;
+  --animate-fade-move-in: fade-move-in 0.3s ease-out forwards;
+  --animate-fade-move-out: fade-move-out 0.3s ease-in forwards;
+  --animate-dot-bounce: dot-bounce 1.4s ease-in-out infinite;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fade-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes fade-move-in {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-move-out {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes dot-bounce {
+    0%,
+    20% {
+      transform: scale(1) translateY(0);
+      opacity: 0.4;
+    }
+    50% {
+      transform: scale(1.2) translateY(var(--bounce-translate-y, -4px));
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1) translateY(0);
+      opacity: 0.4;
+    }
+  }
+}
+
+.loading-dot {
+  animation: var(--animate-dot-bounce);
+}
+
+.loading-dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.loading-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loading-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}

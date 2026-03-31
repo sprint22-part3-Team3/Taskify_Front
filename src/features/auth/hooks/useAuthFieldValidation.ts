@@ -1,0 +1,117 @@
+import { useState, type ChangeEvent } from 'react';
+import { useValidation } from '@/shared/hooks/useValidation';
+import {
+  NICKNAME_RULES,
+  validateAll,
+  validateEmail,
+  validateNickname,
+  validatePassword,
+} from '@/shared/utils/validators';
+
+type UseAuthFieldValidationOptions = {
+  isNicknameIncluded?: boolean;
+  isPasswordConfirmIncluded?: boolean;
+  isAgreementIncluded?: boolean;
+  onEmailChange?: () => void;
+  onPasswordChange?: () => void;
+  onPasswordConfirmChange?: () => void;
+};
+
+export function useAuthFieldValidation({
+  isNicknameIncluded = false,
+  isPasswordConfirmIncluded = false,
+  isAgreementIncluded = false,
+  onEmailChange,
+  onPasswordChange,
+  onPasswordConfirmChange,
+}: UseAuthFieldValidationOptions) {
+  const nicknameField = useValidation({ validateFn: validateNickname });
+  const emailField = useValidation({ validateFn: validateEmail });
+  const passwordField = useValidation({ validateFn: validatePassword });
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [isAgreementChecked, setIsAgreementChecked] = useState(false);
+
+  const passwordConfirmError =
+    isPasswordConfirmIncluded &&
+    passwordConfirm &&
+    passwordField.value.trim() !== passwordConfirm.trim()
+      ? '비밀번호가 일치하지 않습니다.'
+      : '';
+
+  const isSubmitDisabled =
+    !emailField.value ||
+    !passwordField.value ||
+    (isNicknameIncluded && !nicknameField.value) ||
+    (isPasswordConfirmIncluded && !passwordConfirm) ||
+    (isAgreementIncluded && !isAgreementChecked);
+
+  const handleChangeNickname = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value.length > NICKNAME_RULES.MAX_LENGTH) {
+      return;
+    }
+
+    nicknameField.onChange(event);
+  };
+
+  const handleChangeEmail = (event: ChangeEvent<HTMLInputElement>) => {
+    emailField.onChange(event);
+    onEmailChange?.();
+  };
+
+  const handleChangePassword = (event: ChangeEvent<HTMLInputElement>) => {
+    passwordField.onChange(event);
+    onPasswordChange?.();
+  };
+
+  const handleChangePasswordConfirm = (
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
+    setPasswordConfirm(event.target.value);
+    onPasswordConfirmChange?.();
+  };
+
+  const handleBlurPasswordConfirm = () => {
+    setPasswordConfirm((prev) => prev.trim());
+  };
+
+  const validateFields = () => {
+    const validators = {
+      email: () => emailField.trigger(),
+      password: () => passwordField.trigger(),
+      ...(isNicknameIncluded
+        ? {
+            nickname: () => nicknameField.trigger(),
+          }
+        : {}),
+    };
+
+    const { isAllValid } = validateAll(validators);
+
+    if (!isAllValid) {
+      return false;
+    }
+
+    if (isPasswordConfirmIncluded) {
+      return passwordField.value.trim() === passwordConfirm.trim();
+    }
+
+    return true;
+  };
+
+  return {
+    nicknameField,
+    emailField,
+    passwordField,
+    passwordConfirm,
+    isAgreementChecked,
+    isSubmitDisabled,
+    passwordConfirmError,
+    setIsAgreementChecked,
+    handleChangeNickname,
+    handleChangeEmail,
+    handleChangePassword,
+    handleChangePasswordConfirm,
+    handleBlurPasswordConfirm,
+    validateFields,
+  };
+}
