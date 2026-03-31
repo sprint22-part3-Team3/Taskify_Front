@@ -6,14 +6,16 @@ import { ColumnListContext } from '@/features/columns/contexts/columnListContext
 
 type ColumnListProviderProps = {
   columns: Column[];
+  refetch: () => void;
   children: ReactNode;
 };
 
 export function ColumnListProvider({
   columns,
+  refetch,
   children,
 }: ColumnListProviderProps) {
-  const value = useMemo(() => columns, [columns]);
+  const value = useMemo(() => ({ columns, refetch }), [columns, refetch]);
   return (
     <ColumnListContext.Provider value={value}>
       {children}

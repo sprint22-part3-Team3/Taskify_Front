@@ -14,7 +14,8 @@ const LIST_CLASS = cn(
 function ColumnList() {
   const { id } = useParams();
   const dashboardId = Number(id);
-  const { columns, isLoading, errorMessage } = useColumnList(dashboardId);
+  const { columns, isLoading, errorMessage, refetch } =
+    useColumnList(dashboardId);
 
   // TODO: 로딩 화면 처리
   if (isLoading)
@@ -32,7 +33,7 @@ function ColumnList() {
     );
 
   return (
-    <ColumnListProvider columns={columns}>
+    <ColumnListProvider columns={columns} refetch={refetch}>
       <ul className="flex flex-col divide-y divide-gray-100 lg:min-h-screen lg:flex-row lg:divide-x lg:divide-y-0">
         {columns.map((column) => (
           <li key={column.id} className={cn(LIST_CLASS, 'lg:w-88.5')}>
