@@ -50,7 +50,7 @@ export default function InviteModal({
       let page = 1;
       while (isMounted) {
         const data = await getInvitations(safeDashboardId, page);
-        if (!data) break;
+        if (!isMounted || !data) break;
 
         for (const invitation of data.invitations) {
           collectedEmails.add(invitation.invitee.email.toLowerCase());
