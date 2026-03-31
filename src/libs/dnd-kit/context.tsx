@@ -29,6 +29,7 @@ export function DndContext({
     up?: (event: PointerEvent) => void;
   }>({});
   const activeNodeRef = useRef<HTMLElement | null>(null);
+  const droppableRectsRef = useRef(new Map<UniqueIdentifier, DOMRect>());
   const draggingRef = useRef(false);
 
   const cleanup = useCallback(() => {
@@ -53,10 +54,10 @@ export function DndContext({
 
   const findDroppable = useCallback((clientX: number, clientY: number) => {
     for (const [id, entry] of droppablesRef.current.entries()) {
-      if (!entry.node.isConnected) {
+      const rect = droppableRectsRef.current.get(id);
+      if (!rect || !entry.node.isConnected) {
         continue;
       }
-      const rect = entry.node.getBoundingClientRect();
       if (
         clientX >= rect.left &&
         clientX <= rect.right &&
@@ -69,6 +70,24 @@ export function DndContext({
     return null;
   }, []);
 
+  const updateDroppableRects = useCallback(() => {
+    droppableRectsRef.current.clear();
+    for (const [id, entry] of droppablesRef.current.entries()) {
+      if (!entry.node.isConnected) {
+        continue;
+      }
+      droppableRectsRef.current.set(id, entry.node.getBoundingClientRect());
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => updateDroppableRects();
+    window.addEventListener('scroll', handleScroll, true);
+    return () => {
+      window.removeEventListener('scroll', handleScroll, true);
+    };
+  }, [updateDroppableRects]);
+
   const startDragging = useCallback(
     ({ id, data, node, initialEvent }: StartDragParams) => {
       if (!node || draggingRef.current) {
@@ -80,6 +99,7 @@ export function DndContext({
       draggingRef.current = true;
 
       activeNodeRef.current = node;
+      updateDroppableRects();
       const moveHandler = (moveEvent: PointerEvent) => {
         const over = findDroppable(moveEvent.clientX, moveEvent.clientY);
         const translateX = moveEvent.clientX - startX;
@@ -138,19 +158,24 @@ export function DndContext({
 
       onDragStart?.({ active: { id, data } });
     },
-    [cleanup, findDroppable, onDragEnd, onDragStart]
+    [cleanup, findDroppable, onDragEnd, onDragStart, updateDroppableRects]
   );
 
   const registerDroppable = useCallback(
     (id: UniqueIdentifier, node: HTMLElement, data?: unknown) => {
       droppablesRef.current.set(id, { node, data });
+      updateDroppableRects();
     },
-    []
+    [updateDroppableRects]
   );
 
-  const unregisterDroppable = useCallback((id: UniqueIdentifier) => {
-    droppablesRef.current.delete(id);
-  }, []);
+  const unregisterDroppable = useCallback(
+    (id: UniqueIdentifier) => {
+      droppablesRef.current.delete(id);
+      updateDroppableRects();
+    },
+    [updateDroppableRects]
+  );
 
   const value: DndContextValue = {
     activeId: state.activeId,
