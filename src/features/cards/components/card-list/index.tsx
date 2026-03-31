@@ -6,8 +6,9 @@ import { useCardList } from '@/features/cards/hooks/useCardList';
 import { ColumnProvider } from '@/features/columns/contexts/columnProvider';
 import { CardRefetchProvider } from '@/features/cards/contexts/cardRefetchProvider';
 import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
+import { LoadingFallback } from '@/shared/components/loading/loading-fallback';
 
-function CardList({ column }: CardListProps) {
+function CardList({ column, isColumnLoading }: CardListProps) {
   const { id, title } = column;
   const {
     cards,
@@ -27,13 +28,11 @@ function CardList({ column }: CardListProps) {
     isFetching: isAddLoading,
   });
 
-  // TODO: 로딩 화면 처리
-  if (isLoading && cards.length === 0)
-    return (
-      <div className="flex items-center justify-center">
-        <p>Loading...</p>
-      </div>
-    );
+  const isInitialLoading = isColumnLoading || (isLoading && cards.length === 0);
+  if (isInitialLoading) {
+    return <LoadingFallback variant="full" />;
+  }
+
   // TODO: 에러 화면 처리
   if (errorMessage)
     return (
@@ -56,8 +55,7 @@ function CardList({ column }: CardListProps) {
         </ul>
         <div className="mt-4 flex flex-col items-center justify-center gap-2">
           {isAddLoading ? (
-            // TODO: 로딩 화면 처리
-            <p className="typo-sm-medium">Loading...</p>
+            <LoadingFallback variant="part" />
           ) : addErrorMessage ? (
             <p className="typo-sm-medium text-error">{addErrorMessage}</p>
           ) : (

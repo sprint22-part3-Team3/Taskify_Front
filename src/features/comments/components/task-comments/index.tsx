@@ -11,6 +11,7 @@ import DeleteModal from '@/shared/components/modal/delete-modal';
 import { useModal } from '@/shared/hooks/useModal';
 import { MODAL_CLOSE_DELAY } from '@/shared/constants/modal.constants';
 import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
+import { LoadingFallback } from '@/shared/components/loading/loading-fallback';
 
 /**
  * 할 일 카드의 댓글 목록을 렌더링하고 새 댓글을 작성하는 영역입니다.
@@ -43,13 +44,8 @@ function TaskComments({ id: cardId, columnId }: TaskCommentsProps) {
   const [hasDeleteError, setHasDeleteError] = useState(false);
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
 
-  // TODO: 로딩 화면 처리
   if (isLoading && comments.length === 0)
-    return (
-      <div className="flex items-center justify-center">
-        <p>Loading...</p>
-      </div>
-    );
+    return <LoadingFallback variant="full" />;
   // TODO: 에러 화면 처리
   if (errorMessage)
     return (
@@ -119,8 +115,7 @@ function TaskComments({ id: cardId, columnId }: TaskCommentsProps) {
       </ul>
       <div className="mt-4 flex flex-col items-center justify-center gap-2">
         {isAddLoading ? (
-          // TODO: 로딩 화면 처리
-          <p className="typo-sm-medium">Loading...</p>
+          <LoadingFallback variant="part" />
         ) : addErrorMessage ? (
           <p className="typo-sm-medium text-error">{addErrorMessage}</p>
         ) : (

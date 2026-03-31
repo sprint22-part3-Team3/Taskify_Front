@@ -6,6 +6,7 @@ import { useInvitedDashboardList } from '@/features/invitations/hooks/useInvited
 import InvitedDashboardItemRow from '@/pages/my-dashboard/components/invited-dashboard-item-row';
 import SearchInput from '@/pages/my-dashboard/components/search-input';
 import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
+import { LoadingFallback } from '@/shared/components/loading/loading-fallback';
 
 /**
  * 초대받은 대시보드 목록과 검색, 수락/거절 UI를 렌더링합니다.
@@ -184,8 +185,7 @@ function InvitedDashboardSection() {
                 </table>
                 <div className="mt-4 flex flex-col items-center justify-center gap-2">
                   {isAddLoading ? (
-                    // TODO: 로딩 화면 처리
-                    <p className="typo-sm-medium">Loading...</p>
+                    <LoadingFallback variant="part" />
                   ) : addErrorMessage ? (
                     <p className="typo-sm-medium text-error">
                       {addErrorMessage}
