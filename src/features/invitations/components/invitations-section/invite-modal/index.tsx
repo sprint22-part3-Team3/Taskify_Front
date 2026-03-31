@@ -10,6 +10,7 @@ import {
 import { validateEmail } from '@/shared/utils/validators/validateEmail';
 import type { InviteModalProps } from '@/features/dashboards/apis/invitations.types';
 import { dispatchInvitationListChangeEvent } from '@/features/dashboards/utils/dashboardEvents';
+import { ApiError } from '@/shared/apis/apiError';
 
 /**
  * 대시보드에 사용자를 초대하는 모달 컴포넌트입니다.
@@ -106,8 +107,20 @@ export default function InviteModal({
 
       handleClose();
       dispatchInvitationListChangeEvent();
-    } catch {
-      setInviteError('초대에 실패했습니다. 이메일을 확인해 주세요.');
+    } catch (error) {
+      if (error instanceof ApiError) {
+        if (error.status === 404) {
+          setInviteError('존재하지 않는 유저입니다.');
+        } else if (error.status === 409) {
+          setInviteError('이미 대시보드에 초대된 멤버입니다.');
+        } else {
+          setInviteError(
+            error.message || '초대에 실패했습니다. 이메일을 확인해 주세요.'
+          );
+        }
+      } else {
+        setInviteError('초대에 실패했습니다. 이메일을 확인해 주세요.');
+      }
     } finally {
       setIsSubmitting(false);
     }
