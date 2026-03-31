@@ -5,6 +5,8 @@ import Title from '@/shared/components/title';
 import { useInvitedDashboardList } from '@/features/invitations/hooks/useInvitedDashboardList';
 import InvitedDashboardItemRow from '@/pages/my-dashboard/components/invited-dashboard-item-row';
 import SearchInput from '@/pages/my-dashboard/components/search-input';
+import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
+import { InfiniteScrollIndicator } from '@/shared/components/infinite-scroll-indicator';
 
 /**
  * 초대받은 대시보드 목록과 검색, 수락/거절 UI를 렌더링합니다.
@@ -29,6 +31,10 @@ function InvitedDashboardSection() {
     handleRejectInvite,
     handleCloseDeleteModalWithReset,
     handleConfirmRejectInvite,
+    cursorId,
+    isAddLoading,
+    loadMore,
+    addErrorMessage,
   } = useInvitedDashboardList();
   const hasInvitedDashboards = invitedDashboardItems.length > 0;
   const shouldShowInvitedDashboardContent =
@@ -39,6 +45,11 @@ function InvitedDashboardSection() {
     selectedInvitedDashboard &&
     respondingInvitationId === selectedInvitedDashboard.id
   );
+  const { loadMoreRef } = useInfiniteScroll({
+    onLoadMore: loadMore,
+    hasCursorId: cursorId !== null,
+    isFetching: isAddLoading,
+  });
 
   return (
     <>
@@ -183,6 +194,13 @@ function InvitedDashboardSection() {
             </p>
           </div>
         )}
+        <InfiniteScrollIndicator
+          isAddLoading={isAddLoading}
+          addErrorMessage={addErrorMessage}
+          hasMore={cursorId !== null}
+          loadMoreRef={loadMoreRef}
+          onRetry={loadMore}
+        />
       </section>
 
       <DeleteModal
