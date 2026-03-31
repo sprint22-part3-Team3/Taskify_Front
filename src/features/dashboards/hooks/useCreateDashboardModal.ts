@@ -32,7 +32,6 @@ const initialDashboardColor = dashboardColors[0]?.id ?? 'purple';
  * ```
  */
 export function useCreateDashboardModal({
-  isCreating,
   onClose,
   onCreate,
 }: CreateDashboardModalProps) {
@@ -42,7 +41,8 @@ export function useCreateDashboardModal({
   );
   const [dashboardErrorMessage, setDashboardErrorMessage] = useState('');
 
-  const isCreateDisabled = dashboardTitle.trim().length === 0 || isCreating;
+  const isCreateDisabled = dashboardTitle.trim().length === 0;
+  const [isCreating, setIsCreating] = useState(false);
 
   const resetCreateDashboardModal = () => {
     setDashboardTitle('');
@@ -69,7 +69,7 @@ export function useCreateDashboardModal({
     setDashboardColor(dashboardColorValue);
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (dashboardTitle.trim().length === 0) {
@@ -78,12 +78,15 @@ export function useCreateDashboardModal({
     }
 
     try {
+      setIsCreating(true);
       await onCreate(dashboardTitle.trim(), dashboardColor);
       handleClose();
     } catch (error) {
       setDashboardErrorMessage(
         getApiErrorMessage(error, DASHBOARD_ERROR_MESSAGE.createDashboard)
       );
+    } finally {
+      setIsCreating(false);
     }
   };
   return {
@@ -96,5 +99,6 @@ export function useCreateDashboardModal({
     handleDashboardColorChange,
     handleClose,
     handleSubmit,
+    isCreating,
   };
 }
