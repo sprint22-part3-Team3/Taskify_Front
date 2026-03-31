@@ -12,6 +12,8 @@ import { useModal } from '@/shared/hooks/useModal';
 import { MODAL_CLOSE_DELAY } from '@/shared/constants/modal.constants';
 import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
 import { LoadingFallback } from '@/shared/components/loading/loading-fallback';
+import { ErrorFallback } from '@/shared/components/error/error-fallback';
+import { InfiniteScrollIndicator } from '@/shared/components/infinite-scroll-indicator';
 
 /**
  * 할 일 카드의 댓글 목록을 렌더링하고 새 댓글을 작성하는 영역입니다.
@@ -46,12 +48,10 @@ function TaskComments({ id: cardId, columnId }: TaskCommentsProps) {
 
   if (isLoading && comments.length === 0)
     return <LoadingFallback variant="full" />;
-  // TODO: 에러 화면 처리
+
   if (errorMessage)
     return (
-      <div className="flex items-center justify-center">
-        <p>⚠️ {errorMessage}</p>
-      </div>
+      <ErrorFallback message={errorMessage} onRetry={refetch} variant="part" />
     );
 
   const handleSubmitComment = async (content: string) => {
@@ -113,15 +113,13 @@ function TaskComments({ id: cardId, columnId }: TaskCommentsProps) {
           </li>
         ))}
       </ul>
-      <div className="mt-4 flex flex-col items-center justify-center gap-2">
-        {isAddLoading ? (
-          <LoadingFallback variant="part" />
-        ) : addErrorMessage ? (
-          <p className="typo-sm-medium text-error">{addErrorMessage}</p>
-        ) : (
-          <div ref={loadMoreRef} className="h-4 w-full" />
-        )}
-      </div>
+      <InfiniteScrollIndicator
+        isAddLoading={isAddLoading}
+        addErrorMessage={addErrorMessage}
+        hasMore={cursorId !== null}
+        loadMoreRef={loadMoreRef}
+        onRetry={loadMore}
+      />
       <DeleteModal
         isOpen={isDeleteModalOpen}
         onClose={handleDeleteCancel}
