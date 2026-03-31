@@ -5,8 +5,7 @@ import Input from '@/shared/components/input';
 import { Button } from '@/shared/components/button';
 import ImageUploadBox from '@/shared/components/image-uploader';
 
-import { updateUserMe } from '@/features/users/apis/updateUserMe';
-import { uploadProfileImage } from '@/features/users/apis/uploadProfileImage';
+import { updateUserMe, uploadProfileImage } from '@/features/users/apis/users';
 import { UserContext } from '@/shared/context/user/userContext';
 import { NICKNAME_RULES } from '@/shared/utils/validators/validators.constants';
 
