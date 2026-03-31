@@ -99,19 +99,23 @@ export default function InvitationsSection() {
 
     setIsCanceling(true);
 
-    await cancelInvitation(dashboardId, selectedInvitationId);
+    try {
+      await cancelInvitation(dashboardId, selectedInvitationId);
 
-    const isLastItemOnPage = invitations.length === 1;
-    const shouldGoBack = isLastItemOnPage && currentPage > 1;
+      const isLastItemOnPage = invitations.length === 1;
+      const shouldGoBack = isLastItemOnPage && currentPage > 1;
 
-    if (shouldGoBack) {
-      setCurrentPage(currentPage - 1);
-    } else {
-      setRefreshKey((prev) => prev + 1);
+      if (shouldGoBack) {
+        setCurrentPage(currentPage - 1);
+      } else {
+        setRefreshKey((prev) => prev + 1);
+      }
+    } catch {
+      alert('초대 취소에 실패했습니다.');
+    } finally {
+      setIsCanceling(false);
+      handleCloseDeleteInvitationModal();
     }
-
-    setIsCanceling(false);
-    handleCloseDeleteInvitationModal();
   };
 
   return (
