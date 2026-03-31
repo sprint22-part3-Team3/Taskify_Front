@@ -6,7 +6,7 @@ import { useInvitedDashboardList } from '@/features/invitations/hooks/useInvited
 import InvitedDashboardItemRow from '@/pages/my-dashboard/components/invited-dashboard-item-row';
 import SearchInput from '@/pages/my-dashboard/components/search-input';
 import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
-import { LoadingFallback } from '@/shared/components/loading/loading-fallback';
+import { InfiniteScrollIndicator } from '@/shared/components/infinite-scroll-indicator';
 
 /**
  * 초대받은 대시보드 목록과 검색, 수락/거절 UI를 렌더링합니다.
@@ -183,19 +183,6 @@ function InvitedDashboardSection() {
                     })}
                   </tbody>
                 </table>
-                <div className="mt-4 flex flex-col items-center justify-center gap-2">
-                  {isAddLoading ? (
-                    <LoadingFallback variant="part" />
-                  ) : addErrorMessage ? (
-                    <p className="typo-sm-medium text-error">
-                      {addErrorMessage}
-                    </p>
-                  ) : (
-                    cursorId !== null && (
-                      <div ref={loadMoreRef} className="h-4 w-full" />
-                    )
-                  )}
-                </div>
               </div>
             </div>
           </div>
@@ -207,6 +194,13 @@ function InvitedDashboardSection() {
             </p>
           </div>
         )}
+        <InfiniteScrollIndicator
+          isAddLoading={isAddLoading}
+          addErrorMessage={addErrorMessage}
+          hasMore={cursorId !== null}
+          loadMoreRef={loadMoreRef}
+          onRetry={loadMore}
+        />
       </section>
 
       <DeleteModal

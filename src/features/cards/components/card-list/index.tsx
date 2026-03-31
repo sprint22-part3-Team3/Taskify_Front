@@ -8,6 +8,7 @@ import { CardRefetchProvider } from '@/features/cards/contexts/cardRefetchProvid
 import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
 import { LoadingFallback } from '@/shared/components/loading/loading-fallback';
 import { ErrorFallback } from '@/shared/components/error/error-fallback';
+import { InfiniteScrollIndicator } from '@/shared/components/infinite-scroll-indicator';
 
 function CardList({ column }: CardListProps) {
   const { id, title } = column;
@@ -50,15 +51,13 @@ function CardList({ column }: CardListProps) {
             </li>
           ))}
         </ul>
-        <div className="mt-4 flex flex-col items-center justify-center gap-2">
-          {isAddLoading ? (
-            <LoadingFallback variant="part" />
-          ) : addErrorMessage ? (
-            <p className="typo-sm-medium text-error">{addErrorMessage}</p>
-          ) : (
-            <div ref={loadMoreRef} className="h-4 w-full" />
-          )}
-        </div>
+        <InfiniteScrollIndicator
+          isAddLoading={isAddLoading}
+          addErrorMessage={addErrorMessage}
+          hasMore={cursorId !== null}
+          loadMoreRef={loadMoreRef}
+          onRetry={loadMore}
+        />
       </CardRefetchProvider>
     </ColumnProvider>
   );
