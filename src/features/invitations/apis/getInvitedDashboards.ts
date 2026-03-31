@@ -20,7 +20,7 @@ export async function getInvitedDashboards(
     searchParams.set('title', trimmedTitle);
   }
 
-  if (cursorId) {
+  if (cursorId !== null && cursorId !== undefined) {
     searchParams.set('cursorId', cursorId.toString());
   }
 

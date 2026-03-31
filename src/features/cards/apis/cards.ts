@@ -19,7 +19,7 @@ export const getCards = async ({
     size: size.toString(),
     columnId: columnId.toString(),
   });
-  if (cursorId) {
+  if (cursorId !== null && cursorId !== undefined) {
     params.append('cursorId', cursorId.toString());
   }
   const res = await get<GetCardsResponse>(`cards?${params.toString()}`);

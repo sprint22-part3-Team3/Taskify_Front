@@ -21,7 +21,7 @@ export const getComments = async ({
     size: size.toString(),
     cardId: cardId.toString(),
   });
-  if (cursorId) {
+  if (cursorId !== null && cursorId !== undefined) {
     params.append('cursorId', cursorId.toString());
   }
   const res = await get<GetCommentsResponse>(`comments?${params.toString()}`);
