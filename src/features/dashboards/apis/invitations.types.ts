@@ -47,6 +47,11 @@ export type CreateInvitationRequest = {
   email: string;
 };
 
+export type RespondToInvitationRequest = {
+  invitationId: number;
+  inviteAccepted: boolean;
+};
+
 /** 초대하기 모달 타입 정리 */
 export type InviteModalProps = {
   isOpen: boolean;

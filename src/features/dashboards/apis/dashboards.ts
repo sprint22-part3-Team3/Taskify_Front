@@ -10,8 +10,6 @@ import { getDashboardColorName } from '@/features/dashboards/utils/dashboardColo
 import { COLORS } from '@/shared/constants/color.constants';
 import { del, get, post, put } from '@/shared/apis/fetchInstance';
 
-const dashboardColors = [...COLORS];
-
 /**
  * 새로운 대시보드를 생성합니다.
  *
@@ -65,7 +63,7 @@ export async function getMyDashboards(
         id: dashboard.id,
         title: dashboard.title,
         colorHex: dashboard.color,
-        color: matchedDashboardColor ?? dashboardColors[0],
+        color: matchedDashboardColor ?? COLORS[0],
         createdByMe: dashboard.createdByMe,
       };
     }),

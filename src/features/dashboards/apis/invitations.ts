@@ -4,6 +4,7 @@ import type {
   Invitation,
   InvitationListResponse,
   InvitationsResponse,
+  RespondToInvitationRequest,
 } from '@/features/dashboards/apis/invitations.types';
 import type { InvitedDashboardItem } from '@/features/invitations/types/invitedDashboardItem.types';
 
@@ -80,11 +81,6 @@ export async function getInvitedDashboards(
     cursorId: response?.cursorId ?? null,
   };
 }
-
-type RespondToInvitationRequest = {
-  invitationId: number;
-  inviteAccepted: boolean;
-};
 
 /**
  * 받은 초대에 대해 수락 또는 거절 응답을 전송합니다.
