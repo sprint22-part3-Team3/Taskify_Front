@@ -74,7 +74,7 @@ function CreateDashboardModal({
             theme="primary"
             size="md"
             type="submit"
-            disabled={isCreating || isCreateDisabled}
+            disabled={isCreateDisabled}
             isLoading={isCreatingLoading}
           >
             생성
