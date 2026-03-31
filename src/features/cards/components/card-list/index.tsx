@@ -8,7 +8,7 @@ import { CardRefetchProvider } from '@/features/cards/contexts/cardRefetchProvid
 import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
 import { LoadingFallback } from '@/shared/components/loading/loading-fallback';
 
-function CardList({ column, isColumnLoading }: CardListProps) {
+function CardList({ column }: CardListProps) {
   const { id, title } = column;
   const {
     cards,
@@ -28,8 +28,7 @@ function CardList({ column, isColumnLoading }: CardListProps) {
     isFetching: isAddLoading,
   });
 
-  const isInitialLoading = isColumnLoading || (isLoading && cards.length === 0);
-  if (isInitialLoading) {
+  if (isLoading && cards.length === 0) {
     return <LoadingFallback variant="full" />;
   }
 

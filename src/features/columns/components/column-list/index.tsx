@@ -17,6 +17,9 @@ function ColumnList() {
   const { columns, isLoading, errorMessage, refetch } =
     useColumnList(dashboardId);
 
+  if (isLoading && columns.length === 0) {
+    return <div className="flex" />;
+  }
   // TODO: 에러 화면 처리
   if (errorMessage)
     return (
@@ -30,7 +33,7 @@ function ColumnList() {
       <ul className="flex flex-col divide-y divide-gray-100 lg:min-h-screen lg:flex-row lg:divide-x lg:divide-y-0">
         {columns.map((column) => (
           <li key={column.id} className={cn(LIST_CLASS, 'lg:w-88.5')}>
-            <CardList column={column} isColumnLoading={isLoading} />
+            <CardList column={column} />
           </li>
         ))}
         <li className={cn(LIST_CLASS, 'lg:w-98.5')}>
