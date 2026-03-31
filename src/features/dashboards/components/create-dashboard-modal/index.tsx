@@ -34,6 +34,7 @@ function CreateDashboardModal({
     handleDashboardColorChange,
     handleClose,
     handleSubmit,
+    isCreatingLoading,
   } = useCreateDashboardModal({
     isOpen,
     isCreating,
@@ -74,6 +75,7 @@ function CreateDashboardModal({
             size="md"
             type="submit"
             disabled={isCreateDisabled}
+            isLoading={isCreatingLoading}
           >
             생성
           </Button>
