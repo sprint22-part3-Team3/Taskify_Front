@@ -123,6 +123,7 @@ export default function PasswordEditForm() {
             type="submit"
             className="mt-6 h-13.5 w-full"
             disabled={isSubmitDisabled}
+            isLoading={isSubmitting}
           >
             변경
           </Button>
