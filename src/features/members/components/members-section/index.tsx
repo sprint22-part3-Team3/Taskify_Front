@@ -13,6 +13,7 @@ import {
   MEMBERS_SIZE,
 } from '@/features/members/apis/members';
 import { usePagination } from '@/shared/hooks/usePagination';
+import { dispatchMemberListChangeEvent } from '@/features/dashboards/utils/dashboardEvents';
 
 export default function MembersSection() {
   // URL에서 dashboardId 가져오기
@@ -57,6 +58,8 @@ export default function MembersSection() {
           syncTotalCount(data.totalCount, MEMBERS_SIZE);
         }
       }
+
+      dispatchMemberListChangeEvent();
 
       handleCloseDeleteModal();
     } finally {
