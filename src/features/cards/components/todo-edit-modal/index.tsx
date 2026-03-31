@@ -133,7 +133,7 @@ function TodoEditModalContent({
 
     const payload = {
       columnId: selectedColumnId,
-      assigneeUserId: selectedAssignee?.id ?? undefined,
+      assigneeUserId: selectedAssignee?.id ?? null,
       title: title.trim(),
       description: description.trim(),
       dueDate: dueDate || undefined,

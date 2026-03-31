@@ -25,7 +25,7 @@ export type CreateCardRequest = {
 
 export type UpdateCardRequest = {
   columnId: number;
-  assigneeUserId?: number;
+  assigneeUserId?: number | null;
   title: string;
   description: string;
   dueDate?: string;
