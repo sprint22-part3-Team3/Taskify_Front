@@ -96,7 +96,7 @@ export default function InviteModal({
     setInviteError('');
 
     try {
-      await createInvitation(dashboardId, { email: inviteEmail });
+      await createInvitation(dashboardId, { email: normalizedEmail });
 
       setInvitedEmails((prev) => {
         const next = new Set(prev);
