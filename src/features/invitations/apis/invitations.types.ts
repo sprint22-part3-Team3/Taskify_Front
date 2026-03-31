@@ -52,5 +52,4 @@ export type InviteModalProps = {
   isOpen: boolean;
   onClose: () => void;
   dashboardId?: string;
-  onInviteSuccess?: () => void;
 };

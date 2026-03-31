@@ -1,5 +1,6 @@
 const DASHBOARD_LIST_CHANGE_EVENT = 'dashboard-list-change';
 const DASHBOARD_TITLE_CHANGE_EVENT = 'dashboard-title-change';
+const INVITATION_LIST_CHANGE_EVENT = 'invitation-list-change';
 
 type DashboardListChangeSource = 'dashboard-list' | 'sidebar' | 'invitation';
 
@@ -17,6 +18,7 @@ export type DashboardListChangeDetail = {
 export const DASHBOARD_EVENTS = {
   LIST_CHANGE: DASHBOARD_LIST_CHANGE_EVENT,
   TITLE_CHANGE: DASHBOARD_TITLE_CHANGE_EVENT,
+  INVITATION_LIST_CHANGE: INVITATION_LIST_CHANGE_EVENT,
 } as const;
 
 export const dispatchDashboardTitleChangeEvent = (
@@ -40,4 +42,11 @@ export const dispatchDashboardListChangeEvent = (
       detail,
     })
   );
+};
+
+/**
+ * 초대 목록 갱신이 필요할 때 이벤트를 발행합니다.
+ */
+export const dispatchInvitationListChangeEvent = () => {
+  window.dispatchEvent(new Event(INVITATION_LIST_CHANGE_EVENT));
 };

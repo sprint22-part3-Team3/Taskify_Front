@@ -14,6 +14,7 @@ import {
 } from '@/features/invitations/apis/invitations';
 import type { Invitation } from '@/features/invitations/apis/invitations.types';
 import { usePagination } from '@/shared/hooks/usePagination';
+import { DASHBOARD_EVENTS } from '@/features/dashboards/utils/dashboardEvents';
 
 /**
  * 대시보드 초대 내역을 표시하는 섹션 컴포넌트입니다.
@@ -36,11 +37,6 @@ export default function InvitationsSection() {
   } = usePagination();
 
   const [refreshKey, setRefreshKey] = useState(0);
-
-  // 초대 성공 후 리패칭
-  const handleInviteSuccess = () => {
-    setRefreshKey((prev) => prev + 1);
-  };
 
   // 취소할 초대 정보
   const [selectedInvitationId, setSelectedInvitationId] = useState<
@@ -92,6 +88,25 @@ export default function InvitationsSection() {
       setSelectedInvitationEmail(null);
     });
   };
+
+  // 다른 곳에서 초대 성공 시 목록 갱신
+  useEffect(() => {
+    const handleInvitationChange = () => {
+      setRefreshKey((prev) => prev + 1);
+    };
+
+    window.addEventListener(
+      DASHBOARD_EVENTS.INVITATION_LIST_CHANGE,
+      handleInvitationChange
+    );
+
+    return () => {
+      window.removeEventListener(
+        DASHBOARD_EVENTS.INVITATION_LIST_CHANGE,
+        handleInvitationChange
+      );
+    };
+  }, []);
 
   // 초대 취소 확인
   const handleConfirmCancelInvitation = async () => {
@@ -188,7 +203,6 @@ export default function InvitationsSection() {
         isOpen={isInviteModalOpen}
         onClose={handleCloseInviteModal}
         dashboardId={dashboardId ?? ''}
-        onInviteSuccess={handleInviteSuccess}
       />
 
       <DeleteModal

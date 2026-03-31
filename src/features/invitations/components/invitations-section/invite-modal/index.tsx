@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { createInvitation } from '@/features/invitations/apis/invitations';
 import { validateEmail } from '@/shared/utils/validators/validateEmail';
 import type { InviteModalProps } from '@/features/invitations/apis/invitations.types';
+import { dispatchInvitationListChangeEvent } from '@/features/dashboards/utils/dashboardEvents';
 
 /**
  * 대시보드에 사용자를 초대하는 모달 컴포넌트입니다.
@@ -16,7 +17,6 @@ export default function InviteModal({
   isOpen,
   onClose,
   dashboardId,
-  onInviteSuccess,
 }: InviteModalProps) {
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteError, setInviteError] = useState('');
@@ -48,7 +48,7 @@ export default function InviteModal({
       await createInvitation(dashboardId, { email: inviteEmail });
 
       handleClose();
-      onInviteSuccess?.();
+      dispatchInvitationListChangeEvent();
     } catch {
       setInviteError('초대에 실패했습니다. 이메일을 확인해 주세요.');
     } finally {
