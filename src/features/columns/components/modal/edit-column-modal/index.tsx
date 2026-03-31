@@ -52,12 +52,15 @@ function EditColumnModal({
     !!error ||
     isLoading;
 
-  const handleClose = () => {
+  const handleClose = (afterClose?: (() => void) | React.SyntheticEvent) => {
     onClose();
     runAfterModalClose(() => {
       handleCloseDeleteModal();
       setDraftTitle(null);
       setError('');
+      if (typeof afterClose === 'function') {
+        afterClose();
+      }
     });
   };
 
@@ -82,8 +85,7 @@ function EditColumnModal({
     setIsLoading(true);
     try {
       await deleteColumn(columnId);
-      refetch();
-      handleClose();
+      handleClose(refetch);
     } catch {
       setError('컬럼 삭제에 실패했습니다. 다시 시도해주세요.');
     } finally {
