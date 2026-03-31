@@ -116,7 +116,7 @@ export default function PasswordEditForm() {
             labelClassName="text-md mt-4 md:text-lg"
           />
           {errorMessage && (
-            <p className="text-error mt-1 text-sm">{errorMessage}</p>
+            <p className="text-error text-md mt-1">{errorMessage}</p>
           )}
           <Button
             theme="primary"
