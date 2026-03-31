@@ -26,9 +26,9 @@ export function ErrorFallback({
 }: ErrorFallbackProps) {
   return (
     <div className={cn(errorFallbackVariants({ variant }), className)}>
-      <p className="typo-sm-medium text-gray-500">{message}</p>
+      <p className="typo-sm-medium text-error">{message}</p>
       {onRetry && (
-        <Button size="sm" theme="secondary" onClick={onRetry}>
+        <Button size="sm" theme="cancel" onClick={onRetry}>
           다시 시도
         </Button>
       )}
