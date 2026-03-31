@@ -29,6 +29,7 @@ export default function ProfileForm() {
     validateFn: validateNickname,
     initialValue: user?.nickname ?? '', // 추가
   });
+  const { setValue: setNicknameValue } = nicknameField;
   const isImageRemoved = !previewImageUrl && !!user?.profileImageUrl;
 
   const isSaveDisabled =
@@ -43,9 +44,9 @@ export default function ProfileForm() {
       setPreviewImageUrl(user.profileImageUrl);
     }
     if (user?.nickname) {
-      nicknameField.setValue(user.nickname);
+      setNicknameValue(user.nickname);
     }
-  }, [user?.profileImageUrl, user?.nickname]);
+  }, [user?.profileImageUrl, user?.nickname, setNicknameValue]);
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
