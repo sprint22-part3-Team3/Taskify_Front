@@ -91,12 +91,14 @@ export default function ImageUploadBox({
             alt="업로드 이미지 미리보기"
             className="h-full w-full object-cover"
           />
-          <div
+          <button
+            type="button"
+            aria-label="이미지 삭제"
             className="absolute top-1 right-1 cursor-pointer"
             onClick={handleRemove}
           >
             <IcClose className="text-gray-300" />
-          </div>
+          </button>
         </div>
       )}
     </label>
