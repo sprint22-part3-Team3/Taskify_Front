@@ -10,6 +10,12 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
+      '@dnd-kit/core': fileURLToPath(
+        new URL('./src/libs/dnd-kit/index.ts', import.meta.url)
+      ),
+      '@dnd-kit/utilities': fileURLToPath(
+        new URL('./src/libs/dnd-kit/utilities.ts', import.meta.url)
+      ),
     },
   },
 });

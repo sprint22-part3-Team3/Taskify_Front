@@ -1,17 +1,98 @@
+import { useState, useContext, useEffect } from 'react';
+
 import Title from '@/shared/components/title';
 import Input from '@/shared/components/input';
 import { Button } from '@/shared/components/button';
 import ImageUploadBox from '@/shared/components/image-uploader';
 
-/**
- * TODO
- * email 데이터 연동 후 상태 값으로 주입 (readOnly)
- * nickname 데이터 연동 후 placeholder로 주입
- **/
+import { updateUserMe } from '@/features/users/apis/updateUserMe';
+import { uploadProfileImage } from '@/features/users/apis/uploadProfileImage';
+import { UserContext } from '@/shared/context/user/userContext';
+import { NICKNAME_RULES } from '@/shared/utils/validators/validators.constants';
+
+import { useValidation } from '@/shared/hooks/useValidation';
+import { validateNickname } from '@/shared/utils/validators';
 
 export default function ProfileForm() {
+  const userContext = useContext(UserContext);
+  if (!userContext) {
+    throw new Error('UserContext is not provided');
+  }
+  const { userProfile: user, setUserProfile } = userContext;
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [previewImageUrl, setPreviewImageUrl] = useState<string | undefined>(
+    undefined
+  );
+
+  const nicknameField = useValidation({
+    validateFn: validateNickname,
+    initialValue: user?.nickname ?? '', // 추가
+  });
+
+  const isSaveDisabled =
+    isSubmitting ||
+    (nicknameField.value.trim() === user?.nickname && !selectedFile) ||
+    !!nicknameField.error;
+
+  useEffect(() => {
+    if (user?.profileImageUrl) {
+      setPreviewImageUrl(user.profileImageUrl);
+    }
+    if (user?.nickname) {
+      nicknameField.setValue(user.nickname);
+    }
+  }, [user?.profileImageUrl, user?.nickname]);
+
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (isSaveDisabled || !user) return;
+
+    setIsSubmitting(true);
+    setErrorMessage('');
+
+    try {
+      let profileImageUrl = user.profileImageUrl;
+
+      if (selectedFile) {
+        const res = await uploadProfileImage(selectedFile);
+        profileImageUrl = res?.profileImageUrl ?? profileImageUrl;
+      }
+
+      const updated = await updateUserMe({
+        nickname: nicknameField.value.trim() || user.nickname,
+        profileImageUrl,
+      });
+
+      if (updated) setUserProfile(updated);
+
+      nicknameField.setValue(updated?.nickname ?? user.nickname);
+      setSelectedFile(null);
+    } catch {
+      setErrorMessage('프로필 저장에 실패했습니다. 다시 시도해주세요.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleNicknameBlur = () => {
+    if (nicknameField.value.trim() === '') {
+      nicknameField.setValue(user?.nickname ?? ''); // 빈값이면 초기값 복원
+      // 초기값으로 유효성 검사
+    } else {
+      nicknameField.onBlur(); // 입력값으로 유효성 검사
+    }
+  };
+
+  const handleFileSelect = (file: File | null) => {
+    if (!file) return;
+    setSelectedFile(file);
+    setPreviewImageUrl(undefined);
+  };
+
   return (
-    <form>
+    <form onSubmit={handleSubmit} noValidate>
       <div className="mt-1 w-71 rounded-xl bg-white p-4 md:mt-7 md:w-137 md:p-6 lg:w-2xl">
         <Title
           as="h3"
@@ -23,28 +104,42 @@ export default function ProfileForm() {
         </Title>
 
         <div className="w-full md:flex md:justify-between">
-          <ImageUploadBox />
+          <ImageUploadBox
+            imageUrl={previewImageUrl}
+            onFileSelect={handleFileSelect}
+          />
           <div className="mt-10 md:mt-0 md:w-69 lg:w-100">
             <Input
               label="이메일"
               name="email"
               type="text"
+              value={user?.email ?? ''}
               readOnly
               labelClassName="text-md md:mt-0 md:text-lg"
-              className="mb-4"
+              className="mb-4 bg-gray-50 text-gray-300 focus:border-gray-200"
             />
 
             <Input
               label="닉네임"
               name="nickname"
               type="text"
+              value={nicknameField.value}
+              onChange={nicknameField.onChange}
+              onBlur={handleNicknameBlur}
+              errorMessage={nicknameField.error}
+              placeholder={user?.nickname ?? '닉네임을 입력해주세요.'}
               labelClassName="text-md md:mt-0 md:text-lg"
+              maxLength={NICKNAME_RULES.MAX_LENGTH}
             />
-
+            {errorMessage && (
+              <p className="text-error mt-1 text-sm">{errorMessage}</p>
+            )}
             <Button
               theme="primary"
               type="submit"
               className="mt-6 h-13.5 w-full"
+              disabled={isSaveDisabled}
+              isLoading={isSubmitting}
             >
               저장
             </Button>
