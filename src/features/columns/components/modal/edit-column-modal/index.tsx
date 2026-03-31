@@ -52,13 +52,15 @@ function EditColumnModal({
     !!error ||
     isLoading;
 
-  const handleClose = (afterClose?: () => void) => {
+  const handleClose = (afterClose?: (() => void) | React.SyntheticEvent) => {
     onClose();
     runAfterModalClose(() => {
       handleCloseDeleteModal();
       setDraftTitle(null);
       setError('');
-      afterClose?.();
+      if (typeof afterClose === 'function') {
+        afterClose();
+      }
     });
   };
 
