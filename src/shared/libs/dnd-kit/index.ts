@@ -11,5 +11,5 @@ export type {
   DragEndEvent,
   DragStartEvent,
   SensorDescriptor,
-} from './dndKitTypes';
+} from './dndKit.types';
 export { CSS } from './dndKitUtilities';
