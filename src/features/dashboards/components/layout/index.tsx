@@ -135,19 +135,15 @@ export default function DashboardLayout() {
 
   // 구성원 목록 변경 이벤트 수신
   useEffect(() => {
-    const handleMemberChange = () => {
-      refetchMembers();
-    };
-
     window.addEventListener(
       DASHBOARD_EVENTS.MEMBER_LIST_CHANGE,
-      handleMemberChange
+      refetchMembers
     );
 
     return () => {
       window.removeEventListener(
         DASHBOARD_EVENTS.MEMBER_LIST_CHANGE,
-        handleMemberChange
+        refetchMembers
       );
     };
   }, [refetchMembers]);
