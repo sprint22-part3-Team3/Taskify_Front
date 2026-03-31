@@ -109,7 +109,6 @@ export function useInvitedDashboardList() {
       setInvitedDashboardItems([]);
     } finally {
       if (searchAbortController.current === abortController) {
-        searchAbortController.current = null;
         setIsSearchingInvitedDashboards(false);
       }
     }
@@ -118,6 +117,13 @@ export function useInvitedDashboardList() {
   const loadMore = useCallback(async () => {
     if (cursorId === null || loading.current) return;
 
+    const abortController =
+      searchAbortController.current ?? new AbortController();
+
+    if (!searchAbortController.current) {
+      searchAbortController.current = abortController;
+    }
+
     loading.current = true;
     setIsAddLoading(true);
     setAddErrorMessage(null);
@@ -125,12 +131,23 @@ export function useInvitedDashboardList() {
     try {
       const { invitations, cursorId: nextCursor } = await getInvitedDashboards(
         debouncedKeyword,
-        undefined,
+        {
+          signal: abortController.signal,
+        },
         cursorId
       );
+
+      if (abortController.signal.aborted) {
+        return;
+      }
+
       setInvitedDashboardItems((prev) => [...prev, ...invitations]);
       setCursorId(nextCursor);
     } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        return;
+      }
+
       if (error instanceof ApiError && error.status === 404) {
         setAddErrorMessage('추가 데이터를 찾을 수 없습니다.');
       } else if (error instanceof Error) {

@@ -66,7 +66,7 @@ export function useSidebarDashboards() {
 
   useEffect(() => {
     void loadSidebarDashboards();
-  }, [currentPage, loadSidebarDashboards, setCurrentPage]);
+  }, [loadSidebarDashboards]);
 
   useEffect(() => {
     const handleDashboardListChange = (event: Event) => {
