@@ -7,6 +7,7 @@ import { ColumnProvider } from '@/features/columns/contexts/columnProvider';
 import { CardRefetchProvider } from '@/features/cards/contexts/cardRefetchProvider';
 import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
 import { LoadingFallback } from '@/shared/components/loading/loading-fallback';
+import { ErrorFallback } from '@/shared/components/error/error-fallback';
 
 function CardList({ column }: CardListProps) {
   const { id, title } = column;
@@ -32,12 +33,9 @@ function CardList({ column }: CardListProps) {
     return <LoadingFallback variant="full" />;
   }
 
-  // TODO: 에러 화면 처리
   if (errorMessage)
     return (
-      <div className="flex items-center justify-center">
-        <p>⚠️ {errorMessage}</p>
-      </div>
+      <ErrorFallback message={errorMessage} onRetry={refetch} variant="part" />
     );
 
   return (
