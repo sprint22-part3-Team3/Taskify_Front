@@ -17,7 +17,6 @@ export default function InviteModal({
   isOpen,
   onClose,
   dashboardId,
-  onInviteSuccess,
 }: InviteModalProps) {
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteError, setInviteError] = useState('');
@@ -49,7 +48,6 @@ export default function InviteModal({
       await createInvitation(dashboardId, { email: inviteEmail });
 
       handleClose();
-      onInviteSuccess?.();
       dispatchInvitationListChangeEvent();
     } catch {
       setInviteError('초대에 실패했습니다. 이메일을 확인해 주세요.');

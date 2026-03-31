@@ -35,11 +35,6 @@ export default function InvitationsSection() {
 
   const [refreshKey, setRefreshKey] = useState(0);
 
-  // 초대 성공 후 리패칭
-  const handleInviteSuccess = () => {
-    setRefreshKey((prev) => prev + 1);
-  };
-
   // 취소할 초대 정보
   const [selectedInvitationId, setSelectedInvitationId] = useState<
     number | null
@@ -187,7 +182,6 @@ export default function InvitationsSection() {
         isOpen={isInviteModalOpen}
         onClose={handleCloseInviteModal}
         dashboardId={dashboardId ?? ''}
-        onInviteSuccess={handleInviteSuccess}
       />
 
       <DeleteModal
