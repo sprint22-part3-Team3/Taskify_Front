@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
-import { createDashboard } from '@/features/dashboards/apis/createDashboard';
-import { getMyDashboards } from '@/features/dashboards/apis/getMyDashboards';
+import {
+  createDashboard,
+  getMyDashboards,
+} from '@/features/dashboards/apis/dashboards';
 import { DASHBOARD_ERROR_MESSAGE } from '@/features/dashboards/constants/dashboardErrorMessage.constants';
 import type { DashboardColorName } from '@/features/dashboards/types/dashboardColor.types';
 import type { DashboardItem } from '@/features/dashboards/types/myDashboard.types';

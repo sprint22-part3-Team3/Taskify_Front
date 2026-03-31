@@ -5,5 +5,5 @@ export const uploadProfileImage = (file: File) => {
   const formData = new FormData();
   formData.append('image', file);
 
-  return postFormData<UploadProfileImageResponse>('users/me/image', formData);
+  return postFormData<UploadProfileImageResponse>('/users/me/image', formData);
 };
