@@ -28,7 +28,7 @@ export type UpdateCardRequest = {
   assigneeUserId?: number | null;
   title: string;
   description: string;
-  dueDate?: string;
+  dueDate?: string | null;
   tags?: string[];
   imageUrl?: string | null;
 };

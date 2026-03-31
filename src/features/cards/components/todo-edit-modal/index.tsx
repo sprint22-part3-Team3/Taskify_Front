@@ -136,7 +136,7 @@ function TodoEditModalContent({
       assigneeUserId: selectedAssignee?.id ?? null,
       title: title.trim(),
       description: description.trim(),
-      dueDate: dueDate || undefined,
+      dueDate: dueDate || null,
       tags: tags.length > 0 ? tags : undefined,
       imageUrl,
     };
