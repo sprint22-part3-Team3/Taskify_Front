@@ -29,6 +29,7 @@ export default function DashboardLayout() {
     members: dashboardMembers,
     totalCount,
     errorMessage: memberLoadError,
+    refetch: refetchMembers,
   } = useDashboardMembers(dashboardId);
   const {
     isOpen: isInviteModalOpen,
@@ -131,6 +132,21 @@ export default function DashboardLayout() {
       );
     };
   }, [dashboardId]);
+
+  // 구성원 목록 변경 이벤트 수신
+  useEffect(() => {
+    window.addEventListener(
+      DASHBOARD_EVENTS.MEMBER_LIST_CHANGE,
+      refetchMembers
+    );
+
+    return () => {
+      window.removeEventListener(
+        DASHBOARD_EVENTS.MEMBER_LIST_CHANGE,
+        refetchMembers
+      );
+    };
+  }, [refetchMembers]);
 
   return (
     <>
