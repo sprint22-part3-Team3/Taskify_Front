@@ -82,8 +82,7 @@ function Card({ card }: CardProps) {
                 src={imageUrl}
                 alt={title}
                 className="w-full"
-                draggable="false"
-                onDragStart={(event) => event.preventDefault()}
+                draggable={false}
               />
             </figure>
           )}
