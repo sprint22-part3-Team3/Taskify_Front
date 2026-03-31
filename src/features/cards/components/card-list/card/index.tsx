@@ -13,7 +13,7 @@ import { cn } from '@/shared/utils/cn';
 function Card({ card }: CardProps) {
   const { isOpen, openModal, closeModal } = useModal();
   const preventModalOnClickRef = useRef(false);
-  const dragBlockAnimationRef = useRef<number>();
+  const dragBlockAnimationRef = useRef<number | null>(null);
 
   const draggableId = card ? `card-${card.id}` : 'card-placeholder';
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
@@ -50,10 +50,7 @@ function Card({ card }: CardProps) {
   const { imageUrl, title, tags, dueDate, assignee } = card;
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (
-      (e.key === 'Enter' || e.key === ' ') &&
-      !preventModalOnClickRef.current
-    ) {
+    if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       openModal();
     }
