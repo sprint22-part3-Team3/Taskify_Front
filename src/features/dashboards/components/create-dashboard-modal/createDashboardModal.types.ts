@@ -2,6 +2,7 @@ import type { DashboardColorName } from '@/features/dashboards/types/dashboardCo
 
 export type CreateDashboardModalProps = {
   isOpen: boolean;
+  isCreating: boolean;
   onClose: () => void;
   onCreate: (
     dashboardTitle: string,

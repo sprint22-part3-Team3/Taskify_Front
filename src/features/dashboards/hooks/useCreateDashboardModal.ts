@@ -42,7 +42,7 @@ export function useCreateDashboardModal({
   const [dashboardErrorMessage, setDashboardErrorMessage] = useState('');
 
   const isCreateDisabled = dashboardTitle.trim().length === 0;
-  const [isCreating, setIsCreating] = useState(false);
+  const [isCreatingLoading, setIsCreating] = useState(false);
 
   const resetCreateDashboardModal = () => {
     setDashboardTitle('');
@@ -99,6 +99,6 @@ export function useCreateDashboardModal({
     handleDashboardColorChange,
     handleClose,
     handleSubmit,
-    isCreating,
+    isCreatingLoading,
   };
 }

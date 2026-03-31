@@ -20,6 +20,7 @@ import { Modal } from '@/shared/components/modal';
  */
 function CreateDashboardModal({
   isOpen,
+  isCreating,
   onClose,
   onCreate,
 }: CreateDashboardModalProps) {
@@ -33,9 +34,10 @@ function CreateDashboardModal({
     handleDashboardColorChange,
     handleClose,
     handleSubmit,
-    isCreating,
+    isCreatingLoading,
   } = useCreateDashboardModal({
     isOpen,
+    isCreating,
     onClose,
     onCreate,
   });
@@ -72,8 +74,8 @@ function CreateDashboardModal({
             theme="primary"
             size="md"
             type="submit"
-            disabled={isCreateDisabled}
-            isLoading={isCreating}
+            disabled={isCreating || isCreateDisabled}
+            isLoading={isCreatingLoading}
           >
             생성
           </Button>
