@@ -5,7 +5,7 @@ import type {
   InvitationListResponse,
   InvitationsResponse,
   RespondToInvitationRequest,
-} from '@/features/dashboards/apis/invitations.types';
+} from '@/features/invitations/apis/invitations.types';
 import type { InvitedDashboardItem } from '@/features/invitations/types/invitedDashboardItem.types';
 
 /** 한 페이지에 보여줄 초대 내역 수 */
