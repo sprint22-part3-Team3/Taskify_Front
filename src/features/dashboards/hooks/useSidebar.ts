@@ -26,6 +26,7 @@ export function useSidebar() {
     sidebarDashboards,
     currentPage,
     totalPages,
+    setCurrentPage,
     isLoadingSidebarDashboards,
     sidebarDashboardsError,
     loadSidebarDashboards,
@@ -51,7 +52,13 @@ export function useSidebar() {
         title: dashboardTitle,
         color: dashboardColor,
       });
-      await loadSidebarDashboards();
+
+      if (currentPage !== 1) {
+        setCurrentPage(1);
+      } else {
+        await loadSidebarDashboards();
+      }
+
       dispatchDashboardListChangeEvent({ source: 'sidebar' });
     } finally {
       setIsCreatingDashboard(false);
