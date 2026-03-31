@@ -68,6 +68,11 @@ export function useInvitedDashboardList() {
     });
   };
 
+  const debouncedKeyword = useDebounce(
+    searchKeyword,
+    searchKeyword === '' ? 0 : undefined
+  );
+
   const fetchInvitedDashboards = useCallback(async (keyword: string) => {
     setIsSearchingInvitedDashboards(true);
     setInvitedDashboardError('');
@@ -99,7 +104,7 @@ export function useInvitedDashboardList() {
 
     try {
       const { invitations, cursorId: nextCursor } = await getInvitedDashboards(
-        searchKeyword,
+        debouncedKeyword,
         undefined,
         cursorId
       );
@@ -117,7 +122,7 @@ export function useInvitedDashboardList() {
       loading.current = false;
       setIsAddLoading(false);
     }
-  }, [cursorId, searchKeyword]);
+  }, [cursorId, debouncedKeyword]);
 
   const handleSearchKeywordChange = (keyword: string) => {
     setSearchKeyword(keyword);
@@ -139,7 +144,7 @@ export function useInvitedDashboardList() {
       });
 
       if (inviteAccepted) {
-        await fetchInvitedDashboards(searchKeyword);
+        await fetchInvitedDashboards(debouncedKeyword);
         dispatchDashboardListChangeEvent({ source: 'invitation' });
       } else {
         setInvitedDashboardItems((previousInvitedDashboards) =>
@@ -180,11 +185,6 @@ export function useInvitedDashboardList() {
       handleCloseDeleteModalWithReset();
     }
   };
-
-  const debouncedKeyword = useDebounce(
-    searchKeyword,
-    searchKeyword === '' ? 0 : undefined
-  );
 
   useEffect(() => {
     void fetchInvitedDashboards(debouncedKeyword);
