@@ -1,8 +1,12 @@
 import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
 import { Modal } from '@/shared/components/modal';
-import { useState } from 'react';
-import { createInvitation } from '@/features/dashboards/apis/invitations';
+import { useEffect, useState } from 'react';
+import {
+  createInvitation,
+  getInvitations,
+  INVITATIONS_SIZE,
+} from '@/features/dashboards/apis/invitations';
 import { validateEmail } from '@/shared/utils/validators/validateEmail';
 import type { InviteModalProps } from '@/features/dashboards/apis/invitations.types';
 import { dispatchInvitationListChangeEvent } from '@/features/dashboards/utils/dashboardEvents';
@@ -21,12 +25,54 @@ export default function InviteModal({
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteError, setInviteError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [invitedEmails, setInvitedEmails] = useState<Set<string>>(
+    () => new Set()
+  );
 
   const handleClose = () => {
     setInviteEmail('');
     setInviteError('');
     onClose();
   };
+
+  useEffect(() => {
+    if (!isOpen || !dashboardId) {
+      setInvitedEmails(new Set());
+      return;
+    }
+
+    const safeDashboardId = dashboardId;
+
+    let isMounted = true;
+    const collectedEmails = new Set<string>();
+
+    async function fetchAllInvitations() {
+      let page = 1;
+      while (isMounted) {
+        const data = await getInvitations(safeDashboardId, page);
+        if (!data) break;
+
+        for (const invitation of data.invitations) {
+          collectedEmails.add(invitation.invitee.email.toLowerCase());
+        }
+
+        if (data.invitations.length < INVITATIONS_SIZE) break;
+        page += 1;
+      }
+
+      if (isMounted) {
+        setInvitedEmails(collectedEmails);
+      }
+    }
+
+    fetchAllInvitations();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [dashboardId, isOpen]);
+
+  const normalizedEmail = inviteEmail.trim().toLowerCase();
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -39,6 +85,11 @@ export default function InviteModal({
       return;
     }
 
+    if (invitedEmails.has(normalizedEmail)) {
+      setInviteError('이미 초대한 이메일입니다.');
+      return;
+    }
+
     if (isSubmitting) return;
 
     setIsSubmitting(true);
@@ -46,6 +97,12 @@ export default function InviteModal({
 
     try {
       await createInvitation(dashboardId, { email: inviteEmail });
+
+      setInvitedEmails((prev) => {
+        const next = new Set(prev);
+        next.add(normalizedEmail);
+        return next;
+      });
 
       handleClose();
       dispatchInvitationListChangeEvent();
