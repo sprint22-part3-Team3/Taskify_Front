@@ -13,9 +13,9 @@ function PasswordToggleButton({
       aria-label={isPasswordVisible ? '비밀번호 숨기기' : '비밀번호 보기'}
     >
       {isPasswordVisible ? (
-        <IcEyeOn className="h-6 w-6" />
+        <IcEyeOn className="h-6 w-6 cursor-pointer" />
       ) : (
-        <IcEyeOff className="h-6 w-6" />
+        <IcEyeOff className="h-6 w-6 cursor-pointer" />
       )}
     </button>
   );
