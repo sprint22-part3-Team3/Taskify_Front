@@ -27,14 +27,14 @@ function CardList({ column }: CardListProps) {
     isFetching: isAddLoading,
   });
 
-  // TODO : 로딩 화면 처리
+  // TODO: 로딩 화면 처리
   if (isLoading && cards.length === 0)
     return (
       <div className="flex items-center justify-center">
         <p>Loading...</p>
       </div>
     );
-  // TODO : 에러 화면 처리
+  // TODO: 에러 화면 처리
   if (errorMessage)
     return (
       <div className="flex items-center justify-center">
@@ -56,7 +56,7 @@ function CardList({ column }: CardListProps) {
         </ul>
         <div className="mt-4 flex flex-col items-center justify-center gap-2">
           {isAddLoading ? (
-            // TODO : 로딩 화면 처리
+            // TODO: 로딩 화면 처리
             <p className="typo-sm-medium">Loading...</p>
           ) : addErrorMessage ? (
             <p className="typo-sm-medium text-error">{addErrorMessage}</p>

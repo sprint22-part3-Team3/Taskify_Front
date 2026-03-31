@@ -16,14 +16,14 @@ function ColumnList() {
   const dashboardId = Number(id);
   const { columns, isLoading, errorMessage } = useColumnList(dashboardId);
 
-  // TODO : 로딩 화면 처리
+  // TODO: 로딩 화면 처리
   if (isLoading)
     return (
       <div className="flex items-center justify-center">
         <p>Loading...</p>
       </div>
     );
-  // TODO : 에러 화면 처리
+  // TODO: 에러 화면 처리
   if (errorMessage)
     return (
       <div className="flex items-center justify-center">
