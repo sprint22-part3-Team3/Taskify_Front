@@ -1,10 +1,19 @@
-import { format, isValid, parse } from 'date-fns';
+import { format, isValid, parse, parseISO } from 'date-fns';
 
 export function parseDateTimeValue(value: string) {
   if (!value) return null;
 
   const normalized = value.replace('T', ' ');
   const parsedDate = parse(normalized, 'yyyy-MM-dd HH:mm', new Date(0));
+
+  return isValid(parsedDate) ? parsedDate : null;
+}
+
+export function parseServerDateTime(value: string) {
+  if (!value) return null;
+
+  const normalizedValue = value.replace(/Z$/, '');
+  const parsedDate = parseISO(normalizedValue);
 
   return isValid(parsedDate) ? parsedDate : null;
 }
