@@ -3,8 +3,15 @@ import Input from '@/shared/components/input';
 import { Modal } from '@/shared/components/modal';
 import type { InviteModalProps } from '@/features/invitations/apis/invitations.types';
 import { dispatchInvitationListChangeEvent } from '@/features/dashboards/utils/dashboardEvents';
+import { runAfterModalClose } from '@/shared/utils/modal';
 import { useInviteModalForm } from '@/features/invitations/hooks/useInviteModalForm';
 
+/**
+ * 대시보드에 사용자를 초대하는 모달 컴포넌트입니다.
+ *
+ * 이 모달에서는 이메일을 입력하고 제출하면 `useInviteModalForm` 훅을 통해 중복
+ * 체크와 정규화된 API 요청을 수행합니다.
+ */
 export default function InviteModal({
   isOpen,
   onClose,
@@ -20,8 +27,8 @@ export default function InviteModal({
   } = useInviteModalForm({ dashboardId, isOpen });
 
   const handleClose = () => {
-    resetForm();
     onClose();
+    runAfterModalClose(resetForm);
   };
 
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

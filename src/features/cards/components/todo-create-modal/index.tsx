@@ -84,9 +84,13 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
   };
 
   const handleClose = () => {
-    resetTodoCreateState();
     onClose();
-    runAfterModalClose(resetForm);
+    runAfterModalClose(() => {
+      resetTodoCreateState();
+      resetForm();
+      setTitleError('');
+      setDescriptionError('');
+    });
   };
 
   const hasFormErrors = Boolean(
