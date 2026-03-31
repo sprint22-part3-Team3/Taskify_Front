@@ -1,4 +1,4 @@
-import { get, post } from '@/shared/apis/fetchInstance';
+import { del, get, post } from '@/shared/apis/fetchInstance';
 import type {
   Invitation,
   CreateInvitationRequest,
@@ -28,4 +28,14 @@ export async function createInvitation(
   body: CreateInvitationRequest
 ): Promise<Invitation | null> {
   return post<Invitation>(`dashboards/${dashboardId}/invitations`, body);
+}
+
+/**
+ * 대시보드 초대를 취소하는 함수
+ */
+export async function cancelInvitation(
+  dashboardId: string,
+  invitationId: number
+): Promise<null> {
+  return del<null>(`dashboards/${dashboardId}/invitations/${invitationId}`);
 }

@@ -8,6 +8,7 @@ import InviteModal from '@/features/invitations/components/invitations-section/i
 import { useModal } from '@/shared/hooks/useModal';
 import { runAfterModalClose } from '@/shared/utils/modal';
 import {
+  cancelInvitation,
   getInvitations,
   INVITATIONS_SIZE,
 } from '@/features/invitations/apis/invitations';
@@ -21,12 +22,14 @@ import { usePagination } from '@/shared/hooks/usePagination';
  */
 export default function InvitationsSection() {
   const { id: dashboardId } = useParams();
+  const [isCanceling, setIsCanceling] = useState(false);
 
   // 초대 내역 데이터
   const [invitations, setInvitations] = useState<Invitation[]>([]);
   const {
     currentPage,
     totalPages,
+    setCurrentPage,
     syncTotalCount,
     handlePrevPage,
     handleNextPage,
@@ -91,10 +94,28 @@ export default function InvitationsSection() {
   };
 
   // 초대 취소 확인
-  const handleConfirmCancelInvitation = () => {
-    // TODO: 초대 취소 API 연동 (DELETE)
-    console.log('취소할 초대 ID:', selectedInvitationId);
-    handleCloseDeleteInvitationModal();
+  const handleConfirmCancelInvitation = async () => {
+    if (!selectedInvitationId || !dashboardId) return;
+
+    setIsCanceling(true);
+
+    try {
+      await cancelInvitation(dashboardId, selectedInvitationId);
+
+      const isLastItemOnPage = invitations.length === 1;
+      const shouldGoBack = isLastItemOnPage && currentPage > 1;
+
+      if (shouldGoBack) {
+        setCurrentPage(currentPage - 1);
+      } else {
+        setRefreshKey((prev) => prev + 1);
+      }
+    } catch {
+      alert('초대 취소에 실패했습니다.');
+    } finally {
+      setIsCanceling(false);
+      handleCloseDeleteInvitationModal();
+    }
   };
 
   return (
@@ -174,6 +195,10 @@ export default function InvitationsSection() {
         isOpen={isDeleteModalOpen}
         onClose={handleCloseDeleteInvitationModal}
         onConfirm={handleConfirmCancelInvitation}
+        confirmButtonProps={{
+          isLoading: isCanceling,
+          disabled: isCanceling,
+        }}
         className="max-w-142"
         message={
           <>
