@@ -11,6 +11,9 @@ import DeleteModal from '@/shared/components/modal/delete-modal';
 import { useModal } from '@/shared/hooks/useModal';
 import { MODAL_CLOSE_DELAY } from '@/shared/constants/modal.constants';
 import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
+import { LoadingFallback } from '@/shared/components/loading/loading-fallback';
+import { ErrorFallback } from '@/shared/components/error/error-fallback';
+import { InfiniteScrollIndicator } from '@/shared/components/infinite-scroll-indicator';
 
 /**
  * 할 일 카드의 댓글 목록을 렌더링하고 새 댓글을 작성하는 영역입니다.
@@ -43,19 +46,12 @@ function TaskComments({ id: cardId, columnId }: TaskCommentsProps) {
   const [hasDeleteError, setHasDeleteError] = useState(false);
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
 
-  // TODO : 로딩 화면 처리
   if (isLoading && comments.length === 0)
-    return (
-      <div className="flex items-center justify-center">
-        <p>Loading...</p>
-      </div>
-    );
-  // TODO : 에러 화면 처리
+    return <LoadingFallback variant="full" />;
+
   if (errorMessage)
     return (
-      <div className="flex items-center justify-center">
-        <p>⚠️ {errorMessage}</p>
-      </div>
+      <ErrorFallback message={errorMessage} onRetry={refetch} variant="part" />
     );
 
   const handleSubmitComment = async (content: string) => {
@@ -117,16 +113,13 @@ function TaskComments({ id: cardId, columnId }: TaskCommentsProps) {
           </li>
         ))}
       </ul>
-      <div className="mt-4 flex flex-col items-center justify-center gap-2">
-        {isAddLoading ? (
-          // TODO : 로딩 화면 처리
-          <p className="typo-sm-medium">Loading...</p>
-        ) : addErrorMessage ? (
-          <p className="typo-sm-medium text-error">{addErrorMessage}</p>
-        ) : (
-          <div ref={loadMoreRef} className="h-4 w-full" />
-        )}
-      </div>
+      <InfiniteScrollIndicator
+        isAddLoading={isAddLoading}
+        addErrorMessage={addErrorMessage}
+        hasMore={cursorId !== null}
+        loadMoreRef={loadMoreRef}
+        onRetry={loadMore}
+      />
       <DeleteModal
         isOpen={isDeleteModalOpen}
         onClose={handleDeleteCancel}

@@ -4,6 +4,7 @@ import { useColumnList } from '@/features/columns/hooks/useColumnList';
 import { cn } from '@/shared/utils/cn';
 import { useParams } from 'react-router-dom';
 import { ColumnListProvider } from '@/features/columns/contexts/columnListProvider';
+import { ErrorFallback } from '@/shared/components/error/error-fallback';
 
 const LIST_CLASS = cn(
   'shrink-0 px-3 pt-8 pb-6 md:px-5 md:py-5',
@@ -14,25 +15,18 @@ const LIST_CLASS = cn(
 function ColumnList() {
   const { id } = useParams();
   const dashboardId = Number(id);
-  const { columns, isLoading, errorMessage } = useColumnList(dashboardId);
+  const { columns, isLoading, errorMessage, refetch } =
+    useColumnList(dashboardId);
 
-  // TODO : 로딩 화면 처리
-  if (isLoading)
-    return (
-      <div className="flex items-center justify-center">
-        <p>Loading...</p>
-      </div>
-    );
-  // TODO : 에러 화면 처리
+  if (isLoading && columns.length === 0) {
+    return <div className="flex" />;
+  }
+
   if (errorMessage)
-    return (
-      <div className="flex items-center justify-center">
-        <p>⚠️ {errorMessage}</p>
-      </div>
-    );
+    return <ErrorFallback message={errorMessage} onRetry={refetch} />;
 
   return (
-    <ColumnListProvider columns={columns}>
+    <ColumnListProvider columns={columns} refetch={refetch}>
       <ul className="flex flex-col divide-y divide-gray-100 lg:min-h-screen lg:flex-row lg:divide-x lg:divide-y-0">
         {columns.map((column) => (
           <li key={column.id} className={cn(LIST_CLASS, 'lg:w-88.5')}>

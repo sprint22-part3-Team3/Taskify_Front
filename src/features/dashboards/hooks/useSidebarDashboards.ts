@@ -31,6 +31,7 @@ export function useSidebarDashboards() {
   const {
     currentPage,
     totalPages,
+    setCurrentPage,
     syncTotalCount,
     handlePrevPage,
     handleNextPage,
@@ -76,6 +77,11 @@ export function useSidebarDashboards() {
         return;
       }
 
+      if (currentPage !== 1) {
+        setCurrentPage(1);
+        return;
+      }
+
       void loadSidebarDashboards();
     };
 
@@ -90,7 +96,7 @@ export function useSidebarDashboards() {
         handleDashboardListChange
       );
     };
-  }, [loadSidebarDashboards]);
+  }, [currentPage, loadSidebarDashboards, setCurrentPage]);
 
   useEffect(() => {
     const handleTitleChange = () => {
@@ -111,6 +117,7 @@ export function useSidebarDashboards() {
     sidebarDashboards,
     currentPage,
     totalPages,
+    setCurrentPage,
     isLoadingSidebarDashboards,
     sidebarDashboardsError,
     loadSidebarDashboards,

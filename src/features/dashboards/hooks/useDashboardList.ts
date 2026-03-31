@@ -35,6 +35,7 @@ export function useDashboardList() {
   const {
     currentPage,
     totalPages,
+    setCurrentPage,
     syncTotalCount,
     handlePrevPage,
     handleNextPage,
@@ -80,6 +81,11 @@ export function useDashboardList() {
         return;
       }
 
+      if (currentPage !== 1) {
+        setCurrentPage(1);
+        return;
+      }
+
       void loadDashboardItems();
     };
 
@@ -94,7 +100,7 @@ export function useDashboardList() {
         handleDashboardListChange
       );
     };
-  }, [loadDashboardItems]);
+  }, [currentPage, loadDashboardItems, setCurrentPage]);
 
   const handleCreateDashboard = async (
     dashboardTitle: string,
@@ -107,7 +113,13 @@ export function useDashboardList() {
         title: dashboardTitle,
         color: dashboardColor,
       });
-      await loadDashboardItems();
+
+      if (currentPage !== 1) {
+        setCurrentPage(1);
+      } else {
+        await loadDashboardItems();
+      }
+
       dispatchDashboardListChangeEvent({ source: 'dashboard-list' });
     } finally {
       setIsCreatingDashboard(false);

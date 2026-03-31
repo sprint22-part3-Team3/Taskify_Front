@@ -21,10 +21,10 @@ export const getComments = async ({
     size: size.toString(),
     cardId: cardId.toString(),
   });
-  if (cursorId) {
+  if (cursorId !== null && cursorId !== undefined) {
     params.append('cursorId', cursorId.toString());
   }
-  const res = await get<GetCommentsResponse>(`comments?${params.toString()}`);
+  const res = await get<GetCommentsResponse>(`/comments?${params.toString()}`);
 
   return res;
 };
@@ -38,7 +38,7 @@ export const postComment = async ({
   columnId,
   dashboardId,
 }: PostCommentParams) => {
-  const res = await post<PostCommentResponse>(`comments`, {
+  const res = await post<PostCommentResponse>(`/comments`, {
     content,
     cardId,
     columnId,
@@ -52,7 +52,7 @@ export const postComment = async ({
  * PUT 댓글 수정
  */
 export const putComment = async ({ id, content }: PutCommentParams) => {
-  const res = await put<PutCommentResponse>(`comments/${id}`, {
+  const res = await put<PutCommentResponse>(`/comments/${id}`, {
     content,
   });
 
@@ -63,5 +63,5 @@ export const putComment = async ({ id, content }: PutCommentParams) => {
  * DELETE 댓글 삭제
  */
 export const delComment = async ({ id }: DelCommentParams) => {
-  await del(`comments/${id}`);
+  await del(`/comments/${id}`);
 };

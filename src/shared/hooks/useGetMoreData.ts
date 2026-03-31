@@ -39,6 +39,8 @@ export const useGetMoreData = <
 
     loading.current = true;
     setIsAddLoading(true);
+    setAddErrorMessage(null);
+
     const currentToken = requestToken.current;
 
     try {
