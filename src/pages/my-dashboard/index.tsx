@@ -65,7 +65,7 @@ function MyDashboardPage() {
           <AddDashboardButton onClick={openCreateDashboardModal} />
         </div>
 
-        {isLoadingDashboards && (
+        {isLoadingDashboards && dashboardItems.length === 0 && (
           <p className="typo-md-regular mt-4 text-gray-400">
             대시보드 목록을 불러오는 중이에요.
           </p>
