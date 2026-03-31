@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { createDashboard } from '@/features/dashboards/apis/createDashboard';
+import { createDashboard } from '@/features/dashboards/apis/dashboards';
 import { useSidebarDashboards } from '@/features/dashboards/hooks/useSidebarDashboards';
 import type { DashboardColorName } from '@/features/dashboards/types/dashboardColor.types';
 import { dispatchDashboardListChangeEvent } from '@/features/dashboards/utils/dashboardEvents';

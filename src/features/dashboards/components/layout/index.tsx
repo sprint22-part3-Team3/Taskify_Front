@@ -11,7 +11,7 @@ import {
   DASHBOARD_EVENTS,
   type DashboardTitleChangeDetail,
 } from '@/features/dashboards/utils/dashboardEvents';
-import { getDashboard } from '@/features/dashboards/apis/getDashboard';
+import { getDashboard } from '@/features/dashboards/apis/dashboards';
 
 /**
  * 대시보드 공통 레이아웃 컴포넌트입니다.

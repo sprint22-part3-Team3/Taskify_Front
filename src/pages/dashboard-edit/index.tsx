@@ -7,7 +7,7 @@ import MembersSection from '@/features/members/components/members-section';
 import InvitationsSection from '@/features/invitations/components/invitations-section';
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { deleteDashboard } from '@/features/dashboards/apis/deleteDashboard';
+import { deleteDashboard } from '@/features/dashboards/apis/dashboards';
 import { dispatchDashboardListChangeEvent } from '@/features/dashboards/utils/dashboardEvents';
 
 export default function DashboardEditPage() {

@@ -11,8 +11,8 @@ import {
   cancelInvitation,
   getInvitations,
   INVITATIONS_SIZE,
-} from '@/features/invitations/apis/invitations';
-import type { Invitation } from '@/features/invitations/apis/invitations.types';
+} from '@/features/dashboards/apis/invitations';
+import type { Invitation } from '@/features/dashboards/apis/invitations.types';
 import { usePagination } from '@/shared/hooks/usePagination';
 import { DASHBOARD_EVENTS } from '@/features/dashboards/utils/dashboardEvents';
 

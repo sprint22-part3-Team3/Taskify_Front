@@ -2,9 +2,9 @@ import { Button } from '@/shared/components/button';
 import Input from '@/shared/components/input';
 import { Modal } from '@/shared/components/modal';
 import { useState } from 'react';
-import { createInvitation } from '@/features/invitations/apis/invitations';
+import { createInvitation } from '@/features/dashboards/apis/invitations';
 import { validateEmail } from '@/shared/utils/validators/validateEmail';
-import type { InviteModalProps } from '@/features/invitations/apis/invitations.types';
+import type { InviteModalProps } from '@/features/dashboards/apis/invitations.types';
 import { dispatchInvitationListChangeEvent } from '@/features/dashboards/utils/dashboardEvents';
 
 /**

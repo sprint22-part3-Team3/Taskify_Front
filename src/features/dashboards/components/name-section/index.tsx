@@ -9,8 +9,10 @@ import {
 } from '@/features/dashboards/constants/dashboardColorMap.constants';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getDashboard } from '@/features/dashboards/apis/getDashboard';
-import { updateDashboard } from '@/features/dashboards/apis/updateDashboard';
+import {
+  getDashboard,
+  updateDashboard,
+} from '@/features/dashboards/apis/dashboards';
 import { dispatchDashboardTitleChangeEvent } from '@/features/dashboards/utils/dashboardEvents';
 
 /**
