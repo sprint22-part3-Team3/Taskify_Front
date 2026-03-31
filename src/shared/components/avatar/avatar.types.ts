@@ -7,7 +7,7 @@ export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
 
 export type AvatarProps = {
   children?: ReactNode;
-  user: AvatarUser;
+  user?: AvatarUser | null;
   size?: AvatarSize;
   className?: string;
 };

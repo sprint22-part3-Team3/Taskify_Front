@@ -12,6 +12,7 @@ import {
   type DashboardTitleChangeDetail,
 } from '@/features/dashboards/utils/dashboardEvents';
 import { getDashboard } from '@/features/dashboards/apis/dashboards';
+import { DashboardMembersProvider } from '@/features/members/contexts/dashboardMembersContext';
 
 /**
  * 대시보드 공통 레이아웃 컴포넌트입니다.
@@ -149,64 +150,66 @@ export default function DashboardLayout() {
   }, [refetchMembers]);
 
   return (
-    <>
-      <div className="flex h-screen overflow-hidden bg-gray-50">
-        <Sidebar
-          dashboards={sidebarDashboards}
-          selectedId={selectedDashboardId}
-          isLoading={isLoadingSidebarDashboards}
-          errorMessage={sidebarDashboardsError}
-          isPrevDisabled={currentPage === 1 || isLoadingSidebarDashboards}
-          isNextDisabled={
-            currentPage === totalPages || isLoadingSidebarDashboards
-          }
-          onAddClick={handleOpenCreateDashboardModal}
-          onDashboardClick={handleDashboardClick}
-          onPrevPage={handlePrevPage}
-          onNextPage={handleNextPage}
-        />
-        <div className="flex min-w-0 flex-1 flex-col">
-          <Header
-            title={
-              isMyDashboardPage
-                ? '내 대시보드'
-                : isMyPage
-                  ? '계정관리'
-                  : dashboardInfo?.id === dashboardId
-                    ? dashboardInfo?.title
-                    : ''
+    <DashboardMembersProvider members={dashboardMembers}>
+      <>
+        <div className="flex h-screen overflow-hidden bg-gray-50">
+          <Sidebar
+            dashboards={sidebarDashboards}
+            selectedId={selectedDashboardId}
+            isLoading={isLoadingSidebarDashboards}
+            errorMessage={sidebarDashboardsError}
+            isPrevDisabled={currentPage === 1 || isLoadingSidebarDashboards}
+            isNextDisabled={
+              currentPage === totalPages || isLoadingSidebarDashboards
             }
-            isOwner={
-              isSpecificDashboardPage && (dashboardInfo?.createdByMe ?? false)
-            }
-            isTitleAlwaysVisible={!isSpecificDashboardPage}
-            isActionButtonsVisible={
-              isSpecificDashboardPage && (dashboardInfo?.createdByMe ?? false)
-            }
-            isMemberProfilesVisible={isSpecificDashboardPage}
-            onManageClick={handleNavigateDashboardEdit}
-            onInviteClick={handleOpenDashboardInviteModal}
-            members={dashboardMembers}
-            totalMemberCount={totalCount}
-            memberLoadError={memberLoadError ?? ''}
-            onProfileClick={handleNavigateMyPage}
+            onAddClick={handleOpenCreateDashboardModal}
+            onDashboardClick={handleDashboardClick}
+            onPrevPage={handlePrevPage}
+            onNextPage={handleNextPage}
           />
-          <main className="flex-1 overflow-auto">
-            <Outlet />
-          </main>
+          <div className="flex min-w-0 flex-1 flex-col">
+            <Header
+              title={
+                isMyDashboardPage
+                  ? '내 대시보드'
+                  : isMyPage
+                    ? '계정관리'
+                    : dashboardInfo?.id === dashboardId
+                      ? dashboardInfo?.title
+                      : ''
+              }
+              isOwner={
+                isSpecificDashboardPage && (dashboardInfo?.createdByMe ?? false)
+              }
+              isTitleAlwaysVisible={!isSpecificDashboardPage}
+              isActionButtonsVisible={
+                isSpecificDashboardPage && (dashboardInfo?.createdByMe ?? false)
+              }
+              isMemberProfilesVisible={isSpecificDashboardPage}
+              onManageClick={handleNavigateDashboardEdit}
+              onInviteClick={handleOpenDashboardInviteModal}
+              members={dashboardMembers}
+              totalMemberCount={totalCount}
+              memberLoadError={memberLoadError ?? ''}
+              onProfileClick={handleNavigateMyPage}
+            />
+            <main className="flex-1 overflow-auto">
+              <Outlet />
+            </main>
+          </div>
         </div>
-      </div>
-      <InviteModal
-        isOpen={isInviteModalOpen}
-        onClose={handleCloseInviteModal}
-        dashboardId={dashboardId ?? ''}
-      />
-      <CreateDashboardModal
-        isOpen={isCreateDashboardModalOpen}
-        isCreating={isCreatingDashboard}
-        onClose={handleCloseCreateDashboardModal}
-        onCreate={handleCreateDashboard}
-      />
-    </>
+        <InviteModal
+          isOpen={isInviteModalOpen}
+          onClose={handleCloseInviteModal}
+          dashboardId={dashboardId ?? ''}
+        />
+        <CreateDashboardModal
+          isOpen={isCreateDashboardModalOpen}
+          isCreating={isCreatingDashboard}
+          onClose={handleCloseCreateDashboardModal}
+          onCreate={handleCreateDashboard}
+        />
+      </>
+    </DashboardMembersProvider>
   );
 }

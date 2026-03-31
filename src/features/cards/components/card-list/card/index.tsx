@@ -9,12 +9,14 @@ import { useModal } from '@/shared/hooks/useModal';
 import { getTagColor } from '@/shared/utils/getTagColor';
 import { useDraggable } from '@/shared/libs/dnd-kit';
 import { cn } from '@/shared/utils/cn';
+import { useDashboardMembersContextOrDefault } from '@/features/members/contexts/dashboardMembersContext';
 
 function Card({ card }: CardProps) {
   const { isOpen, openModal, closeModal } = useModal();
   const preventModalOnClickRef = useRef(false);
   const dragBlockAnimationRef = useRef<number | null>(null);
 
+  const members = useDashboardMembersContextOrDefault();
   const draggableId = card ? `card-${card.id}` : 'card-placeholder';
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: draggableId,
@@ -48,6 +50,15 @@ function Card({ card }: CardProps) {
   }
 
   const { imageUrl, title, tags, dueDate, assignee } = card;
+  const hasMembersList = members.length > 0;
+  const assigneeId = assignee ? (assignee.userId ?? assignee.id) : null;
+  const shouldDisplayAssignee =
+    Boolean(assignee) &&
+    (!hasMembersList ||
+      (assigneeId !== null &&
+        members.some(
+          (member) => member.userId === assigneeId || member.id === assigneeId
+        )));
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -111,7 +122,7 @@ function Card({ card }: CardProps) {
                     {dueDate || '-'}
                   </p>
                 </div>
-                {assignee && (
+                {shouldDisplayAssignee && (
                   <Avatar user={assignee} size="sm">
                     {assignee?.profileImageUrl ? (
                       <Avatar.Img />
