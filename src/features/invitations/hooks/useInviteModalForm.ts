@@ -21,6 +21,18 @@ export type UseInviteModalFormResult = {
   resetForm: () => void;
 };
 
+/**
+ * 초대하기 모달의 폼 상태와 제출 로직을 관리하는 커스텀 훅입니다.
+ *
+ * 중복 이메일 검증, 정규화된 API 요청, 서버 에러 메시지(404/409) 분기 처리를
+ * 수행하고 성공 여부를 boolean으로 반환합니다.
+ *
+ * @example
+ * ```ts
+ * const { inviteEmail, inviteError, handleSubmit } =
+ *   useInviteModalForm({ dashboardId: '123', isOpen: isInviteModalOpen });
+ * ```
+ */
 export function useInviteModalForm({
   dashboardId,
   isOpen,
