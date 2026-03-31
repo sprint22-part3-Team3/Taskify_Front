@@ -53,7 +53,7 @@ export default function Header({
   return (
     <header className="z-header flex h-15 min-w-0 items-center justify-between border-b border-gray-200 bg-white pl-4 md:h-17.5 md:px-10 lg:justify-between">
       {/* 제목 - 데스크탑에서만 표시 */}
-      {isTitleVisible && (
+      {isTitleVisible && title && (
         <div
           className={
             isTitleAlwaysVisible
