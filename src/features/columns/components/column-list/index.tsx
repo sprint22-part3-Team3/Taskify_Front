@@ -17,13 +17,9 @@ function ColumnList() {
   const { columns, isLoading, errorMessage, refetch } =
     useColumnList(dashboardId);
 
-  // TODO: 로딩 화면 처리
-  if (isLoading)
-    return (
-      <div className="flex items-center justify-center">
-        <p>Loading...</p>
-      </div>
-    );
+  if (isLoading && columns.length === 0) {
+    return <div className="flex" />;
+  }
   // TODO: 에러 화면 처리
   if (errorMessage)
     return (
