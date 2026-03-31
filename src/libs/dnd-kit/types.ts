@@ -9,7 +9,6 @@ export type DragState = {
   activeData: DragData | null;
   overId: UniqueIdentifier | null;
   overData: unknown;
-  transform: { x: number; y: number } | null;
 };
 
 export type DroppableEntry = {
@@ -38,7 +37,6 @@ export type DragEndEvent = {
 export type DndContextValue = {
   activeId: UniqueIdentifier | null;
   overId: UniqueIdentifier | null;
-  transform: { x: number; y: number } | null;
   registerDroppable: (
     id: UniqueIdentifier,
     node: HTMLElement,

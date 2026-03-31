@@ -8,7 +8,6 @@ import Title from '@/shared/components/title';
 import { useModal } from '@/shared/hooks/useModal';
 import { getTagColor } from '@/shared/utils/getTagColor';
 import { useDraggable } from '@dnd-kit/core';
-import { CSS } from '@dnd-kit/utilities';
 import { cn } from '@/shared/utils/cn';
 
 function Card({ card }: CardProps) {
@@ -17,11 +16,10 @@ function Card({ card }: CardProps) {
   const dragBlockAnimationRef = useRef<number>();
 
   const draggableId = card ? `card-${card.id}` : 'card-placeholder';
-  const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useDraggable({
-      id: draggableId,
-      data: card,
-    });
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id: draggableId,
+    data: card,
+  });
 
   useEffect(() => {
     if (isDragging) {
@@ -51,13 +49,6 @@ function Card({ card }: CardProps) {
 
   const { imageUrl, title, tags, dueDate, assignee } = card;
 
-  const transformStyle = transform
-    ? {
-        transform: CSS.Translate.toString(transform),
-        zIndex: 50,
-      }
-    : undefined;
-
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (
       (e.key === 'Enter' || e.key === ' ') &&
@@ -72,7 +63,6 @@ function Card({ card }: CardProps) {
     <>
       <article
         ref={setNodeRef}
-        style={transformStyle}
         {...listeners}
         {...attributes}
         role="button"

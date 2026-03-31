@@ -13,7 +13,6 @@ const DEFAULT_STATE: DragState = {
   activeData: null,
   overId: null,
   overData: null,
-  transform: null,
 };
 
 const DndInternalContext = createContext<DndContextValue | null>(null);
@@ -29,6 +28,7 @@ export function DndContext({
     move?: (event: PointerEvent) => void;
     up?: (event: PointerEvent) => void;
   }>({});
+  const activeNodeRef = useRef<HTMLElement | null>(null);
   const draggingRef = useRef(false);
 
   const cleanup = useCallback(() => {
@@ -42,6 +42,10 @@ export function DndContext({
     listenersRef.current.move = undefined;
     listenersRef.current.up = undefined;
     draggingRef.current = false;
+    if (activeNodeRef.current) {
+      activeNodeRef.current.style.transform = '';
+      activeNodeRef.current = null;
+    }
     setState(DEFAULT_STATE);
   }, []);
 
@@ -75,20 +79,30 @@ export function DndContext({
       const startY = initialEvent.clientY;
       draggingRef.current = true;
 
+      activeNodeRef.current = node;
       const moveHandler = (moveEvent: PointerEvent) => {
         const over = findDroppable(moveEvent.clientX, moveEvent.clientY);
+        const translateX = moveEvent.clientX - startX;
+        const translateY = moveEvent.clientY - startY;
+        if (activeNodeRef.current) {
+          activeNodeRef.current.style.transform = `translate(${translateX}px, ${translateY}px)`;
+        }
         setState((previous) => {
           if (previous.activeId !== id) {
             return previous;
           }
+          const nextOverId = over?.id ?? null;
+          const nextOverData = over?.data ?? null;
+          if (
+            previous.overId === nextOverId &&
+            previous.overData === nextOverData
+          ) {
+            return previous;
+          }
           return {
             ...previous,
-            transform: {
-              x: moveEvent.clientX - startX,
-              y: moveEvent.clientY - startY,
-            },
-            overId: over?.id ?? null,
-            overData: over?.data ?? null,
+            overId: nextOverId,
+            overData: nextOverData,
           };
         });
       };
@@ -120,7 +134,6 @@ export function DndContext({
         activeData: data,
         overId: null,
         overData: null,
-        transform: { x: 0, y: 0 },
       });
 
       onDragStart?.({ active: { id, data } });
@@ -142,7 +155,6 @@ export function DndContext({
   const value: DndContextValue = {
     activeId: state.activeId,
     overId: state.overId,
-    transform: state.transform,
     registerDroppable,
     unregisterDroppable,
     startDragging,

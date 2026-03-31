@@ -83,7 +83,6 @@ export function useDraggable({
       onPointerDown: handlePointerDown,
     },
     setNodeRef,
-    transform: context.activeId === id ? context.transform : null,
     isDragging,
   };
 }
