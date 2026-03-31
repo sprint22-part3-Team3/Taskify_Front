@@ -1,4 +1,4 @@
-import { Button } from '@/shared/components/button';
+import { ErrorFallback } from '@/shared/components/error/error-fallback';
 import type { InfiniteScrollIndicatorProps } from '@/shared/components/infinite-scroll-indicator/infiniteScrollIndicator.types';
 import { LoadingFallback } from '@/shared/components/loading/loading-fallback';
 
@@ -19,12 +19,11 @@ export function InfiniteScrollIndicator({
       {isAddLoading && <LoadingFallback variant="part" />}
 
       {!isAddLoading && addErrorMessage && (
-        <div className="flex flex-col items-center gap-2">
-          <p className="typo-sm-medium text-error">⚠️ {addErrorMessage}</p>
-          <Button type="button" theme="outlined" size="sm" onClick={onRetry}>
-            다시 시도
-          </Button>
-        </div>
+        <ErrorFallback
+          message={addErrorMessage}
+          onRetry={onRetry}
+          variant="part"
+        />
       )}
 
       {!isAddLoading && !addErrorMessage && hasMore && (
