@@ -25,6 +25,10 @@ const isSameAssigneeQuery = (query: string, selectedAssigneeQuery: string) => {
   return selectedAssigneeQuery !== '' && query === selectedAssigneeQuery;
 };
 
+const isOnlyMentionTrigger = (query: string) => {
+  return query.trim() === '@';
+};
+
 function AssigneeSelect({
   label,
   selectedAssignee,
@@ -33,6 +37,8 @@ function AssigneeSelect({
   required = false,
   placeholder = '@이름을 입력해 주세요',
 }: AssigneeSelectProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const isSelectingAssigneeRef = useRef(false);
   const [query, setQuery] = useState<string>(
     getAssigneeQuery(selectedAssignee)
   );
@@ -70,6 +76,7 @@ function AssigneeSelect({
     setQuery(getAssigneeQuery(assignee));
     setIsOpen(false);
     setShowManualInvalidMentionError(false);
+    inputRef.current?.blur();
   };
 
   const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,6 +103,18 @@ function AssigneeSelect({
   };
 
   const handleBlur = () => {
+    if (isSelectingAssigneeRef.current) {
+      isSelectingAssigneeRef.current = false;
+      setShowManualInvalidMentionError(false);
+      return;
+    }
+
+    if (selectedAssignee && isOnlyMentionTrigger(query)) {
+      setQuery(selectedAssigneeQuery);
+      setShowManualInvalidMentionError(false);
+      return;
+    }
+
     if (query.trim() && !shouldShowSelectedAssignee) {
       setShowManualInvalidMentionError(true);
       return;
@@ -145,6 +164,7 @@ function AssigneeSelect({
             </div>
           )}
           <InputField
+            ref={inputRef}
             type="text"
             value={query}
             placeholder={placeholder}
@@ -166,6 +186,10 @@ function AssigneeSelect({
                   <li key={assignee.id}>
                     <button
                       type="button"
+                      onMouseDown={(event) => {
+                        event.preventDefault();
+                        isSelectingAssigneeRef.current = true;
+                      }}
                       onClick={() => handleSelect(assignee)}
                       className={cn(
                         'text-black-200 flex h-12 w-full items-center px-4 text-left hover:bg-gray-50',
