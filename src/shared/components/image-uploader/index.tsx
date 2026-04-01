@@ -5,6 +5,7 @@ import type {
 import { useState, useEffect } from 'react';
 import { IcAdd, IcClose } from '@/shared/assets/icons';
 import { VARIANT_STYLE } from '@/shared/components/image-uploader/imageUploader.constants';
+import { cn } from '@/shared/utils/cn';
 
 /**
  * 이미지 업로드 박스 컴포넌트
@@ -94,10 +95,20 @@ export default function ImageUploadBox({
           <button
             type="button"
             aria-label="이미지 삭제"
-            className="absolute top-1 right-1 cursor-pointer"
+            className={cn(
+              'absolute flex cursor-pointer items-center justify-center rounded-full bg-black/70 transition-colors hover:bg-black',
+              variant === 'default'
+                ? 'top-2 right-2 h-6 w-6'
+                : 'top-1 right-1 h-5 w-5'
+            )}
             onClick={handleRemove}
           >
-            <IcClose className="text-gray-300" />
+            <IcClose
+              className={cn(
+                'text-gray-300 text-white',
+                variant === 'default' ? 'h-5 w-5' : 'h-4 w-4'
+              )}
+            />
           </button>
         </div>
       )}
