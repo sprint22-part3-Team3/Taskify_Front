@@ -122,7 +122,7 @@ export default function Header({
         {/* 유저 프로필 - 이름은 모바일에서 숨김 */}
         <button
           type="button"
-          className="cursor-pointer border-l border-gray-200 px-3 md:pl-6"
+          className="cursor-pointer border-l border-gray-200 px-3 md:pr-0 md:pl-6"
           onClick={onProfileClick}
         >
           {userProfile && (
