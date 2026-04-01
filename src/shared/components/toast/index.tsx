@@ -43,7 +43,7 @@ export function Toast({
 
   return (
     <div className={toastVariants({ theme })} role="alert">
-      <div className={cn('shrink-0', colorClass)}>
+      <div className={cn('shrink-0', colorClass)} aria-hidden="true">
         <Icon />
       </div>
 
