@@ -1,9 +1,6 @@
 import {
-  TAG_COLOR_HEX,
-  type TagColorName,
-} from '@/shared/components/tag/tag.constants';
-import {
   TAG_BACKGROUND_OPACITY_PERCENT,
+  TAG_COLOR_HEX,
   TAG_TEXT_DEFAULT_COLOR,
 } from '@/shared/components/tag/tag.constants';
 import { type TagProps } from '@/shared/components/tag/tag.types';
