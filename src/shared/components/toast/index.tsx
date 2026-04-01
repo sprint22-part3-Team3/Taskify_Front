@@ -4,8 +4,10 @@ import { cn } from '@/shared/utils/cn';
 import { IcClose } from '@/shared/assets';
 import {
   DEFAULT_TITLES,
+  TOAST_DURATION,
   TOAST_ICONS,
 } from '@/shared/components/toast/toast.constants';
+import { useEffect } from 'react';
 
 const toastVariants = cva(
   'pointer-events-auto flex w-xs md:w-md items-center gap-3 bg-white p-3 shadow-lg ring-1 ring-black/5 transition-all min-h-14 border-l-4',
@@ -36,6 +38,16 @@ export function Toast({
   onClose,
 }: ToastProps) {
   const { Icon, colorClass } = TOAST_ICONS[theme];
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onClose(id);
+    }, TOAST_DURATION);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [id, onClose]);
 
   const handleClose = () => {
     onClose(id);
