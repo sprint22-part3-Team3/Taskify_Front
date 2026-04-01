@@ -46,7 +46,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
     <ToastContext.Provider value={contextValue}>
       {children}
       {createPortal(
-        <div className="z-toast fixed bottom-5 left-1/2 flex -translate-x-1/2 flex-col gap-2">
+        <div className="z-toast fixed right-5 bottom-5 flex flex-col gap-2">
           {toasts.map((toast) => (
             <Toast key={toast.id} {...toast} onClose={removeToast} />
           ))}
