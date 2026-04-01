@@ -32,7 +32,7 @@ export function useTodoEditForm({ card }: UseTodoEditFormParams) {
       setSubmissionError(null);
 
       try {
-        await updateCard(cardId, payload);
+        const updatedCard = await updateCard(cardId, payload);
         refetch();
         window.dispatchEvent(
           new CustomEvent(CARD_EVENTS.LIST_CHANGE, {
@@ -42,14 +42,14 @@ export function useTodoEditForm({ card }: UseTodoEditFormParams) {
             },
           })
         );
-        return true;
+        return updatedCard;
       } catch (error) {
         const message =
           error instanceof Error
             ? error.message
             : '카드 수정을 실패했습니다. 다시 시도해 주세요.';
         setSubmissionError(message);
-        return false;
+        return null;
       } finally {
         setIsSubmitting(false);
       }

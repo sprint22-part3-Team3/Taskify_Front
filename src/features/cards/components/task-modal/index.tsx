@@ -13,7 +13,12 @@ import { delCard } from '@/features/cards/apis/cards';
 import { MODAL_CLOSE_DELAY } from '@/shared/constants/modal.constants';
 import { useCardRefetchContext } from '@/features/cards/hooks/useCardRefetchContext';
 
-function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
+function TaskModal({
+  isOpen,
+  closeModal,
+  card,
+  onCardUpdated,
+}: TaskModalProps) {
   const { refetch } = useCardRefetchContext();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const {
@@ -120,6 +125,7 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
         isOpen={isEditModalOpen}
         onClose={handleCloseEditModal}
         card={card}
+        onCardUpdated={onCardUpdated}
       />
       <DeleteModal
         isOpen={isDeleteModalOpen}

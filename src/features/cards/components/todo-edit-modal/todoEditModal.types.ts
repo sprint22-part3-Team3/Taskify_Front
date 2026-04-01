@@ -4,4 +4,5 @@ export type TodoEditModalProps = {
   isOpen: boolean;
   onClose: () => void;
   card: Card;
+  onCardUpdated?: (card: Card) => void;
 };

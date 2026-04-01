@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { CardProps } from '@/features/cards/components/card-list/card/card.types';
 import { TaskModal } from '@/features/cards/components/task-modal';
 import { IcCalendar } from '@/shared/assets/icons';
@@ -15,12 +15,15 @@ function Card({ card }: CardProps) {
   const { isOpen, openModal, closeModal } = useModal();
   const preventModalOnClickRef = useRef(false);
   const dragBlockAnimationRef = useRef<number | null>(null);
+  const [currentCard, setCurrentCard] = useState(card);
 
   const { members, totalCount } = useDashboardMembersContextOrDefault();
-  const draggableId = card ? `card-${card.id}` : 'card-placeholder';
+  const draggableId = currentCard
+    ? `card-${currentCard.id}`
+    : 'card-placeholder';
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: draggableId,
-    data: card,
+    data: currentCard,
   });
 
   useEffect(() => {
@@ -45,11 +48,11 @@ function Card({ card }: CardProps) {
     };
   }, [isDragging]);
 
-  if (!card) {
+  if (!currentCard) {
     return null;
   }
 
-  const { imageUrl, title, tags, dueDate, assignee } = card;
+  const { imageUrl, title, tags, dueDate, assignee } = currentCard;
   const isFullList = totalCount > 0 && members.length >= totalCount;
   const assigneeId = assignee?.userId ?? null;
   const shouldDisplayAssignee =
@@ -134,7 +137,12 @@ function Card({ card }: CardProps) {
           </section>
         </div>
       </article>
-      <TaskModal isOpen={isOpen} closeModal={closeModal} card={card} />
+      <TaskModal
+        isOpen={isOpen}
+        closeModal={closeModal}
+        card={currentCard}
+        onCardUpdated={setCurrentCard}
+      />
     </>
   );
 }

@@ -4,4 +4,5 @@ export type TaskModalProps = {
   isOpen: boolean;
   closeModal: () => void;
   card: Card;
+  onCardUpdated?: (card: Card) => void;
 };

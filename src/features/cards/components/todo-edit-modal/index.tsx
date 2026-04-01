@@ -35,6 +35,7 @@ function TodoEditModalContent({
   onClose,
   card,
   dashboardId,
+  onCardUpdated,
 }: TodoEditModalProps & { dashboardId: number }) {
   const {
     selectedColumnId,
@@ -141,8 +142,9 @@ function TodoEditModalContent({
       imageUrl,
     };
 
-    const isUpdated = await handleUpdateCard(payload, card.columnId);
-    if (isUpdated) {
+    const updatedCard = await handleUpdateCard(payload, card.columnId);
+    if (updatedCard) {
+      onCardUpdated?.(updatedCard);
       onClose();
     }
   };
