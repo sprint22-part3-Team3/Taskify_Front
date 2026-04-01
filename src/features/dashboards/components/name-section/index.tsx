@@ -99,6 +99,8 @@ export default function NameSection() {
 
       if (result) {
         setDashboardTitle(result.title);
+        setTitle(result.title);
+        setOriginalColor(selectedColor);
         dispatchDashboardTitleChangeEvent({ title: result.title });
       }
     } catch {
