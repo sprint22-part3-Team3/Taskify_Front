@@ -14,7 +14,7 @@ function TaskAssignee({ assignee, dueDate }: TaskAssigneeProps) {
 
   return (
     <div className="rounded-lg border border-gray-200 px-4 py-2.25 md:py-3.75">
-      <div className="flex gap-[24%] md:flex-col md:gap-4">
+      <div className="flex flex-wrap justify-between gap-4 md:flex-col">
         {assignee && (
           <div>
             <Title as="h3" size="xs" weight="semibold" color="text-black">
