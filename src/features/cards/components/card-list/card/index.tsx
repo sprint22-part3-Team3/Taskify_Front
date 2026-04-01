@@ -80,7 +80,7 @@ function Card({ card }: CardProps) {
           }
         }}
         className={cn(
-          'cursor-pointer rounded-md border border-gray-200 bg-white px-3 py-3 md:px-5 md:py-5 lg:py-4',
+          'touch-action-none cursor-pointer rounded-md border border-gray-200 bg-white px-3 py-3 md:px-5 md:py-5 lg:py-4',
           isDragging && 'opacity-70 shadow-lg'
         )}
       >
