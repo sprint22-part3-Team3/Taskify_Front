@@ -32,3 +32,4 @@ export const DEFAULT_TITLES = {
 } as const;
 
 export const TOAST_DURATION = 3000;
+export const MAX_TOASTS = 3;

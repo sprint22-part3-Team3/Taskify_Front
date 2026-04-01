@@ -4,6 +4,7 @@ import { useState, useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { ToastContext } from './toastContext';
 import { Toast } from '@/shared/components/toast';
+import { MAX_TOASTS } from '@/shared/components/toast/toast.constants';
 
 type ToastProviderProps = {
   children: React.ReactNode;
@@ -20,8 +21,8 @@ export function ToastProvider({ children }: ToastProviderProps) {
 
   const removeToast = useCallback((id: string) => {
     setToasts((prev) => {
-      if (!prev.some((toast) => toast.id === id)) return prev;
-      return prev.filter((toast) => toast.id !== id);
+      const next = prev.filter((toast) => toast.id !== id);
+      return next.length === prev.length ? prev : next;
     });
   }, []);
 
@@ -33,7 +34,10 @@ export function ToastProvider({ children }: ToastProviderProps) {
       id,
     };
 
-    setToasts((prev) => [...prev, newToast]);
+    setToasts((prev) => {
+      const next = [...prev, newToast];
+      return next.length > MAX_TOASTS ? next.slice(-MAX_TOASTS) : next;
+    });
   }, []);
 
   const contextValue = useMemo(() => ({ showToast }), [showToast]);
