@@ -38,7 +38,7 @@ function AssigneeSelect({
   placeholder = '@이름을 입력해 주세요',
 }: AssigneeSelectProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const isSelectingAssigneeRef = useRef(false);
+  const shouldSkipNextBlurValidationRef = useRef(false);
   const [query, setQuery] = useState<string>(
     getAssigneeQuery(selectedAssignee)
   );
@@ -72,6 +72,7 @@ function AssigneeSelect({
   }, [assigneeOptions, debouncedNormalizedQuery]);
 
   const handleSelect = (assignee: AvatarUser) => {
+    shouldSkipNextBlurValidationRef.current = true;
     onSelect(assignee);
     setQuery(getAssigneeQuery(assignee));
     setIsOpen(false);
@@ -114,8 +115,8 @@ function AssigneeSelect({
 
     setIsOpen(false);
 
-    if (isSelectingAssigneeRef.current) {
-      isSelectingAssigneeRef.current = false;
+    if (shouldSkipNextBlurValidationRef.current) {
+      shouldSkipNextBlurValidationRef.current = false;
       setShowManualInvalidMentionError(false);
       return;
     }
@@ -202,7 +203,6 @@ function AssigneeSelect({
                       type="button"
                       onMouseDown={(event) => {
                         event.preventDefault();
-                        isSelectingAssigneeRef.current = true;
                       }}
                       onClick={() => handleSelect(assignee)}
                       className={cn(
