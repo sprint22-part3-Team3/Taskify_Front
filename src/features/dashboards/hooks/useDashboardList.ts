@@ -13,6 +13,7 @@ import {
 } from '@/features/dashboards/utils/dashboardEvents';
 import { getApiErrorMessage } from '@/features/dashboards/utils/getApiErrorMessage';
 import { usePagination } from '@/shared/hooks/usePagination';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * 내 대시보드 목록 조회와 생성 후 갱신 상태를 관리합니다.
@@ -29,6 +30,7 @@ import { usePagination } from '@/shared/hooks/usePagination';
  * ```
  */
 export function useDashboardList() {
+  const navigate = useNavigate();
   const PAGE_SIZE = 5;
   const [dashboardItems, setDashboardItems] = useState<DashboardItem[]>([]);
   const [isLoadingDashboards, setIsLoadingDashboards] = useState(true);
@@ -123,6 +125,7 @@ export function useDashboardList() {
       }
 
       dispatchDashboardListChangeEvent({ source: 'dashboard-list' });
+      navigate('/mydashboard');
     } finally {
       setIsCreatingDashboard(false);
     }
