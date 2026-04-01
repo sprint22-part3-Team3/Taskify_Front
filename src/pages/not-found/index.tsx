@@ -9,7 +9,7 @@ function NotFoundPage() {
       <div className="absolute -top-18 -left-12 h-56 w-56 rounded-full bg-white/10 blur-2xl" />
       <div className="absolute -right-10 -bottom-16 h-64 w-64 rounded-full bg-black/10 blur-2xl" />
 
-      <section className="relative z-10 flex w-full max-w-3xl flex-col items-center px-8 py-12 text-center md:px-12 md:py-16">
+      <section className="z-base relative flex w-full max-w-3xl flex-col items-center px-8 py-12 text-center md:px-12 md:py-16">
         <Link to="/" className="mb-8" aria-label="홈으로 이동">
           <NotFoundLogo className="h-auto w-19.5 text-white" />
         </Link>

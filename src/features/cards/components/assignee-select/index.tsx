@@ -25,6 +25,10 @@ const isSameAssigneeQuery = (query: string, selectedAssigneeQuery: string) => {
   return selectedAssigneeQuery !== '' && query === selectedAssigneeQuery;
 };
 
+const isOnlyMentionTrigger = (query: string) => {
+  return query.trim() === '@';
+};
+
 function AssigneeSelect({
   label,
   selectedAssignee,
@@ -33,6 +37,8 @@ function AssigneeSelect({
   required = false,
   placeholder = '@이름을 입력해 주세요',
 }: AssigneeSelectProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const shouldSkipNextBlurValidationRef = useRef(false);
   const [query, setQuery] = useState<string>(
     getAssigneeQuery(selectedAssignee)
   );
@@ -66,10 +72,12 @@ function AssigneeSelect({
   }, [assigneeOptions, debouncedNormalizedQuery]);
 
   const handleSelect = (assignee: AvatarUser) => {
+    shouldSkipNextBlurValidationRef.current = true;
     onSelect(assignee);
     setQuery(getAssigneeQuery(assignee));
     setIsOpen(false);
     setShowManualInvalidMentionError(false);
+    inputRef.current?.blur();
   };
 
   const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,7 +103,30 @@ function AssigneeSelect({
     setIsOpen(hasNextMentionTrigger);
   };
 
-  const handleBlur = () => {
+  const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
+    const nextFocusedElement = event.relatedTarget;
+
+    if (
+      nextFocusedElement instanceof Node &&
+      containerRef.current?.contains(nextFocusedElement)
+    ) {
+      return;
+    }
+
+    setIsOpen(false);
+
+    if (shouldSkipNextBlurValidationRef.current) {
+      shouldSkipNextBlurValidationRef.current = false;
+      setShowManualInvalidMentionError(false);
+      return;
+    }
+
+    if (selectedAssignee && isOnlyMentionTrigger(query)) {
+      setQuery(selectedAssigneeQuery);
+      setShowManualInvalidMentionError(false);
+      return;
+    }
+
     if (query.trim() && !shouldShowSelectedAssignee) {
       setShowManualInvalidMentionError(true);
       return;
@@ -121,7 +152,11 @@ function AssigneeSelect({
     showManualInvalidMentionError;
 
   return (
-    <div className="flex w-full flex-col gap-2" ref={containerRef}>
+    <div
+      className="flex w-full flex-col gap-2"
+      ref={containerRef}
+      onBlur={handleBlur}
+    >
       <Label
         required={required}
         className="typo-md-regular md:typo-2lg-regular"
@@ -145,11 +180,11 @@ function AssigneeSelect({
             </div>
           )}
           <InputField
+            ref={inputRef}
             type="text"
             value={query}
             placeholder={placeholder}
             onFocus={handleFocus}
-            onBlur={handleBlur}
             onChange={handleChangeQuery}
             className={cn(
               'typo-md-regular md:typo-lg-regular focus:border-primary-500 text-black-200 h-12 bg-white py-0 pr-4 pl-11 md:pl-12',
@@ -159,13 +194,16 @@ function AssigneeSelect({
         </div>
 
         {isOpen && (
-          <div className="absolute z-50 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
+          <div className="z-dropdown absolute mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
             {filteredAssignees.length > 0 ? (
               <ul className="max-h-52 overflow-y-auto">
                 {filteredAssignees.map((assignee) => (
                   <li key={assignee.id}>
                     <button
                       type="button"
+                      onMouseDown={(event) => {
+                        event.preventDefault();
+                      }}
                       onClick={() => handleSelect(assignee)}
                       className={cn(
                         'text-black-200 flex h-12 w-full items-center px-4 text-left hover:bg-gray-50',

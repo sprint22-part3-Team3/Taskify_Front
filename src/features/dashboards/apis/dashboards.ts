@@ -21,8 +21,8 @@ import { del, get, post, put } from '@/shared/apis/fetchInstance';
 export async function createDashboard({
   title,
   color,
-}: CreateDashboardRequest) {
-  await post<unknown>('/dashboards', {
+}: CreateDashboardRequest): Promise<Dashboard | null> {
+  return post<Dashboard>('/dashboards', {
     title,
     color: DASHBOARD_COLOR_HEX[color],
   });

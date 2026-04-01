@@ -9,6 +9,7 @@ import type {
 } from './dndKit.types';
 
 const DRAG_THRESHOLD = 3;
+const DRAG_DELAY_MS = 150;
 
 export function useDraggable({
   id,
@@ -37,6 +38,10 @@ export function useDraggable({
       const startY = event.clientY;
       let hasStartedDrag = false;
       const target = event.currentTarget;
+      let dragDelayPassed = false;
+      const delayId = window.setTimeout(() => {
+        dragDelayPassed = true;
+      }, DRAG_DELAY_MS);
       const pointerId = event.pointerId;
       target?.setPointerCapture(pointerId);
 
@@ -47,11 +52,12 @@ export function useDraggable({
         const deltaX = moveEvent.clientX - startX;
         const deltaY = moveEvent.clientY - startY;
         const distance = Math.hypot(deltaX, deltaY);
-        if (distance >= DRAG_THRESHOLD) {
+        if (distance >= DRAG_THRESHOLD && dragDelayPassed) {
           hasStartedDrag = true;
           target?.releasePointerCapture(pointerId);
           window.removeEventListener('pointermove', moveHandler);
           window.removeEventListener('pointerup', upHandler);
+          cleanup();
           context.startDragging({
             id,
             data: { current: data },
@@ -65,6 +71,11 @@ export function useDraggable({
         target?.releasePointerCapture(pointerId);
         window.removeEventListener('pointermove', moveHandler);
         window.removeEventListener('pointerup', upHandler);
+        cleanup();
+      };
+
+      const cleanup = () => {
+        window.clearTimeout(delayId);
       };
 
       window.addEventListener('pointermove', moveHandler);
