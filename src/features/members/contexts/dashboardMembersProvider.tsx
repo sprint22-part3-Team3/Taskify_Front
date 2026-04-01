@@ -5,14 +5,16 @@ import { DashboardMembersContext } from '@/features/members/contexts/dashboardMe
 
 type DashboardMembersProviderProps = {
   members: Member[];
+  totalCount: number;
   children: ReactNode;
 };
 
 export function DashboardMembersProvider({
   members,
+  totalCount,
   children,
 }: DashboardMembersProviderProps) {
-  const value = useMemo(() => ({ members }), [members]);
+  const value = useMemo(() => ({ members, totalCount }), [members, totalCount]);
 
   return (
     <DashboardMembersContext.Provider value={value}>

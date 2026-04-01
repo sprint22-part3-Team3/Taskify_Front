@@ -150,7 +150,10 @@ export default function DashboardLayout() {
   }, [refetchMembers]);
 
   return (
-    <DashboardMembersProvider members={dashboardMembers}>
+    <DashboardMembersProvider
+      members={dashboardMembers}
+      totalCount={totalCount}
+    >
       <>
         <div className="flex h-screen overflow-hidden bg-gray-50">
           <Sidebar

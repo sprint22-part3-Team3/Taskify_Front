@@ -16,7 +16,7 @@ function Card({ card }: CardProps) {
   const preventModalOnClickRef = useRef(false);
   const dragBlockAnimationRef = useRef<number | null>(null);
 
-  const members = useDashboardMembersContextOrDefault();
+  const { members, totalCount } = useDashboardMembersContextOrDefault();
   const draggableId = card ? `card-${card.id}` : 'card-placeholder';
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: draggableId,
@@ -50,15 +50,13 @@ function Card({ card }: CardProps) {
   }
 
   const { imageUrl, title, tags, dueDate, assignee } = card;
-  const hasMembersList = members.length > 0;
-  const assigneeId = assignee ? (assignee.userId ?? assignee.id) : null;
+  const isFullList = totalCount > 0 && members.length >= totalCount;
+  const assigneeId = assignee?.userId ?? null;
   const shouldDisplayAssignee =
     Boolean(assignee) &&
-    (!hasMembersList ||
+    (!isFullList ||
       (assigneeId !== null &&
-        members.some(
-          (member) => member.userId === assigneeId || member.id === assigneeId
-        )));
+        members.some((member) => member.userId === assigneeId)));
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' || e.key === ' ') {

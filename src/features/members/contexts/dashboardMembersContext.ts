@@ -3,6 +3,7 @@ import { createContext, useContext } from 'react';
 
 type DashboardMembersContextValue = {
   members: Member[];
+  totalCount: number;
 };
 
 export const DashboardMembersContext =
@@ -20,5 +21,5 @@ export const useDashboardMembersContext = () => {
 
 export const useDashboardMembersContextOrDefault = () => {
   const context = useContext(DashboardMembersContext);
-  return context?.members ?? [];
+  return context ?? { members: [], totalCount: 0 };
 };
