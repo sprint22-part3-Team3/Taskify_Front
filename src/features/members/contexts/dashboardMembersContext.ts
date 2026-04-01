@@ -1,6 +1,5 @@
-import type { ReactNode } from 'react';
 import type { Member } from '@/features/members/apis/members.types';
-import { createContext, createElement, useContext, useMemo } from 'react';
+import { createContext, useContext } from 'react';
 
 type DashboardMembersContextValue = {
   members: Member[];
@@ -8,17 +7,6 @@ type DashboardMembersContextValue = {
 
 export const DashboardMembersContext =
   createContext<DashboardMembersContextValue | null>(null);
-
-export const DashboardMembersProvider = ({
-  members,
-  children,
-}: {
-  members: Member[];
-  children: ReactNode;
-}) => {
-  const value = useMemo(() => ({ members }), [members]);
-  return createElement(DashboardMembersContext.Provider, { value }, children);
-};
 
 export const useDashboardMembersContext = () => {
   const context = useContext(DashboardMembersContext);

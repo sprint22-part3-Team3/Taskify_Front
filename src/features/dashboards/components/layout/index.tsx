@@ -12,7 +12,7 @@ import {
   type DashboardTitleChangeDetail,
 } from '@/features/dashboards/utils/dashboardEvents';
 import { getDashboard } from '@/features/dashboards/apis/dashboards';
-import { DashboardMembersProvider } from '@/features/members/contexts/dashboardMembersContext';
+import { DashboardMembersProvider } from '@/features/members/contexts/dashboardMembersProvider';
 
 /**
  * 대시보드 공통 레이아웃 컴포넌트입니다.
