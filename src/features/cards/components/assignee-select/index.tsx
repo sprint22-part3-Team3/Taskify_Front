@@ -181,7 +181,7 @@ function AssigneeSelect({
         </div>
 
         {isOpen && (
-          <div className="absolute z-50 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
+          <div className="z-dropdown absolute mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
             {filteredAssignees.length > 0 ? (
               <ul className="max-h-52 overflow-y-auto">
                 {filteredAssignees.map((assignee) => (
