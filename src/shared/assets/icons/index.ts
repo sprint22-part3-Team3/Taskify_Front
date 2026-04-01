@@ -15,6 +15,10 @@ import IcMailOff from '@/shared/assets/icons/ic-mail-off.svg?react';
 import IcMenu from '@/shared/assets/icons/ic-menu.svg?react';
 import IcSearch from '@/shared/assets/icons/ic-search.svg?react';
 import IcSettings from '@/shared/assets/icons/ic-settings.svg?react';
+import IcToastError from '@/shared/assets/icons/ic-toast-error.svg?react';
+import IcToastInfo from '@/shared/assets/icons/ic-toast-info.svg?react';
+import IcToastSuccess from '@/shared/assets/icons/ic-toast-success.svg?react';
+import IcToastWarning from '@/shared/assets/icons/ic-toast-warning.svg?react';
 
 export {
   IcAdd,
@@ -34,4 +38,8 @@ export {
   IcMenu,
   IcSearch,
   IcSettings,
+  IcToastError,
+  IcToastInfo,
+  IcToastSuccess,
+  IcToastWarning,
 };
