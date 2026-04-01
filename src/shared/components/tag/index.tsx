@@ -1,4 +1,7 @@
-import { getDashboardColorHex } from '@/features/dashboards/utils/dashboardColor';
+import {
+  TAG_COLOR_HEX,
+  type TagColorName,
+} from '@/shared/components/tag/tag.constants';
 import {
   TAG_BACKGROUND_OPACITY_PERCENT,
   TAG_TEXT_DEFAULT_COLOR,
@@ -24,7 +27,7 @@ function Tag({
   style,
   ...props
 }: TagProps) {
-  const textColor = getDashboardColorHex(color);
+  const textColor = TAG_COLOR_HEX[color];
   const backgroundColor = getTagBackgroundColor(textColor);
 
   return (
