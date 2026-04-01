@@ -1,8 +1,3 @@
-const TAG_TEXT_DEFAULT_COLOR: TagColorName = 'blue';
-const TAG_BACKGROUND_OPACITY_PERCENT = 10;
-
-export { TAG_TEXT_DEFAULT_COLOR, TAG_BACKGROUND_OPACITY_PERCENT };
-
 /** 태그 전용 색상 목록 */
 export const TAG_COLORS = [
   'purple',
@@ -32,3 +27,6 @@ export const TAG_COLOR_HEX: Record<TagColorName, string> = {
   indigo: '#5a67d8',
   brown: '#a0522d',
 };
+
+export const TAG_TEXT_DEFAULT_COLOR: TagColorName = 'blue';
+export const TAG_BACKGROUND_OPACITY_PERCENT = 10;
