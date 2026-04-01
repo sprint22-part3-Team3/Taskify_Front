@@ -38,7 +38,7 @@ function AssigneeSelect({
   placeholder = '@이름을 입력해 주세요',
 }: AssigneeSelectProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const isSelectingAssigneeRef = useRef(false);
+  const shouldSkipNextBlurValidationRef = useRef(false);
   const [query, setQuery] = useState<string>(
     getAssigneeQuery(selectedAssignee)
   );
@@ -72,6 +72,7 @@ function AssigneeSelect({
   }, [assigneeOptions, debouncedNormalizedQuery]);
 
   const handleSelect = (assignee: AvatarUser) => {
+    shouldSkipNextBlurValidationRef.current = true;
     onSelect(assignee);
     setQuery(getAssigneeQuery(assignee));
     setIsOpen(false);
@@ -102,11 +103,20 @@ function AssigneeSelect({
     setIsOpen(hasNextMentionTrigger);
   };
 
-  const handleBlur = () => {
+  const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
+    const nextFocusedElement = event.relatedTarget;
+
+    if (
+      nextFocusedElement instanceof Node &&
+      containerRef.current?.contains(nextFocusedElement)
+    ) {
+      return;
+    }
+
     setIsOpen(false);
 
-    if (isSelectingAssigneeRef.current) {
-      isSelectingAssigneeRef.current = false;
+    if (shouldSkipNextBlurValidationRef.current) {
+      shouldSkipNextBlurValidationRef.current = false;
       setShowManualInvalidMentionError(false);
       return;
     }
@@ -142,7 +152,11 @@ function AssigneeSelect({
     showManualInvalidMentionError;
 
   return (
-    <div className="flex w-full flex-col gap-2" ref={containerRef}>
+    <div
+      className="flex w-full flex-col gap-2"
+      ref={containerRef}
+      onBlur={handleBlur}
+    >
       <Label
         required={required}
         className="typo-md-regular md:typo-2lg-regular"
@@ -171,7 +185,6 @@ function AssigneeSelect({
             value={query}
             placeholder={placeholder}
             onFocus={handleFocus}
-            onBlur={handleBlur}
             onChange={handleChangeQuery}
             className={cn(
               'typo-md-regular md:typo-lg-regular focus:border-primary-500 text-black-200 h-12 bg-white py-0 pr-4 pl-11 md:pl-12',
@@ -190,7 +203,6 @@ function AssigneeSelect({
                       type="button"
                       onMouseDown={(event) => {
                         event.preventDefault();
-                        isSelectingAssigneeRef.current = true;
                       }}
                       onClick={() => handleSelect(assignee)}
                       className={cn(
