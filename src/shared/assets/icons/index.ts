@@ -19,6 +19,7 @@ import IcToastError from '@/shared/assets/icons/ic-toast-error.svg?react';
 import IcToastInfo from '@/shared/assets/icons/ic-toast-info.svg?react';
 import IcToastSuccess from '@/shared/assets/icons/ic-toast-success.svg?react';
 import IcToastWarning from '@/shared/assets/icons/ic-toast-warning.svg?react';
+import IcDrag from '@/shared/assets/icons/ic-drag.svg?react';
 
 export {
   IcAdd,
@@ -42,4 +43,5 @@ export {
   IcToastInfo,
   IcToastSuccess,
   IcToastWarning,
+  IcDrag,
 };
