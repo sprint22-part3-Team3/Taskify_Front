@@ -65,7 +65,7 @@ function StatusDropdown({
       </button>
 
       {isOpen && (
-        <ul className="absolute z-50 mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
+        <ul className="z-dropdown absolute mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
           {isLoading && (
             <li className="typo-lg-regular flex h-12 items-center px-4 text-gray-500">
               {STATUS_DROPDOWN_TEXT.LOADING}
