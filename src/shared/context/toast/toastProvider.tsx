@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom';
 import { ToastContext } from './toastContext';
 import { Toast } from '@/shared/components/toast';
 import { MAX_TOASTS } from '@/shared/components/toast/toast.constants';
+import { cn } from '@/shared/utils/cn';
 
 type ToastProviderProps = {
   children: React.ReactNode;
@@ -46,7 +47,13 @@ export function ToastProvider({ children }: ToastProviderProps) {
     <ToastContext.Provider value={contextValue}>
       {children}
       {createPortal(
-        <div className="z-toast fixed bottom-5 left-1/2 flex -translate-x-1/2 flex-col gap-2">
+        <div
+          className={cn(
+            'z-toast pointer-events-none fixed bottom-5 flex flex-col gap-2',
+            'left-1/2 -translate-x-1/2 items-center',
+            'md:right-5 md:left-auto md:translate-x-0 md:items-end'
+          )}
+        >
           {toasts.map((toast) => (
             <Toast key={toast.id} {...toast} onClose={removeToast} />
           ))}
