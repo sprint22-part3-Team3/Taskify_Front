@@ -40,6 +40,8 @@ export default function NameSection() {
   const [submitError, setSubmitError] = useState('');
   const [loadError, setLoadError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [originalColor, setOriginalColor] =
+    useState<DashboardColorName>('purple');
 
   // 대시보드 제목 (input에 표시할 값)
   const [title, setTitle] = useState('');
@@ -61,6 +63,8 @@ export default function NameSection() {
           setTitle(data.title);
           setDashboardTitle(data.title);
           setSelectedColor(hexToColorName(data.color));
+          const colorName = hexToColorName(data.color);
+          setOriginalColor(colorName);
           dispatchDashboardTitleChangeEvent({ title: data.title });
         }
       } catch {
@@ -70,6 +74,9 @@ export default function NameSection() {
 
     fetchDashboard(dashboardId);
   }, [dashboardId]);
+
+  const hasChanges =
+    title.trim() !== dashboardTitle || selectedColor !== originalColor;
 
   // 변경 버튼 클릭 시 PUT API 호출
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
@@ -137,7 +144,7 @@ export default function NameSection() {
         <Button
           type="submit"
           className="w-full"
-          disabled={isSubmitting}
+          disabled={isSubmitting || !hasChanges}
           isLoading={isSubmitting}
         >
           변경
