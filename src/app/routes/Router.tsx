@@ -11,10 +11,12 @@ import MyDashboardPage from '@/pages/my-dashboard';
 import MyPage from '@/pages/my';
 import NotFoundPage from '@/pages/not-found';
 import SignupPage from '@/pages/signup';
+import ScrollToTop from '@/shared/components/scroll-to-top';
 
 function Router() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route element={<PublicRoute />}>
           <Route path="/" element={<MainPage />} />
