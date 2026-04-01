@@ -8,7 +8,7 @@ import {
 } from '@/shared/components/toast/toast.constants';
 
 const toastVariants = cva(
-  'pointer-events-auto flex w-full max-w-sm items-center gap-3 bg-white p-4 shadow-lg ring-1 ring-black/5 transition-all h-14 border-l-4',
+  'pointer-events-auto flex w-full min-w-xs items-center gap-3 bg-white p-4 shadow-lg ring-1 ring-black/5 transition-all h-14 border-l-4',
   {
     variants: {
       theme: {
