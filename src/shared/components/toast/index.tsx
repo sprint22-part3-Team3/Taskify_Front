@@ -12,10 +12,10 @@ const toastVariants = cva(
   {
     variants: {
       theme: {
-        success: 'border-l-4 border-l-primary-500',
-        error: 'border-l-4 border-l-error',
-        warning: 'border-l-4 border-l-warning',
-        info: 'border-l-4 border-l-info',
+        success: 'border-l-primary-500',
+        error: 'border-l-error',
+        warning: 'border-l-warning',
+        info: 'border-l-info',
       },
     },
     defaultVariants: {
@@ -53,9 +53,7 @@ export function Toast({
             {title || DEFAULT_TITLES[theme]}
           </p>
         )}
-        {message && (
-          <p className={cn('typo-xs-regular text-gray-400')}>{message}</p>
-        )}
+        {message && <p className="typo-xs-regular text-gray-400">{message}</p>}
       </div>
 
       <button
