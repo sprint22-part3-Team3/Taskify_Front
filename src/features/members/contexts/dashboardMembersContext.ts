@@ -21,5 +21,8 @@ export const useDashboardMembersContext = () => {
 
 export const useDashboardMembersContextOrDefault = () => {
   const context = useContext(DashboardMembersContext);
-  return context ?? { members: [], totalCount: 0 };
+  return {
+    members: context?.members ?? [],
+    totalCount: context?.totalCount ?? 0,
+  };
 };
