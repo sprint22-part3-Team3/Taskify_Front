@@ -101,7 +101,7 @@ export default function ProfileForm() {
 
   return (
     <form onSubmit={handleSubmit} noValidate>
-      <div className="mt-1 w-71 rounded-xl bg-white p-4 md:mt-7 md:w-137 md:p-6 lg:w-2xl">
+      <div className="mt-1 w-full rounded-xl bg-white p-4 md:mt-7 md:w-137 md:p-6 lg:w-2xl">
         <Title
           as="h3"
           size="2lg"
