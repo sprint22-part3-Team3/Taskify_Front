@@ -1,4 +1,4 @@
-import type { ToastItemProps } from '@/shared/components/toast/toast-item/toastItem.types';
+import type { ToastProps } from '@/shared/components/toast/toast.types';
 import { cva } from 'class-variance-authority';
 import { cn } from '@/shared/utils/cn';
 import { IcClose } from '@/shared/assets';
@@ -27,14 +27,14 @@ const toastVariants = cva(
 /**
  * 화면 하단에 띄워지는 알림(Toast) UI 컴포넌트입니다.
  */
-export function ToastItem({
+export function Toast({
   id,
   theme = 'success',
   title,
   message,
   isDisableTitle = false,
   onClose,
-}: ToastItemProps) {
+}: ToastProps) {
   const { Icon, colorClass } = TOAST_ICONS[theme];
   return (
     <div className={toastVariants({ theme })} role="alert">
