@@ -52,12 +52,15 @@ function EditColumnModal({
     !!error ||
     isLoading;
 
-  const handleClose = () => {
+  const handleClose = (afterClose?: (() => void) | React.SyntheticEvent) => {
     onClose();
     runAfterModalClose(() => {
       handleCloseDeleteModal();
       setDraftTitle(null);
       setError('');
+      if (typeof afterClose === 'function') {
+        afterClose();
+      }
     });
   };
 
@@ -80,11 +83,9 @@ function EditColumnModal({
 
   const handleDelete = async () => {
     setIsLoading(true);
-
     try {
       await deleteColumn(columnId);
-      refetch();
-      handleClose();
+      handleClose(refetch);
     } catch {
       setError('컬럼 삭제에 실패했습니다. 다시 시도해주세요.');
     } finally {
@@ -148,7 +149,12 @@ function EditColumnModal({
               >
                 삭제
               </Button>
-              <Button theme="primary" type="submit" disabled={isSubmitDisabled}>
+              <Button
+                theme="primary"
+                type="submit"
+                disabled={isSubmitDisabled}
+                isLoading={isLoading}
+              >
                 변경
               </Button>
             </Modal.Footer>
@@ -161,6 +167,10 @@ function EditColumnModal({
           renderInModal={false}
           onClose={handleClose}
           onConfirm={handleDelete}
+          confirmButtonProps={{
+            isLoading: isLoading,
+            disabled: isLoading,
+          }}
           message={
             <>
               컬럼을 <span className="text-error">삭제</span> 하시겠습니까?

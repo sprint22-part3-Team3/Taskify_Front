@@ -104,13 +104,13 @@ export default function Sidebar({
       </nav>
 
       {/* 하단 페이지네이션 */}
-      <div className="px-3 py-3">
+      <div className="flex justify-center px-0 py-3 md:block md:px-3">
         <NavigationButtons
           onPrev={onPrevPage ?? (() => undefined)}
           onNext={onNextPage ?? (() => undefined)}
           isPrevDisabled={isPrevDisabled}
           isNextDisabled={isNextDisabled}
-          isHidingOnMobile={true}
+          size="compact"
         />
       </div>
     </aside>

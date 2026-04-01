@@ -28,11 +28,11 @@ import useUserContext from '@/shared/context/user/useUserContext';
  * ```
  */
 export default function Header({
-  title = '비브리지', //TODO: API 연결할 때 SAMPLE_DASHBOARDS 제거
+  title = '',
   isOwner = true,
   members = [],
   totalMemberCount = 0,
-  userName = '배유철',
+  userName = '',
   profileImage,
   isTitleVisible = true,
   isTitleAlwaysVisible = false,
@@ -53,7 +53,7 @@ export default function Header({
   return (
     <header className="z-header flex h-15 min-w-0 items-center justify-between border-b border-gray-200 bg-white pl-4 md:h-17.5 md:px-10 lg:justify-between">
       {/* 제목 - 데스크탑에서만 표시 */}
-      {isTitleVisible && (
+      {isTitleVisible && title && (
         <div
           className={
             isTitleAlwaysVisible
@@ -125,15 +125,17 @@ export default function Header({
           className="cursor-pointer border-l border-gray-200 pl-3 md:pl-6"
           onClick={onProfileClick}
         >
-          <UserProfile
-            user={{
-              id: displayedProfile.id,
-              nickname: displayedProfile.nickname,
-              profileImageUrl: displayedProfile.profileImageUrl ?? '',
-            }}
-            size="lg"
-            nicknameClassName="hidden md:block"
-          />
+          {userProfile && (
+            <UserProfile
+              user={{
+                id: displayedProfile.id,
+                nickname: displayedProfile.nickname,
+                profileImageUrl: displayedProfile.profileImageUrl ?? '',
+              }}
+              size="lg"
+              nicknameClassName="hidden md:block"
+            />
+          )}
         </button>
       </div>
     </header>

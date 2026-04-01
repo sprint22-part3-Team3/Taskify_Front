@@ -220,7 +220,7 @@ export default function InvitationsSection() {
             <span className="text-error">취소</span> 하시겠습니까?
           </>
         }
-        confirmText="취소"
+        confirmText="확인"
       />
     </section>
   );

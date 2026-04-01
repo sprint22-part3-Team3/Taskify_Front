@@ -9,12 +9,14 @@ import { useModal } from '@/shared/hooks/useModal';
 import { getTagColor } from '@/shared/utils/getTagColor';
 import { useDraggable } from '@/shared/libs/dnd-kit';
 import { cn } from '@/shared/utils/cn';
+import { useDashboardMembersContextOrDefault } from '@/features/members/contexts/dashboardMembersContext';
 
 function Card({ card }: CardProps) {
   const { isOpen, openModal, closeModal } = useModal();
   const preventModalOnClickRef = useRef(false);
   const dragBlockAnimationRef = useRef<number | null>(null);
 
+  const { members, totalCount } = useDashboardMembersContextOrDefault();
   const draggableId = card ? `card-${card.id}` : 'card-placeholder';
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: draggableId,
@@ -48,6 +50,13 @@ function Card({ card }: CardProps) {
   }
 
   const { imageUrl, title, tags, dueDate, assignee } = card;
+  const isFullList = totalCount > 0 && members.length >= totalCount;
+  const assigneeId = assignee?.userId ?? null;
+  const shouldDisplayAssignee =
+    Boolean(assignee) &&
+    (!isFullList ||
+      (assigneeId !== null &&
+        members.some((member) => member.userId === assigneeId)));
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -71,14 +80,19 @@ function Card({ card }: CardProps) {
           }
         }}
         className={cn(
-          'cursor-pointer rounded-md border border-gray-200 bg-white px-3 py-3 md:px-5 md:py-5 lg:py-4',
+          'cursor-pointer touch-none rounded-md border border-gray-200 bg-white px-3 py-3 select-none md:px-5 md:py-5 lg:py-4',
           isDragging && 'opacity-70 shadow-lg'
         )}
       >
         <div className="md:flex md:items-center md:gap-5 lg:block">
           {imageUrl && (
             <figure className="mb-1.25 shrink-0 overflow-hidden rounded-md md:mb-0 md:w-22.75 lg:mb-3.75 lg:w-full">
-              <img src={imageUrl} alt={title} className="w-full" />
+              <img
+                src={imageUrl}
+                alt={title}
+                className="w-full"
+                draggable={false}
+              />
             </figure>
           )}
           <section className="flex w-full flex-col gap-1.5 md:gap-2.5">
@@ -106,7 +120,7 @@ function Card({ card }: CardProps) {
                     {dueDate || '-'}
                   </p>
                 </div>
-                {assignee && (
+                {shouldDisplayAssignee && (
                   <Avatar user={assignee} size="sm">
                     {assignee?.profileImageUrl ? (
                       <Avatar.Img />

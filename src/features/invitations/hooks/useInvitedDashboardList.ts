@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { InvitedDashboardItem } from '@/features/invitations/types/invitedDashboardItem.types';
-import { getInvitedDashboards } from '@/features/invitations/apis/getInvitedDashboards';
-import { respondToInvitation } from '@/features/invitations/apis/respondToInvitation';
+import {
+  getInvitedDashboards,
+  respondToInvitation,
+} from '@/features/invitations/apis/invitations';
 import { ApiError } from '@/shared/apis/apiError';
 import { DASHBOARD_ERROR_MESSAGE } from '@/features/dashboards/constants/dashboardErrorMessage.constants';
 import { getApiErrorMessage } from '@/features/dashboards/utils/getApiErrorMessage';

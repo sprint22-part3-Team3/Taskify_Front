@@ -26,6 +26,8 @@
   --color-pink: #fc7b8f;
 
   --color-error: #d6173a;
+  --color-warning: #ffc021;
+  --color-info: #2f86eb;
 
   /* Box Shadows */
   --shadow-lg: 0 4px 6px 0 rgb(0 0 0 / 0.05);

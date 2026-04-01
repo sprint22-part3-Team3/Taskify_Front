@@ -7,7 +7,7 @@ import { Button } from '@/shared/components/button';
 import TextArea from '@/shared/components/text-area';
 import useResponsiveValue from '@/shared/hooks/useResponsiveValue';
 import { cn } from '@/shared/utils/cn';
-import { formatDateTimeValue } from '@/shared/utils/date';
+import { formatDateTimeValue, parseServerDateTime } from '@/shared/utils/date';
 import { useState } from 'react';
 
 const TEXT_BUTTON_CLASS = cn(
@@ -22,6 +22,7 @@ const TEXT_BUTTON_CLASS = cn(
 function TaskCommentItem({ comment, refetch, onDelete }: TaskCommentItemProps) {
   const { id, author, createdAt, content } = comment;
 
+  const formattedDateTime = formatDateTimeValue(parseServerDateTime(createdAt));
   const avatarSize = useResponsiveValue<'md' | 'lg'>(TASK_MODAL_AVATAR_SIZE);
 
   const [isEditing, setIsEditing] = useState(false);
@@ -69,7 +70,7 @@ function TaskCommentItem({ comment, refetch, onDelete }: TaskCommentItemProps) {
             {author.nickname}
           </p>
           <p className="text-2xs md:typo-xs-regular text-gray-300">
-            {formatDateTimeValue(new Date(createdAt))}
+            {formattedDateTime}
           </p>
         </div>
 
@@ -98,7 +99,7 @@ function TaskCommentItem({ comment, refetch, onDelete }: TaskCommentItemProps) {
           </div>
         ) : (
           <>
-            <p className="text-black-200 typo-xs-regular md:typo-md-regular mb-2 whitespace-pre-wrap md:mb-2.5">
+            <p className="text-black-200 typo-xs-regular md:typo-md-regular mb-2 wrap-anywhere whitespace-pre-wrap md:mb-2.5">
               {content}
             </p>
             <ul className="text-2xs md:typo-xs-regular flex gap-2">

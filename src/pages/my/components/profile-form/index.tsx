@@ -5,8 +5,7 @@ import Input from '@/shared/components/input';
 import { Button } from '@/shared/components/button';
 import ImageUploadBox from '@/shared/components/image-uploader';
 
-import { updateUserMe } from '@/features/users/apis/updateUserMe';
-import { uploadProfileImage } from '@/features/users/apis/uploadProfileImage';
+import { updateUserMe, uploadProfileImage } from '@/features/users/apis/users';
 import { UserContext } from '@/shared/context/user/userContext';
 import { NICKNAME_RULES } from '@/shared/utils/validators/validators.constants';
 
@@ -30,10 +29,14 @@ export default function ProfileForm() {
     validateFn: validateNickname,
     initialValue: user?.nickname ?? '', // 추가
   });
+  const { setValue: setNicknameValue } = nicknameField;
+  const isImageRemoved = !previewImageUrl && !!user?.profileImageUrl;
 
   const isSaveDisabled =
     isSubmitting ||
-    (nicknameField.value.trim() === user?.nickname && !selectedFile) ||
+    (nicknameField.value.trim() === user?.nickname &&
+      !selectedFile &&
+      !isImageRemoved) ||
     !!nicknameField.error;
 
   useEffect(() => {
@@ -41,9 +44,9 @@ export default function ProfileForm() {
       setPreviewImageUrl(user.profileImageUrl);
     }
     if (user?.nickname) {
-      nicknameField.setValue(user.nickname);
+      setNicknameValue(user.nickname);
     }
-  }, [user?.profileImageUrl, user?.nickname]);
+  }, [user?.profileImageUrl, user?.nickname, setNicknameValue]);
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -53,11 +56,13 @@ export default function ProfileForm() {
     setErrorMessage('');
 
     try {
-      let profileImageUrl = user.profileImageUrl;
+      let profileImageUrl: string | null = user.profileImageUrl ?? null;
 
       if (selectedFile) {
         const res = await uploadProfileImage(selectedFile);
         profileImageUrl = res?.profileImageUrl ?? profileImageUrl;
+      } else if (isImageRemoved) {
+        profileImageUrl = null;
       }
 
       const updated = await updateUserMe({
@@ -78,15 +83,18 @@ export default function ProfileForm() {
 
   const handleNicknameBlur = () => {
     if (nicknameField.value.trim() === '') {
-      nicknameField.setValue(user?.nickname ?? ''); // 빈값이면 초기값 복원
-      // 초기값으로 유효성 검사
+      nicknameField.setValue(user?.nickname ?? '');
     } else {
-      nicknameField.onBlur(); // 입력값으로 유효성 검사
+      nicknameField.onBlur();
     }
   };
 
   const handleFileSelect = (file: File | null) => {
-    if (!file) return;
+    if (!file) {
+      setSelectedFile(null);
+      setPreviewImageUrl(undefined);
+      return;
+    }
     setSelectedFile(file);
     setPreviewImageUrl(undefined);
   };
@@ -116,7 +124,7 @@ export default function ProfileForm() {
               value={user?.email ?? ''}
               readOnly
               labelClassName="text-md md:mt-0 md:text-lg"
-              className="mb-4 bg-gray-50 text-gray-300 focus:border-gray-200"
+              className="mb-4 cursor-default bg-gray-50 text-gray-300 focus:border-gray-200"
             />
 
             <Input
