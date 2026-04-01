@@ -103,6 +103,8 @@ function AssigneeSelect({
   };
 
   const handleBlur = () => {
+    setIsOpen(false);
+
     if (isSelectingAssigneeRef.current) {
       isSelectingAssigneeRef.current = false;
       setShowManualInvalidMentionError(false);
