@@ -21,6 +21,8 @@ import {
   type DragEndEvent,
   type UniqueIdentifier,
 } from '@/shared/libs/dnd-kit';
+import { ApiError } from '@/shared/apis/apiError';
+import { useToast } from '@/shared/hooks/useToast';
 
 const LIST_CLASS = cn(
   'shrink-0 px-3 pt-8 pb-6 md:px-5 md:py-5',
@@ -76,35 +78,51 @@ function ColumnList() {
   const { columns, isLoading, errorMessage, refetch } =
     useColumnList(dashboardId);
   const sensors = useSensors(useSensor(PointerSensor));
+  const { showToast } = useToast();
 
-  const moveCard = useCallback(async (card: Card, targetColumnId: number) => {
-    const payload: UpdateCardRequest = {
-      columnId: targetColumnId,
-      title: card.title,
-      description: card.description,
-      dueDate: card.dueDate ?? undefined,
-      tags: card.tags,
-      imageUrl: card.imageUrl,
-      assigneeUserId: card.assignee?.id,
-    };
+  const moveCard = useCallback(
+    async (card: Card, targetColumnId: number) => {
+      const payload: UpdateCardRequest = {
+        columnId: targetColumnId,
+        title: card.title,
+        description: card.description,
+        dueDate: card.dueDate ?? undefined,
+        tags: card.tags,
+        imageUrl: card.imageUrl,
+        assigneeUserId: card.assignee?.id,
+      };
 
-    try {
-      await updateCard(card.id, payload);
-      const movedCard = { ...card, columnId: targetColumnId };
-      window.dispatchEvent(
-        new CustomEvent(CARD_EVENTS.LIST_CHANGE, {
-          detail: {
-            newColumnId: targetColumnId,
-            originalColumnId: card.columnId,
-            movedCard,
-          },
-        })
-      );
-    } catch (error) {
-      void error;
-      alert('카드 이동에 실패했습니다. 잠시 후 다시 시도해 주세요.');
-    }
-  }, []);
+      try {
+        await updateCard(card.id, payload);
+        const movedCard = { ...card, columnId: targetColumnId };
+        window.dispatchEvent(
+          new CustomEvent(CARD_EVENTS.LIST_CHANGE, {
+            detail: {
+              newColumnId: targetColumnId,
+              originalColumnId: card.columnId,
+              movedCard,
+            },
+          })
+        );
+      } catch (error) {
+        if (error instanceof ApiError && error.status === 400) {
+          showToast({
+            theme: 'warning',
+            title: '담당자 오류',
+            message:
+              '해당 담당자가 삭제되었습니다. 대시보드 구성원으로 변경해 주세요.',
+          });
+        } else {
+          showToast({
+            theme: 'error',
+            title: '카드 이동 실패',
+            message: '카드 이동에 실패했습니다. 잠시 후 다시 시도해 주세요.',
+          });
+        }
+      }
+    },
+    [showToast]
+  );
 
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
