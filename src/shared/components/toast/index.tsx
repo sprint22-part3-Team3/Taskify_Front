@@ -8,7 +8,7 @@ import {
 } from '@/shared/components/toast/toast.constants';
 
 const toastVariants = cva(
-  'pointer-events-auto flex w-full min-w-xs items-center gap-3 bg-white p-4 shadow-lg ring-1 ring-black/5 transition-all h-14 border-l-4',
+  'pointer-events-auto flex w-xs md:w-md items-center gap-3 bg-white p-3 shadow-lg ring-1 ring-black/5 transition-all min-h-14 border-l-4',
   {
     variants: {
       theme: {
@@ -59,7 +59,7 @@ export function Toast({
         className="shrink-0 cursor-pointer rounded-md p-0.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-500"
         aria-label="닫기"
       >
-        <IcClose className="h-4.5 w-4.5" />
+        <IcClose className="h-4 w-4" />
       </button>
     </div>
   );
