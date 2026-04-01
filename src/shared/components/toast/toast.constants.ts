@@ -30,3 +30,5 @@ export const DEFAULT_TITLES = {
   warning: 'Warning',
   info: 'Info',
 } as const;
+
+export const TOAST_DURATION = 3000;

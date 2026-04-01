@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { ToastContext } from './toastContext';
 import { Toast } from '@/shared/components/toast';
+import { TOAST_DURATION } from '@/shared/components/toast/toast.constants';
 
 type ToastProviderProps = {
   children: React.ReactNode;
@@ -34,7 +35,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
 
       setTimeout(() => {
         removeToast(id);
-      }, 3000);
+      }, TOAST_DURATION);
     },
     [removeToast]
   );
