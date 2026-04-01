@@ -191,7 +191,7 @@ export default function DashboardLayout() {
             memberLoadError={memberLoadError ?? ''}
             onProfileClick={handleNavigateMyPage}
           />
-          <main className="flex-1 overflow-auto">
+          <main id="main-scroll-area" className="flex-1 overflow-auto">
             <Outlet />
           </main>
         </div>
