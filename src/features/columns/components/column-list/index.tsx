@@ -106,19 +106,26 @@ function ColumnList() {
         );
       } catch (error) {
         if (error instanceof ApiError && error.status === 400) {
-          showToast({
-            theme: 'warning',
-            title: '담당자 오류',
-            message:
-              '해당 담당자가 삭제되었습니다. 대시보드 구성원으로 변경해 주세요.',
-          });
-        } else {
-          showToast({
-            theme: 'error',
-            title: '카드 이동 실패',
-            message: '카드 이동에 실패했습니다. 잠시 후 다시 시도해 주세요.',
-          });
+          const normalizedMessage = (error.message ?? '').toLowerCase();
+          if (
+            normalizedMessage.includes('assignee') ||
+            normalizedMessage.includes('담당자') ||
+            normalizedMessage.includes('구성원')
+          ) {
+            showToast({
+              theme: 'warning',
+              title: '담당자 오류',
+              message:
+                '해당 담당자가 삭제되었습니다. 대시보드 구성원으로 변경해 주세요.',
+            });
+            return;
+          }
         }
+        showToast({
+          theme: 'error',
+          title: '카드 이동 실패',
+          message: '카드 이동에 실패했습니다. 잠시 후 다시 시도해 주세요.',
+        });
       }
     },
     [showToast]
