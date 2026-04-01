@@ -133,12 +133,12 @@ function TodoEditModalContent({
 
     const payload = {
       columnId: selectedColumnId,
-      assigneeUserId: selectedAssignee?.id ?? undefined,
+      assigneeUserId: selectedAssignee?.id ?? null,
       title: title.trim(),
       description: description.trim(),
-      dueDate: dueDate || undefined,
-      tags: tags.length > 0 ? tags : undefined,
-      imageUrl: imageUrl ?? undefined,
+      dueDate: dueDate || null,
+      tags,
+      imageUrl,
     };
 
     const isUpdated = await handleUpdateCard(payload, card.columnId);

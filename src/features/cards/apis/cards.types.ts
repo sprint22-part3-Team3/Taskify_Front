@@ -25,10 +25,10 @@ export type CreateCardRequest = {
 
 export type UpdateCardRequest = {
   columnId: number;
-  assigneeUserId?: number;
+  assigneeUserId?: number | null;
   title: string;
   description: string;
-  dueDate?: string;
+  dueDate?: string | null;
   tags?: string[];
   imageUrl?: string | null;
 };

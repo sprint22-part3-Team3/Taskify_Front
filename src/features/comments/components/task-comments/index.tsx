@@ -45,6 +45,7 @@ function TaskComments({ id: cardId, columnId }: TaskCommentsProps) {
   } = useModal();
   const [hasDeleteError, setHasDeleteError] = useState(false);
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   if (isLoading && comments.length === 0)
     return <LoadingFallback variant="full" />;
@@ -83,11 +84,14 @@ function TaskComments({ id: cardId, columnId }: TaskCommentsProps) {
   const handleDeleteComment = async () => {
     if (deleteTargetId === null) return;
     try {
+      setIsDeleting(true);
       await delComment({ id: deleteTargetId });
       refetch();
       handleDeleteCancel();
     } catch {
       setHasDeleteError(true);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -125,6 +129,10 @@ function TaskComments({ id: cardId, columnId }: TaskCommentsProps) {
         onClose={handleDeleteCancel}
         onConfirm={handleDeleteComment}
         className="w-73.75 md:w-130"
+        confirmButtonProps={{
+          isLoading: isDeleting,
+          disabled: isDeleting,
+        }}
         message={
           <>
             코멘트를 <span className="text-error">삭제</span>하시겠습니까?

@@ -78,7 +78,12 @@ function Card({ card }: CardProps) {
         <div className="md:flex md:items-center md:gap-5 lg:block">
           {imageUrl && (
             <figure className="mb-1.25 shrink-0 overflow-hidden rounded-md md:mb-0 md:w-22.75 lg:mb-3.75 lg:w-full">
-              <img src={imageUrl} alt={title} className="w-full" />
+              <img
+                src={imageUrl}
+                alt={title}
+                className="w-full"
+                draggable={false}
+              />
             </figure>
           )}
           <section className="flex w-full flex-col gap-1.5 md:gap-2.5">

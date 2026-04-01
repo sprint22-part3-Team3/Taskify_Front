@@ -11,8 +11,8 @@ import {
   cancelInvitation,
   getInvitations,
   INVITATIONS_SIZE,
-} from '@/features/dashboards/apis/invitations';
-import type { Invitation } from '@/features/dashboards/apis/invitations.types';
+} from '@/features/invitations/apis/invitations';
+import type { Invitation } from '@/features/invitations/apis/invitations.types';
 import { usePagination } from '@/shared/hooks/usePagination';
 import { DASHBOARD_EVENTS } from '@/features/dashboards/utils/dashboardEvents';
 
@@ -220,7 +220,7 @@ export default function InvitationsSection() {
             <span className="text-error">취소</span> 하시겠습니까?
           </>
         }
-        confirmText="취소"
+        confirmText="확인"
       />
     </section>
   );
