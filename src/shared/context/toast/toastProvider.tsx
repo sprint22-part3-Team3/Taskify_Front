@@ -1,6 +1,6 @@
 import type { ShowToastParams } from './toastContext';
 import type { ToastProps } from '@/shared/components/toast/toast.types';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { ToastContext } from './toastContext';
 import { Toast } from '@/shared/components/toast';
@@ -18,7 +18,10 @@ export function ToastProvider({ children }: ToastProviderProps) {
   const [toasts, setToasts] = useState<ToastProps[]>([]);
 
   const removeToast = useCallback((id: string) => {
-    setToasts((prev) => prev.filter((toast) => toast.id !== id));
+    setToasts((prev) => {
+      if (!prev.some((toast) => toast.id === id)) return prev;
+      return prev.filter((toast) => toast.id !== id);
+    });
   }, []);
 
   const showToast = useCallback(
@@ -40,8 +43,10 @@ export function ToastProvider({ children }: ToastProviderProps) {
     [removeToast]
   );
 
+  const contextValue = useMemo(() => ({ showToast }), [showToast]);
+
   return (
-    <ToastContext.Provider value={{ showToast }}>
+    <ToastContext.Provider value={contextValue}>
       {children}
       {createPortal(
         <div className="z-toast fixed bottom-5 left-1/2 flex -translate-x-1/2 flex-col gap-2">
