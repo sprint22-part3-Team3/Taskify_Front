@@ -60,6 +60,7 @@ export function useSidebar() {
       }
 
       dispatchDashboardListChangeEvent({ source: 'sidebar' });
+      navigate('/mydashboard');
     } finally {
       setIsCreatingDashboard(false);
     }
