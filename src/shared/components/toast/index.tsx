@@ -36,6 +36,11 @@ export function Toast({
   onClose,
 }: ToastProps) {
   const { Icon, colorClass } = TOAST_ICONS[theme];
+
+  const handleClose = () => {
+    onClose(id);
+  };
+
   return (
     <div className={toastVariants({ theme })} role="alert">
       <div className={cn('shrink-0', colorClass)}>
@@ -55,7 +60,7 @@ export function Toast({
 
       <button
         type="button"
-        onClick={() => onClose(id)}
+        onClick={handleClose}
         className="shrink-0 cursor-pointer rounded-md p-0.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-500"
         aria-label="닫기"
       >
