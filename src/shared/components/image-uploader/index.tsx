@@ -105,7 +105,7 @@ export default function ImageUploadBox({
           >
             <IcClose
               className={cn(
-                'text-gray-300 text-white',
+                'text-white',
                 variant === 'default' ? 'h-4 w-4' : 'h-3.5 w-3.5'
               )}
             />
