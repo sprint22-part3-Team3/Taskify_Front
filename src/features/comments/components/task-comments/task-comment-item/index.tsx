@@ -98,7 +98,7 @@ function TaskCommentItem({ comment, refetch, onDelete }: TaskCommentItemProps) {
           </div>
         ) : (
           <>
-            <p className="text-black-200 typo-xs-regular md:typo-md-regular mb-2 whitespace-pre-wrap md:mb-2.5">
+            <p className="text-black-200 typo-xs-regular md:typo-md-regular mb-2 wrap-anywhere whitespace-pre-wrap md:mb-2.5">
               {content}
             </p>
             <ul className="text-2xs md:typo-xs-regular flex gap-2">

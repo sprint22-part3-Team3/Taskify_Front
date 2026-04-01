@@ -2,7 +2,7 @@ import type { TaskContentProps } from '@/features/cards/components/task-modal/ta
 
 function TaskContent({ description, title, imageUrl }: TaskContentProps) {
   return (
-    <div className="pb-2 lg:pb-0">
+    <div className="pb-2 wrap-anywhere lg:pb-0">
       <p className="typo-md-regular text-black">{description}</p>
       {imageUrl && (
         <article className="mt-8 overflow-hidden rounded-md md:mt-4">
