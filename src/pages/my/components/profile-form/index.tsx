@@ -11,6 +11,7 @@ import { NICKNAME_RULES } from '@/shared/utils/validators/validators.constants';
 
 import { useValidation } from '@/shared/hooks/useValidation';
 import { validateNickname } from '@/shared/utils/validators';
+import { useToast } from '@/shared/hooks/useToast';
 
 export default function ProfileForm() {
   const userContext = useContext(UserContext);
@@ -24,6 +25,7 @@ export default function ProfileForm() {
   const [previewImageUrl, setPreviewImageUrl] = useState<string | undefined>(
     undefined
   );
+  const { showToast } = useToast();
 
   const nicknameField = useValidation({
     validateFn: validateNickname,
@@ -74,8 +76,19 @@ export default function ProfileForm() {
 
       nicknameField.setValue(updated?.nickname ?? user.nickname);
       setSelectedFile(null);
+      showToast({
+        theme: 'success',
+        title: '프로필 저장 완료',
+        message: '프로필 정보가 정상적으로 저장되었습니다.',
+      });
     } catch {
-      setErrorMessage('프로필 저장에 실패했습니다. 다시 시도해주세요.');
+      const errorMsg = '프로필 저장에 실패했습니다. 다시 시도해주세요.';
+      setErrorMessage(errorMsg);
+      showToast({
+        theme: 'error',
+        title: '프로필 저장 실패',
+        message: errorMsg,
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -101,7 +114,7 @@ export default function ProfileForm() {
 
   return (
     <form onSubmit={handleSubmit} noValidate>
-      <div className="mt-1 w-71 rounded-xl bg-white p-4 md:mt-7 md:w-137 md:p-6 lg:w-2xl">
+      <div className="mt-1 w-full rounded-xl bg-white p-4 md:mt-7 md:w-137 md:p-6 lg:w-2xl">
         <Title
           as="h3"
           size="2lg"

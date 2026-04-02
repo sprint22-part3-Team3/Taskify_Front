@@ -14,6 +14,7 @@ import {
   updateDashboard,
 } from '@/features/dashboards/apis/dashboards';
 import { dispatchDashboardTitleChangeEvent } from '@/features/dashboards/utils/dashboardEvents';
+import { useToast } from '@/shared/hooks/useToast';
 
 /**
  * hex 코드를 DashboardColorName으로 변환하는 함수
@@ -35,11 +36,14 @@ function hexToColorName(hex: string): DashboardColorName {
  */
 export default function NameSection() {
   const { id: dashboardId } = useParams();
+  const { showToast } = useToast();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [loadError, setLoadError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [originalColor, setOriginalColor] =
+    useState<DashboardColorName>('purple');
 
   // 대시보드 제목 (input에 표시할 값)
   const [title, setTitle] = useState('');
@@ -61,6 +65,8 @@ export default function NameSection() {
           setTitle(data.title);
           setDashboardTitle(data.title);
           setSelectedColor(hexToColorName(data.color));
+          const colorName = hexToColorName(data.color);
+          setOriginalColor(colorName);
           dispatchDashboardTitleChangeEvent({ title: data.title });
         }
       } catch {
@@ -70,6 +76,9 @@ export default function NameSection() {
 
     fetchDashboard(dashboardId);
   }, [dashboardId]);
+
+  const hasChanges =
+    title.trim() !== dashboardTitle || selectedColor !== originalColor;
 
   // 변경 버튼 클릭 시 PUT API 호출
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
@@ -92,10 +101,22 @@ export default function NameSection() {
 
       if (result) {
         setDashboardTitle(result.title);
+        setTitle(result.title);
+        setOriginalColor(selectedColor);
         dispatchDashboardTitleChangeEvent({ title: result.title });
+        showToast({
+          theme: 'success',
+          title: '대시보드 수정 완료',
+          message: '대시보드 설정이 저장되었습니다.',
+        });
       }
     } catch {
       setSubmitError('오류가 발생하여 대시보드를 수정할 수 없습니다.');
+      showToast({
+        theme: 'error',
+        title: '대시보드 수정 실패',
+        message: '대시보드 정보를 저장할 수 없습니다. 다시 시도해 주세요.',
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -137,7 +158,7 @@ export default function NameSection() {
         <Button
           type="submit"
           className="w-full"
-          disabled={isSubmitting}
+          disabled={isSubmitting || !hasChanges}
           isLoading={isSubmitting}
         >
           변경

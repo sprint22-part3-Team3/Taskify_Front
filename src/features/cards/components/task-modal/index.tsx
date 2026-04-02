@@ -12,9 +12,11 @@ import { useModal } from '@/shared/hooks/useModal';
 import { delCard } from '@/features/cards/apis/cards';
 import { MODAL_CLOSE_DELAY } from '@/shared/constants/modal.constants';
 import { useCardRefetchContext } from '@/features/cards/hooks/useCardRefetchContext';
+import { useToast } from '@/shared/hooks/useToast';
 
 function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
   const { refetch } = useCardRefetchContext();
+  const { showToast } = useToast();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const {
     isOpen: isEditModalOpen,
@@ -63,6 +65,11 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
 
     try {
       await delCard(id);
+      showToast({
+        theme: 'success',
+        title: '할 일 삭제 완료',
+        message: '할 일 카드가 삭제되었습니다.',
+      });
       handleCloseDeleteModal();
       handleCloseModal();
       setTimeout(() => {
@@ -70,6 +77,11 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
       }, MODAL_CLOSE_DELAY);
     } catch {
       setHasDeleteError(true);
+      showToast({
+        theme: 'error',
+        title: '삭제 실패',
+        message: '카드 삭제에 실패했습니다. 잠시 후 다시 시도해 주세요.',
+      });
     } finally {
       setIsDeleting(false);
     }
@@ -80,7 +92,7 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
       <Modal
         isOpen={isOpen}
         onClose={handleCloseModal}
-        className="max-w-81.75 px-4 py-4 md:max-w-169.5 md:px-8 md:py-6 lg:max-w-182.5 lg:py-7.5 lg:pr-4 lg:pl-4.5"
+        className="max-w-81.75 md:max-w-169.5 lg:max-w-182.5"
       >
         <div className="relative">
           <Modal.Header
@@ -88,7 +100,6 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
             hasMenuIcon
             title={title}
             onClickMenu={handleClickMenu}
-            className="lg:pr-5.5"
           />
         </div>
         {isMenuOpen && (

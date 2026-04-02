@@ -29,7 +29,7 @@ function TaskCommentInput({ onSubmit, error }: TaskCommentInputProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="relative mb-4 md:mb-6">
+    <form onSubmit={handleSubmit} className="relative">
       <TextArea
         value={content}
         onChange={setContent}

@@ -9,15 +9,10 @@ import { validatePassword } from '@/shared/utils/validators';
 import { updatePassword } from '@/features/auth/apis/updatePassword';
 
 import { ApiError } from '@/shared/apis/apiError';
-import ChangePasswordCompleteModal from '../change-password-complete-modal';
-import { useModal } from '@/shared/hooks/useModal';
+import { useToast } from '@/shared/hooks/useToast';
 
 export default function PasswordEditForm() {
-  const {
-    isOpen: isSuccessModalOpen,
-    openModal: handleOpenSuccessModal,
-    closeModal: handleCloseSuccessModal,
-  } = useModal();
+  const { showToast } = useToast();
 
   const [currentPassword, setCurrentPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -50,15 +45,32 @@ export default function PasswordEditForm() {
       });
 
       // 성공 시 초기화
-      handleOpenSuccessModal();
+      showToast({
+        theme: 'success',
+        title: '비밀번호 변경 완료',
+        message: '비밀번호가 정상적으로 변경되었습니다.',
+      });
       setCurrentPassword('');
       newPasswordField.reset();
       setConfirmPassword('');
     } catch (error) {
       if (error instanceof ApiError) {
-        setErrorMessage(error.message);
+        const fieldError = error.message === '기존 비밀번호와 동일합니다.';
+        if (!fieldError) {
+          setErrorMessage(error.message);
+        }
+        showToast({
+          theme: 'error',
+          title: '비밀번호 변경 실패',
+          message: error.message,
+        });
       } else {
         setErrorMessage('비밀번호 변경에 실패했습니다. 다시 시도해주세요.');
+        showToast({
+          theme: 'error',
+          title: '비밀번호 변경 실패',
+          message: '비밀번호 변경에 실패했습니다. 다시 시도해주세요.',
+        });
       }
     } finally {
       setIsSubmitting(false);
@@ -67,7 +79,7 @@ export default function PasswordEditForm() {
 
   return (
     <form onSubmit={handleSubmit} noValidate>
-      <div className="mt-4 w-71 rounded-xl bg-white p-4 md:mt-7 md:w-137 md:p-6 lg:w-2xl">
+      <div className="mt-4 w-full rounded-xl bg-white p-4 md:mt-7 md:w-137 md:p-6 lg:w-2xl">
         <Title
           as="h3"
           size="2lg"
@@ -127,10 +139,6 @@ export default function PasswordEditForm() {
           >
             변경
           </Button>
-          <ChangePasswordCompleteModal
-            isOpen={isSuccessModalOpen}
-            onClose={handleCloseSuccessModal}
-          />
         </div>
       </div>
     </form>

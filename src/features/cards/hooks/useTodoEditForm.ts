@@ -5,6 +5,7 @@ import { useCardRefetchContext } from '@/features/cards/hooks/useCardRefetchCont
 import { CARD_EVENTS } from '@/features/cards/utils/cardEvents';
 import type { Card } from '@/features/cards/types/card.types';
 import { useCardImageUpload } from '@/features/cards/hooks/useCardImageUpload';
+import { useToast } from '@/shared/hooks/useToast';
 
 type UseTodoEditFormParams = {
   card: Card;
@@ -26,6 +27,8 @@ export function useTodoEditForm({ card }: UseTodoEditFormParams) {
     initialImageUrl: card.imageUrl,
   });
 
+  const { showToast } = useToast();
+
   const handleUpdateCard = useCallback(
     async (payload: UpdateCardRequest, originalColumnId: number) => {
       setIsSubmitting(true);
@@ -33,6 +36,11 @@ export function useTodoEditForm({ card }: UseTodoEditFormParams) {
 
       try {
         await updateCard(cardId, payload);
+        showToast({
+          theme: 'success',
+          title: '할 일 수정 완료',
+          message: '할 일 정보가 저장되었습니다.',
+        });
         refetch();
         window.dispatchEvent(
           new CustomEvent(CARD_EVENTS.LIST_CHANGE, {
@@ -49,12 +57,17 @@ export function useTodoEditForm({ card }: UseTodoEditFormParams) {
             ? error.message
             : '카드 수정을 실패했습니다. 다시 시도해 주세요.';
         setSubmissionError(message);
+        showToast({
+          theme: 'error',
+          title: '할 일 수정 실패',
+          message,
+        });
         return false;
       } finally {
         setIsSubmitting(false);
       }
     },
-    [cardId, refetch]
+    [cardId, refetch, showToast]
   );
 
   useEffect(() => {

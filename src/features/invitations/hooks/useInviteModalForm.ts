@@ -6,6 +6,7 @@ import {
 } from '@/features/invitations/apis/invitations';
 import { validateEmail } from '@/shared/utils/validators/validateEmail';
 import { ApiError } from '@/shared/apis/apiError';
+import { useToast } from '@/shared/hooks/useToast';
 
 export type UseInviteModalFormParams = {
   dashboardId?: string;
@@ -101,6 +102,8 @@ export function useInviteModalForm({
     setInviteError('');
   }, []);
 
+  const { showToast } = useToast();
+
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
@@ -132,25 +135,40 @@ export function useInviteModalForm({
         });
         return true;
       } catch (error) {
+        let message = '초대에 실패했습니다. 이메일을 확인해 주세요.';
+        let shouldToast = true;
         if (error instanceof ApiError) {
           if (error.status === 404) {
-            setInviteError('존재하지 않는 유저입니다.');
+            message = '존재하지 않는 유저입니다.';
+            shouldToast = false;
           } else if (error.status === 409) {
-            setInviteError('이미 대시보드에 초대된 멤버입니다.');
-          } else {
-            setInviteError(
-              error.message || '초대에 실패했습니다. 이메일을 확인해 주세요.'
-            );
+            message = '이미 대시보드에 초대된 멤버입니다.';
+            shouldToast = false;
+          } else if (error.message) {
+            message = error.message;
           }
-        } else {
-          setInviteError('초대에 실패했습니다. 이메일을 확인해 주세요.');
+        }
+        setInviteError(message);
+        if (shouldToast) {
+          showToast({
+            theme: 'error',
+            title: '초대 실패',
+            message,
+          });
         }
         return false;
       } finally {
         setIsSubmitting(false);
       }
     },
-    [dashboardId, inviteEmail, invitedEmails, normalizedEmail, isSubmitting]
+    [
+      dashboardId,
+      inviteEmail,
+      invitedEmails,
+      normalizedEmail,
+      isSubmitting,
+      showToast,
+    ]
   );
 
   return {

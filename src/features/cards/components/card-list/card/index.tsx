@@ -1,7 +1,7 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import type { CardProps } from '@/features/cards/components/card-list/card/card.types';
 import { TaskModal } from '@/features/cards/components/task-modal';
-import { IcCalendar } from '@/shared/assets/icons';
+import { IcCalendar, IcDrag } from '@/shared/assets/icons';
 import Avatar from '@/shared/components/avatar';
 import { Tag } from '@/shared/components/tag';
 import Title from '@/shared/components/title';
@@ -20,6 +20,24 @@ function Card({ card }: CardProps) {
     id: draggableId,
     data: card,
   });
+
+  const dragListeners = useMemo(() => {
+    const { onPointerDown } = listeners;
+    return {
+      ...listeners,
+      onPointerDown: (event: React.PointerEvent<HTMLElement>) => {
+        if (event.pointerType === 'touch') {
+          const isDragHandle =
+            event.target instanceof Element &&
+            event.target.closest('[data-card-drag-handle]');
+          if (!isDragHandle) {
+            return;
+          }
+        }
+        onPointerDown?.(event);
+      },
+    };
+  }, [listeners]);
 
   useEffect(() => {
     if (isDragging) {
@@ -60,7 +78,7 @@ function Card({ card }: CardProps) {
     <>
       <article
         ref={setNodeRef}
-        {...listeners}
+        {...dragListeners}
         {...attributes}
         role="button"
         tabIndex={0}
@@ -87,15 +105,26 @@ function Card({ card }: CardProps) {
             </figure>
           )}
           <section className="flex w-full flex-col gap-1.5 md:gap-2.5">
-            <Title
-              as="h4"
-              size="md"
-              weight="medium"
-              color="text-black-200"
-              className="md:typo-lg-medium"
-            >
-              {title}
-            </Title>
+            <div className="flex items-center justify-between gap-2">
+              <Title
+                as="h4"
+                size="md"
+                weight="medium"
+                color="text-black-200"
+                className="md:typo-lg-medium"
+              >
+                {title}
+              </Title>
+              <button
+                type="button"
+                aria-label="카드 이동"
+                data-card-drag-handle
+                onClick={(event) => event.stopPropagation()}
+                className="touch-none md:hidden"
+              >
+                <IcDrag className="h-4 w-4" />
+              </button>
+            </div>
             <div className="flex flex-col gap-1.5 md:flex-row md:gap-4 lg:flex-col lg:gap-2">
               <ul className="flex shrink-0 flex-wrap gap-1.5 md:w-[50%] lg:w-auto">
                 {tags.map((tag) => (

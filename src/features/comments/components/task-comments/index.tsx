@@ -106,17 +106,19 @@ function TaskComments({ id: cardId, columnId }: TaskCommentsProps) {
         댓글
       </Title>
       <TaskCommentInput onSubmit={handleSubmitComment} error={submitError} />
-      <ul className="flex flex-col gap-4">
-        {comments.map((comment) => (
-          <li key={comment.id} className="flex gap-2 md:gap-2.5">
-            <TaskCommentItem
-              comment={comment}
-              refetch={refetch}
-              onDelete={handleDelete}
-            />
-          </li>
-        ))}
-      </ul>
+      {comments.length > 0 && (
+        <ul className="mt-4 flex flex-col gap-4 md:mt-6">
+          {comments.map((comment) => (
+            <li key={comment.id} className="flex gap-2 md:gap-2.5">
+              <TaskCommentItem
+                comment={comment}
+                refetch={refetch}
+                onDelete={handleDelete}
+              />
+            </li>
+          ))}
+        </ul>
+      )}
       <InfiniteScrollIndicator
         isAddLoading={isAddLoading}
         addErrorMessage={addErrorMessage}
