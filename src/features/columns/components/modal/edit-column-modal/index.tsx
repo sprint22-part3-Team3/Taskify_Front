@@ -12,6 +12,7 @@ import { COLUMN_NAME_RULES } from '@/shared/utils/validators/validators.constant
 
 import { useModal } from '@/shared/hooks/useModal';
 import { useColumnListContext } from '@/features/columns/hooks/useColumnListContext';
+import { useToast } from '@/shared/hooks/useToast';
 
 /**
  * 컬럼 이름을 수정하거나 삭제할 수 있는 모달입니다.
@@ -33,6 +34,7 @@ function EditColumnModal({
   initialTitle,
 }: EditColumnModalProps) {
   const { columns, refetch } = useColumnListContext();
+  const { showToast } = useToast();
   const [draftTitle, setDraftTitle] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -85,9 +87,19 @@ function EditColumnModal({
     setIsLoading(true);
     try {
       await deleteColumn(columnId);
+      showToast({
+        theme: 'success',
+        title: '컬럼 삭제 완료',
+        message: '컬럼이 삭제되었습니다.',
+      });
       handleClose(refetch);
     } catch {
       setError('컬럼 삭제에 실패했습니다. 다시 시도해주세요.');
+      showToast({
+        theme: 'error',
+        title: '컬럼 삭제 실패',
+        message: '컬럼 삭제에 실패했습니다. 다시 시도해 주세요.',
+      });
     } finally {
       setIsLoading(false);
     }
@@ -110,10 +122,20 @@ function EditColumnModal({
 
     try {
       await updateColumn(columnId, { title: columnTitle.trim() });
+      showToast({
+        theme: 'success',
+        title: '컬럼 수정 완료',
+        message: '컬럼 이름이 변경되었습니다.',
+      });
       refetch();
       handleClose();
     } catch {
       setError('컬럼 수정에 실패했습니다. 다시 시도해주세요.');
+      showToast({
+        theme: 'error',
+        title: '컬럼 수정 실패',
+        message: '컬럼 수정에 실패했습니다. 다시 시도해 주세요.',
+      });
     } finally {
       setIsLoading(false);
     }
