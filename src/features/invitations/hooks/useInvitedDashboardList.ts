@@ -11,6 +11,7 @@ import { useModal } from '@/shared/hooks/useModal';
 import { runAfterModalClose } from '@/shared/utils/modal';
 import { useDebounce } from '@/shared/hooks/useDebounce';
 import { dispatchDashboardListChangeEvent } from '@/features/dashboards/utils/dashboardEvents';
+import { useToast } from '@/shared/hooks/useToast';
 
 /**
  * 초대받은 대시보드 섹션의 검색과 초대 응답 상태를 관리합니다.
@@ -75,6 +76,8 @@ export function useInvitedDashboardList() {
     searchKeyword,
     searchKeyword === '' ? 0 : undefined
   );
+
+  const { showToast } = useToast();
 
   const fetchInvitedDashboards = useCallback(async (keyword: string) => {
     searchAbortController.current?.abort();
@@ -150,18 +153,23 @@ export function useInvitedDashboardList() {
         return;
       }
 
+      let message = '알 수 없는 에러가 발생했습니다.';
       if (error instanceof ApiError && error.status === 404) {
-        setAddErrorMessage('추가 데이터를 찾을 수 없습니다.');
+        message = '추가 데이터를 찾을 수 없습니다.';
       } else if (error instanceof Error) {
-        setAddErrorMessage(error.message);
-      } else {
-        setAddErrorMessage('알 수 없는 에러가 발생했습니다.');
+        message = error.message;
       }
+      setAddErrorMessage(message);
+      showToast({
+        theme: 'error',
+        title: '초대 목록 로드 실패',
+        message,
+      });
     } finally {
       loading.current = false;
       setIsAddLoading(false);
     }
-  }, [cursorId, debouncedKeyword]);
+  }, [cursorId, debouncedKeyword, showToast]);
 
   const handleSearchKeywordChange = (keyword: string) => {
     setSearchKeyword(keyword);
@@ -185,20 +193,40 @@ export function useInvitedDashboardList() {
       if (inviteAccepted) {
         await fetchInvitedDashboards(debouncedKeyword);
         dispatchDashboardListChangeEvent({ source: 'invitation' });
+        showToast({
+          theme: 'success',
+          title: '초대 수락 완료',
+          message: '대시보드 초대를 수락했습니다.',
+        });
       } else {
         setInvitedDashboardItems((previousInvitedDashboards) =>
           previousInvitedDashboards.filter(
             (invitedDashboardItem) => invitedDashboardItem.id !== invitationId
           )
         );
+        showToast({
+          theme: 'success',
+          title: '초대 거절 완료',
+          message: '해당 초대를 거절했습니다.',
+        });
       }
 
       return true;
     } catch (error) {
       if (error instanceof ApiError && error.message) {
         setInvitationResponseError(error.message);
+        showToast({
+          theme: 'error',
+          title: '초대 응답 실패',
+          message: error.message,
+        });
       } else {
         setInvitationResponseError(DASHBOARD_ERROR_MESSAGE.respondToInvitation);
+        showToast({
+          theme: 'error',
+          title: '초대 응답 실패',
+          message: DASHBOARD_ERROR_MESSAGE.respondToInvitation,
+        });
       }
       return false;
     } finally {

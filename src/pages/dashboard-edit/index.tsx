@@ -9,11 +9,13 @@ import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { deleteDashboard } from '@/features/dashboards/apis/dashboards';
 import { dispatchDashboardListChangeEvent } from '@/features/dashboards/utils/dashboardEvents';
+import { useToast } from '@/shared/hooks/useToast';
 
 export default function DashboardEditPage() {
   const { id: dashboardId } = useParams();
   const navigate = useNavigate();
   const [isDeleting, setIsDeleting] = useState(false);
+  const { showToast } = useToast();
 
   const {
     isOpen: isDeleteModalOpen,
@@ -29,9 +31,18 @@ export default function DashboardEditPage() {
     try {
       await deleteDashboard(dashboardId);
       dispatchDashboardListChangeEvent({ source: 'dashboard-list' });
+      showToast({
+        theme: 'success',
+        title: '대시보드 삭제 완료',
+        message: '대시보드가 삭제되었습니다.',
+      });
       navigate('/mydashboard');
     } catch {
-      alert('대시보드 삭제에 실패했습니다.');
+      showToast({
+        theme: 'error',
+        title: '대시보드 삭제 실패',
+        message: '대시보드 삭제에 실패했습니다. 다시 시도해 주세요.',
+      });
       setIsDeleting(false);
     }
   };

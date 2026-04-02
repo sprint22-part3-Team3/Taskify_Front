@@ -15,6 +15,7 @@ import {
 import type { Invitation } from '@/features/invitations/apis/invitations.types';
 import { usePagination } from '@/shared/hooks/usePagination';
 import { DASHBOARD_EVENTS } from '@/features/dashboards/utils/dashboardEvents';
+import { useToast } from '@/shared/hooks/useToast';
 
 /**
  * 대시보드 초대 내역을 표시하는 섹션 컴포넌트입니다.
@@ -24,6 +25,7 @@ import { DASHBOARD_EVENTS } from '@/features/dashboards/utils/dashboardEvents';
 export default function InvitationsSection() {
   const { id: dashboardId } = useParams();
   const [isCanceling, setIsCanceling] = useState(false);
+  const { showToast } = useToast();
 
   // 초대 내역 데이터
   const [invitations, setInvitations] = useState<Invitation[]>([]);
@@ -116,6 +118,11 @@ export default function InvitationsSection() {
 
     try {
       await cancelInvitation(dashboardId, selectedInvitationId);
+      showToast({
+        theme: 'success',
+        title: '초대 취소 완료',
+        message: '선택하신 초대를 취소했습니다.',
+      });
 
       const isLastItemOnPage = invitations.length === 1;
       const shouldGoBack = isLastItemOnPage && currentPage > 1;
@@ -126,7 +133,11 @@ export default function InvitationsSection() {
         setRefreshKey((prev) => prev + 1);
       }
     } catch {
-      alert('초대 취소에 실패했습니다.');
+      showToast({
+        theme: 'error',
+        title: '초대 취소 실패',
+        message: '초대 취소에 실패했습니다. 다시 시도해 주세요.',
+      });
     } finally {
       setIsCanceling(false);
       handleCloseDeleteInvitationModal();
