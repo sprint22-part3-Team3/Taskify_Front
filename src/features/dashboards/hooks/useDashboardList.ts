@@ -13,6 +13,7 @@ import {
 } from '@/features/dashboards/utils/dashboardEvents';
 import { getApiErrorMessage } from '@/features/dashboards/utils/getApiErrorMessage';
 import { usePagination } from '@/shared/hooks/usePagination';
+import { useToast } from '@/shared/hooks/useToast';
 
 /**
  * 내 대시보드 목록 조회와 생성 후 갱신 상태를 관리합니다.
@@ -42,6 +43,7 @@ export function useDashboardList() {
     handlePrevPage,
     handleNextPage,
   } = usePagination();
+  const { showToast } = useToast();
 
   const loadDashboardItems = useCallback(async () => {
     setIsLoadingDashboards(true);
@@ -114,6 +116,12 @@ export function useDashboardList() {
       await createDashboard({
         title: dashboardTitle,
         color: dashboardColor,
+      });
+
+      showToast({
+        theme: 'success',
+        title: '대시보드 생성 완료',
+        message: '새로운 대시보드가 생성되었습니다.',
       });
 
       if (currentPage !== 1) {

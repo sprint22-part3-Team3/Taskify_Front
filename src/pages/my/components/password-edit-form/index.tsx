@@ -9,15 +9,10 @@ import { validatePassword } from '@/shared/utils/validators';
 import { updatePassword } from '@/features/auth/apis/updatePassword';
 
 import { ApiError } from '@/shared/apis/apiError';
-import ChangePasswordCompleteModal from '../change-password-complete-modal';
-import { useModal } from '@/shared/hooks/useModal';
+import { useToast } from '@/shared/hooks/useToast';
 
 export default function PasswordEditForm() {
-  const {
-    isOpen: isSuccessModalOpen,
-    openModal: handleOpenSuccessModal,
-    closeModal: handleCloseSuccessModal,
-  } = useModal();
+  const { showToast } = useToast();
 
   const [currentPassword, setCurrentPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -50,7 +45,11 @@ export default function PasswordEditForm() {
       });
 
       // 성공 시 초기화
-      handleOpenSuccessModal();
+      showToast({
+        theme: 'success',
+        title: '비밀번호 변경 완료',
+        message: '비밀번호가 정상적으로 변경되었습니다.',
+      });
       setCurrentPassword('');
       newPasswordField.reset();
       setConfirmPassword('');
@@ -127,10 +126,6 @@ export default function PasswordEditForm() {
           >
             변경
           </Button>
-          <ChangePasswordCompleteModal
-            isOpen={isSuccessModalOpen}
-            onClose={handleCloseSuccessModal}
-          />
         </div>
       </div>
     </form>

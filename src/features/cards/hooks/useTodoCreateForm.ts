@@ -3,6 +3,7 @@ import type { CreateCardRequest } from '@/features/cards/apis/cards.types';
 import { createCard } from '@/features/cards/apis/cards';
 import { useCardRefetchContext } from '@/features/cards/hooks/useCardRefetchContext';
 import { useCardImageUpload } from '@/features/cards/hooks/useCardImageUpload';
+import { useToast } from '@/shared/hooks/useToast';
 
 type UseTodoCreateFormParams = {
   dashboardId?: number;
@@ -33,6 +34,7 @@ export function useTodoCreateForm({
   } = useCardImageUpload({ teamId, initialImageUrl: null });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState<string | null>(null);
+  const { showToast } = useToast();
 
   const handleCreateTodo = useCallback(
     async ({
@@ -63,6 +65,11 @@ export function useTodoCreateForm({
 
       try {
         await createCard(payload);
+        showToast({
+          theme: 'success',
+          title: '할 일 생성 완료',
+          message: '새로운 할 일이 목록에 추가되었습니다.',
+        });
         refetch();
         return true;
       } catch (error) {
@@ -76,7 +83,7 @@ export function useTodoCreateForm({
         setIsSubmitting(false);
       }
     },
-    [columnId, dashboardId, imageUrl, refetch]
+    [columnId, dashboardId, imageUrl, refetch, showToast]
   );
 
   const resetTodoCreateState = useCallback(() => {

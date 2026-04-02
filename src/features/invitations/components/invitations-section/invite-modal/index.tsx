@@ -5,6 +5,7 @@ import type { InviteModalProps } from '@/features/invitations/apis/invitations.t
 import { dispatchInvitationListChangeEvent } from '@/features/dashboards/utils/dashboardEvents';
 import { runAfterModalClose } from '@/shared/utils/modal';
 import { useInviteModalForm } from '@/features/invitations/hooks/useInviteModalForm';
+import { useToast } from '@/shared/hooks/useToast';
 
 /**
  * 대시보드에 사용자를 초대하는 모달 컴포넌트입니다.
@@ -25,6 +26,7 @@ export default function InviteModal({
     handleSubmit,
     resetForm,
   } = useInviteModalForm({ dashboardId, isOpen });
+  const { showToast } = useToast();
 
   const handleClose = () => {
     onClose();
@@ -34,6 +36,11 @@ export default function InviteModal({
   const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     const succeeded = await handleSubmit(event);
     if (succeeded) {
+      showToast({
+        theme: 'success',
+        title: '초대 완료',
+        message: '초대 메일을 전송했습니다.',
+      });
       handleClose();
       dispatchInvitationListChangeEvent();
     }

@@ -11,6 +11,7 @@ import { NICKNAME_RULES } from '@/shared/utils/validators/validators.constants';
 
 import { useValidation } from '@/shared/hooks/useValidation';
 import { validateNickname } from '@/shared/utils/validators';
+import { useToast } from '@/shared/hooks/useToast';
 
 export default function ProfileForm() {
   const userContext = useContext(UserContext);
@@ -24,6 +25,7 @@ export default function ProfileForm() {
   const [previewImageUrl, setPreviewImageUrl] = useState<string | undefined>(
     undefined
   );
+  const { showToast } = useToast();
 
   const nicknameField = useValidation({
     validateFn: validateNickname,
@@ -74,6 +76,11 @@ export default function ProfileForm() {
 
       nicknameField.setValue(updated?.nickname ?? user.nickname);
       setSelectedFile(null);
+      showToast({
+        theme: 'success',
+        title: '프로필 저장 완료',
+        message: '프로필 정보가 정상적으로 저장되었습니다.',
+      });
     } catch {
       setErrorMessage('프로필 저장에 실패했습니다. 다시 시도해주세요.');
     } finally {
