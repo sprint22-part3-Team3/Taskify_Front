@@ -9,6 +9,7 @@ function ModalMain({ className, children, ...props }: ModalMainProps) {
     <div
       className={cn(
         'custom-modal-scrollbar my-6 flex-1 overflow-y-auto',
+        '-mx-4 px-4 md:-mx-6 md:px-6',
         className
       )}
       {...props}
