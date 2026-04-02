@@ -80,7 +80,7 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
       <Modal
         isOpen={isOpen}
         onClose={handleCloseModal}
-        className="max-w-81.75 px-4 py-4 md:max-w-169.5 md:px-8 md:py-6 lg:max-w-182.5 lg:py-7.5 lg:pr-4 lg:pl-4.5"
+        className="max-w-81.75 md:max-w-169.5 lg:max-w-182.5"
       >
         <div className="relative">
           <Modal.Header
@@ -88,7 +88,6 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
             hasMenuIcon
             title={title}
             onClickMenu={handleClickMenu}
-            className="lg:pr-5.5"
           />
         </div>
         {isMenuOpen && (
