@@ -55,9 +55,22 @@ export default function PasswordEditForm() {
       setConfirmPassword('');
     } catch (error) {
       if (error instanceof ApiError) {
-        setErrorMessage(error.message);
+        const fieldError = error.message === '기존 비밀번호와 동일합니다.';
+        if (!fieldError) {
+          setErrorMessage(error.message);
+        }
+        showToast({
+          theme: 'error',
+          title: '비밀번호 변경 실패',
+          message: error.message,
+        });
       } else {
         setErrorMessage('비밀번호 변경에 실패했습니다. 다시 시도해주세요.');
+        showToast({
+          theme: 'error',
+          title: '비밀번호 변경 실패',
+          message: '비밀번호 변경에 실패했습니다. 다시 시도해주세요.',
+        });
       }
     } finally {
       setIsSubmitting(false);

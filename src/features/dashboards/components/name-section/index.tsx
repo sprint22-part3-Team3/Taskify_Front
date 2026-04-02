@@ -112,6 +112,11 @@ export default function NameSection() {
       }
     } catch {
       setSubmitError('오류가 발생하여 대시보드를 수정할 수 없습니다.');
+      showToast({
+        theme: 'error',
+        title: '대시보드 수정 실패',
+        message: '대시보드 정보를 저장할 수 없습니다. 다시 시도해 주세요.',
+      });
     } finally {
       setIsSubmitting(false);
     }

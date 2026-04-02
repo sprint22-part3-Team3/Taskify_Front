@@ -78,6 +78,11 @@ export function useTodoCreateForm({
             ? error.message
             : '할 일 생성에 실패했습니다. 다시 시도해 주세요.';
         setSubmissionError(message);
+        showToast({
+          theme: 'error',
+          title: '할 일 생성 실패',
+          message,
+        });
         return false;
       } finally {
         setIsSubmitting(false);

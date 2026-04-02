@@ -57,6 +57,11 @@ export function useTodoEditForm({ card }: UseTodoEditFormParams) {
             ? error.message
             : '카드 수정을 실패했습니다. 다시 시도해 주세요.';
         setSubmissionError(message);
+        showToast({
+          theme: 'error',
+          title: '할 일 수정 실패',
+          message,
+        });
         return false;
       } finally {
         setIsSubmitting(false);

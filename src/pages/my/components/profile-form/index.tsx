@@ -82,7 +82,13 @@ export default function ProfileForm() {
         message: '프로필 정보가 정상적으로 저장되었습니다.',
       });
     } catch {
-      setErrorMessage('프로필 저장에 실패했습니다. 다시 시도해주세요.');
+      const errorMsg = '프로필 저장에 실패했습니다. 다시 시도해주세요.';
+      setErrorMessage(errorMsg);
+      showToast({
+        theme: 'error',
+        title: '프로필 저장 실패',
+        message: errorMsg,
+      });
     } finally {
       setIsSubmitting(false);
     }
