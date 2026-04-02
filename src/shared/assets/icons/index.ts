@@ -1,5 +1,5 @@
-import IcAddBox from '@/shared/assets/icons/ic-add-box.svg?react';
 import IcAdd from '@/shared/assets/icons/ic-add.svg?react';
+import IcAddBox from '@/shared/assets/icons/ic-add-box.svg?react';
 import IcArrowBottom from '@/shared/assets/icons/ic-arrow-bottom.svg?react';
 import IcArrowLeft from '@/shared/assets/icons/ic-arrow-left.svg?react';
 import IcArrowRight from '@/shared/assets/icons/ic-arrow-right.svg?react';
@@ -8,6 +8,7 @@ import IcCalendar from '@/shared/assets/icons/ic-calendar.svg?react';
 import IcCheck from '@/shared/assets/icons/ic-check.svg?react';
 import IcCheckbox from '@/shared/assets/icons/ic-checkbox.svg?react';
 import IcClose from '@/shared/assets/icons/ic-close.svg?react';
+import IcDrag from '@/shared/assets/icons/ic-drag.svg?react';
 import IcEyeOff from '@/shared/assets/icons/ic-eye-off.svg?react';
 import IcEyeOn from '@/shared/assets/icons/ic-eye.svg?react';
 import IcGithub from '@/shared/assets/icons/ic-github.svg?react';
@@ -31,8 +32,9 @@ export {
   IcCheck,
   IcCheckbox,
   IcClose,
-  IcEyeOn,
+  IcDrag,
   IcEyeOff,
+  IcEyeOn,
   IcGithub,
   IcMailOff,
   IcMenu,
