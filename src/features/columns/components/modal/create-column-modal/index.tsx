@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom';
 import { COLUMN_NAME_RULES } from '@/shared/utils/validators';
 import { runAfterModalClose } from '@/shared/utils/modal';
 import { useColumnListContext } from '@/features/columns/hooks/useColumnListContext';
+import { useToast } from '@/shared/hooks/useToast';
 /**
  * 새 컬럼 이름을 입력받는 생성 모달입니다.
  *
@@ -22,6 +23,7 @@ function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
   const { id } = useParams();
   const dashboardId = Number(id);
   const { columns, refetch } = useColumnListContext();
+  const { showToast } = useToast();
   const columnNameField = useColumnNameValidation({
     checkFn: (name) =>
       Promise.resolve(columns.some((column) => column.title === name)),
@@ -62,12 +64,20 @@ function CreateColumnModal({ isOpen, onClose }: CreateColumnModalProps) {
         title: columnNameField.value.trim(),
         dashboardId: dashboardId,
       });
+      showToast({
+        theme: 'success',
+        title: '컬럼 생성 완료',
+        message: '새로운 컬럼이 추가되었습니다.',
+      });
       refetch();
       handleClose();
     } catch {
-      //TODO: 오류 처리
       //400, 404 에러 가능성 낮아서 범용 에러 메시지 처리
-      setSubmitError('컬럼 생성에 실패했습니다. 다시 시도해주세요.');
+      showToast({
+        theme: 'error',
+        title: '컬럼 생성 실패',
+        message: '컬럼 생성에 실패했습니다. 다시 시도해 주세요.',
+      });
     } finally {
       setIsLoading(false);
     }

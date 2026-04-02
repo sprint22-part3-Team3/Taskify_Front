@@ -14,6 +14,7 @@ import {
   updateDashboard,
 } from '@/features/dashboards/apis/dashboards';
 import { dispatchDashboardTitleChangeEvent } from '@/features/dashboards/utils/dashboardEvents';
+import { useToast } from '@/shared/hooks/useToast';
 
 /**
  * hex 코드를 DashboardColorName으로 변환하는 함수
@@ -35,6 +36,7 @@ function hexToColorName(hex: string): DashboardColorName {
  */
 export default function NameSection() {
   const { id: dashboardId } = useParams();
+  const { showToast } = useToast();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
@@ -102,9 +104,19 @@ export default function NameSection() {
         setTitle(result.title);
         setOriginalColor(selectedColor);
         dispatchDashboardTitleChangeEvent({ title: result.title });
+        showToast({
+          theme: 'success',
+          title: '대시보드 수정 완료',
+          message: '대시보드 설정이 저장되었습니다.',
+        });
       }
     } catch {
       setSubmitError('오류가 발생하여 대시보드를 수정할 수 없습니다.');
+      showToast({
+        theme: 'error',
+        title: '대시보드 수정 실패',
+        message: '대시보드 정보를 저장할 수 없습니다. 다시 시도해 주세요.',
+      });
     } finally {
       setIsSubmitting(false);
     }
