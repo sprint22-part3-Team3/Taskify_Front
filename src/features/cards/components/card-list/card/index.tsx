@@ -27,11 +27,10 @@ function Card({ card }: CardProps) {
       ...listeners,
       onPointerDown: (event: React.PointerEvent<HTMLElement>) => {
         if (event.pointerType === 'touch') {
-          const target =
-            event.target instanceof Element
-              ? event.target.closest('[data-card-drag-handle]')
-              : null;
-          if (!target) {
+          const isDragHandle =
+            event.target instanceof Element &&
+            event.target.closest('[data-card-drag-handle]');
+          if (!isDragHandle) {
             return;
           }
         }
