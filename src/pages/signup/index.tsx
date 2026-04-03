@@ -8,14 +8,8 @@ import Input from '@/shared/components/input';
 import SignupAgreement from '@/pages/signup/components/signup-agreement';
 
 function SignupPage() {
-  const {
-    emailApiError,
-    submitError,
-    isSubmitting,
-    resetEmailApiError,
-    resetSubmitError,
-    handleSignup,
-  } = useSignup();
+  const { emailApiError, isSubmitting, resetEmailApiError, handleSignup } =
+    useSignup();
   const {
     nicknameField,
     emailField,
@@ -36,8 +30,6 @@ function SignupPage() {
     isPasswordConfirmIncluded: true,
     isAgreementIncluded: true,
     onEmailChange: resetEmailApiError,
-    onPasswordChange: resetSubmitError,
-    onPasswordConfirmChange: resetSubmitError,
   });
   const isDisabled = isSubmitting || isSubmitDisabled;
 
@@ -101,9 +93,6 @@ function SignupPage() {
           isChecked={isAgreementChecked}
           onChange={setIsAgreementChecked}
         />
-        {submitError && (
-          <p className="typo-md-regular text-error">{submitError}</p>
-        )}
         <Button
           theme="primary"
           size="md"

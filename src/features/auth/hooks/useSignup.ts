@@ -12,11 +12,9 @@ export function useSignup() {
   const navigate = useNavigate();
   const { showToast } = useToast();
   const [emailApiError, setEmailApiError] = useState('');
-  const [submitError, setSubmitError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const resetEmailApiError = () => setEmailApiError('');
-  const resetSubmitError = () => setSubmitError('');
 
   const isInvalidSignupState = ({
     password,
@@ -51,7 +49,6 @@ export function useSignup() {
 
     try {
       setIsSubmitting(true);
-      resetSubmitError();
       await signup({
         nickname: nickname.trim(),
         email: email.trim(),
@@ -72,11 +69,11 @@ export function useSignup() {
         return;
       }
 
-      setSubmitError(getSignupErrorMessage(error));
+      const errorMessage = getSignupErrorMessage(error);
       showToast({
         theme: 'error',
         title: '회원가입 실패',
-        message: getSignupErrorMessage(error),
+        message: errorMessage,
       });
     } finally {
       setIsSubmitting(false);
@@ -85,10 +82,8 @@ export function useSignup() {
 
   return {
     emailApiError,
-    submitError,
     isSubmitting,
     resetEmailApiError,
-    resetSubmitError,
     handleSignup,
   };
 }
