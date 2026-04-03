@@ -22,7 +22,6 @@ function InvitedDashboardSection() {
     searchKeyword,
     isSearchingInvitedDashboards,
     invitedDashboardError,
-    invitationResponseError,
     respondingInvitationId,
     selectedInvitedDashboard,
     isDeleteModalOpen,
@@ -78,12 +77,6 @@ function InvitedDashboardSection() {
             {invitedDashboardError && (
               <p className="typo-md-regular text-error mt-3">
                 {invitedDashboardError}
-              </p>
-            )}
-
-            {invitationResponseError && (
-              <p className="typo-md-regular text-error mt-3">
-                {invitationResponseError}
               </p>
             )}
 
