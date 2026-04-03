@@ -58,7 +58,6 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
     isUploadingImage,
     imageUploadError,
     isSubmitting,
-    submissionError,
     handleImageSelect,
     handleCreateTodo,
     resetTodoCreateState,
@@ -213,11 +212,6 @@ function TodoCreateModal({ isOpen, onClose }: TodoCreateModalProps) {
           </Modal.Main>
 
           <Modal.Footer className="shrink-0">
-            {submissionError && (
-              <p className="typo-md-regular text-error mr-4">
-                {submissionError}
-              </p>
-            )}
             <Button theme="cancel" type="button" onClick={handleClose}>
               취소
             </Button>
