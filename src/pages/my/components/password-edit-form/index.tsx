@@ -19,6 +19,11 @@ export default function PasswordEditForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
+  const FIELD_ERROR_MESSAGES = [
+    '기존 비밀번호와 동일합니다.',
+    '현재 비밀번호가 틀렸습니다.',
+  ];
+
   const newPasswordField = useValidation({ validateFn: validatePassword });
 
   const isPasswordMismatch =
@@ -55,7 +60,8 @@ export default function PasswordEditForm() {
       setConfirmPassword('');
     } catch (error) {
       if (error instanceof ApiError) {
-        const fieldError = error.message === '기존 비밀번호와 동일합니다.';
+        const fieldError = FIELD_ERROR_MESSAGES.includes(error.message);
+
         if (!fieldError) {
           setErrorMessage(error.message);
         }
