@@ -15,7 +15,6 @@ export function useTodoEditForm({ card }: UseTodoEditFormParams) {
   const { refetch } = useCardRefetchContext();
   const cardId = card.id;
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submissionError, setSubmissionError] = useState<string | null>(null);
   const {
     imageUrl,
     isUploadingImage,
@@ -32,7 +31,6 @@ export function useTodoEditForm({ card }: UseTodoEditFormParams) {
   const handleUpdateCard = useCallback(
     async (payload: UpdateCardRequest, originalColumnId: number) => {
       setIsSubmitting(true);
-      setSubmissionError(null);
 
       try {
         await updateCard(cardId, payload);
@@ -56,7 +54,6 @@ export function useTodoEditForm({ card }: UseTodoEditFormParams) {
           error instanceof Error
             ? error.message
             : '카드 수정을 실패했습니다. 다시 시도해 주세요.';
-        setSubmissionError(message);
         showToast({
           theme: 'error',
           title: '할 일 수정 실패',
@@ -72,12 +69,10 @@ export function useTodoEditForm({ card }: UseTodoEditFormParams) {
 
   useEffect(() => {
     resetImageState(card.imageUrl);
-    setSubmissionError(null);
   }, [card.id, card.imageUrl, resetImageState]);
 
   return {
     isSubmitting,
-    submissionError,
     handleUpdateCard,
     imageUrl,
     isUploadingImage,
