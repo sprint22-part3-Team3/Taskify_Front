@@ -55,7 +55,9 @@ export default function PasswordEditForm() {
       setConfirmPassword('');
     } catch (error) {
       if (error instanceof ApiError) {
-        const fieldError = error.message === '기존 비밀번호와 동일합니다.';
+        const fieldError =
+          error.message === '기존 비밀번호와 동일합니다.' ||
+          error.message === '현재 비밀번호가 틀렸습니다.';
         if (!fieldError) {
           setErrorMessage(error.message);
         }
