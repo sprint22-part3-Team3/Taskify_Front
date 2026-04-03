@@ -33,7 +33,6 @@ export function useTodoCreateForm({
     resetImageState,
   } = useCardImageUpload({ teamId, initialImageUrl: null });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submissionError, setSubmissionError] = useState<string | null>(null);
   const { showToast } = useToast();
 
   const handleCreateTodo = useCallback(
@@ -45,7 +44,11 @@ export function useTodoCreateForm({
       tags,
     }: CreateTodoPayload) => {
       if (!dashboardId) {
-        setSubmissionError('대시보드를 찾을 수 없습니다.');
+        showToast({
+          theme: 'error',
+          title: '할 일 생성 실패',
+          message: '대시보드를 찾을 수 없습니다.',
+        });
         return false;
       }
 
@@ -61,7 +64,6 @@ export function useTodoCreateForm({
       };
 
       setIsSubmitting(true);
-      setSubmissionError(null);
 
       try {
         await createCard(payload);
@@ -77,7 +79,6 @@ export function useTodoCreateForm({
           error instanceof Error
             ? error.message
             : '할 일 생성에 실패했습니다. 다시 시도해 주세요.';
-        setSubmissionError(message);
         showToast({
           theme: 'error',
           title: '할 일 생성 실패',
@@ -93,7 +94,6 @@ export function useTodoCreateForm({
 
   const resetTodoCreateState = useCallback(() => {
     resetImageState();
-    setSubmissionError(null);
   }, [resetImageState]);
 
   return {
@@ -101,7 +101,6 @@ export function useTodoCreateForm({
     isUploadingImage,
     imageUploadError,
     isSubmitting,
-    submissionError,
     handleImageSelect,
     handleCreateTodo,
     resetTodoCreateState,
