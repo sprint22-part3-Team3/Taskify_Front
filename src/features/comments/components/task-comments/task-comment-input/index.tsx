@@ -3,6 +3,8 @@ import { useState, type SubmitEvent } from 'react';
 import { Button } from '@/shared/components/button';
 import TextArea from '@/shared/components/text-area';
 import { cn } from '@/shared/utils/cn';
+import { useToast } from '@/shared/hooks/useToast';
+import { COMMENT_MESSAGES } from '@/features/comments/constants/commentMessage.constants';
 
 /**
  * 댓글 내용을 입력받고 제출하는 폼 컴포넌트입니다.
@@ -11,6 +13,8 @@ import { cn } from '@/shared/utils/cn';
 function TaskCommentInput({ onSubmit, error }: TaskCommentInputProps) {
   const [content, setContent] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+
+  const { showToast } = useToast();
 
   const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,6 +26,7 @@ function TaskCommentInput({ onSubmit, error }: TaskCommentInputProps) {
       const success = await onSubmit(content);
       if (success) {
         setContent('');
+        showToast(COMMENT_MESSAGES.SUCCESS.CREATE);
       }
     } finally {
       setIsSaving(false);
