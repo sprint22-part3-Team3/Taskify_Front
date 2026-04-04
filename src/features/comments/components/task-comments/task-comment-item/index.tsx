@@ -6,6 +6,7 @@ import { TASK_MODAL_AVATAR_SIZE } from '@/shared/components/avatar/avatar.consta
 import { Button } from '@/shared/components/button';
 import TextArea from '@/shared/components/text-area';
 import useResponsiveValue from '@/shared/hooks/useResponsiveValue';
+import { useToast } from '@/shared/hooks/useToast';
 import { cn } from '@/shared/utils/cn';
 import { formatDateTimeValue, parseServerDateTime } from '@/shared/utils/date';
 import { useState } from 'react';
@@ -30,6 +31,8 @@ function TaskCommentItem({ comment, refetch, onDelete }: TaskCommentItemProps) {
   const [editError, setEditError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
+  const { showToast } = useToast();
+
   const handleEdit = () => {
     setIsEditing(true);
   };
@@ -50,8 +53,9 @@ function TaskCommentItem({ comment, refetch, onDelete }: TaskCommentItemProps) {
       await putComment({ id, content: editContent });
       refetch();
       setIsEditing(false);
+      showToast(COMMENT_MESSAGES.SUCCESS.UPDATE);
     } catch {
-      setEditError(COMMENT_MESSAGES.ERROR.UPDATE);
+      setEditError(COMMENT_MESSAGES.ERROR.UPDATE.message);
     } finally {
       setIsSaving(false);
     }

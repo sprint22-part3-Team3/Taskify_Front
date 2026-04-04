@@ -7,7 +7,7 @@ import type { GetCommentsResponse } from '@/features/comments/apis/comments.type
 import { COMMENT_MESSAGES } from '@/features/comments/constants/commentMessage.constants';
 
 /**
- * 코멘트 목록을 조회하는 훅
+ * 댓글 목록을 조회하는 훅
  */
 export const useCommentList = (cardId: number) => {
   const fetchFn = useCallback(() => getComments({ cardId }), [cardId]);
@@ -15,7 +15,7 @@ export const useCommentList = (cardId: number) => {
   const { result, isLoading, errorMessage, refetch } = useGetData({
     fetchFn,
     dependencyId: cardId,
-    notFoundMessage: COMMENT_MESSAGES.ERROR.NOT_FOUND_OR_FORBIDDEN,
+    notFoundMessage: COMMENT_MESSAGES.ERROR.NOT_FOUND_OR_FORBIDDEN.message,
   });
 
   const {
@@ -29,7 +29,7 @@ export const useCommentList = (cardId: number) => {
     fetchMoreFn: useCallback(
       async (cursor) => {
         const res = await getComments({ cardId, cursorId: cursor });
-        if (!res) throw new Error(COMMENT_MESSAGES.ERROR.FETCH_MORE);
+        if (!res) throw new Error(COMMENT_MESSAGES.ERROR.FETCH_MORE.message);
         return res;
       },
       [cardId]

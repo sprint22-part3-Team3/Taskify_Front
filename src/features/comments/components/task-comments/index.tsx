@@ -14,6 +14,7 @@ import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
 import { LoadingFallback } from '@/shared/components/loading/loading-fallback';
 import { ErrorFallback } from '@/shared/components/error/error-fallback';
 import { InfiniteScrollIndicator } from '@/shared/components/infinite-scroll-indicator';
+import { useToast } from '@/shared/hooks/useToast';
 
 /**
  * 할 일 카드의 댓글 목록을 렌더링하고 새 댓글을 작성하는 영역입니다.
@@ -47,6 +48,8 @@ function TaskComments({ id: cardId, columnId }: TaskCommentsProps) {
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  const { showToast } = useToast();
+
   if (isLoading && comments.length === 0)
     return <LoadingFallback variant="full" />;
 
@@ -62,7 +65,7 @@ function TaskComments({ id: cardId, columnId }: TaskCommentsProps) {
       refetch();
       return true;
     } catch {
-      setSubmitError(COMMENT_MESSAGES.ERROR.SUBMIT);
+      setSubmitError(COMMENT_MESSAGES.ERROR.CREATE.message);
       return false;
     }
   };
@@ -88,8 +91,10 @@ function TaskComments({ id: cardId, columnId }: TaskCommentsProps) {
       await delComment({ id: deleteTargetId });
       refetch();
       handleDeleteCancel();
+      showToast(COMMENT_MESSAGES.SUCCESS.DELETE);
     } catch {
       setHasDeleteError(true);
+      showToast({ ...COMMENT_MESSAGES.ERROR.DELETE, theme: 'error' });
     } finally {
       setIsDeleting(false);
     }
@@ -137,10 +142,13 @@ function TaskComments({ id: cardId, columnId }: TaskCommentsProps) {
         }}
         message={
           <>
-            코멘트를 <span className="text-error">삭제</span>하시겠습니까?
+            댓글을 <span className="text-error">삭제</span>하시겠습니까?
             {hasDeleteError && (
               <span className="typo-sm-medium text-error mt-1 block">
-                {COMMENT_MESSAGES.ERROR.DELETE}
+                <span className="inline-block">댓글 삭제에 실패했습니다.</span>
+                <span className="inline-block">
+                  잠시 후 다시 시도해 주세요.
+                </span>
               </span>
             )}
           </>
