@@ -187,40 +187,40 @@
 
 ```
 📦src
-│   ├── 📁app/                # 앱 설정 및 라우팅
-│   │   ├── App.tsx
-│   │   ├── 📁routes/
-│   │   └── 📁styles/
-│   ├── 📁features/           # 기능(도메인) 단위 구조
-│   │   ├── 📁auth/
-│   │   ├── 📁dashboards/
-│   │   ├── 📁cards/
-│   │   ├── 📁columns/
-│   │   ├── 📁comments/
-│   │   ├── 📁invitations/
-│   │   ├── 📁members/
-│   │   └── 📁users/
-│   ├── 📁pages/              # 페이지 단위 컴포넌트
-│   │   ├── 📁main/
-│   │   ├── 📁login/
-│   │   ├── 📁signup/
-│   │   ├── 📁my-dashboard/
-│   │   ├── 📁dashboard-detail/
-│   │   ├── 📁dashboard-edit/
-│   │   ├── 📁my/
-│   │   └── 📁not-found/
-│   ├── 📁shared/             # 공통 로직 및 UI
-│   │   ├── 📁components/
-│   │   ├── 📁hooks/
-│   │   ├── 📁apis/
-│   │   ├── 📁utils/
-│   │   ├── 📁types/
-│   │   ├── 📁constants/
-│   │   ├── 📁context/
-│   │   ├── 📁libs/
-│   │   └── 📁assets/
-│   ├── 📄main.tsx
-│   └── 📄vite-env.d.ts
+   ├── 📁app/                # 앱 설정 및 라우팅
+   │   ├── App.tsx
+   │   ├── 📁routes/
+   │   └── 📁styles/
+   ├── 📁features/           # 기능(도메인) 단위 구조
+   │   ├── 📁auth/
+   │   ├── 📁dashboards/
+   │   ├── 📁cards/
+   │   ├── 📁columns/
+   │   ├── 📁comments/
+   │   ├── 📁invitations/
+   │   ├── 📁members/
+   │   └── 📁users/
+   ├── 📁pages/              # 페이지 단위 컴포넌트
+   │   ├── 📁main/
+   │   ├── 📁login/
+   │   ├── 📁signup/
+   │   ├── 📁my-dashboard/
+   │   ├── 📁dashboard-detail/
+   │   ├── 📁dashboard-edit/
+   │   ├── 📁my/
+   │   └── 📁not-found/
+   ├── 📁shared/             # 공통 로직 및 UI
+   │   ├── 📁components/
+   │   ├── 📁hooks/
+   │   ├── 📁apis/
+   │   ├── 📁utils/
+   │   ├── 📁types/
+   │   ├── 📁constants/
+   │   ├── 📁context/
+   │   ├── 📁libs/
+   │   └── 📁assets/
+   ├── 📄main.tsx
+   └── 📄vite-env.d.ts
 ```
 
 ---
