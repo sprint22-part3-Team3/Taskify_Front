@@ -4,7 +4,7 @@ import NavigationButtons from '@/shared/components/page-indicator/navigation-but
 import Title from '@/shared/components/title';
 import UserProfile from '@/shared/components/user-profile';
 import DeleteModal from '@/shared/components/modal/delete-modal';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import type { Member } from '@/features/members/apis/members.types';
 import {
@@ -14,6 +14,7 @@ import {
 } from '@/features/members/apis/members';
 import { usePagination } from '@/shared/hooks/usePagination';
 import { dispatchMemberListChangeEvent } from '@/features/dashboards/utils/dashboardEvents';
+import { ToastContext } from '@/shared/context/toast/toastContext';
 
 export default function MembersSection() {
   // URL에서 dashboardId 가져오기
@@ -37,7 +38,7 @@ export default function MembersSection() {
     setIsDeleteModalOpen(false);
     setSelectedMemberId(null);
   };
-
+  const { showToast } = useContext(ToastContext)!;
   const handleConfirmDelete = async () => {
     if (!selectedMemberId || !dashboardId) return;
 
@@ -60,8 +61,19 @@ export default function MembersSection() {
       }
 
       dispatchMemberListChangeEvent();
-
       handleCloseDeleteModal();
+
+      showToast({
+        theme: 'success',
+        title: '구성원 삭제 완료',
+        message: '구성원이 삭제되었습니다.',
+      });
+    } catch {
+      showToast({
+        theme: 'error',
+        title: '구성원 삭제 실패',
+        message: '구성원 삭제에 실패했습니다.',
+      });
     } finally {
       setIsDeleting(false);
     }
