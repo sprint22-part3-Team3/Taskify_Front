@@ -42,7 +42,6 @@ export function useInvitedDashboardList() {
   const [isSearchingInvitedDashboards, setIsSearchingInvitedDashboards] =
     useState(false);
   const [invitedDashboardError, setInvitedDashboardError] = useState('');
-  const [invitationResponseError, setInvitationResponseError] = useState('');
   const [respondingInvitationId, setRespondingInvitationId] = useState<
     number | null
   >(null);
@@ -87,7 +86,6 @@ export function useInvitedDashboardList() {
 
     setIsSearchingInvitedDashboards(true);
     setInvitedDashboardError('');
-    setInvitationResponseError('');
     setAddErrorMessage(null);
     setCursorId(null);
 
@@ -174,7 +172,6 @@ export function useInvitedDashboardList() {
   const handleSearchKeywordChange = (keyword: string) => {
     setSearchKeyword(keyword);
     setInvitedDashboardError('');
-    setInvitationResponseError('');
   };
 
   const handleInvitationResponse = async (
@@ -182,7 +179,6 @@ export function useInvitedDashboardList() {
     inviteAccepted: boolean
   ) => {
     setRespondingInvitationId(invitationId);
-    setInvitationResponseError('');
 
     try {
       await respondToInvitation({
@@ -214,14 +210,12 @@ export function useInvitedDashboardList() {
       return true;
     } catch (error) {
       if (error instanceof ApiError && error.message) {
-        setInvitationResponseError(error.message);
         showToast({
           theme: 'error',
           title: '초대 응답 실패',
           message: error.message,
         });
       } else {
-        setInvitationResponseError(DASHBOARD_ERROR_MESSAGE.respondToInvitation);
         showToast({
           theme: 'error',
           title: '초대 응답 실패',
@@ -268,7 +262,6 @@ export function useInvitedDashboardList() {
     searchKeyword,
     isSearchingInvitedDashboards,
     invitedDashboardError,
-    invitationResponseError,
     respondingInvitationId,
     selectedInvitedDashboard,
     isDeleteModalOpen,

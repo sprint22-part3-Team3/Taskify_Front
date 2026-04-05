@@ -1,6 +1,7 @@
 import { ApiError } from '@/shared/apis/apiError';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from '@/shared/hooks/useToast';
 import { signup } from '@/features/auth/apis/signup';
 import type { SignupFormValues } from '@/features/auth/apis/auth.types';
 
@@ -9,12 +10,11 @@ const SIGNUP_ERROR_MESSAGE = '회원가입에 실패했습니다. 다시 시도�
 
 export function useSignup() {
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const [emailApiError, setEmailApiError] = useState('');
-  const [submitError, setSubmitError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const resetEmailApiError = () => setEmailApiError('');
-  const resetSubmitError = () => setSubmitError('');
 
   const isInvalidSignupState = ({
     password,
@@ -49,11 +49,15 @@ export function useSignup() {
 
     try {
       setIsSubmitting(true);
-      resetSubmitError();
       await signup({
         nickname: nickname.trim(),
         email: email.trim(),
         password,
+      });
+      showToast({
+        theme: 'success',
+        title: '회원가입 완료',
+        message: '회원가입이 완료되었습니다. 로그인 페이지로 이동합니다.',
       });
       navigate('/login');
     } catch (error) {
@@ -65,7 +69,12 @@ export function useSignup() {
         return;
       }
 
-      setSubmitError(getSignupErrorMessage(error));
+      const errorMessage = getSignupErrorMessage(error);
+      showToast({
+        theme: 'error',
+        title: '회원가입 실패',
+        message: errorMessage,
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -73,10 +82,8 @@ export function useSignup() {
 
   return {
     emailApiError,
-    submitError,
     isSubmitting,
     resetEmailApiError,
-    resetSubmitError,
     handleSignup,
   };
 }

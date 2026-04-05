@@ -14,6 +14,7 @@ import {
 } from '@/features/members/apis/members';
 import { usePagination } from '@/shared/hooks/usePagination';
 import { dispatchMemberListChangeEvent } from '@/features/dashboards/utils/dashboardEvents';
+import { useToast } from '@/shared/hooks/useToast';
 
 export default function MembersSection() {
   // URL에서 dashboardId 가져오기
@@ -32,7 +33,7 @@ export default function MembersSection() {
   const [selectedMemberId, setSelectedMemberId] = useState<number | null>(null);
 
   const [isDeleting, setIsDeleting] = useState(false);
-
+  const { showToast } = useToast();
   const handleCloseDeleteModal = () => {
     setIsDeleteModalOpen(false);
     setSelectedMemberId(null);
@@ -45,7 +46,18 @@ export default function MembersSection() {
 
     try {
       await deleteMember(selectedMemberId);
+    } catch {
+      showToast({
+        theme: 'error',
+        title: '구성원 삭제 실패',
+        message: '구성원 삭제에 실패했습니다.',
+      });
+      setIsDeleting(false);
+      return; // 삭제 실패 시 여기서 끝
+    }
 
+    // 삭제 성공 후 목록 갱신 (별도 try-catch)
+    try {
       const isLastItemOnPage = members.length === 1;
       const shouldGoBack = isLastItemOnPage && currentPage > 1;
 
@@ -58,13 +70,23 @@ export default function MembersSection() {
           syncTotalCount(data.totalCount, MEMBERS_SIZE);
         }
       }
-
-      dispatchMemberListChangeEvent();
-
-      handleCloseDeleteModal();
-    } finally {
-      setIsDeleting(false);
+    } catch {
+      showToast({
+        theme: 'warning',
+        title: '구성원 목록 갱신 실패',
+        message: '목록 갱신에 실패했습니다. 새로고침해주세요.',
+      });
     }
+
+    dispatchMemberListChangeEvent();
+    handleCloseDeleteModal();
+    setIsDeleting(false);
+
+    showToast({
+      theme: 'success',
+      title: '구성원 삭제 성공',
+      message: '구성원이 삭제되었습니다.',
+    });
   };
 
   // 구성원 목록 API 호출

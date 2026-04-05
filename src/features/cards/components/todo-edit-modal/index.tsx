@@ -63,7 +63,6 @@ function TodoEditModalContent({
   } = useColumnList(dashboardId);
   const {
     isSubmitting,
-    submissionError,
     handleUpdateCard,
     imageUrl,
     isUploadingImage,
@@ -249,11 +248,6 @@ function TodoEditModalContent({
             </FieldWrapper>
           </Modal.Main>
           <Modal.Footer className="shrink-0">
-            {submissionError && (
-              <p className="typo-md-regular text-error mr-4">
-                {submissionError}
-              </p>
-            )}
             <Button theme="cancel" type="button" onClick={onClose}>
               취소
             </Button>
