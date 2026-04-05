@@ -1,7 +1,7 @@
 # ⏰ Taskify - 일정 관리 대시보드
 <div align="center">
 <img width="1231" height="691" alt="image" src="https://github.com/user-attachments/assets/c8a437f3-55c3-4c40-9385-d463718ab6c3" />
-<img src="https://img.shields.io/badge/프로젝트 기간-2026.03.17.~2025.04.03-fab2ac?style=flat&logo=&logoColor=white" />
+<img src="https://img.shields.io/badge/프로젝트 기간-2026.03.17.~2025.04.03-5eead4?style=flat&logo=&logoColor=white" />
 </div>
 
 
@@ -78,58 +78,50 @@
 
 | 이름 | 담당 |
 |------------|------|
-| [팀장]이서정 | **공통 컴포넌트**<br>avatar, form, loading, input<br><br>**페이지 & 기능**<br>auth(로그인, 회원가입), 알림 생성/수정 모달, 환경 모달, 랜딩 페이지<br><br>**공통 훅/기능**<br>useDebounce, 드래그 앤 드롭<br><br>**기타**<br>프로젝트 초기 세팅, 라우터 |
-| 권새롬 | **공통 컴포넌트**<br>태그, 컬럼, 상태 배지, 대시보드 제목, 토큰<br><br>**페이지 & 기능**<br>할 일 생성/수정 모달 UI, 마이페이지, 404 페이지<br><br>**공통 훅/기능**<br>페이지네이션<br><br>**기타**<br>assets 세팅, 피그마 리디자인 |
-| 김예지 | **공통 컴포넌트**<br>모달, 토스트<br><br>**페이지 & 기능**<br>할 일 카드 상세페이지, 할 일 카드 모달<br><br>**공통 훅/기능**<br>무한 스크롤<br><br>**기타**<br>템플릿 및 라이브러리 설치, 공통 컬러 및 폰트 시스템 |
-| 김혜원 | **공통 컴포넌트**<br>이미지 업로드, 타이틀, 데이터 테이블 버튼<br><br>**페이지 & 기능**<br>마이페이지, 컬럼 생성/수정/삭제<br><br>**공통 훅/기능**<br>유효성 검사<br><br>**기타**<br>vercel 배포 |
-| 김현진 | **공통 컴포넌트**<br>대시보드 레이아웃<br><br>**페이지 & 기능**<br>대시보드 수정 페이지, 대시보드 상세 페이지<br><br>**기타**<br>fetchInstance, env 설정 |
+| 🚩이서정(팀장) | **공통 컴포넌트**<br>avatar, form, loading, input<br><br>**페이지 & 기능**<br>auth(로그인, 회원가입), 알림 생성/수정 모달, 환경 모달, 랜딩 페이지<br><br>**공통 훅/기능**<br>useDebounce, 드래그 앤 드롭<br><br>**기타**<br>프로젝트 초기 세팅, 라우터, 랜딩페이지 리디자인 |
+| 권새롬 | **공통 컴포넌트**<br>태그, 컬러칩, 상태 뱃지, 대시보드 제목, 로고<br><br>**페이지 & 기능**<br>할 일 생성/수정 모달 UI, 마이페이지, 404 페이지<br><br>**공통 훅/기능**<br>페이지네이션<br><br>**기타**<br>assets 세팅, 피그마 리디자인 |
+| 김예지 | **공통 컴포넌트**<br>모달, 토스트<br><br>**페이지 & 기능**<br>대시보드 상세페이지, 할 일 카드 모달<br><br>**공통 훅/기능**<br>무한 스크롤<br><br>**기타**<br>Tailwind 공통 유틸, 공통 컬러 및 폰트 시스템 |
+| 김혜원 | **공통 컴포넌트**<br>이미지 업로드, 타이틀, 네비게이션 버튼<br><br>**페이지 & 기능**<br>마이페이지, 컬럼 생성/수정/삭제 기능<br><br>**공통 훅/기능**<br>유효성 검사<br><br>**기타**<br>vercel 배포 |
+| 김현진 | **공통 컴포넌트**<br>헤더, 사이드바<br><br>**페이지 & 기능**<br>대시보드 수정 페이지, 구성원 초대/삭제 모달<br><br>**공통 훅/기능**<br>대시보드 레이아웃 적용<br><br>**기타**<br>fetchInstance, env 설정 |
 
 ---
 
 ## 🖥️ 화면 미리보기
 > 모든 화면은 **PC / Tablet / Mobile** 반응형을 고려해 구현했습니다.
 
-### 랜딩 페이지
-| PC | Tablet | Mobile |
-|---|---|---|
-| | | |
+|랜딩 페이지(/)|
+|:---:|
+|<img src="https://github.com/user-attachments/assets/944c21f1-2081-454e-b8a3-fd1947622cff" width="800" />|
+|서비스 컨셉 및 주요 기능 소개|
 
-- 서비스 컨셉 및 주요 기능 소개
-
-### 회원가입 & 로그인
-| PC | Tablet | Mobile |
-|---|---|---|
-| | | |
+|회원가입 & 로그인(/signup,/login)|
+|:---:|
+|<img src="https://github.com/user-attachments/assets/6a18b6b4-6613-42a1-b4d9-1d08482fa460" width="800" />|
+|회원가입 및 로그인 - 유효성 검사|
 
 
-### 내 대시보드
-| PC | Tablet | Mobile |
-|---|---|---|
-| | | |
+
+|내 대시보드 - 대시보드 생성(/mydashboard)|
+|:---:|
+|<img src="https://github.com/user-attachments/assets/ecaedab5-bf34-40e1-97e2-d0f508788476" width="400" /> <img src="https://github.com/user-attachments/assets/1d1e8c7b-e404-4adf-8973-0918cf0555b1" width="400" />|
+|대시보드 생성 및 대시보드 목록 확인 / 초대 수락|
 
 
-### 대시보드 상세
-| PC | Tablet | Mobile |
-|---|---|---|
-| | ||
+|대시보드 상세(/dashboard/:id)|
+|:---:|
+|<img src="https://github.com/user-attachments/assets/ea58ba88-da5b-4b33-82dd-139407bb054f" width="400" /><img src="https://github.com/user-attachments/assets/1c8d01f0-c747-4b69-9baf-c1c1414c6eb8" width="400" />|
+|할 일 카드 생성&수정&삭제, 댓글 수정&삭제, 드래그 앤 드롭 / 컬럼 생성&수정&삭제 |
 
 
-### 대시보드 관리
-| PC | Tablet | Mobile |
-|---|---|---|
-|  | | |
+|대시보드 수정(/dashboard/:id/edit)|
+|:---:|
+|<img src="https://github.com/user-attachments/assets/94d5942f-eba3-4c08-8461-4117db62c367" width="800" />|
+|대시보드 구성원 초대&삭제(owner만 가능), 대시보드 수정&삭제(owner만 가능) |
 
-
-- ### 구성원 초대
-| PC | Tablet | Mobile |
-|---|---|---|
-| | | |
-
-
-### 계정 관리
-| PC | Tablet | Mobile |
-|---|---|---|
-| || |
+|계정관리(/mypage)|
+|:---:|
+|<img src="https://github.com/user-attachments/assets/63bb70d2-b9c3-4876-8751-30a188947384" width="800" />|
+|나의 정보 수정, 비밀번호 변경, 로그아웃 |
 
 ---
 
