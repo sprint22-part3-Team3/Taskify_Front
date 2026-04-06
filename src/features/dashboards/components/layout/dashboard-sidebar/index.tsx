@@ -43,7 +43,6 @@ export default function Sidebar({
   onNextPage,
   totalPages,
 }: SidebarProps) {
-  console.log(totalPages);
   return (
     <aside className="flex h-screen w-17 shrink-0 flex-col bg-white md:w-40 lg:w-75">
       {/* 로고 */}
