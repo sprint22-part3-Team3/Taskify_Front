@@ -47,12 +47,24 @@ function AssigneeSelect({
   const [showManualInvalidMentionError, setShowManualInvalidMentionError] =
     useState(false);
   const selectedAssigneeQuery = getAssigneeQuery(selectedAssignee);
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
+  const highlightedItemRef = useRef<HTMLButtonElement | null>(null);
+
+  const resetHighlight = () => {
+    setHighlightedIndex(-1);
+    highlightedItemRef.current = null;
+  };
+
+  const closeDropdown = () => {
+    setIsOpen(false);
+    resetHighlight();
+  };
 
   useEffect(() => {
     setQuery(selectedAssigneeQuery);
   }, [selectedAssigneeQuery]);
 
-  useOnClickOutside(containerRef, () => setIsOpen(false), isOpen);
+  useOnClickOutside(containerRef, closeDropdown, isOpen);
 
   const { hasMentionTrigger, normalizedQuery } = parseAssigneeQuery(query);
   const hasSelectedAssigneeQuery = isSameAssigneeQuery(
@@ -71,11 +83,32 @@ function AssigneeSelect({
     );
   }, [assigneeOptions, debouncedNormalizedQuery]);
 
+  useEffect(() => {
+    if (!isOpen || filteredAssignees.length === 0) {
+      resetHighlight();
+      return;
+    }
+
+    setHighlightedIndex((currentIndex) =>
+      currentIndex >= 0 && currentIndex < filteredAssignees.length
+        ? currentIndex
+        : 0
+    );
+  }, [filteredAssignees, isOpen]);
+
+  useEffect(() => {
+    if (highlightedIndex < 0 || !isOpen) {
+      return;
+    }
+
+    highlightedItemRef.current?.scrollIntoView({ block: 'nearest' });
+  }, [highlightedIndex, isOpen]);
+
   const handleSelect = (assignee: AvatarUser) => {
     shouldSkipNextBlurValidationRef.current = true;
     onSelect(assignee);
     setQuery(getAssigneeQuery(assignee));
-    setIsOpen(false);
+    closeDropdown();
     setShowManualInvalidMentionError(false);
     inputRef.current?.blur();
   };
@@ -103,6 +136,69 @@ function AssigneeSelect({
     setIsOpen(hasNextMentionTrigger);
   };
 
+  const moveHighlight = (delta: number) => {
+    if (filteredAssignees.length === 0) {
+      return;
+    }
+
+    setHighlightedIndex((currentIndex) => {
+      const baseIndex =
+        currentIndex >= 0 && currentIndex < filteredAssignees.length
+          ? currentIndex
+          : 0;
+      const nextIndex = baseIndex + delta;
+
+      if (nextIndex >= filteredAssignees.length) {
+        return 0;
+      }
+
+      if (nextIndex < 0) {
+        return filteredAssignees.length - 1;
+      }
+
+      return nextIndex;
+    });
+  };
+
+  const selectHighlighted = () => {
+    if (
+      highlightedIndex < 0 ||
+      highlightedIndex >= filteredAssignees.length ||
+      filteredAssignees.length === 0
+    ) {
+      return;
+    }
+
+    handleSelect(filteredAssignees[highlightedIndex]);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!isOpen || filteredAssignees.length === 0) {
+      return;
+    }
+
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault();
+        moveHighlight(1);
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        moveHighlight(-1);
+        break;
+      case 'Enter':
+        event.preventDefault();
+        selectHighlighted();
+        break;
+      case 'Escape':
+        event.preventDefault();
+        closeDropdown();
+        break;
+      default:
+        break;
+    }
+  };
+
   const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
     const nextFocusedElement = event.relatedTarget;
 
@@ -113,7 +209,7 @@ function AssigneeSelect({
       return;
     }
 
-    setIsOpen(false);
+    closeDropdown();
 
     if (shouldSkipNextBlurValidationRef.current) {
       shouldSkipNextBlurValidationRef.current = false;
@@ -186,6 +282,7 @@ function AssigneeSelect({
             placeholder={placeholder}
             onFocus={handleFocus}
             onChange={handleChangeQuery}
+            onKeyDown={handleKeyDown}
             className={cn(
               'typo-md-regular md:typo-lg-regular focus:border-primary-500 text-black-200 h-12 bg-white py-0 pr-4 pl-11 md:pl-12',
               shouldShowSelectedAssignee && 'text-transparent caret-transparent'
@@ -197,27 +294,35 @@ function AssigneeSelect({
           <div className="z-dropdown absolute mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
             {filteredAssignees.length > 0 ? (
               <ul className="max-h-52 overflow-y-auto">
-                {filteredAssignees.map((assignee) => (
-                  <li key={assignee.id}>
-                    <button
-                      type="button"
-                      onMouseDown={(event) => {
-                        event.preventDefault();
-                      }}
-                      onClick={() => handleSelect(assignee)}
-                      className={cn(
-                        'text-black-200 flex h-12 w-full items-center px-4 text-left hover:bg-gray-50',
-                        selectedAssignee?.id === assignee.id && 'bg-gray-50'
-                      )}
-                    >
-                      <UserProfile
-                        user={assignee}
-                        size="md"
-                        nicknameClassName="typo-md-regular md:typo-lg-regular"
-                      />
-                    </button>
-                  </li>
-                ))}
+                {filteredAssignees.map((assignee, index) => {
+                  const isHighlighted = index === highlightedIndex;
+                  const isSelected = selectedAssignee?.id === assignee.id;
+
+                  return (
+                    <li key={assignee.id}>
+                      <button
+                        type="button"
+                        ref={isHighlighted ? highlightedItemRef : null}
+                        onMouseDown={(event) => {
+                          event.preventDefault();
+                        }}
+                        onClick={() => handleSelect(assignee)}
+                        className={cn(
+                          'text-black-200 flex h-12 w-full items-center px-4 text-left hover:bg-gray-50',
+                          isHighlighted && 'bg-gray-100',
+                          !isHighlighted && isSelected && 'bg-gray-50'
+                        )}
+                        aria-selected={isHighlighted}
+                      >
+                        <UserProfile
+                          user={assignee}
+                          size="md"
+                          nicknameClassName="typo-md-regular md:typo-lg-regular"
+                        />
+                      </button>
+                    </li>
+                  );
+                })}
               </ul>
             ) : (
               <p className="typo-md-regular px-4 py-3 text-gray-400">
