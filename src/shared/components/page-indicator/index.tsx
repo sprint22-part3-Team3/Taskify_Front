@@ -19,6 +19,10 @@ function PageIndicator({
   isHidingOnMobile = false,
   ...props
 }: PageIndicatorProps) {
+  const isSinglePage = totalPages <= 1;
+
+  if (isSinglePage) return null;
+
   return (
     <div className={cn('flex items-center gap-3', className)} {...props}>
       <span className="typo-xs-regular md:typo-md-regular text-black-200">

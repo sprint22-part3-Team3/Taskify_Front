@@ -77,8 +77,9 @@ function MyDashboardPage() {
 
         {dashboardItems.length > 0 && (
           <div className="mt-4 flex items-center justify-end gap-3 md:mt-3">
-            <PageIndicator currentPage={currentPage} totalPages={totalPages} />
-            <NavigationButtons
+            <PageIndicator
+              currentPage={currentPage}
+              totalPages={totalPages}
               onPrev={handlePrevPage}
               onNext={handleNextPage}
               isPrevDisabled={currentPage === 1 || isLoadingDashboards}

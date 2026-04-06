@@ -41,7 +41,9 @@ export default function Sidebar({
   onDashboardClick,
   onPrevPage,
   onNextPage,
+  totalPages,
 }: SidebarProps) {
+  console.log(totalPages);
   return (
     <aside className="flex h-screen w-17 shrink-0 flex-col bg-white md:w-40 lg:w-75">
       {/* 로고 */}
@@ -111,6 +113,7 @@ export default function Sidebar({
           isPrevDisabled={isPrevDisabled}
           isNextDisabled={isNextDisabled}
           size="compact"
+          totalPages={totalPages}
         />
       </div>
     </aside>

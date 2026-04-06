@@ -164,6 +164,7 @@ export default function DashboardLayout() {
           onDashboardClick={handleDashboardClick}
           onPrevPage={handlePrevPage}
           onNextPage={handleNextPage}
+          totalPages={totalPages}
         />
         <div className="flex min-w-0 flex-1 flex-col">
           <Header
