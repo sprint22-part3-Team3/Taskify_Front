@@ -50,7 +50,7 @@ function ModalHeader({
       )}
       {...props}
     >
-      <h2 className="typo-xl-bold md:typo-2xl-bold text-black-200 w-full">
+      <h2 className="typo-xl-bold md:typo-2xl-bold text-black-200 w-full wrap-anywhere">
         {title}
       </h2>
       {(hasMenuIcon || hasCloseIcon) && (
