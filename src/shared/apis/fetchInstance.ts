@@ -3,12 +3,14 @@ import { ENV } from '@/shared/apis/env.ts';
 import { getAccessToken, removeAccessToken } from '@/shared/utils/token';
 
 const REQUEST_TIMEOUT = 5000;
+export const IMAGE_UPLOAD_TIMEOUT = 15000;
 const JSON_CONTENT_TYPE = 'application/json';
 const UNAUTHORIZED_STATUS = 401;
 
 type FetchRequestOptions = RequestInit & {
   auth?: boolean;
   isFormData?: boolean;
+  timeout?: number;
 };
 
 type RequestConfig = {
@@ -72,14 +74,19 @@ export async function fetchInstance<T>(
   body?: unknown
 ): Promise<T | null> {
   const url = buildRequestUrl(endpoint, query);
-  const { auth = true, isFormData = false, ...requestOptions } = options;
+  const {
+    auth = true,
+    isFormData = false,
+    timeout = REQUEST_TIMEOUT,
+    ...requestOptions
+  } = options;
   const accessToken = auth ? getAccessToken() : null;
   const defaultHeaders = {
     ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
   };
 
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
 
   const signal = options.signal
     ? AbortSignal.any([controller.signal, options.signal])

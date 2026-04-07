@@ -1,4 +1,9 @@
-import { get, put, postFormData } from '@/shared/apis/fetchInstance';
+import {
+  get,
+  IMAGE_UPLOAD_TIMEOUT,
+  postFormData,
+  put,
+} from '@/shared/apis/fetchInstance';
 import type {
   UploadProfileImageResponse,
   UpdateUserMeRequest,
@@ -14,5 +19,7 @@ export const uploadProfileImage = (file: File) => {
   const formData = new FormData();
   formData.append('image', file);
 
-  return postFormData<UploadProfileImageResponse>('/users/me/image', formData);
+  return postFormData<UploadProfileImageResponse>('/users/me/image', formData, {
+    timeout: IMAGE_UPLOAD_TIMEOUT,
+  });
 };
