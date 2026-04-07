@@ -307,6 +307,7 @@ function AssigneeSelect({
                     <li key={assignee.id}>
                       <button
                         type="button"
+                        role="option"
                         ref={isHighlighted ? highlightedItemRef : null}
                         onMouseDown={(event) => {
                           event.preventDefault();
@@ -317,7 +318,7 @@ function AssigneeSelect({
                           isHighlighted && 'bg-gray-100',
                           !isHighlighted && isSelected && 'bg-gray-50'
                         )}
-                        aria-selected={isHighlighted}
+                        aria-selected={isSelected}
                       >
                         <UserProfile
                           user={assignee}
