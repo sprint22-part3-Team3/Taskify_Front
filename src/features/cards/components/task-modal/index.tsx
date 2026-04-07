@@ -1,5 +1,5 @@
 import type { TaskModalProps } from '@/features/cards/components/task-modal/taskModal.types';
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Modal } from '@/shared/components/modal';
 import DeleteModal from '@/shared/components/modal/delete-modal';
 import { TaskMeta } from '@/features/cards/components/task-modal/task-meta';
@@ -89,13 +89,11 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
     }
   };
 
-  useOnClickOutside(
-    menuRef,
-    () => {
-      setIsMenuOpen(false);
-    },
-    isMenuOpen
-  );
+  const handleCloseMenu = useCallback(() => {
+    setIsMenuOpen(false);
+  }, []);
+
+  useOnClickOutside(menuRef, handleCloseMenu, isMenuOpen);
 
   return (
     <>
@@ -104,22 +102,22 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
         onClose={handleCloseModal}
         className="max-w-81.75 md:max-w-169.5 lg:max-w-182.5"
       >
-        <div className="relative">
-          <Modal.Header
-            hasCloseIcon
-            hasMenuIcon
-            title={title}
-            onClickMenu={handleClickMenu}
-          />
-        </div>
-        {isMenuOpen && (
-          <div ref={menuRef}>
+        <div ref={menuRef}>
+          <div className="relative">
+            <Modal.Header
+              hasCloseIcon
+              hasMenuIcon
+              title={title}
+              onClickMenu={handleClickMenu}
+            />
+          </div>
+          {isMenuOpen && (
             <TaskMenu
               onEdit={handleClickEditMenu}
               onDelete={handleClickDeleteMenu}
             />
-          </div>
-        )}
+          )}
+        </div>
         <Modal.Main className="mb-0">
           <div className="flex flex-col-reverse gap-4 md:flex-row md:gap-3.25 lg:gap-10">
             <div className="flex grow flex-col gap-4">
