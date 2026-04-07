@@ -1,7 +1,7 @@
 # ⏰ Taskify - 일정 관리 대시보드
 <div align="center">
 <img width="1231" height="691" alt="image" src="https://github.com/user-attachments/assets/c8a437f3-55c3-4c40-9385-d463718ab6c3" />
-<img src="https://img.shields.io/badge/프로젝트 기간-2026.03.17.~2025.04.03-5eead4?style=flat&logo=&logoColor=white" />
+<img src="https://img.shields.io/badge/프로젝트 기간-2026.03.17.~2026.04.03-5eead4?style=flat&logo=&logoColor=white" />
 </div>
 
 
@@ -45,32 +45,32 @@
     </tr>
     <tr>
       <td align="center">
-        <a href="https://github.com/geniexx64" target="_blank">
+        <a href="https://github.com/Lseojeong" target="_blank">
           이서정
         </a>
       </td>
       <td align="center">
-        <a  href="https://github.com/ziy1027" target="_blank">
+        <a  href="https://github.com/rhdtls3562" target="_blank">
           권새롬
         </a>
       </td>
       <td align="center">
-        <a href="https://github.com/Lseojeong" target="_blank">
+        <a href="https://github.com/anarose314" target="_blank">
           김예지
         </a>
       </td>
       <td align="center">
-        <a  href="https://github.com/bitna0a" target="_blank">
+        <a  href="https://github.com/geniexx64" target="_blank">
           김현진
         </a>
       </td>
       <td align="center">
-        <a  href="https://github.com/bitna0a" target="_blank">
+        <a  href="https://github.com/hyewon0457" target="_blank">
           김혜원
         </a>
       </td>
     </tr>
-  <table>
+  </table>
 <br />
 
 
