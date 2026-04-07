@@ -1,9 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { IcSearch } from '@/shared/assets/icons';
 import InputField from '@/shared/components/input/input-field';
 import Label from '@/shared/components/input/label';
 import UserProfile from '@/shared/components/user-profile';
 import { useOnClickOutside } from '@/shared/hooks/useOnClickOutside';
+import { useDropdownArrowKeyOpen } from '@/shared/hooks/useDropdownArrowKeyOpen';
+import { useDropdownNavigation } from '@/shared/hooks/useDropdownNavigation';
 import type { AvatarUser } from '@/shared/types/user.types';
 import { cn } from '@/shared/utils/cn';
 import { useDebounce } from '@/shared/hooks/useDebounce';
@@ -47,12 +49,11 @@ function AssigneeSelect({
   const [showManualInvalidMentionError, setShowManualInvalidMentionError] =
     useState(false);
   const selectedAssigneeQuery = getAssigneeQuery(selectedAssignee);
+  const highlightedItemRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     setQuery(selectedAssigneeQuery);
   }, [selectedAssigneeQuery]);
-
-  useOnClickOutside(containerRef, () => setIsOpen(false), isOpen);
 
   const { hasMentionTrigger, normalizedQuery } = parseAssigneeQuery(query);
   const hasSelectedAssigneeQuery = isSameAssigneeQuery(
@@ -71,11 +72,59 @@ function AssigneeSelect({
     );
   }, [assigneeOptions, debouncedNormalizedQuery]);
 
+  const {
+    highlightedIndex,
+    moveHighlight,
+    resetHighlight,
+    setInitialHighlight,
+  } = useDropdownNavigation({
+    itemCount: filteredAssignees.length,
+  });
+
+  const clearHighlight = useCallback(() => {
+    resetHighlight();
+    highlightedItemRef.current = null;
+  }, [resetHighlight]);
+
+  const closeDropdown = () => {
+    setIsOpen(false);
+    clearHighlight();
+  };
+
+  useOnClickOutside(containerRef, closeDropdown, isOpen);
+
+  useEffect(() => {
+    if (!isOpen || filteredAssignees.length === 0) {
+      clearHighlight();
+      return;
+    }
+
+    if (highlightedIndex >= 0 && highlightedIndex < filteredAssignees.length) {
+      return;
+    }
+
+    setInitialHighlight(0);
+  }, [
+    clearHighlight,
+    filteredAssignees.length,
+    highlightedIndex,
+    isOpen,
+    setInitialHighlight,
+  ]);
+
+  useEffect(() => {
+    if (highlightedIndex < 0 || !isOpen) {
+      return;
+    }
+
+    highlightedItemRef.current?.scrollIntoView({ block: 'nearest' });
+  }, [highlightedIndex, isOpen]);
+
   const handleSelect = (assignee: AvatarUser) => {
     shouldSkipNextBlurValidationRef.current = true;
     onSelect(assignee);
     setQuery(getAssigneeQuery(assignee));
-    setIsOpen(false);
+    closeDropdown();
     setShowManualInvalidMentionError(false);
     inputRef.current?.blur();
   };
@@ -103,6 +152,58 @@ function AssigneeSelect({
     setIsOpen(hasNextMentionTrigger);
   };
 
+  const selectHighlighted = () => {
+    if (
+      highlightedIndex < 0 ||
+      highlightedIndex >= filteredAssignees.length ||
+      filteredAssignees.length === 0
+    ) {
+      return;
+    }
+
+    handleSelect(filteredAssignees[highlightedIndex]);
+  };
+
+  const openDropdownOnArrowKey = useDropdownArrowKeyOpen({
+    isOpen,
+    canOpen: filteredAssignees.length > 0,
+    onOpen: () => {
+      setIsOpen(true);
+      setInitialHighlight(0);
+    },
+  });
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (openDropdownOnArrowKey(event)) {
+      return;
+    }
+
+    if (!isOpen || filteredAssignees.length === 0) {
+      return;
+    }
+
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault();
+        moveHighlight(1);
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        moveHighlight(-1);
+        break;
+      case 'Enter':
+        event.preventDefault();
+        selectHighlighted();
+        break;
+      case 'Escape':
+        event.preventDefault();
+        closeDropdown();
+        break;
+      default:
+        break;
+    }
+  };
+
   const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
     const nextFocusedElement = event.relatedTarget;
 
@@ -113,7 +214,7 @@ function AssigneeSelect({
       return;
     }
 
-    setIsOpen(false);
+    closeDropdown();
 
     if (shouldSkipNextBlurValidationRef.current) {
       shouldSkipNextBlurValidationRef.current = false;
@@ -186,6 +287,7 @@ function AssigneeSelect({
             placeholder={placeholder}
             onFocus={handleFocus}
             onChange={handleChangeQuery}
+            onKeyDown={handleKeyDown}
             className={cn(
               'typo-md-regular md:typo-lg-regular focus:border-primary-500 text-black-200 h-12 bg-white py-0 pr-4 pl-11 md:pl-12',
               shouldShowSelectedAssignee && 'text-transparent caret-transparent'
@@ -197,27 +299,36 @@ function AssigneeSelect({
           <div className="z-dropdown absolute mt-1 w-full overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg">
             {filteredAssignees.length > 0 ? (
               <ul className="max-h-52 overflow-y-auto">
-                {filteredAssignees.map((assignee) => (
-                  <li key={assignee.id}>
-                    <button
-                      type="button"
-                      onMouseDown={(event) => {
-                        event.preventDefault();
-                      }}
-                      onClick={() => handleSelect(assignee)}
-                      className={cn(
-                        'text-black-200 flex h-12 w-full items-center px-4 text-left hover:bg-gray-50',
-                        selectedAssignee?.id === assignee.id && 'bg-gray-50'
-                      )}
-                    >
-                      <UserProfile
-                        user={assignee}
-                        size="md"
-                        nicknameClassName="typo-md-regular md:typo-lg-regular"
-                      />
-                    </button>
-                  </li>
-                ))}
+                {filteredAssignees.map((assignee, index) => {
+                  const isHighlighted = index === highlightedIndex;
+                  const isSelected = selectedAssignee?.id === assignee.id;
+
+                  return (
+                    <li key={assignee.id}>
+                      <button
+                        type="button"
+                        role="option"
+                        ref={isHighlighted ? highlightedItemRef : null}
+                        onMouseDown={(event) => {
+                          event.preventDefault();
+                        }}
+                        onClick={() => handleSelect(assignee)}
+                        className={cn(
+                          'text-black-200 flex h-12 w-full items-center px-4 text-left hover:bg-gray-50',
+                          isHighlighted && 'bg-gray-100',
+                          !isHighlighted && isSelected && 'bg-gray-50'
+                        )}
+                        aria-selected={isSelected}
+                      >
+                        <UserProfile
+                          user={assignee}
+                          size="md"
+                          nicknameClassName="typo-md-regular md:typo-lg-regular"
+                        />
+                      </button>
+                    </li>
+                  );
+                })}
               </ul>
             ) : (
               <p className="typo-md-regular px-4 py-3 text-gray-400">
