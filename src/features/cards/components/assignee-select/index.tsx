@@ -173,7 +173,15 @@ function AssigneeSelect({
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!isOpen || filteredAssignees.length === 0) {
+    if (filteredAssignees.length === 0) {
+      return;
+    }
+
+    if (!isOpen) {
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault();
+        setIsOpen(true);
+      }
       return;
     }
 
