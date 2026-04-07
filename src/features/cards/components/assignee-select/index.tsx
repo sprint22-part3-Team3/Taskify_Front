@@ -1,9 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { IcSearch } from '@/shared/assets/icons';
 import InputField from '@/shared/components/input/input-field';
 import Label from '@/shared/components/input/label';
 import UserProfile from '@/shared/components/user-profile';
 import { useOnClickOutside } from '@/shared/hooks/useOnClickOutside';
+import { useDropdownArrowKeyOpen } from '@/shared/hooks/useDropdownArrowKeyOpen';
+import { useDropdownNavigation } from '@/shared/hooks/useDropdownNavigation';
 import type { AvatarUser } from '@/shared/types/user.types';
 import { cn } from '@/shared/utils/cn';
 import { useDebounce } from '@/shared/hooks/useDebounce';
@@ -47,24 +49,11 @@ function AssigneeSelect({
   const [showManualInvalidMentionError, setShowManualInvalidMentionError] =
     useState(false);
   const selectedAssigneeQuery = getAssigneeQuery(selectedAssignee);
-  const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const highlightedItemRef = useRef<HTMLButtonElement | null>(null);
-
-  const resetHighlight = () => {
-    setHighlightedIndex(-1);
-    highlightedItemRef.current = null;
-  };
-
-  const closeDropdown = () => {
-    setIsOpen(false);
-    resetHighlight();
-  };
 
   useEffect(() => {
     setQuery(selectedAssigneeQuery);
   }, [selectedAssigneeQuery]);
-
-  useOnClickOutside(containerRef, closeDropdown, isOpen);
 
   const { hasMentionTrigger, normalizedQuery } = parseAssigneeQuery(query);
   const hasSelectedAssigneeQuery = isSameAssigneeQuery(
@@ -83,18 +72,45 @@ function AssigneeSelect({
     );
   }, [assigneeOptions, debouncedNormalizedQuery]);
 
+  const {
+    highlightedIndex,
+    moveHighlight,
+    resetHighlight,
+    setInitialHighlight,
+  } = useDropdownNavigation({
+    itemCount: filteredAssignees.length,
+  });
+
+  const clearHighlight = useCallback(() => {
+    resetHighlight();
+    highlightedItemRef.current = null;
+  }, [resetHighlight]);
+
+  const closeDropdown = () => {
+    setIsOpen(false);
+    clearHighlight();
+  };
+
+  useOnClickOutside(containerRef, closeDropdown, isOpen);
+
   useEffect(() => {
     if (!isOpen || filteredAssignees.length === 0) {
-      resetHighlight();
+      clearHighlight();
       return;
     }
 
-    setHighlightedIndex((currentIndex) =>
-      currentIndex >= 0 && currentIndex < filteredAssignees.length
-        ? currentIndex
-        : 0
-    );
-  }, [filteredAssignees, isOpen]);
+    if (highlightedIndex >= 0 && highlightedIndex < filteredAssignees.length) {
+      return;
+    }
+
+    setInitialHighlight(0);
+  }, [
+    clearHighlight,
+    filteredAssignees.length,
+    highlightedIndex,
+    isOpen,
+    setInitialHighlight,
+  ]);
 
   useEffect(() => {
     if (highlightedIndex < 0 || !isOpen) {
@@ -136,30 +152,6 @@ function AssigneeSelect({
     setIsOpen(hasNextMentionTrigger);
   };
 
-  const moveHighlight = (delta: number) => {
-    if (filteredAssignees.length === 0) {
-      return;
-    }
-
-    setHighlightedIndex((currentIndex) => {
-      const baseIndex =
-        currentIndex >= 0 && currentIndex < filteredAssignees.length
-          ? currentIndex
-          : 0;
-      const nextIndex = baseIndex + delta;
-
-      if (nextIndex >= filteredAssignees.length) {
-        return 0;
-      }
-
-      if (nextIndex < 0) {
-        return filteredAssignees.length - 1;
-      }
-
-      return nextIndex;
-    });
-  };
-
   const selectHighlighted = () => {
     if (
       highlightedIndex < 0 ||
@@ -172,16 +164,21 @@ function AssigneeSelect({
     handleSelect(filteredAssignees[highlightedIndex]);
   };
 
+  const openDropdownOnArrowKey = useDropdownArrowKeyOpen({
+    isOpen,
+    canOpen: filteredAssignees.length > 0,
+    onOpen: () => {
+      setIsOpen(true);
+      setInitialHighlight(0);
+    },
+  });
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (filteredAssignees.length === 0) {
+    if (openDropdownOnArrowKey(event)) {
       return;
     }
 
-    if (!isOpen) {
-      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-        event.preventDefault();
-        setIsOpen(true);
-      }
+    if (!isOpen || filteredAssignees.length === 0) {
       return;
     }
 
