@@ -3,6 +3,7 @@ import { ENV } from '@/shared/apis/env.ts';
 import { getAccessToken, removeAccessToken } from '@/shared/utils/token';
 
 const REQUEST_TIMEOUT = 5000;
+export const IMAGE_UPLOAD_TIMEOUT = 15000;
 const JSON_CONTENT_TYPE = 'application/json';
 const UNAUTHORIZED_STATUS = 401;
 

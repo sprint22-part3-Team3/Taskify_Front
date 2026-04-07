@@ -5,7 +5,14 @@ import type {
   UpdateCardRequest,
 } from '@/features/cards/apis/cards.types';
 import type { Card } from '@/features/cards/types/card.types';
-import { del, get, post, postFormData, put } from '@/shared/apis/fetchInstance';
+import {
+  del,
+  get,
+  IMAGE_UPLOAD_TIMEOUT,
+  post,
+  postFormData,
+  put,
+} from '@/shared/apis/fetchInstance';
 
 /**
  * GET 카드 목록 조회
@@ -64,6 +71,6 @@ export const uploadCardImage = async (
   return postFormData<{ imageUrl: string }>(
     `/columns/${params.columnId}/card-image`,
     formData,
-    { timeout: 15000 }
+    { timeout: IMAGE_UPLOAD_TIMEOUT }
   );
 };
