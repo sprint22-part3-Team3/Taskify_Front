@@ -63,6 +63,7 @@ export const uploadCardImage = async (
 
   return postFormData<{ imageUrl: string }>(
     `/columns/${params.columnId}/card-image`,
-    formData
+    formData,
+    { timeout: 15000 }
   );
 };
