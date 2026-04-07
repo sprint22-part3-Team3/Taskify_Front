@@ -1,5 +1,5 @@
 import type { TaskModalProps } from '@/features/cards/components/task-modal/taskModal.types';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Modal } from '@/shared/components/modal';
 import DeleteModal from '@/shared/components/modal/delete-modal';
 import { TaskMeta } from '@/features/cards/components/task-modal/task-meta';
@@ -13,11 +13,13 @@ import { delCard } from '@/features/cards/apis/cards';
 import { MODAL_CLOSE_DELAY } from '@/shared/constants/modal.constants';
 import { useCardRefetchContext } from '@/features/cards/hooks/useCardRefetchContext';
 import { useToast } from '@/shared/hooks/useToast';
+import { useOnClickOutside } from '@/shared/hooks/useOnClickOutside';
 
 function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
   const { refetch } = useCardRefetchContext();
   const { showToast } = useToast();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
   const {
     isOpen: isEditModalOpen,
     openModal: handleOpenEditModal,
@@ -87,6 +89,14 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
     }
   };
 
+  useOnClickOutside(
+    menuRef,
+    () => {
+      setIsMenuOpen(false);
+    },
+    isMenuOpen
+  );
+
   return (
     <>
       <Modal
@@ -103,10 +113,12 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
           />
         </div>
         {isMenuOpen && (
-          <TaskMenu
-            onEdit={handleClickEditMenu}
-            onDelete={handleClickDeleteMenu}
-          />
+          <div ref={menuRef}>
+            <TaskMenu
+              onEdit={handleClickEditMenu}
+              onDelete={handleClickDeleteMenu}
+            />
+          </div>
         )}
         <Modal.Main className="mb-0">
           <div className="flex flex-col-reverse gap-4 md:flex-row md:gap-3.25 lg:gap-10">
