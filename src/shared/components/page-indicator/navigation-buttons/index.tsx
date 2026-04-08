@@ -46,7 +46,10 @@ export default function NavigationButtons({
   isNextDisabled = false,
   isHidingOnMobile = false,
   size = 'default',
+  totalPages,
 }: NavigationButtonsProps) {
+  if (totalPages !== undefined && totalPages <= 1) return null;
+
   return (
     <div className={cn('flex shrink-0', isHidingOnMobile && 'hidden sm:flex')}>
       {/* 이전 버튼 */}

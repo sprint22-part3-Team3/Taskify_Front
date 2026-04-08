@@ -12,4 +12,5 @@ export type NavigationButtonsProps = {
   isNextDisabled?: boolean;
   isHidingOnMobile?: boolean;
   size?: 'default' | 'compact';
+  totalPages?: number;
 };

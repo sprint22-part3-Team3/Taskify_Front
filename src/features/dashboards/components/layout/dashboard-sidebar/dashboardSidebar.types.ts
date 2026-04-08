@@ -13,4 +13,5 @@ export type SidebarProps = {
   onDashboardClick?: (id: number) => void;
   onPrevPage?: () => void;
   onNextPage?: () => void;
+  totalPages?: number;
 };
