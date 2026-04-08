@@ -111,7 +111,7 @@ function Card({ card }: CardProps) {
                 size="md"
                 weight="medium"
                 color="text-black-200"
-                className="md:typo-lg-medium"
+                className="md:typo-lg-medium wrap-anywhere"
               >
                 {title}
               </Title>

@@ -1,5 +1,5 @@
 import type { TaskModalProps } from '@/features/cards/components/task-modal/taskModal.types';
-import { useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Modal } from '@/shared/components/modal';
 import DeleteModal from '@/shared/components/modal/delete-modal';
 import { TaskMeta } from '@/features/cards/components/task-modal/task-meta';
@@ -13,11 +13,13 @@ import { delCard } from '@/features/cards/apis/cards';
 import { MODAL_CLOSE_DELAY } from '@/shared/constants/modal.constants';
 import { useCardRefetchContext } from '@/features/cards/hooks/useCardRefetchContext';
 import { useToast } from '@/shared/hooks/useToast';
+import { useOnClickOutside } from '@/shared/hooks/useOnClickOutside';
 
 function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
   const { refetch } = useCardRefetchContext();
   const { showToast } = useToast();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
   const {
     isOpen: isEditModalOpen,
     openModal: handleOpenEditModal,
@@ -87,6 +89,12 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
     }
   };
 
+  const handleCloseMenu = useCallback(() => {
+    setIsMenuOpen(false);
+  }, []);
+
+  useOnClickOutside(menuRef, handleCloseMenu, isMenuOpen);
+
   return (
     <>
       <Modal
@@ -94,20 +102,22 @@ function TaskModal({ isOpen, closeModal, card }: TaskModalProps) {
         onClose={handleCloseModal}
         className="max-w-81.75 md:max-w-169.5 lg:max-w-182.5"
       >
-        <div className="relative">
-          <Modal.Header
-            hasCloseIcon
-            hasMenuIcon
-            title={title}
-            onClickMenu={handleClickMenu}
-          />
+        <div ref={menuRef}>
+          <div className="relative">
+            <Modal.Header
+              hasCloseIcon
+              hasMenuIcon
+              title={title}
+              onClickMenu={handleClickMenu}
+            />
+          </div>
+          {isMenuOpen && (
+            <TaskMenu
+              onEdit={handleClickEditMenu}
+              onDelete={handleClickDeleteMenu}
+            />
+          )}
         </div>
-        {isMenuOpen && (
-          <TaskMenu
-            onEdit={handleClickEditMenu}
-            onDelete={handleClickDeleteMenu}
-          />
-        )}
         <Modal.Main className="mb-0">
           <div className="flex flex-col-reverse gap-4 md:flex-row md:gap-3.25 lg:gap-10">
             <div className="flex grow flex-col gap-4">
